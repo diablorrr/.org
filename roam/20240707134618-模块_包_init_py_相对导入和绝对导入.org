@@ -1,0 +1,59 @@
+:PROPERTIES:
+:ID:       611d96c5-57fd-44b7-9c3b-283d2f9e989d
+:END:
+#+title: 模块、包、__init__.py、相对导入和绝对导入
+
+* 模块
+- .py文件
+- 是一个命名空间
+  # 使得可以存在同名函数、变量
+
+
+* 包结构
+- 有__init__.py文件 是包
+- 包结构 根据__name__来
+- 是一个命名空间
+  # 使得可以存在同名模块
+
+
+* 顶层模块
+- 一个模块的__name__是__main__，则其是顶层模块，没有包结构
+  # 一般命令行 python xxx.py，则xxx.py是顶层模块
+- 如果是A.B.C的结构，则顶层模块是A
+
+
+* __init__.py
+- 判断包的标识
+- 初始化包：包导入时，首先加载__init__.py文件
+- __all__控制模糊导入内容
+  # 模糊导入：from package import *
+
+#+begin_src python
+
+# graphics/formats/__init__.py
+from . import jpg
+from . import png
+
+#+end_src
++ 以上代码会自动加载子模块：
+  可用import graphics.formats 代替 import graphics.formats.jpg和import graphics.formats.png
+
+
+* 相对导入和绝对导入
+- *只针对包内导入而言*
+- 一个模块，有包结构，相对导入只能导入顶层模块内部的模块
+- 一个模块，绝对导入可以导入同级别及以下模块
+
+
+* import和from import
+- import只能用于 绝对导入
+- from import可以用于 绝对导入和相对导入
+
+  | 执行语句                     | 效果                                                                 |
+  |----------------------------+---------------------------------------------------------------------|
+  | import graphics            | graphics/__init__.py将被导入，建立graphics命名空间内容                   |
+  | import graphics.format.jpg | graphics/__init__.py和graphics/formats/__init__.py在jpg.py被导入前导入 |
+
+
+* 经验总结
+- 尽量只使用from import形式

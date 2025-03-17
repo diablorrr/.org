@@ -1,0 +1,63 @@
+:PROPERTIES:
+:ID:       590995a2-6dcd-4ab4-a52d-3ffdce10e8fd
+:END:
+#+title: ResNet
+# 2015.12
+# 标题：Deep Residual learning for Image Recognition
+
+* 先前工作的问题
+在ResNet提出之前，人们认为网络的层数越多，获取的图片特征信息越全，学习效果越好。
+然而实际情况是，随着网络层数的增加，不但学习效果没有更好，还出现了以下两个问题：
+** 梯度消失、梯度爆炸
+- 梯度消失：若每一层的误差梯度小于1，则反向传播时，网络越深，梯度越趋近0
+- 梯度爆炸：若每一层的误差梯度大于1，则反向传播时，网络越深，梯度越来越大
+** 退化问题
+随着层数加深，预测效果反而越来越差
+
+
+* 解决方式
+** 批归一化（Batch Normalization)
+将每一层的输入激活值标准化为==均值为0、方差为1的分布==
+适用场景：深层网络中的全连接层和卷积层
+** 残差连接 :ATTACH:
+:PROPERTIES:
+:ID:       9e08354c-475c-4253-8795-c0bc6140c6bc
+:END:
+将浅层网络的输入直接连接到后面的网络中，即 跳跃连接
+[[attachment:_20241227_213638screenshot.png]]
+# 极端情况下，即使增加的层什么都没有学习到，深层网络的性能也至少和浅层网络一样
+适用场景：非常深的网络
+
+
+* ResNet整体网络结构 :ATTACH:
+:PROPERTIES:
+:ID:       c4c292df-d20d-42ed-916f-5a7f6ea91977
+:END:
+[[attachment:_20241227_213715screenshot.png]]
+** 不同层数的网络结构 :ATTACH:
+:PROPERTIES:
+:ID:       32053403-4a5c-4e35-acbe-1e1f46191416
+:END:
+[[attachment:_20241227_213819screenshot.png]]
+# 图中存在两种ResNet block（残差块），整体网络由ResNet block构成
+
+
+* ResNet block :ATTACH:
+:PROPERTIES:
+:ID:       8239c9bb-ffc0-469b-85c9-4ade0c6dd7f8
+:END:
+[[attachment:_20241227_213801screenshot.png]]
+- 如图为两种残差结构，右边的结构我们称为==Bottleneck Block（瓶颈结构）==
+
+
+* Bottleneck
+** 结构
+- 1x1卷积：用于降维，减少通道数
+- 3x3卷积：用于提取空间特征
+- 1x1卷积：用于升维，恢复通道数
+** 作用
+- 减少参数量，提高计算效率
+
+
+* 参考链接
+https://blog.csdn.net/weixin_44001371/article/details/134192776?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522f695717dece5cb5b28335a15d577f7bf%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=f695717dece5cb5b28335a15d577f7bf&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-134192776-null-null.142^v100^pc_search_result_base3&utm_term=ResNet&spm=1018.2226.3001.4187

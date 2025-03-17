@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID:       eb955da4-d9f2-4122-bf2c-cd2900c71a53
+:END:
+#+title: ssh
+#+LAST_MODIFIED: 2025-03-16 17:23:56
+
+* 使用
+** 登录服务器
+- 示例 ::
+  #+begin_src bash
+  ssh -p 9722 hubu@111.47.28.118 # 用户名hubu，ip地址111.47.28.118，端口号9722
+  #+end_src
+
+** 本地打开 服务器中jupyter暴露出来的地址
+1. 本地转发端口
+   #+begin_src bash
+   ssh -L 8888:localhost:8888 user@192.168.1.100 # 将192.168.0.100服务器的8888端口映射到本地8888端口
+   #+end_src
+2. 服务器安装 [[id:6a95d71e-f7ea-4258-bf08-62ce584d3842][jupyter notebook]]
+   #+begin_src bash
+   pip install jupyter
+   #+end_src
+3. 启动jupyter
+   #+begin_src bash
+   jupyter notebook --no-browser --ip=0.0.0.0 --port=8888
+   #+end_src
+
+** 配置心跳包
+- 文件位置 :: ~/.ssh/config
+- 示例 ::
+
+  #+begin_src bash
+  Host 111.47.28.118
+        HostName 111.47.28.118
+        Port 9722
+        User hubu
+        # 心跳包
+        ServerAliveInterval 300  # 每300秒（5分钟）向服务器发送空闲检查消息
+        ServerAliveCountMax 3    # 如果连续3次未响应，则断开连接
+  #+end_src
+
+
+* 查询
+| 参数 | 作用                                   | 示例                                      |
+|------+----------------------------------------+-------------------------------------------|
+| -p   | 指定 SSH 服务器端口，用于 SSH 连接本身 | ssh -p 2222 user@server_ip                |
+| -L   | 进行 本地端口转发，用于访问远程服务    | ssh -L 8888:localhost:9999 user@server_ip |
+
+
+* 概念
+- 简介 ::
+  1. 是远程登录程序

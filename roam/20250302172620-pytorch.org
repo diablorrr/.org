@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       85ad8c21-0236-428e-bfe7-c71b0585cdf2
+:END:
+#+title: pytorch
+#+LAST_MODIFIED: 2025-03-15 19:53:18
+
+* 使用
+** api查找
+[[https://pytorch.org/docs/stable/index.html][pytorch官方文档]]
+
+
+* 概念
+** pytorch相关包介绍
+| 包名         | 作用                                                     | 是否必需           |
+|--------------+----------------------------------------------------------+--------------------|
+| pytorch      | PyTorch 的核心库，包括张量运算、自动求导、神经网络等功能 | 必需               |
+| pytorch-cuda | CUDA 相关库，提供 GPU 加速（需匹配 CUDA 版本）           | 选装（若使用 GPU） |
+| torchvision  | 处理计算机视觉任务的工具包，包含数据集加载、图像变换等   | 选装（若涉及 CV）  |
+| torchaudio   | 处理音频任务的工具包，提供音频数据加载、变换等功能       | 选装（若涉及音频） |

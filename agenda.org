@@ -1,0 +1,52 @@
+#+title: Agenda
+#+LAST_MODIFIED: 2025-03-18 20:32:20
+#+COLUMNS: %25ITEM %25TODO %25PRIORITY %25SCHEDULED
+#+TAGS: 项目(j) 科研(p) 杂事(o) 书(b)
+#+STARTUP: show2levels
+
+* 已安排
+** TODO [#A] 吃透项目
+** TODO [#B] 补充项目相关知识
+** TODO [#C] 重构项目
+** TODO [#B] cpp相关 [14/23]
+:LOGBOOK:
+CLOCK: [2025-01-26 日 21:56]--[2025-01-26 日 23:46] =>  1:50
+CLOCK: [2025-01-26 日 15:02]--[2025-01-26 日 21:50] =>  6:48
+:END:
+*** DONE cpp拷贝控制
+SCHEDULED: <2025-01-17 五>
+:LOGBOOK:
+CLOCK: [2025-01-17 五 19:41]--[2025-01-17 五 20:27] =>  0:46
+:END:
+*** DONE cpp构造函数&列表初始化 [0/0]
+SCHEDULED: <2025-01-17 五>
+*** DONE cpp 三五法则
+*** DONE cpp 右值引用
+*** DONE std::move()
+*** KILL 模板视频
+*** DONE cpp 完美转发、forward
+*** DONE auto
+*** DONE decltype
+*** DONE const
+*** DONE 引用折叠
+*** DONE 运算符
+*** DONE 引用
+*** DONE 类型
+*** TODO string和c风格字符串
+*** TODO virtual和override关键字
+*** TODO enum关键字
+*** TODO 指针
+*** TODO swap()
+*** TODO 构造函数
+*** TODO 隐式类型转换
+*** TODO using声明
+*** TODO cpp SFINAE机制
+** TODO [#B] 八股
+** TODO [#B] 算法
+** TODO [#C] 买眼镜
+** TODO [#C] [[https://github.com/xiaotudui/pytorch-tutorial][pytorch教程]]
+* 未安排
+** TODO [#C] 培养计划
+** TODO [#C] emacs gud
+** TODO [#C] emacs magit
+** TODO [#C] emacs calfw

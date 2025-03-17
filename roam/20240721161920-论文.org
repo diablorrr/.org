@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       ef841d60-6f56-41cd-a896-8d42205b688a
+:END:
+#+title: 论文
+* Deep Learning for Cross-Domain Data Fusion in Urban Computing: Taxonomy,Advances,and Outlook
+** 简介
+这是一篇综述，介绍了城市数据、融合方法、应用领域
+** 数据
+*** 数据源角度
+- 🔥地理数据
+- 🔥交通数据
+- 社交媒体数据
+- 人口统计数据
+- 环境数据
+*** 数据模态角度
+- 时空模态
+  - POI
+  - POA
+- 文本模态
+- 图像模态
+- 其他模态
+** 融合方法
+*** 基于特征的融合方法
+*** 基于对齐的融合方法
+*** 🍀基于对比的融合方法
+*** 基于生成的融合方法

@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID:       9b19126f-71f1-46a2-99b0-844096b09bb4
+:END:
+#+title: Vision Transformer
+# 2020.10
+# 标题：An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale
+
+* 模型 :ATTACH:
+:PROPERTIES:
+:ID:       5e364ac7-f10b-4baf-8d31-3bde9e33baa0
+:END:
+[[attachment:_20241228_134344screenshot.png]]
+** 图片预处理：分块和降维 :ATTACH:
+:PROPERTIES:
+:ID:       bcffd2bc-8e44-49f7-badc-005bd2c5e191
+:END:
+[[attachment:_20241228_134412screenshot.png]]
+** 为什么要有x~class~？
+# 即模型图中的Extra learnable [class] embedding
+因为我们进行分类预测，我们就使用可学习的x~class~进行预测，为什么有效？
+- x~class~类似于Decoder中的Query的作用，其他9个编码向量的输出是对应的Key、Value（相当于Transformer的Encoder输出的结果，作为Key、Value传入Decoder）
+# 因为ViT只用到了Transformer中的Encoder，没有用到Decoder
+** E~pos~的可视化 :ATTACH:
+:PROPERTIES:
+:ID:       630a1d2f-733e-42a2-bbf5-a3e4db05eabe
+:END:
+[[attachment:_20241228_134503screenshot.png]]
+
+
+* 参考链接
+https://zhuanlan.zhihu.com/p/342261872

@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       38d020ae-cf6d-43fa-bb07-0e5085dc676a
+:END:
+#+title: tmux
+#+LAST_MODIFIED: 2025-02-17 20:27:13
+
+* 使用
+- 创建新会话：tmux new-session -s mysession
+- 分离会话：Ctrl-b d
+- 重新连接会话：tmux attach -t mysession
+- 查看所有会话：tmux ls

@@ -1,0 +1,130 @@
+:PROPERTIES:
+:ID:       c28cfe01-5f7f-49fa-a7a7-a87c0cd52c34
+:NOTER_DOCUMENT: /home/yoshiki01/Documents/C++ Primer 5th.pdf
+:NOTER_PAGE: 88
+:END:
+#+FILETAGS: book
+#+title: cpp primer 5th
+#+LAST_MODIFIED: 2025-01-28 23:49:21
+构造函数和默认构造函数不同，后者无参数
+
+
+
+* 2.变量和基本类型
+:PROPERTIES:
+:NOTER_PAGE: 56
+:END:
+** 内置类型
+:PROPERTIES:
+:NOTER_PAGE: 56
+:END:
+- 分类 ::
+  1. 算数类型
+     1) 整型(包含：字符、布尔)
+     2) 浮点型
+  2. 空类型
+** 复合类型
+:PROPERTIES:
+:NOTER_PAGE: 71
+:END:
+- 简介 :: 基于其他类型定义的类型
+- 分类 ::
+  1. 引用
+  2. 指针
+*** 引用
+*** 指针
+:PROPERTIES:
+:NOTER_PAGE: 73
+:END:
+- 简介 ::
+- 特点 ::
+  1. 指针是对象
+  2. 块作用域内定义的指针未被初始化，拥有未定义的值
+** 变量
+:PROPERTIES:
+:NOTER_PAGE: 64
+:END:
+- 简介 ::
+  1. 某种数据类型的内存空间
+  2. 变量 和 对象 可以互换使用
+*** [[id:cbf04b45-0bd7-4bb8-91e8-62788c109fd5][初始化]]
+** const限定符
+:PROPERTIES:
+:NOTER_PAGE: 79
+:END:
+
+* 7.类
+** 类数据成员初始化
+:PROPERTIES:
+:NOTER_PAGE: 91
+:ID:       78903ddb-4da2-4f8a-81f9-a5fcf371851f
+:END:
+- 类内 ::
+  + 类内初始值 :: 为成员提供初始值
+  + [[id:fb6aa438-3fcc-4ed1-bd7d-7cda9344aa8d][默认初始化]] :: 没有初始值的成员会进行默认初始化
+- 类外 ::
+  + [[id:ac8ad834-52c3-4fec-84fd-b000adce344f][列表初始化]] :: 自定义初始值
+** TODO 构造函数
+:PROPERTIES:
+:NOTER_PAGE: 261
+:END:
+- 简介 :: 用于定义对象初始化的方式
+*** 合成的默认构造函数
+- 简介 :: 没有显式定义构造函数，编译器会合成默认构造函数
+  - 实现 :: [[id:78903ddb-4da2-4f8a-81f9-a5fcf371851f][类数据成员初始化]]的类内
+*** 构造函数初始值列表
+:PROPERTIES:
+:NOTER_PAGE: 284
+:END:
+- 特点 :: 成员的初始化顺序与它们在类定义中的出现顺序一样
+**** 两种初始化方式的区别
+| 方式               | 区别                                                     |
+|--------------------+----------------------------------------------------------|
+| 初始值列表         | 效率高：直接初始化数据成员                               |
+| 函数体内赋值初始化 | 效率低：数据成员在函数体前默认初始化，再函数体内进行赋值 |
+✨对于类成员为const、引用、某种未提供默认构造函数的类类型 => 必须构造函数初始值列表初始化
+*** 委托构造函数
+:PROPERTIES:
+:NOTER_PAGE: 287
+:END:
+*** 隐式的类类型转换
+:PROPERTIES:
+:NOTER_PAGE: 289
+:END:
+*** 聚合类
+:PROPERTIES:
+:NOTER_PAGE: 292
+:END:
+**** 特点
+1. 用户可以直接访问其成员
+2. 有特殊的初始化语法形式：花括号列表
+**** 判定
+- 所有成员都是public的
+- 没有定义任何构造函数
+- 没有类内初始值
+- 没有基类，也没有virtual函数
+**** 示例
+1) 一个聚合类
+  #+begin_src c++
+  struct Data{
+      int ival;
+      string s;
+  };
+  #+end_src
+2) 特殊初始化语法
+  #+begin_src c++
+  // val1.ival = 0; val1.s = string("Anna")
+  Data val1 = {0, "Anna"};
+  #+end_src
+* 16.模板与泛型编程
+:PROPERTIES:
+:NOTER_PAGE: 603
+:END:
+** 模板实参推断
+模板实参推断：调用中的函数实参来确定其模板实参
+* Footnotes
+[fn:5][[https://blog.csdn.net/qq_42815188/article/details/109607301][【深入理解C++】默认初始化]]
+[fn:4][[https://zhuanlan.zhihu.com/p/576507360][2022年10月23日 三五法则]]
+[fn:3]比如那个成员的XX函数是删除或不可访问(如private) 、或那个成员是const或引用
+[fn:2][[https://www.cnblogs.com/codingmengmeng/p/9110608.html][C++ 三/五法则]]
+[fn:1]如果不是引用，则调用永远不会成功：调用拷贝构造函数 => 拷贝实参 => 调用拷贝构造函数 => 拷贝实参 => (无限循环)

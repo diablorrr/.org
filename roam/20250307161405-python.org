@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       28b7f709-6465-4cec-98ac-67356f67f8b4
+:END:
+#+title: python
+#+LAST_MODIFIED: 2025-03-16 15:49:16
+
+* 使用
+- 构建、安装、分发python包 :: [[id:96afad67-3303-42ae-a863-d124bdc2a304][setuptools]]
+
+** 常用命令行
+*** 命令行执行代码
+#+begin_src python
+python -c "代码"                                    # 命令行中直接执行代码
+# 示例
+python -c "import torch; print(torch.__version__)"  # 检查torch版本
+python -c "import mmcv; print(mmcv.__version__)"    # 检查mmcv版本
+#+end_src

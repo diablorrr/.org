@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       9e5c88d8-bdd4-4a6d-bbc6-41026b576157
+:END:
+#+title: 超像素
+#+LAST_MODIFIED: 2025-03-04 18:46:00
+
+* 概念 :ATTACH:
+:PROPERTIES:
+:ID:       5164966d-7637-46d4-8d61-fff5669e1ef0
+:END:
+- 简介 ::
+  1. 超像素 是由 位置相邻且颜色、亮度、纹理等特征相似的像素点组成的 小区域 => 降低图像处理的复杂度
+  2. 将像素级的图像 变成 不规则像素块级的图像
+[[attachment:_20250304_183846screenshot.png]]

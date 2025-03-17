@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       cb72adb0-caf0-45f7-ad9f-c7971e4f8baa
+:END:
+#+title: RGB
+#+LAST_MODIFIED: 2025-03-04 19:40:20
+
+* 概念
+- 简介 ::
+  1. 提供色彩信息

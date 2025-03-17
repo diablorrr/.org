@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       fd1764dd-273e-4304-b930-3b45e4f9fadd
+:END:
+#+title: Attention U-Net
+# 2018.5
+# 标题：Attention U-Net: Learning Where to Look for the Pancreas
+# 任务：医学图像分割
+
+* 先前工作的问题
+1. 资源浪费：U-Net使用大量CNN，耗费大量运算资源在低阶特征的重复提取上
+2. 不重要区域的干扰
+
+
+* 解决方式
+- 抑制不重要区域，突出特定区域的局部特征：在skip connection中使用attention机制
+- 可学习的attention权重：用soft attention替代hard-attention
+# soft attention可微，因此可以计算梯度来学习attention的权重
+
+
+* 模型
+** 整体结构 :ATTACH:
+:PROPERTIES:
+:ID:       01217105-9b6f-4dfb-8e3e-ac41e089aec9
+:END:
+[[attachment:_20241228_134135screenshot.png]]
+** Attention Gate结构 :ATTACH:
+:PROPERTIES:
+:ID:       5cad7016-72d2-455a-b581-e63b7696d473
+:END:
+[[attachment:_20241228_134152screenshot.png]]
+
+
+* soft attention和hard attention :ATTACH:
+:PROPERTIES:
+:ID:       30bd7b44-51e6-4827-9bc6-9c4327787b2b
+:END:
+[[attachment:_20241228_134210screenshot.png]]

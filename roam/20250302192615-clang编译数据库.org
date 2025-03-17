@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       64744248-ac41-4af0-ba4e-8f69a162f160
+:END:
+#+title: clang编译数据库
+#+LAST_MODIFIED: 2025-03-13 13:01:47
+
+* 使用
+
+
+* 概念
+- clang编译数据库（Clang Compilation Database） ::
+  1. 属于概念，[[id:9653d634-a6ed-45c9-a7f7-f7f51f024ab9][compile_commands.json]]属于具体实现
+  2. 用于记录 c/[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]] 项目编译信息 的 json 文件格式
+  3. 主要用于帮助 [[id:db21c347-0dd3-49ee-a698-455d3e88aa7e][clangd]]、clang-tidy、cppcheck 等工具理解代码的 编译方式，从而提供 代码补全、语法检查、跳转定义 等功能

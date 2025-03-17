@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       2732f7a7-3f0e-4ce0-a466-38b9a072818c
+:END:
+#+title: protoc
+#+LAST_MODIFIED: 2025-03-12 16:29:03
+
+* 使用
+- 生成[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]代码 :: --cpp_out=./out：指定输出目录 ./out，会生成 example.pb.h 和 example.pb.cc
+  #+begin_src bash
+  protoc --cpp_out=./out example.proto
+  #+end_src
+- 生成[[id:a5c426e4-365b-447d-89f3-eddc9c517a01][gRPC]]代码 :: --grpc_out 生成 example.grpc.pb.h 和 example.grpc.pb.cc
+  #+begin_src bash
+  protoc --grpc_out=./out --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` example.proto
+  #+end_src
+
+* 概念
+- protoc ::
+  1. 是[[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][protobuf]]的编译器
+  2. 用于将  文件编译成 不同语言的代码 => 语言的转换工作由对应的语言插件实现
+** 插件
+protoc-gen-cpp(protoc内置) => 解析.proto文件生成相应[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]代码
+grpc_cpp_plugin =>

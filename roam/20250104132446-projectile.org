@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       f7692632-d29a-42bb-959f-505a78768643
+:END:
+#+title: projectile
+#+LAST_MODIFIED: 2025-03-08 17:05:49
+#+FILETAGS: emacs
+
+* 使用
+- 设置某个文件夹为项目 ::
+  #+begin_src elisp
+  projectile-add-known-project
+  #+end_src
+
+- 加载整个项目文件到buffer ::
+  #+begin_src elisp
+  projectile-discover-projects-in-directory
+  #+end_src

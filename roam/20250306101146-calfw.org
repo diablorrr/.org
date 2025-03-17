@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       2336a5ac-eb4b-4b2d-918b-147bbc0394a5
+:END:
+#+title: calfw
+#+LAST_MODIFIED: 2025-03-15 20:42:29
+
+* 使用
+- 查看当日细节 :: SPC
+- 切换视图(日/周/两周/月) :: D/W/T/M
+
+
+* 概念
+- 简介 :: [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]的一个日历框架
+
+
+* 参考 [0/2]
+- [ ] [[https://github.com/kiwanami/emacs-calfw/tree/master?tab=readme-ov-file][[github]emacs-calfw]]
+- [ ] [[https://github.com/doomemacs/doomemacs/blob/master/modules/app/calendar/README.org][[doomemacs]:app calendar]]

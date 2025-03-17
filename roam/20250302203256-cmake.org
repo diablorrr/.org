@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       c4819291-b93f-4864-b210-aa436634ac22
+:END:
+#+title: .cmake
+#+LAST_MODIFIED: 2025-03-02 21:22:01
+
+* 使用
+
+
+* 概念
+** 简介
+- .cmake文件 ::
+  1. 是 [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]] 脚本文件
+  2. 用于封装 [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]] 的功能，如 模块、工具链、配置 等
+  3. 通常用于定义可复用的 [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]] 逻辑，可在 [[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]] 中用 find_package()、target_link_libraries()、target_include_directories()调用
+** 作为package配置的.cmake文件
+- Find<Package>.cmake ::
+  1. 作为[[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]内置模块（Modules）
+  2. find_package() MODULE模式 查找package
+- <Package>Config.cmake ::
+  1. 作为第三方[[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]配置（Config）
+  2. find_package() CONFIG模式 查找package

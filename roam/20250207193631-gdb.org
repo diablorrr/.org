@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       8a46ff3c-7b8e-42e8-a6c9-bdaf55195c4a
+:END:
+#+title: gdb
+#+LAST_MODIFIED: 2025-03-03 21:00:25
+
+
+* 使用
+- 运行/重新运行 程序 :: r
+
+- 查看当前调用栈 :: bt
+- 切换帧 :: frame <帧编号>
+
+- 给某个文件中某个类的某个函数打断点 :: break file.cpp:className::function
+
+- 打印类型名称 :: whatis <>
+- 打印复杂类型详细定义 :: ptype <>
+- 查看运行时值 :: p <>

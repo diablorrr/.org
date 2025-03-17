@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       e709bfbf-1bf2-467b-921c-709b3a44b20f
+:END:
+#+title: BN
+# 2015.2
+# 标题：Batch Normalization：Accelerating Deep Network Training by Reducing Internal Covariate Shift
+
+* Batch Normalization
+- 作用：维持数据的稳定分布；防止梯度爆炸或梯度消失；提高训练速度和模型的稳定性
+- 做法：将数据的均值和方差分别计算为0和1
+
+
+* BN、LN、IN、GN :ATTACH:
+:PROPERTIES:
+:ID:       9f254552-09ed-4659-8dd3-434f51e8e919
+:END:
+[[attachment:_20241227_212615screenshot.png]]
+# 假设输入样本为4张大小为240x240的彩色图片，因此样本Batch数量N为4，RGB彩色通道Channel为3，长H为240，宽W为240，样本数据矩阵为[4，3，240，240]
+- BN归一化相当于作用在==通道维度==上，分别计算3次[4，240，240]数据的均值和方差。
+- LN归一化相当于作用在==样本数量==上，计算4次[3，240，240]数据的均值和方差。
+- IN归一化相当于作用在==样本数量和通道维度==上，一共3x4=12次归一化，也就是计算12次[240，240]数据的均值和方差。
+- GN归一化相当于作用在==样本数量和以组为单位的通道维度==上，例如将通道维度(图中绿色数字3)分为两组，第一组为通道1、2，第二组为通道3，一共2x4=8次归一化，分别求照片1、2、3、4的通道组1的均值和方差和照片1、2、3、4的通道组2的均值和方差，也就是计算4次[2，240，240]和4次[1，240，240]数据的均值和方差。
+** 另一个视角的BN、LN对比图 :ATTACH:
+:PROPERTIES:
+:ID:       2e8ad3af-6141-4e7c-8a7b-7df3320aefc3
+:END:
+[[attachment:_20241227_212640screenshot.png]]
+
+
+* 四维特征图的比喻
+将feature map shape 记为[N, C, H, W]。若把特征图比喻成一摞书，这摞书共有 N 本，每本有 C 页，每页有 H 行，每行 有W 个字符。
+
+
+* 参考链接
+https://blog.csdn.net/Next_SummerAgain/article/details/130168838

@@ -1,0 +1,180 @@
+:PROPERTIES:
+:ID:       4012acd2-c162-4270-8c93-9922a3502f50
+:END:
+#+title: qt
+#+LAST_MODIFIED: 2025-01-17 21:34:55
+
+
+* 未分类
+QOject::connect 会创建一个信号和槽的连接，这个连接会在两个对象的生命周期内保持有效。Qt 会将这个连接的信息记录在对象内部，并确保连接在对象有效期间存在
+
+* 对象树机制
+:PROPERTIES:
+:ID:       3301bec5-5488-4bca-a23f-2f95a03ba401
+:ROAM_REFS: https://doc.qt.io/qt-6/objecttrees.html
+:END:
+- 作用 :: 管理对象的生命周期和资源：通过父子关系建立对象间的依赖关系，从而避免内存泄漏和简化资源清理
+- 组成 :: QObjects被组织在object tree中
+- 创建对象 :: 如果以另一个object为parent创建一个QObject，那么该QObject会被加入parent的children()列表
+- 删除对象 :: 删除QObject：
+  + parent：会删除它的children和它自己
+  + children：删除它自己，并在parent的children()列表中移除
+  # 一个对象被销毁，相关的信号与槽连接会被自动断开
+* QObject的构造和析构顺序
+- 代码片段1
+  #+begin_src c++
+  int main(){
+      QWidget window;
+      QPushButton quit("Quit", &window);
+      ...
+  }
+  #+end_src
+- 代码片段2
+  #+begin_src c++
+  int main()
+  {
+      QPushButton quit("Quit");
+      QWidget window;
+      quit.setParent(&window);
+      ...
+  }
+  #+end_src
+
+
+
+
+* Qt Style Sheet
+:PROPERTIES:
+:ID:       f9dc39e4-1bcf-4677-aeea-e1f99bbc9f90
+:ROAM_REFS: https://doc.qt.io/qt-6/stylesheet-syntax.html
+:END:
+
+** 语法
+- style rule = selector + declaration
+  #+begin_src qss
+  QPushButton { color: red }
+  #+end_src
+  # QPushButton是selector；color: red是declaration
+
+** 选择器类型
+[[https://doc.qt.io/qt-6/stylesheet-syntax.html#selector-types][选择器类型]]
+
+
+* QApplication
+- 用于管理应用程序的 *全局设置* 和控制 *事件循环*
+  - 全局设置 :: 应用程序的名称、图标、样式等
+  - 事件循环 :: 处理用户交互、窗口更新等
+
+* QDialog
+- 模态：对话框弹出后会阻塞其他窗口（如：只有先关闭对话框才能再关闭其他窗口
+- 非模态：对话框弹出后不会阻塞其他窗口
+
+
+* QObject
+| 函数        | 作用                                                                     |
+|-------------+--------------------------------------------------------------------------|
+| [[https://doc.qt.io/qt-6/qobject.html#setProperty][setProperty]] | 动态设置对象的属性(运行时对对象的属性进行操作，即使这些属性在编译时未知) |
+
+
+** QMainWindow :ATTACH:
+:PROPERTIES:
+:ID:       9aa6e879-c71d-43fc-a774-5c6a73c8f34a
+:END:
+- 用于管理主窗口，QMainWindow有自己的布局
+  [[attachment:_20250101_002022screenshot.png]]
+1. Central Widget区域可以被任何种类的widget占用
+2. 其余区域分别有对应的widget
+   # QMenuBar，QToolBar，QDockWidget，QStatusBar
+   | 函数             | 作用                           |
+   |------------------+--------------------------------|
+   | [[https://doc.qt.io/qt-6/qmainwindow.html#setCentralWidget][setCentralWidget]] | 设置Central Widget位置的widget |
+
+
+* Qt Namespace
+[[https://doc.qt.io/qt-6/qt.html#WindowType-enum][enum Qt::WindowType(flags Qt::WindowFlags)]]：用于设置widget的窗口系统属性
+
+
+* QStyle
+| 函数     | 作用                   |
+|----------+------------------------|
+| [[https://doc.qt.io/qt-6/qstyle.html#polish][polish]]   | 初始化widget的外观     |
+| unpolish | 取消初始化widget的外观 |
+# 一般和qss联动使用
+
+
+* QFile
+#+begin_src c++
+QFile qss(":/style/stylesheet.qss");
+#+end_src
+在qt中，路径前的:符号表示资源文件的路径
+
+
+* 信号与槽
+如果我们想要一个类可以实现信号和槽机制，我们需要在类中增加Q_OBJECT宏
+- 一个界面通知另一个界面的方式
+- 一个界面发送信号时，链接该信号的槽会进行响应
+- 信号连接槽、信号连接信号
+
+
+* exec()
+#+begin_src c++
+int main(int argc,char * argv[])
+{
+    QApplication a(argc,argv);
+    MainWindow w;
+    w.show();
+    return a.exec();
+}
+#+end_src
+exec()作用：启动一个局部事件循环，等待用户操作完成后返回结果
+# main函数返回后交给系统处理，因此可以猜到exec()和系统处理有关。
+# `QApplication a(argc,argv);`将main函数中的参数传到a中，所以控制权从main转到Qt
+# `return a.exec()`是进入循环等待事件的状态，等待用户和系统的消息并进行处理
+# return 0;的话，就直接退出程序了
+# return a.exec()就是进行循环等待事件的状态
+
+
+* exec()和show()的区别
+作用和区别：都是用于显示对话框，区别在于 运行机制 和 返回值
+- exec()：当前线程中显示对话框，阻塞当前进程，直到用户关闭对话框。也就是说会开启一个事件循环，知道对话框关闭事件被触发
+- show()：当前线程中显示对话框并返回，不会阻塞当前线程，因此程序可以执行其他代码
+应用场景：
+- exec()：用于显示模态对话框
+- show()：用于显示 模态 和 非模态对话框
+
+
+* tr()
+作用：国际化使用
+所有传入tr函数的文本，都可以用工具提取出来翻译成其他语言。
+* C++中局部变量的销毁顺序
+是按照逆序销毁
+- 该例中QPushButon父类是QWidget，QWidget的父类是QObject
+#+begin_src c++
+int main()
+{
+    QWidget window;
+    QPushButton quit("Quit", &window);
+    ...
+}
+#+end_src
+正确：先调用子类析构（QPushButton）后调用父类析构（QWidget）
+#+begin_src c++
+int main()
+{
+    QPushButton quit("Quit", &window);
+    QWidget window;
+
+    quit.setParent(&window);
+    ...
+}
+#+end_src
+有问题：先调用父类析构，父类析构造接着调用子类析构。然后又在销毁子类局部对象时，又调用了一次子类的析构函数
+
+
+* 未处理
+ 只有父窗口关闭，才会回收子窗口
+# 假设父窗口有一个按钮a，点击a触发槽函数，进而在堆中产生一个子窗口，我们关闭子窗口，其实子窗口是隐藏了。随着点击和关闭 重复进行，窗口会越来越多。
+# 解决方法：
+# 在主窗口的构造函数中 创建子窗口，析构函数中 回收子窗口，槽函数只用来控制子窗口的显示
+
+代码片段1正确。代码片段2错误：析构顺序和构造顺序相反，先是window先析构它的children quit，然后析构自己；接下来又析构quit

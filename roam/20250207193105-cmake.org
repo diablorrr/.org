@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       c651b8b0-bc76-451d-acac-0ea55329f0e8
+:END:
+#+title: cmake
+#+LAST_MODIFIED: 2025-03-02 21:38:49
+#+startup: show2levels
+
+* 使用
+** 打印当前系统的 cmake 相关信息
+系统配置、编译器、环境变量、cmake 变量 等
+#+begin_src cmake
+cmake --system-information | grep <感兴趣的变量>
+#+end_src
+
+* 概念
+- 简介 ::
+  1. 是一个 跨平台的构建系统，用于管理 c/[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]] 项目的编译过程
+  2. 通过解析 [[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]] 生成 适用于不同平台的构建文件（如 Makefile、Ninja 文件、Visual Studio 项目等） => 从而简化编译和依赖管理
+- 配置文件 :: [[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]
+- 脚本文件 :: [[id:c4819291-b93f-4864-b210-aa436634ac22][.cmake]]

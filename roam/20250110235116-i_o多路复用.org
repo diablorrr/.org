@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       706ae573-ec8c-400d-841c-3d3cd47ec8f2
+:END:
+#+title: I/O多路复用
+
+* 简介
+I/O多路复用是操作系统的技术手段，提供具体接口

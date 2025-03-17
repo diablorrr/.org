@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       3f48fda9-3702-4fdc-a472-06fad4cdb394
+:END:
+#+title: jq
+#+LAST_MODIFIED: 2025-03-08 18:44:58
+
+
+* 使用
+#+begin_src bash
+输出内容 | jq
+#+end_src
+
+
+* 概念
+- 简介 ::
+  1. 轻量级命令行[[id:f59f9f1b-d0ff-4a70-b6d1-99bc6a0024db][json]]处理工具
+  2. 用于解析、查询、过滤、格式化 json 数据

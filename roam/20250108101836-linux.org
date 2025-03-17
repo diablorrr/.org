@@ -1,0 +1,78 @@
+:PROPERTIES:
+:ID:       ec7aef91-2628-4ba9-b300-16652314877f
+:END:
+#+title: linux
+#+LAST_MODIFIED: 2025-03-08 18:59:13
+#+startup: show2levels
+
+
+* 使用
+** 命令行工具
+- 查找进程号 :: [[id:b76cb01a-0ba6-4226-a539-c3ebadd68d1d][pidof]]
+- 远程连接 :: [[id:eb955da4-d9f2-4122-bf2c-cd2900c71a53][ssh]]
+- 查看gpu运行状态 :: nvidia-smi
+- 命令行下载 :: [[id:7d9efa4c-4ab0-46b9-a8cb-22926ec11e59][wget]]
+- 打包解包 :: [[id:3ab70f69-74de-4653-b92e-5126303a692e][tar]]
+- 磁盘空间使用情况 :: [[id:7479e24e-0363-42a7-8fd9-be48b8be354c][df]]
+- 网络请求 :: [[id:47eb3326-7aac-4300-904e-33f7539709c8][curl]]
+- 控制[[id:669a06c1-5af2-40bd-a102-51b0b5eeb23b][systemd]]系统和服务管理器 :: [[id:5a19e8de-05ec-4bae-bf70-54b24b63c412][systemctl]]
+- 网络连接状态分析 :: [[id:d8e0342f-6890-4a6c-acb9-0f1cdbba675c][ss]]
+- 查找文件、目录 :: [[id:e15008e9-069c-4a13-a56d-89b4aa8c6cb6][fd]]
+- 测试网络连通性 :: [[id:08dc4a68-2a75-42e0-9321-4908207481ad][ping]]
+- 超快文本搜索 :: [[id:1c44133a-b180-461a-8f85-0ec46ae27168][rg]]
+- [[id:f59f9f1b-d0ff-4a70-b6d1-99bc6a0024db][json]]处理 :: [[id:3f48fda9-3702-4fdc-a472-06fad4cdb394][jq]]
+- 显示目录结构 :: [[id:f42439b6-bbfa-4fe1-8156-7046961930a0][tree]]
+
+- 终端复用工具 :: [[id:8ca61e04-0c10-43ab-8135-f54a477a94c6][zellij]]
+- musicfox :: 网易云音乐
+- yazi :: 文件管理
+- tldr :: 更简单易懂的命令行帮助文档
+
+** 环境变量
+- PATH :: 可执行程序的搜索目录
+- LD_LIBRARY_PATH :: c/[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]语言 动态链接库 文件搜索的目录，不是linux缺省的环境变量
+- CLASSPATH :: [[id:19518163-c915-48da-9083-fe58e8b3afcf][java]]语言库文件搜索的目录，不是linux缺省的环境变量
+
+
+
+* 概念
+
+
+
+* 常用命令行工具
+- lsof :: 列出所有打开的文件，显示相关信息(相比ss能力更全面)
+  - 查看端口占用：
+    #+begin_src bash
+    sudo lsof -i :端口号
+    #+end_src
+- nmap
+- nslookup
+- nc ::
+- pipx
+- ps ::
+
+
+* /​usr和/usr/local
+:PROPERTIES:
+:ID:       a07b877c-3ae3-4e72-9df7-7ed82addfc86
+:END:
+** 目录结构对比
+| 目录       | /usr                 | /usr/local                      |
+|------------+----------------------+---------------------------------|
+| 可执行文件 | /usr/bin, /usr/sbin  | /usr/local/bin, /usr/local/sbin |
+| 库文件     | /usr/lib, /usr/lib64 | /usr/local/lib                  |
+| 头文件     | /usr/include         | /usr/local/include              |
+| 共享文件   | /usr/share           | /usr/local/share                |
+
+** 区别
+| 特性     | /usr                           | /usr/local                     |
+|----------+--------------------------------+--------------------------------|
+| 安装方式 | 包管理器自动安装               | 手动编译或手动安装             |
+| 维护者   | 包管理器维护                   | 用户手动维护                   |
+| 查找     | 系统默认优先查找 /usr 下的内容 | 必须通过 PATH 或手动指定优先级 |
+
+** 与lsp-mode的关系
+将[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]第三方库安装到/​usr/include/和/usr/local/include/后，doom emacs的[[id:8e853293-ab43-4b77-87f4-2e3e21c7afdb][lsp-mode]]就能识别到头文件
+#include ""对应/​/usr/local/include//
+#include <>对应/usr/include/
+

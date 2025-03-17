@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       3ab70f69-74de-4653-b92e-5126303a692e
+:END:
+#+title: tar(Tape Archive)
+#+LAST_MODIFIED: 2025-03-08 18:00:51
+
+* 使用
+** 解压.tar.gz文件
+#+begin_src bash
+tar -zxvf file.tar.gz
+#+end_src
+- 参数解释 ::
+  -z → 使用 gzip 解压（gzip）
+  -x → 解压（extract）
+  -v → 显示详细信息（verbose）
+  -f → 指定文件名（file）
+
+* 概念

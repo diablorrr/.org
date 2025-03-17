@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       d8e0342f-6890-4a6c-acb9-0f1cdbba675c
+:END:
+#+title: ss
+#+LAST_MODIFIED: 2025-03-08 18:12:06
+
+
+* 使用
+- 查看端口占用：(相比lsof更轻量)
+    #+begin_src bash
+    ss -tulnp | grep XX
+    #+end_src
+
+
+* 概念
+- 简介 ::
+  1. 网络连接状态分析工具
+  2. 速度快

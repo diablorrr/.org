@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       aa8af2c0-e0ff-4238-80bd-5c3b2d913bee
+:END:
+#+title: .qmake.stash
+#+LAST_MODIFIED: 2025-03-13 13:10:04

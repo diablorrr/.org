@@ -1,0 +1,98 @@
+:PROPERTIES:
+:ID:       8122499f-c12d-4a41-870d-01ff770626d7
+:END:
+#+title: R-CNN
+# 2014.03
+# 标题：Rich feature hierarchies for accurate object detection and semantic segmentation
+# 任务：目标检测
+
+* 目标检测要做的事 :ATTACH:
+:PROPERTIES:
+:ID:       7b876e6d-3a56-44ea-96cf-db02ea89c857
+:END:
+- 图像识别
+  - 输入：图片
+  - 输出：物体的类别
+[[attachment:_20241227_211201screenshot.png]]
+- 定位
+  - 输入：图片
+  - 输出：方框在图片中的位置(x,y,w,h)
+[[attachment:_20241227_211223screenshot.png]]
+# CNN已经帮我们完成图像识别的任务
+
+
+* 如何解决 定位 的问题
+** 思路1 :ATTACH:
+:PROPERTIES:
+:ID:       cb9affce-c12d-4e26-9e72-c95fb9998ebd
+:END:
+看作回归问题，预测(x,y,w,h)四个参数的值
+[[attachment:_20241227_211259screenshot.png]]
+*** 存在的问题
+回归训练参数收敛的时间太长， 应该想法设法转换为 =分类= 的问题
+** 思路2 :ATTACH:
+:PROPERTIES:
+:ID:       745b350e-fff0-4708-8350-dc3b4dbf61d3
+:END:
+取不同大小的图像窗口，取得分最高的框
+[[attachment:_20241227_211342screenshot.png]]
+** 思路总结
+对一张图片，取各种大小的框将图片截取出来，输入到CNN，CNN输出这个框的得分以及对应的(x,y,h,w)
+** 稍微优化 :ATTACH:
+:PROPERTIES:
+:ID:       83be2d3c-697f-45b5-9d9c-c7814a207b1d
+:END:
+将全连接层改成卷积层，可以稍微提速
+[[attachment:_20241227_211414screenshot.png]]
+
+
+* 图像中有多个物体怎么办
+我们的目标变成：
+- 多物体识别
+- 多物体定位
+# 我们知道回归收敛时间长，因此考虑用分类，但是对于多个物体，我们需要找很多位置，给很多不同大小的框，再对框内图像分类，性能消耗大，很慢。
+# 此时，我们还是考虑分类，应该怎么做？
+# 看R-CNN
+
+
+* R-CNN :ATTACH:
+:PROPERTIES:
+:ID:       2fe2d644-0e4a-428e-ae7e-12a452273ff3
+:END:
+[[attachment:_20241227_211520screenshot.png]]
+** 工作流程 :ATTACH:
+:PROPERTIES:
+:ID:       2ca19377-bee2-47e1-80ca-019e74d7c3a4
+:END:
+1. 输入图片
+2. 选择性搜索找到所有 候选区域(Region Proposal)
+   # 这一步就不会暴力枚举所有的框了
+   # 且问题转变为，在有限的框中找出可能存在物体的框
+   # 生成候选区域的方式很多，如：选择性搜索等
+[[attachment:_20241227_211604screenshot.png]]
+3. 修正区域大小适合CNN的输入(主要在于全连接层的输入需要固定长度)，使用crop和warp
+   - crop：从图片中扣出一个边界框的大小
+   - warp：resize一个图片，使其适应边界框
+[[attachment:_20241227_211637screenshot.png]]
+4. 对每个候选框内的图像进行CNN提取特征
+[[attachment:_20241227_211652screenshot.png]]
+5. SVM分类器(二分类)
+[[attachment:_20241227_211720screenshot.png]]
+6. 边界框回归(线性回归模型 判定这个框是否框得完美)
+[[attachment:_20241227_211738screenshot.png]]
+7. 输出目标检测结果
+
+
+* R-CNN存在的问题
+候选区框(Region Proposal)太多，对每个候选框都进行 CNN特征提取+SVM分类，计算量很大，导致R-CNN计算量大
+** 解决方案
+这么多的候选区域都来自一个图片，所以可以：
+1. 对图像进行一次CNN特征提取
+2. 将region proposal在原图的位置 映射到 卷积层特征图上
+3. 然后将每个region proposal的卷积层特征输入到全连接层做后续操作
+** 第3步存在的问题
+全连接层的输入必须是固定的长度，所以第3步是不行的。SPP-Net可以解决这个问题
+
+
+* 参考链接
+https://blog.csdn.net/v_JULY_v/article/details/80170182

@@ -1,0 +1,119 @@
+#+title: Someday
+#+LAST_MODIFIED: 2025-03-18 20:32:19
+#+STARTUP: show2levels
+
+* A
+** TODO [#B] C++：STL源码剖析 [3/9]
+*** [X] 下载电子书[X]
+*** [X] 第1章 STL概述与版本简介
+*** [X] 第2章 空间配置器(allocater)
+SCHEDULED: <2024-12-24 二 14:00>
+:LOGBOOK:
+CLOCK: [2024-12-24 二 13:59]--[2024-12-24 二 14:52] =>  0:53
+CLOCK: [2024-12-24 二 13:58]--[2024-12-24 二 13:59] =>  0:01
+:END:
+*** [ ] 第3章 迭代器(iterators)概念与traits编程技法
+:LOGBOOK:
+CLOCK: [2024-12-24 二 14:53]--[2024-12-24 二 15:40] =>  0:47
+:END:
+*** [ ] 第4章 序列式容器(sequence containers)
+*** [ ] 第5章 关联式容器(associattive containers)
+*** [ ] 第6章 算法(algorithms)
+*** [ ] 第7章 仿函数(functors，另名 函数对象 function objects)
+*** [ ] 第8章 配接器(adapters)
+** TODO [#C] vision mamba [2/5] :科研:
+*** DONE 寻找论文
+*** DONE GPU、CUDA、CUDA toolkit和pytorch的关系&做笔记
+:LOGBOOK:
+CLOCK: [2024-12-25 三 16:03]--[2024-12-25 三 16:21] =>  0:18
+CLOCK: [2024-12-25 三 10:45]--[2024-12-25 三 11:04] =>  0:19
+:END:
+*** TODO 阅读&做笔记
+*** TODO 复现
+:LOGBOOK:
+CLOCK: [2024-12-25 三 19:04]--[2024-12-25 三 19:49] =>  0:45
+CLOCK: [2024-12-25 三 17:10]--[2024-12-25 三 18:07] =>  0:57
+CLOCK: [2024-12-25 三 16:21]--[2024-12-25 三 17:09] =>  0:48
+CLOCK: [2024-12-25 三 09:57]--[2024-12-25 三 10:44] =>  0:47
+CLOCK: [2024-12-25 三 09:34]--[2024-12-25 三 09:57] =>  0:23
+:END:
+- 计划 :: 下载权重 => 下载ImageNet-1K/其他图像数据集 => 评估权重
+*** TODO 研究源代码
+** TODO [#C] 研究mamba源代码 [2/4] :科研:
+:LOGBOOK:
+CLOCK: [2025-01-02 四 07:52]--[2025-01-02 四 10:25] =>  2:33
+CLOCK: [2025-01-01 三 12:25]--[2025-01-01 三 13:39] =>  1:14
+:END:
+*** TODO 服务器clash调试
+*** DONE jupyter notebook环境安装
+*** DONE 运行mamba
+*** TODO 研究mamba源代码
+** TODO [#B] 三篇论文 [0/0] :科研:
+** TODO [#B] C++并发编程实战 [3/11] :书:
+*** DONE 第1章 你好，C++并发世界
+SCHEDULED: <2025-01-15 三>
+:LOGBOOK:
+CLOCK: [2025-01-15 三 20:26]--[2025-01-15 三 21:52] =>  1:26
+CLOCK: [2025-01-15 三 16:15]--[2025-01-15 三 16:50] =>  0:35
+:END:
+*** DONE 第2章 线程管控
+SCHEDULED: <2025-01-15 三>
+:LOGBOOK:
+CLOCK: [2025-01-16 四 12:40]--[2025-01-16 四 15:15] =>  2:35
+:END:
+*** DONE 第3章 在线程间共享数据
+*** TODO 第4章 并发操作的同步
+*** TODO 第5章 C++内存模型和原子操作
+*** TODO 第6章 设计基于锁的并发数据结构
+*** TODO 第7章 设计无锁数据结构
+*** TODO 第8章 设计并发代码
+*** TODO 第9章 高级线程管理
+*** TODO 第10章 并行算法函数
+*** TODO 第11章 多线程应用的测试和除错
+** TODO [#B] magit [0/3]
+*** TODO [#B] Learn Git Branching
+:LOGBOOK:
+CLOCK: [2025-01-11 六 00:17]--[2025-01-11 六 00:57] =>  0:40
+CLOCK: [2025-01-10 五 16:40]--[2025-01-10 五 17:04] =>  0:24
+CLOCK: [2025-01-10 五 15:38]--[2025-01-10 五 16:00] =>  0:22
+:END:
+*** TODO [#B] git变基
+*** TODO [#B] magit
+** TODO [#B] git commit规范
+** TODO [#B] lsp问题 [2/4]
+*** DONE cpp-mode缩进问题
+- Note taken on [2025-02-02 日 17:05] \\
+  解决：https://emacs-china.org/t/emacs/19319/7
+*** DONE 打开cpp文件，是c-mode
+*** TODO lsp-ui-doc关闭
+*** TODO minibuffer提示关闭
+** TODO [#C] C++ 全栈聊天项目 第二季
+* B
+** TODO [#B] arch官方文档 [0/0]
+** TODO [#B] v2ray [0/0]
+** TODO [#B] 阅读embark文档
+** TODO [#B] 多线程相关 [0/0]
+*** TODO [#B] 进程、线程、协程
+https://zhuanlan.zhihu.com/p/337978321
+https://blog.csdn.net/jinking01/article/details/130520579
+https://blog.csdn.net/Survivalist_Boy/article/details/100913340?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EOPENSEARCH%7ECtr-1-100913340-blog-139303361.235%5Ev43%5Epc_blog_bottom_relevance_base9&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EOPENSEARCH%7ECtr-1-100913340-blog-139303361.235%5Ev43%5Epc_blog_bottom_relevance_base9&utm_relevant_index=2
+*** TODO [#B] 线程模型
+https://blog.csdn.net/luzhensmart/article/details/108250330
+https://blog.csdn.net/caspar_notes/article/details/133802083
+* C
+** TODO [#C] 还原org中的斜体，自己写一个新的强调符号
+** TODO [#C] org-download图片存放改用directory
++ 线索：org-download org-attach
+** TODO [#B] org中输入公式
+** TODO [#B] 重复任务中的重复行为笔记记录
+[[file:~/.org/roam/20241223152839-org.org::*几种重复行为][几种重复行为]]
+** TODO [#B] zero width space在表格中无法转义|
+** TODO [#B] org-agenda日程到了没有提醒
+- org-alert
+** TODO [#B] agenda buffer显示父任务及子目录
+** TODO [#B] 组装主机 [0/0]
+** TODO [#B] 自制emacs插件：ai找笔记 [0/0]
+** TODO [#B] make文档 [0/0]
+** TODO [#C] 表格设置倒计时的函数 [0/0]
+** TODO [#B] 为musicfox写一个插件 [0/0]
+** TODO [#B] ai自动查文档 [0/0]

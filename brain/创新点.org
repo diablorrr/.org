@@ -1,0 +1,9 @@
+
+* 创新点
+:PROPERTIES:
+:ID:       32ef0fd9-8af1-4175-a7cc-2766b06e9bce
+:BRAIN_PARENTS: 5f6ca75a-2fbd-48fe-b4c3-d133b4bc0b98
+:BRAIN_CHILDREN: 90b1969b-23cc-48b1-a602-f5d0cf393dee a8f978fb-9da2-4dde-9d29-40655ba8f4d4 7999e1e4-485b-411b-99f8-daa4ffdb16c7 e1fa0fb7-873d-45c7-8e52-136edbd460fc 7844188b-38bd-4e10-b1f6-2ca924cf8fb5
+:END:
+- 实时性 ::
+  因为果农在进行病害检测时，使用手机等资源受限的设备时候，需要一定的实时性

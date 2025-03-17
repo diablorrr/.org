@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       c72170f6-35b3-4407-8a98-4cb509a1639b
+:END:
+#+title: 函数式编程
+#+LAST_MODIFIED: 2025-03-03 19:14:34
+
+* 概念
+- 函数式编程(Functional Programming, FP) ::
+  1. 一种编程范式
+  2. 强调使用函数来处理数据，并且尽量避免改变程序状态和使用可变数据

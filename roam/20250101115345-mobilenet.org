@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       d35f2e91-926e-4a56-bb9c-2fca157a13ae
+:ROAM_REFS: https://arxiv.org/pdf/1704.04861
+:END:
+#+title: MobileNet
+#+LAST_MODIFIED: 2025-02-28 17:18:00
+# 标题：MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications
+#+filetags: 论文
+
+* 深度可分离卷积 :trick:
+:PROPERTIES:
+:ID:       36522fd8-9d4a-48d0-bace-6a7440820aa0
+:ROAM_REFS: https://blog.csdn.net/kangdi7547/article/details/117925389
+:END:
+- 简介 :: 将一个卷积运算分解为 深度卷积 逐点卷积
+- 作用 :: 减少参数量 => 减少计算量 => 运行速度快
+- 组成 :: 深度可分离卷积 = 深度(Depthwise)卷积 + 逐点(Pointwise)卷积
+
+** 常规卷积 :ATTACH:
+:PROPERTIES:
+:ID:       a0c883f6-4e85-473b-b14a-5e6a5a98c95f
+:END:
+[[attachment:_20250101_121805screenshot.png]]
+- 卷积层参数量 ::
+#+begin_src python
+N_std = 4 × 3 × 3 × 3 = 108
+#+end_src
+
+** Depthwise卷积 :ATTACH:
+:PROPERTIES:
+:ID:       c434bf05-7a34-4819-bf5f-e31be87d96c9
+:END:
+[[attachment:_20250101_121329screenshot.png]]
+- 卷积层参数量 ::
+#+begin_src python
+N_depthwise = 3 × 3 × 3 = 27
+#+end_src
+
+** Pointwise卷积 :ATTACH:
+:PROPERTIES:
+:ID:       91c0d032-bab0-4f8d-9c6a-0090c194b582
+:END:
+[[attachment:_20250101_121401screenshot.png]]
+- 卷积层参数量 ::
+#+begin_src python
+N_pointwise = 1 × 1 × 3 × 4 = 12
+#+end_src

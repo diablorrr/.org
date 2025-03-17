@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       5cb0d8f2-a257-48bf-ba1e-d465d4b069e0
+:END:
+#+title: 类型转换
+#+LAST_MODIFIED: 2025-01-29 19:32:56

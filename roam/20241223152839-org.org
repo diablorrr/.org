@@ -1,0 +1,103 @@
+:PROPERTIES:
+:ID:       2d50336c-dabb-4c57-8cb5-b7853cabd245
+:END:
+#+title: org-mode
+#+LAST_MODIFIED: 2025-03-16 21:36:36
+#+startup: show2levels
+
+* 使用
+** 隐藏标题前的*和强调标记
+1. M-x customize
+2. Org Hide Leading Stars    => on
+   Org Hide Emphasis Markers => on
+
+** 显示*对应的数字
+1. M-x org-num-mode
+
+** 设置初次打开org显示的视图层级
+1. 在org文件的上方写入
+   #+begin_example
+   #+STARTUP: overview
+   #+STARTUP: content
+   #+STARTUP: showall
+   #+STARTUP: show<数字>levels
+   #+STARTUP: showeverything(默认)
+   #+end_example
+
+** 过了DEADLINE依旧显示重复任务
+# 假设我计划25-27号重复任务，SCHEDULED设置为25，DEADLINE设置为27；但是 => 27号后也会显示重复任务
+1.  设置变量 *org-agenda-skip-scheduled-repeats-after-deadline* 为t
+
+
+
+* 查询
+|----------+----------------------------------------+-----------------------------------------|
+|          | 命令                                   | 作用                                    |
+|----------+----------------------------------------+-----------------------------------------|
+| 子树视图 | TAB                                    | 循环当前子树的视图                      |
+|          | (C-u 数字) S-TAB                       | 全局循环子树<数字级>视图                |
+|          | C-c C-k                                | 展示当前子树的标题                      |
+|          | C-u C-u TAB                            | 返回刚进入该org时的视图(返回初始可视化) |
+|          | C-u C-u C-u TAB                        | 打开全部，包括drawers                   |
+|----------+----------------------------------------+-----------------------------------------|
+| 子树操作 | M-x org-copy-visible                   | 复制整个子树的内容                      |
+|          | C-c @                                  | 标记整个子树内容                        |
+|          | C-c *                                  | 将该列表变成子树                        |
+|----------+----------------------------------------+-----------------------------------------|
+| 标签设置 | 设置全局标签列表                       | 变量org-tag-alist                       |
+|          | 设置文件标签列表                       | #+TAGS: 标签1 标签2 标签3               |
+|          | 设置文件标签列表(带快捷键)             | #+TAGS: 标签1(快捷键1) 标签2(快捷键2)   |
+|----------+----------------------------------------+-----------------------------------------|
+| 标签继承 | 全局开启标签继承                       | org-use-tag-inheritance                 |
+|          | 单文件开启标签继承                     | #+STARTUP: tagsinherit                  |
+|          | 单文件设置文件标签(所有条目都会继承它) | #+FILETAGS: :标签1:标签2:               |
+|----------+----------------------------------------+-----------------------------------------|
+| 标题操作 | C-c C-b                                | 回上一个同级标题                        |
+|          | C-c C-u                                | 返回上一级的标题                        |
+|          | (按键被占用)C-c C-f                    | 到下一个同级别标题                      |
+|          | C-S-RET                                | 在上方插入同级标题                      |
+|----------+----------------------------------------+-----------------------------------------|
+
+
+
+* 概念
+** #+TAGS和#+FILETAGS的区别
+- #+TAGS :: 定义标签集合，条目选择使用
+- #+FILETAGS :: 为整个文件 分配默认标签
+
+** entry和headline的区别
+- entry :: 标题 + 标题下的所有内容
+- headline :: 标题
+
+** 抽屉
+- 抽屉(drawer) :: 存放键值对
+  #+begin_example
+  :PROPERTIES:
+  :键: 值
+  :END:
+  #+end_example
+
+
+* 汇总
+: 任务
+  - 任务和日程管理 :: [[id:ff91392f-bdeb-4fd6-b4fd-d0355c3be5eb][org-agenda]]
+: 笔记
+  - 双链笔记 :: [[id:4501892f-ce3c-4e7c-989a-49a828d1294a][org-roam]]
+  - pdf笔记 :: [[id:d65dd25a-e032-4237-b38b-e1a9eec370f0][org-noter]]
+  - 导出笔记 :: [[id:604b863d-174c-4ce5-95cb-b6175b4c7c05][org-pandoc]] [[id:d9ec78e3-9bc9-42e0-ad04-eebc8f0efd01][org-export]]
+  - 捕获想法 :: [[id:182a3be6-99f8-4df1-a8db-47a6a3550345][org-capture]]
+  - 移动笔记 :: [[id:dba4c85d-5a01-44d7-be35-717d76ac8ea3][org-refile]]
+  - 粘贴图片 :: [[id:04055be6-57c9-44f2-b4d1-ddf389c58e4b][org-download]]
+  - 文学编程 :: [[id:cdd95a82-4ae0-4cdd-a9a8-40267f152a13][org-babel]]
+: 表格
+  - 表格操作、计算 :: [[id:dc392b84-65d5-4c41-9d09-15de26a5aa6b][org-table]]
+  - 表格生成 :: [[id:b171b65c-5b04-4d60-b061-5edb30c130d5][table.el]]
+: 时间
+  - 番茄钟 :: [[id:1fd43cc3-35ac-4867-ac16-ec14c50e8afc][org-pomodoro]]
+  - 计时 :: [[id:54b77c23-d971-4522-b36a-5c620e6db2ff][org-clock]]
+  - 时间戳 :: [[id:c22a9aa5-cf34-4916-b456-f19a01413a7a][org-timestamp]]
+: 视图
+  - 跳转 :: [[id:42ec6ff8-b4c2-40cc-a533-bb55d2b20204][org-goto]]
+  - 稀疏树 :: [[id:0ef912e3-677b-4754-93d2-1906d6775b28][org-sparse-tree]]
+: 杂项
+  - 创建id :: [[id:b86ab583-2d53-473c-a1f5-8ad596502fe4][org-id]]

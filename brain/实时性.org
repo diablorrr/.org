@@ -1,0 +1,7 @@
+
+* 实时性
+:PROPERTIES:
+:ID:       e1fa0fb7-873d-45c7-8e52-136edbd460fc
+:BRAIN_PARENTS: 32ef0fd9-8af1-4175-a7cc-2766b06e9bce
+:BRAIN_CHILDREN: e5951c2b-ca07-4f30-94ce-d6587f445705
+:END:

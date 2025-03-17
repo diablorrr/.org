@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       b319fd25-1f6b-4a8b-b175-892a271ee6f8
+:ROAM_ALIASES: 超点
+:END:
+#+title: Superpoint
+#+LAST_MODIFIED: 2025-03-04 20:22:13
+
+* 概念
+- Superpoint(超点) ::
+  1. 是[[id:eab6111a-7301-4436-acf2-268b0c314298][点云]]处理中的一种概念，类比于图像处理中的[[id:9e5c88d8-bdd4-4a6d-bbc6-41026b576157][超像素]]，[[id:b319fd25-1f6b-4a8b-b175-892a271ee6f8][Superpoint]]是一组点
+  2. 每个 superpoint 中的点在几何和外观上具有一定的相似性
+  3. 通过对[[id:eab6111a-7301-4436-acf2-268b0c314298][点云]]中的点进行[[id:f36479f5-2137-4601-ab84-3010e2eebdbe][聚类]]分组为有意义的局部区域 => 便于后续的特征提取和对象识别等任务

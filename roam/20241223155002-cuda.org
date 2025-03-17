@@ -1,0 +1,71 @@
+:PROPERTIES:
+:ID:       1ad28819-7ca5-4497-a875-053abe7c08a6
+:END:
+#+title: cuda
+#+author:    yoshiki
+#+email:     1299331829@qq.com
+#+update:    [2024-12-23 一 15:50]
+
+* 简介
+- CUDA :: 专门为GPU提供通用计算能力；允许开发者 *利用GPU来加速各种计算密集型任务*
+
+* 常用信息
+| 符号         | 信息             |
+|--------------+------------------|
+| /​usr/local/  | 默认cuda安装目录 |
+
+
+* 常用命令
+| 命令           | 作用                                           |
+|----------------+------------------------------------------------|
+| nvidia-smi     | 显示NVIDIA GPU的状态                           |
+| nvcc --version | 显示安装的CUDA Toolkit版本，并用于编译CUDA程序 |
+ls /​usr/local/ | grep cuda 查看系统中已安装的cuda版本
+ls -l /​user/local/cuda 确定cuda的默认版本
+
+* PyTorch安装中的CUDA与NVIDIA CUDA Toolkit的区别
+[[https://docs.infini-ai.com/posts/where-is-cuda.html][PyTorch安装中的CUDA与NVIDA CUDA Toolkit的区别]]
+
+* 驱动和CUDA的区别
+| 属性     | 驱动                         | CUDA                          |
+|----------+------------------------------+-------------------------------|
+| 作用     | 管理 GPU 硬件，与系统通信    | 提供 GPU 加速的编程接口和工具 |
+| 工作层级 | 底层，靠近硬件               | 上层，面向开发者              |
+| 用途     | 图形渲染、通用计算           | 开发高性能计算应用            |
+| 安装方式 | 独立安装，直接驱动硬件       | 通常包含编译器、库等开发工具  |
+| 更新频率 | 较高，优化性能和支持新硬件   | 较低，提供新功能和兼容性      |
+| 示例     | 运行 nvidia-smi 查看驱动信息 | 使用 nvcc 编译 CUDA 程序      |
+
+
+
+* GPU、Cuda Driver、Cuda Toolkit图解关系 :ATTACH:
+:PROPERTIES:
+:ID:       fbaba305-f60a-4f73-805a-862551d96f21
+:ORG-IMAGE-ACTUAL-WIDTH: 600
+:END:
+[[attachment:_20241225_105322screenshot.png]]
+
+- Nvidia Driver驱动 :: 操作系统和硬件GPU进行沟通交互的程序。装了这个电脑就能用GPU了，但是深度学习搞不定
+- CUDA Toolkit工具包 :: 是基于驱动程序，用来实现GPU *并行计算* 和 *加速深度学习* 的软件包。通过这个软件包，调用驱动，实现更加高级的功能
+  + NVCC :: CUDA编译器，将CUDA源代码编译成GPU可执行代码
+- cudnn :: 深度学习加速库，专门针对深度学习的GPU加速库，要使用深度学习框架，这个是必需的。虽然是 *CUDA Toolkit的组件* ，但是官方的下载包里面并没有，需要 *额外下载*
+- pytorch，tensorflow :: 深度学习框架，CUDA Toolkit并没有提供 *深度学习的框架* ，只是提供了如何高效调用GPU的软件库。如果要创建深度学习模型，进行训练。还是要使用深度学习框架
+
+- Nvidia官方下载的CUDA :: 官方下载的CUDA Toolkit是包含了驱动的，并且联合到一块是称为CUDA的
+- conda下载的CUDA :: 是不包含驱动的，但是高版本的驱动，是向前兼容的，你可以下载相匹配的cuda toolkit，构成不同版本的cuda
+
+
+** 实现多版本cuda :ATTACH:
+:PROPERTIES:
+:ID:       6acb16ad-dfa9-4822-adcc-1d0927359c59
+:ORG-IMAGE-ACTUAL-WIDTH: 600
+:END:
+[[attachment:_20241225_110310screenshot.png]]
+
+
+** Nvidia Driver和CUDA Toolkit的对应版本 :ATTACH:
+:PROPERTIES:
+:ID:       03c60f0d-cac1-471e-8adf-8bb86db4d63a
+:ORG-IMAGE-ACTUAL-WIDTH: 600
+:END:
+[[attachment:_20241225_160644screenshot.png]]

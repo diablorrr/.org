@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       08d89f98-95e1-4f75-8ec3-7f302ff33d15
+:END:
+#+title: RGB-D
+#+LAST_MODIFIED: 2025-03-04 19:40:59
+
+* 概念
+- 简介 :: 包含[[id:cb72adb0-caf0-45f7-ad9f-c7971e4f8baa][RGB]]图像和[[id:d369d83f-0d9c-4b58-a45a-8f286bb5f60a][深度图]]的数据

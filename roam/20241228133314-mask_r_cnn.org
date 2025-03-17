@@ -1,0 +1,68 @@
+:PROPERTIES:
+:ID:       791cd2b0-195d-4b96-bbcf-b468525f5a28
+:END:
+#+title: Mask R-CNN
+# 2017.10
+# 标题：Mask R-CNN
+# 任务：实例分割（也可以完成目标分类、目标检测、语义分割、实例分割、人体姿势识别等任务）
+
+* 对先前工作的改进 :ATTACH:
+:PROPERTIES:
+:ID:       e31d10aa-f589-4b28-88e5-be5f351aab56
+:END:
+[[attachment:_20241228_133733screenshot.png]]
+# 黑色部分为 原来的Faster-RCNN
+# 红色部分为 在Faster网络上的修改
+- ResNet+FPN 替换 vgg网络
+  # 特征表达能力更强
+- RoiAlign 替换 Roi pooling
+  # Roi pooling中存在Misalignment问题
+  # Misalignment问题又是又量化操作引起的
+- 增加新的mask分支
+
+
+* 模型 :ATTACH:
+:PROPERTIES:
+:ID:       44c2d9a8-9b45-41cb-bff1-54d2d525400e
+:END:
+[[attachment:_20241228_133756screenshot.png]]
+
+
+* ROIAlign
+** Misalignment问题 :ATTACH:
+:PROPERTIES:
+:ID:       f5102dc1-004c-4033-8ca7-816716dea346
+:END:
+Roi pooling存在Misalignment问题：即原始物体的位置和形状与feature map不对齐的问题。对于精细任务（如：像素级的语义分割）会有明显影响。
+# 为什么会有明显影响？
+# 因为特征图通常较小，特征图中的一个像素对应原始输入的感受野较大；在精细任务中，特征图中像素位置的不准确，会导致与原始图像的不对齐。
+导致Misalignment问题的是量化操作
+# 量化操作就是将值取整
+Roi pooling中的两次量化操作：
+1. 图像坐标 -> feature map坐标
+2. feature map坐标 -> Roi feature坐标
+[[attachment:_20241228_133821screenshot.png]]
+** 解决方法 :ATTACH:
+:PROPERTIES:
+:ID:       14ecb838-0e56-45f9-8591-156c6c8edd7c
+:END:
+使用双线性插值：根据周围的四个点，计算中间的点的值。
+我们可以根据计算得到的中间点的值来池化，最终得到fixed size feature map
+[[attachment:_20241228_133840screenshot.png]]
+# 以上图为例：红色箭头的蓝点，根据四周黑色框的四个交点计算得到，然后我们可以用蓝色的这个点池化代表这个粉红框的内容。
+# 当然，一个框中的蓝色的点可以设置多个，然后分别计算。再取这几个蓝色点的平均池化代表这个框的内容
+# - 蓝色方格为卷积后的feature map
+# - 橙色方格为Roi feature
+# - 蓝色小点是我们采样的虚拟点
+
+
+* Mask branch
+** 结构
+使用了全卷积网络（FCN），FCN由 卷积层 和 反卷积层 组成
+# 反卷积层就是将低分辨率的特征图恢复到输入Roi区域相同的分辨率
+** 输出
+每个Roi中的每个像素都会有一个二值掩码，表示是否属于该目标（如：1为目标像素，0为背景像素）
+
+
+* 参考链接
+https://blog.csdn.net/u010901792/article/details/100044200

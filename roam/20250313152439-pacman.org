@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       682195ed-75db-4183-a437-fcf107cec05d
+:END:
+#+title: pacman
+#+LAST_MODIFIED: 2025-03-13 16:32:35
+
+* 使用
+** 包缓存目录
+#+begin_src bash
+/var/cache/pacman/pkg/
+#+end_src
+
+** 查看帮助
+#+begin_src bash
+man pacman
+#+end_src
+
+** 降级包版本
+1. 检查包缓存目录 => 是否存在低版本包
+2. sudo pacman -U 低版本包所在路径
+
+
+* 概念
+- 简介 ::
+  1. 是[[id:29a2fc5a-1db6-4a13-a5cd-397e587c21ec][arch]]的包管理工具；也是windows上[[id:0e945c2a-612d-4887-af1d-998d191eb432][msys2]]默认的包管理工具
+  2. 可直接从网络上的软件仓库下载安装及删除软件，自动处理依赖关系

@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       68a8d733-e3fe-4793-9727-f8a80e1daaad
+:END:
+#+title: coredumpctl
+#+LAST_MODIFIED: 2025-03-03 18:42:09
+
+* 使用
+** 列出[[id:9fa181ca-96dc-4987-af7d-fcff90769347][core dump]]
+#+begin_src bash
+coredumpctl list
+#+end_src
+** 提取[[id:9fa181ca-96dc-4987-af7d-fcff90769347][core dump]]文件
+#+begin_src bash
+coredumpctl dump <PID> > core.dump
+#+end_src
+** 用[[id:8a46ff3c-7b8e-42e8-a6c9-bdaf55195c4a][gdb]]调试
+#+begin_src bash
+coredumpctl gdb <PID>
+#+end_src
+
+
+* 概念
+- 简介 ::
+  1. 是 [[id:669a06c1-5af2-40bd-a102-51b0b5eeb23b][systemd]] 提供的一个工具，用于管理和调试系统中的核心转储（[[id:9fa181ca-96dc-4987-af7d-fcff90769347][core dump]]）
+  2. [[id:9fa181ca-96dc-4987-af7d-fcff90769347][core dump]]文件默认存储在 //var/lib/systemd/coredump/ 目录下

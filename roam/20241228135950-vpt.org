@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       20e0cbee-061b-48b2-b093-00134cd92eb1
+:END:
+#+title: VPT
+# 2022.3
+# 标题：Visual Prompt Tuning
+
+* 作用
+用于transformer模型 的小样本学习 的微调
+
+
+* 先前工作存在的问题
+transformer模型的参数量大，微调代价昂贵
+
+
+* 模型
+** 与传统微调方法的对比 :ATTACH:
+:PROPERTIES:
+:ID:       dac44aba-bbdf-46c5-9c97-bc5065724fc9
+:END:
+[[attachment:_20241228_140056screenshot.png]]
+（a）图所展示的微调方法：
+- 全微调
+- 只微调Head
+- 只微调Backbone
+（b）图展示的微调方法：
+- 只增加少量的 特定于任务的可学习参数 到输入空间（不到整个模型参数的百分之1，冻结Backbone，微调期间Prompt和Head一起学习）
+
+
+** 两种策略 :ATTACH:
+:PROPERTIES:
+:ID:       d57d316c-ec73-4b48-a5ee-eb24e287e499
+:END:
+[[attachment:_20241228_140123screenshot.png]]
+# 实验结果是Deep比Shallow好
+
+
+** 提示词位置的影响 :ATTACH:
+:PROPERTIES:
+:ID:       f5ab9a50-11da-4c0c-a010-f4aed08b0ad8
+:END:
+[[attachment:_20241228_140146screenshot.png]]
+结论：Prepend的效果更好

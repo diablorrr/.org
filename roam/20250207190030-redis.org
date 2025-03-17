@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       c76e9ab3-bcb3-4a97-ba1b-48809c337c51
+:END:
+#+title: redis
+#+LAST_MODIFIED: 2025-03-13 20:06:40
+
+* 使用
+| 功能                    | 命令                        | 备注     |
+|-------------------------+-----------------------------+----------|
+| 启动redis客户端         | redis-cli                   |          |
+| 检测redis服务是否启动   | ping                        |          |
+| 验证密码                | auth 密码                   |          |
+| 设置密码                | config set requirepass 密码 |          |
+| 查看配置                | config get 配置             |          |
+| 设置配置                | config set 配置             |          |
+| 查询所有键              | keys *                      | * 为全部 |
+| 检测键类型              | type 键                     |          |
+| 返回键对应的值(string)  | get 键                      |          |
+| 返回键对应的值(hash)    | hgetall 键                  |          |
+| 查看所处redis数据库编号 | info keyspace               |          |
+| 清空当前数据库          | flushdb                     |          |
+
+
+* 概念
+** hiredis
+- 简介 :: C语言编写的Redis的客户端库
+  1. 开发者可以编程连接和操控Redis数据库

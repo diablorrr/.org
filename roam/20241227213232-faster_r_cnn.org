@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID:       c36f47f2-82c6-4b97-85b5-6984a5f6e3ae
+:END:
+#+title: Faster R-CNN
+# 2015.12
+# 标题：Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks
+# 任务：目标检测
+
+* 先前工作的问题
+Fast R-CNN：选择性搜索，找出所有候选框，非常耗时。
+# 如何找到一个更高效的方法来获取候选框？
+
+
+* 模型 :ATTACH:
+:PROPERTIES:
+:ID:       9c9fc6d2-87a9-4bb4-b0b4-07840694da97
+:END:
+[[attachment:_20241227_213454screenshot.png]]
+改进：提出RPN（Region Proposal Network）：此网络用于找候选框（解决选择性搜索获取候选框的性能问题）
+# 因此，损失函数又多了俩
+** 整体工作流程
+1. 输入图片
+2. CNN生成特征图
+3. RPN生成建议窗口
+4. 将建议窗口 映射到 最后一层卷积的特征图上
+5. 通过ROI pooling层使每个ROI生成固定尺寸的特征图
+6. 利用损失函数进行训练
+** 整体工作原理图 :ATTACH:
+:PROPERTIES:
+:ID:       5ba465e8-10df-457e-bd8c-3e9c5f6362ee
+:END:
+[[attachment:_20241227_213427screenshot.png]]
+** RPN工作流程
+1. 输入特征图（来自CNN）
+2. 生成Anchor Boxes（预定义尺度和长宽比）
+   # Anchor Box特征图的各个像素位置生成
+3. 3x3卷积提取特征
+   # 提取特征图的上下文信息，为Anchor Box生成相关特征（通过后续的分类和回归分支）
+4. 对Anchor Boxes进行 分类（前景/背景）和回归（位置调整）
+   # 分类分支的输入：3x3卷积提取的特征图的特征
+   # 而Anchor Box依赖于特征图的像素位置，因此我们对特征图提取的特征进行分类，就相当于对Anchor Box进行分类
+5. 筛选、过滤候选框（置信度+NMS）
+6. 输出高质量候选区域
+
+
+* 存在的问题
+Faster R-CNN是主流的目标检测方法，但速度不满足实时的要求
+考虑基于深度学习的回归方法---->YOLO：速度快，但精度不高
+
+
+* 参考链接
+https://blog.csdn.net/v_JULY_v/article/details/80170182

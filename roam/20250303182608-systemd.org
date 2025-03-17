@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       669a06c1-5af2-40bd-a102-51b0b5eeb23b
+:END:
+#+title: systemd
+#+LAST_MODIFIED: 2025-03-03 18:46:21
+
+* 使用
+- [[id:5a19e8de-05ec-4bae-bf70-54b24b63c412][systemctl]] :: 管理 [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]] 系统的 系统服务（services） 和 系统状态 的命令行工具
+- [[id:68a8d733-e3fe-4793-9727-f8a80e1daaad][coredumpctl]] :: 管理和调试系统中的核心转储工具
+
+
+* 概念

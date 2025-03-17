@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       8ca61e04-0c10-43ab-8135-f54a477a94c6
+:END:
+#+title: zellij
+#+LAST_MODIFIED: 2025-03-15 13:33:07
+
+
+* 使用
+- 分离会话 :: Ctrl-b d
+- 重新连接会话 :: zellij attach
+- 查看所有会话 :: zellij ls
+
+** 在一个tab中上下对称产生四个pane的方法
+1. 新建2个pane(此时总共3个pane)
+2. 增大pane大小，还原
+3. 新建第3个pane
+
+
+* 概念
+- 简介 :: 终端复用工具

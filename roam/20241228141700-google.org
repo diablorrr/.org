@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       247f3c54-b3b7-4a77-8fdf-bad941b8fc2e
+:END:
+#+title: google
+#+LAST_MODIFIED: 2025-03-12 16:18:33
+
+
+
+* 使用
+** 只搜索某网站 site:
+segformer site:csdn.net
+
+** 搜索特定大小图片 imagesize:
+dog imagesize:500*600
+
+** 搜索特定文件类型 filetype:
+segformer filetype:pdf
+
+** 查找某关键字的定义 define:
+define:计算机网络

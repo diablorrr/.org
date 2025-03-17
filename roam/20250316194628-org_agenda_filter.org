@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       b06db93a-4014-4384-b90b-a898097e8f56
+:END:
+#+title: org-agenda-filter
+#+LAST_MODIFIED: 2025-03-16 19:49:15
+
+* 使用
+1. agenda视图中 => 按 /
+2. 基于语法
+  #+begin_example
+  (+/-)category(+/-)tags(+/-)effort(+/-)regexp
+  #+end_example
+
+   - 示例 :: 选择category为work，反选择tags为John，选择effort小于10分钟，反选择带有plot关键字 的任务
+     #+begin_example
+     +work-John+<0:10-/plot /
+     #+end_example
+
+
+* 概念
+- 简介 :: [[id:ff91392f-bdeb-4fd6-b4fd-d0355c3be5eb][org-agenda]]视图中的过滤方法

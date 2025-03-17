@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       49a27997-65f1-4ad9-8812-e2376bd88422
+:END:
+#+title: flask
+* 两种注册应用方式：
+1. 视图及其他代码 直接注册到 应用
+2. 视图及其他代码 注册到 蓝图，在工厂函数中 将蓝图注册到应用
+3. 基本使用：
+   #+begin_src python
+   bp = Blueprint('蓝图名',__name__,url_prefix='/example')
+   @bp.route("/test",methods=('GET','POST'))
+   def 视图函数
+
+   + Flask收到一个指向/example/test的请求时，就会调用视图函数
+   #+end_src

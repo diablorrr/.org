@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       9f29aa0d-85f8-42b7-b16c-a0eb7e6b623e
+:END:
+#+title: 软链接
+#+LAST_MODIFIED: 2025-03-04 15:49:41
+
+* 使用
+** 创建软链接
+#+begin_src bash
+ln -s <源文件> <目标链接>
+#+end_src
+
+* 概念
+- 简介 ::
+  1. 又称 符号链接

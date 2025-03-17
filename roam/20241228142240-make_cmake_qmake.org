@@ -1,0 +1,66 @@
+:PROPERTIES:
+:ID:       04338684-9d9d-42dd-8bb0-6a2d2e8ea218
+:END:
+#+title: make qmake
+#+LAST_MODIFIED: 2025-02-07 19:31:22
+
+
+* make
+- make :: 根据Makefile中的指令进行编译，生成目标文件，但不安装
+# Makefile定义
+# - 编译源代码
+# - 链接库文件
+# - 生成可执行文件
+- make install
+将文件 安装到 指定目录，方便全局访问
+
+
+
+* qmake
+** 显示qmake相关信息
+#+begin_src bash
+qmake -query
+#+end_src
+
+#+RESULTS:
+QT_SYSROOT:                                        QT_INSTALL_PREFIX:/usr                             QT_INSTALL_ARCHDATA:/usr/lib/qt                    QT_INSTALL_DATA:/usr/share/qt                      QT_INSTALL_DOCS:/usr/share/doc/qt                  QT_INSTALL_HEADERS:/usr/include/qt
+- QT_INSTALL_HEADERS :: 头文件位置
+QT_INSTALL_LIBS:/usr/lib                           QT_INSTALL_LIBEXECS:/usr/lib/qt/libexec            QT_INSTALL_BINS:/usr/bin                           QT_INSTALL_TESTS:/usr/tests                        QT_INSTALL_PLUGINS:/usr/lib/qt/plugins             QT_INSTALL_IMPORTS:/usr/lib/qt/imports             QT_INSTALL_QML:/usr/lib/qt/qml                     QT_INSTALL_TRANSLATIONS:/usr/share/qt/translations QT_INSTALL_CONFIGURATION:/etc/xdg                  QT_INSTALL_EXAMPLES:/usr/share/doc/qt/examples     QT_INSTALL_DEMOS:/usr/share/doc/qt/examples        QT_HOST_PREFIX:/usr                                QT_HOST_DATA:/usr/lib/qt                           QT_HOST_BINS:/usr/bin
+** 构建qt项目的流程
+#+begin_src bash
+qmake xxx.pro  # 生成Makefile
+make # 构建
+#+end_src
+** 一个.pro文件的示例
+#+begin_src .pro
+QT += core gui widgets
+
+INCLUDEPATH += /usr/include/qt
+
+TARGET = hello_world
+TEMPLATE = app
+
+SOURCES += main.cpp \
+           mainwindow.cpp
+
+HEADERS += mainwindow.h
+
+FORMS += mainwindow.ui
+#+end_src
+- QT :: 启用的qt模块
+- INCLUDEPATH :: qmake搜索路径
+- TARGET :: 生成的目标文件
+- TEMPLATE :: 设置项目的模板类型
+  + TEMPLATE = app :: 表示构建一个应用程序
+  + TEMPLATE = lib :: 表示构建一个库文件（共享库或静态库）
+  + TEMPLATE = subdirs :: 表示构建一个包含多个子项目的项目
+- SOURCES :: 指定项目中的源代码文件(.cpp)
+- HEADERS :: 指定项目中的头文件(.h)
+- FORMS :: 指定项目中的UI文件(.ui)
+- RESOURCES :: 指定项目中的资源文件(.qrc)
+- CONFIG :: 指定编译时的配置选项
+  + CONFIG += debug :: 启用调试模式，生成调试信息
+  + CONFIG += release :: 启用发布模式，进行优化，去除调试信息
+  + CONFIG += c++11 :: 启用 C++11 标准
+  + CONFIG += static :: 静态链接 Qt 库
+- INSTALLS :: 指定安装路径，项目被安装时，指定文件将被复制到指定位置

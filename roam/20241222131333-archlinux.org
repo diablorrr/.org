@@ -1,0 +1,36 @@
+:PROPERTIES:
+:ID:       29a2fc5a-1db6-4a13-a5cd-397e587c21ec
+:END:
+#+title: arch
+#+LAST_MODIFIED: 2025-02-22 20:38:23
+
+* 使用
+** java jdk管理
+- archlinux-java :: 管理和切换系统中已安装的java版本
+- archlinux-java status :: 查看所有jdk版本
+- sudo archlinux-java set <java-environment> :: 设置java的jdk版本
+** 安装向日葵
+#+begin_src bash
+sudo pacman -S yay
+yay -S sunloginclient
+sudo systemctl start runsunloginclient.service
+sudo systemctl enable runsunloginclient.service
+#+end_src
+
+* 问题解决
+** archlinux的wps乱码问题
+[[https://bbs.archlinux.org/viewtopic.php?id=288562][给freetype降级]]：pacman -U /var/cache/pacman/pkg/freetype2-2.13.0-1-x86_64.pkg.tar.zst
+** 终端musicfox播放音乐时无法使用耳机播放
+[[https://github.com/go-musicfox/go-musicfox/issues/348][安装pipewire-alsa]]
+
+* 概念
+** 简介
+[[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]的一个发行版
+** systemd
+systemd管理各种单元，单元有多种类型。
+- 服务(.service)
+  在后台运行，没有界面，等待特定事件发生并提供服务。历史上称守护进程
+- 挂载点(.mount)
+- 设备(.device)
+- 套接字(.socket)
+主要命令：[[id:5a19e8de-05ec-4bae-bf70-54b24b63c412][systemctl]]

@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       42689b29-37d3-457a-be3a-be8d83cfaf74
+:END:
+#+title: emacs
+#+LAST_MODIFIED: 2025-03-16 20:03:16
+
+
+* 使用
+- 文件管理 :: [[id:7acbcaf4-e3bf-4f47-90e8-192b0ab7311e][dired]]
+- 笔记 :: [[id:2d50336c-dabb-4c57-8cb5-b7853cabd245][org-mode]]
+- 绘图 :: [[id:b131ef68-539e-4992-a19a-3e3227e0eec7][artist-mode]]
+- 日历 :: [[id:2336a5ac-eb4b-4b2d-918b-147bbc0394a5][calfw]]
+
+* 查询
+| 命令                          | 作用       |
+|-------------------------------+------------|
+| compile                       | 编译       |
+| shell-command                 | 执行命令行 |
+| set-rectangular-region-anchor | 多光标输入 |

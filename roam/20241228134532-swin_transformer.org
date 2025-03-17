@@ -1,0 +1,98 @@
+:PROPERTIES:
+:ID:       951a204b-d3ac-43d7-9d05-c73427147c6a
+:END:
+#+title: Swin Transformer
+# 2021.3
+# 标题：Swin Transformer: Hierarchical Vision Transformer using Shifted Windows
+# ICCV
+
+* 先前工作的问题
+ViT：
+- 计算复杂度高：ViT使用了全局注意力机制
+- 无法有效捕获局部特征：ViT全局注意力机制没有内置局部性（如：CNN的卷积核感受野）
+- 无法高效建模多尺度特征：ViT使用了固定大小的token
+
+
+* 解决方式
+- 基于窗口的注意力机制
+- 基于金字塔结构
+
+
+* 模型
+** 整体结构 :ATTACH:
+:PROPERTIES:
+:ID:       6716b300-5d69-4723-9561-4a34de17aaa8
+:END:
+[[attachment:_20241228_134904screenshot.png]]
+** 大致原理 :ATTACH:
+:PROPERTIES:
+:ID:       d8ccded2-2302-4409-ac35-a729b1e8326a
+:END:
+将输入图片打成patch
+（Stage 1）映射为embedding传入Swin Transformer Block中。
+（Stage 2-4）每阶段都patch merging：逐渐减少patch数量，降低分辨率；传入Swin Transformer Block中。
+[[attachment:_20241228_134927screenshot.png]]
+# 图示中 灰色方框为patch；红色方框为窗口；注意力机制是在红色方框中计算的
+** Swin Transformer Block :ATTACH:
+:PROPERTIES:
+:ID:       d77d5c2e-3723-4565-9503-0dde645b6ec2
+:END:
+[[attachment:_20241228_134950screenshot.png]]
+# 图示为两个连续的Swin Transformer Block
+- W-MSA：基于窗口的多头注意力机制
+- SW-MSA：基于移动窗口的多头注意力机制
+** 工作流程
+1. 对特征图进行LN
+2. 通过self.shift_size决定是否需要对特征图进行shift
+3. 将特征图切成一个个窗口
+4. 计算attention，通过self.atten_mask区分是window attention还是shift window attention
+5. 将各个窗口合并
+6. 如果之前做过shift操作，此时进行reverse shift，把之前的shift操作恢复
+7. 做dropout和残差连接
+8. 再通过一层LayerNorm+全连接层，以及dropout和残差连接
+*** 为什么其中一个是W-MSA，另一个是SW-MSA呢？
+因为W-MSA基于窗口计算注意力机制，窗口内进行了信息交流，窗口之间没有进行信息交流。因此需要将窗口移位，重新分配窗口后在各窗口中进行注意力计算。
+** Shifted Window Partition :ATTACH:
+:PROPERTIES:
+:ID:       eb23688b-5ea1-467a-ab6d-3a0ea34ca498
+:END:
+[[attachment:_20241228_135019screenshot.png]]
+- 核心机制：交替使用W-MSA和SW-MSA==解决窗口间信息交流问题==。
+*** 但是当我们滑动成第二张图时，窗口数量变多(4->9)且不适合进行并行计算，如何改进？ :ATTACH:
+:PROPERTIES:
+:ID:       9d9fd394-b29d-40dc-9943-da794ad5d719
+:END:
+# 不适合并行计算是因为window的大小不一样
+- 改进方法：如下图，将SW(上图2)的窗口布局变成W(上图1)的布局
+[[attachment:_20241228_135046screenshot.png]]
+这样就可以切分成四块，并行计算了（5一块，6、4一块，8、2一块，9、7、3、1一块），另一张示意图：
+[[attachment:_20241228_135105screenshot.png]]
+# 实际代码操作就是将左边和上边的部分移动到右边和下边
+此时可以并行计算了（5一块，6、4一块，8、2一块，9、7、3、1一块），但出现问题：
+*** 一块中的窗口可能存在混杂，而我们想要一块中的每个窗口单独计算注意力，如何解决？
+# 不如其中一块含有6、4，我们希望是6和4分开计算注意力，而不是6、4混在一起计算
+使用attention mask
+** attention mask :ATTACH:
+:PROPERTIES:
+:ID:       27eb699c-795a-4509-8bc4-ae83b1436866
+:END:
+# 以6、4为例
+patch排布：
+[[attachment:_20241228_135130screenshot.png]]
+q和k矩阵相乘后，希望得到的结果如图(行列都是同样的数字才保留，self-attention)：
+[[attachment:_20241228_135153screenshot.png]]
+因此我们需要的mask如图：
+[[attachment:_20241228_135214screenshot.png]]
+# 5这块不需要attention mask操作，剩下两块需要
+
+
+* 为什么随着网络加深，图片分辨率会降低？
+** 下采样操作
+- 池化
+- 卷积步幅
+- Patch Merging等
+
+
+* 参考链接
+https://zhuanlan.zhihu.com/p/360513527
+https://zhuanlan.zhihu.com/p/367111046

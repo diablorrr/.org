@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       9fa181ca-96dc-4987-af7d-fcff90769347
+:END:
+#+title: core dump
+#+LAST_MODIFIED: 2025-03-03 18:26:10
+
+* 使用
+** 启用core dump
+#+begin_src bash
+ulimit -c unlimited  # 允许生成 core dump
+#+end_src
+** 查看是否启用
+#+begin_src bash
+ulimit -c
+#+end_src
+- 0 :: 禁用
+- unlimited :: 启用
+** 检查core文件存放路径
+#+begin_src bash
+cat /proc/sys/kernel/core_pattern
+#+end_src
+- core :: 程序运行的目录下
+- /tmp/core.%e.%p :: /tmp目录下
+- |/usr/lib/systemd/systemd-coredump %P %u %g %s %t %c %h :: 存放在 [[id:669a06c1-5af2-40bd-a102-51b0b5eeb23b][systemd]] 日志
+
+
+
+* 概念
+- core dump(核心转储) ::
+  1. 当程序崩溃 => 操作系统会把该程序当时的 内存数据、寄存器状态和执行上下文 记录下来 => 存成一个文件(core dump) => 就像给程序崩溃时的“现场”拍了一张快照，方便事后分析

@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       a8270354-11ea-4b5c-ae42-87170cd68368
+:END:
+#+title: .gitignore
+#+LAST_MODIFIED: 2025-03-19 11:07:26
+
+
+* 概念
+- 简介 ::
+  1. 让[[id:52880cac-b451-4efc-bf87-3edde817eb06][git]]忽略某些文件的变更
+  2. (注意) 只对未跟踪的文件生效，且 .gitignore 需要被跟踪

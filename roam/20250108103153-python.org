@@ -1,0 +1,261 @@
+#+LAST_MODIFIED: 2025-01-13 09:51:06
+:PROPERTIES:
+:ID:       ab5aa49e-57d1-4a88-957b-b92f9e96a586
+:END:
+#+title: python
+
+
+* 作用域
+** 四种作用域
+1. L（Locals）局部作用域
+2. E（Enclosing）闭包函数外的函数中
+3. G（Globals）全局作用域
+4. B（Built-ins）内建作用域
+
++ 优先级：L -> E -> G -> B
+
+- 内建作用域示例：自己定义的与内建函数名一样，冲突，优先使用自己的
+#+begin_src python :results output
+def globals():
+    return "from local globals()"
+
+print(globals())
+#+end_src
+
+#+RESULTS:
+: from local globals()
+
+** 作用域同名互斥性
+- 两个不同作用域中，定义了两个同名变量，高优先级的作用域不能同时访问这两个变量，只能访问其中一个
+
+  #+begin_src python :results output
+def foo():
+    a = 0
+    def bar():
+        a = a + 1  # 或 a += 1
+        return a
+
+    return bar
+
+c = foo()
+print(c())
+  #+end_src
+
+# 结果是错误的。c()执行到a = a + 1时，左边的a已是局部变量a。由作用域同名互斥性，又边的a也只能是局部的a,但它未定义
+
+修改方式如下：
+  #+begin_src python :results output
+def foo():
+    b = 0
+    def bar():
+        a = b + 1  # 或 a += 1
+        return a
+
+    return bar
+
+c = foo()
+print(c())
+  #+end_src
+
+  #+RESULTS:
+  : 1
+
+或者使用关键字 *nonlocal*
+
+*** nonlocal
+- 作用：在闭包中声明使用上一级作用域中的变量
+- 只能用于内嵌函数
+
+  #+begin_src python :results output
+def foo():
+    a = 0
+    def bar():
+        nonlocal a
+        a = a + 1  # 或 a += 1
+        return a
+
+    return bar
+
+c = foo()
+print(c())
+  #+end_src
+
+  #+RESULTS:
+  : 1
+
+
+** 引入新作用域的方式
+- 模块（module）
+- 类（class）
+- 函数（def、lambda）
+
+#+begin_src python :results output
+def foo():
+    local_var = 0
+
+foo()
+print('local_var' in globals())
+#+end_src
+
+#+RESULTS:
+: False
+
+** 不引入新作用域：一些代码块
+- if/elif/else
+- try/except
+- for/while
+
+#+begin_src python :results output
+while True:
+    block_var = "012345"
+    break
+
+print(block_var)
+print('block_var' in globals())
+#+end_src
+
+#+RESULTS:
+: 012345
+: True
+
+** 作用域链
+
+#+begin_src python :results output
+def outer():
+    var0, var1 = "ABC", "DEF"
+
+    def inner():
+        var0 = "abc"
+        local_var = "123"
+
+        print(var0)
+        print(var1)
+        print(local_var)
+
+    print(var0)
+    inner()
+
+outer()
+#+end_src
+
+#+RESULTS:
+: ABC
+: abc
+: DEF
+: 123
+
+** 函数作为返回值
+- python中函数作为对象存在
+- 函数名是一个变量，指向一个函数对象
+  # 因此可以有多个变量去指向一个函数对象，并引用它
+
+  #+begin_src python :results output
+def foo():
+    return abs
+
+myabs = foo()
+print(myabs(-1))
+  #+end_src
+
+  #+RESULTS:
+  : 1
+
+** python在把函数作为返回值时，不会将函数体内的全局变量替换为实际的值，而是原封不动保留该变量
+- 例1：
+#+begin_src python :results output
+flist = []
+for i in range(3):
+    def foo(x):
+        print(x + i)
+    flist.append(foo)
+
+for f in flist:
+    f(1)
+#+end_src
+
+#+RESULTS:
+: 3
+: 3
+: 3
+
+- 例2：
+#+begin_src python :results output
+flist = []
+for i in range(3):
+    def foo(x, y = i):
+        print(x + y)
+    flist.append(foo)
+
+for f in flist:
+    f(1)
+#+end_src
+
+#+RESULTS:
+: 1
+: 2
+: 3
+
+** 备注表
+| 符号       | 作用                          |
+|-----------+------------------------------|
+| globals() | python内建函数：获取全局变量的字典 |
+| abs()     | python内建函数：获取绝对值       |
+
+* 命名规范
+** 模块名
+- 小写
+- 尽量不要下划线
+** 类名
+- 首字母大写，驼峰命名法
+  - 私有类，_开头
+** 函数命名
+- 小写，下划线隔开
+- 类内函数，_开头（可被继承访问）
+- 类内私有函数，__开头（不可被继承访问）
+** 变量命名
+- 小写、下划线隔开
+- 类内变量 _开头（可被继承访问
+- 类内私有变量 __开头（不可被继承访问
+** 常量命名
+- 全大写，下划线隔开
+
+* 函数参数传递形式
+** 方式
+1. 位置参数 关键字参数
+2. 可变参数 可变关键字参数
+
+** 以上两种方式等价
+
+#+begin_src python :results output
+def test_input_args(list0, num0, name="Tom"):
+    print("list:%s, num:%d, name:%s" % (str(list0), num0, name))
+
+test_input_args([1], 2, name="John")
+test_input_args(*([1], 2), **{"name": "John"})
+#+end_src
+
+#+RESULTS:
+: list:[1], num:2, name:John
+: list:[1], num:2, name:John
+
+** 第二种方式可以实现 在一个函数中调用不同的函数
+
+#+begin_src python :results output
+def func0(n):
+    print("from %s, %d" %(func0.__name__, n))
+
+def func1(m, n):
+    print("from %s, %d" %(func0.__name__, m + n))
+
+def test_call_func(func, *args, **kwargs):
+    func(*args, **kwargs)
+
+test_call_func(func0, 1)
+test_call_func(func1, 1, 2)
+#+end_src
+
+#+RESULTS:
+: from func0, 1
+: from func0, 3
+* 调试器
+pdb

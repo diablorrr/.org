@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       8d927b43-f3aa-42a9-8d33-d776366b5a29
+:END:
+#+title: checkpoint
+#+LAST_MODIFIED: 2025-03-06 21:24:52
+
+* 概念
+** 深度学习中的checkpoint
+- checkpoint :: 保存模型的状态，包括
+  + 模型参数(权重)，[[id:73a2a62b-1693-45b7-b48a-60c9e504dbaf][优化器]]状态等 => 可在训练中断或完成后恢复模型，无需从头开始训练

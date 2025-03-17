@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       bee683d2-eec4-45a8-af02-be369d182e8d
+:NOTER_DOCUMENT: /home/yoshiki01/Documents/C++ Primer 5th.pdf
+:NOTER_PAGE: 88
+:END:
+#+title: auto
+#+LAST_MODIFIED: 2025-01-28 23:44:54
+#+filetags: cpp
+
+* auto
+:PROPERTIES:
+:NOTER_PAGE: 87
+:END:
+- 简介 :: 用于推断变量类型，会用表达式初始化变量(会执行表达式)
+** 修饰复合类型
+引用对象的类型作为auto推导的类型
+#+begin_src cpp :results output :includes <iostream> <typeinfo>
+int i = 0, &r = i;
+auto a = r;
+std::cout << typeid(a).name();
+#+end_src
+
+#+RESULTS:
+: i
+
+** 修饰常量
+忽略顶层const，保留底层const
+#+begin_src cpp :results output :includes <iostream> <typeinfo>
+using namespace std;
+int i = 0;
+const int ci = i, &cr = ci;
+auto b = ci;
+auto c = cr;
+auto d = &i;
+auto e = &ci;
+cout << typeid(b).name() << endl;
+cout << typeid(c).name() << endl;
+cout << typeid(d).name() << endl;
+cout << typeid(e).name() << endl;
+#+end_src
+
+#+RESULTS:
+: i
+: i
+: Pi
+: PKi

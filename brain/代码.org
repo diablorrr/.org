@@ -1,0 +1,8 @@
+
+* 代码
+:PROPERTIES:
+:ID:       c200f50b-a246-400e-aeb0-b9b6c5822e8e
+:BRAIN_PARENTS:
+:BRAIN_CHILDREN: 9d3f80f8-78ad-4d9d-ba37-5875fe9be25f 104b3a6e-eb68-4ada-bbdf-05d2ccf59b50
+:BRAIN_FRIENDS:
+:END:

@@ -1,0 +1,41 @@
+:PROPERTIES:
+:ID:       80c27465-018f-4b97-b7b3-461a6a3283e4
+:END:
+#+title: Fast R-CNN
+# 2015.4
+# 标题：Fast R-CNN
+# 任务：目标检测
+
+* 先前工作的问题
+R-CNN具有速度瓶颈，因为它是对每个 候选区域 进行特征提取
+
+
+* 模型结构 :ATTACH:
+:PROPERTIES:
+:ID:       0acbefd2-b9cb-4dfa-8dc9-527e51dee79c
+:END:
+[[attachment:_20241227_213006screenshot.png]]
+** 与R-CNN的不同
+1. 只进行了一次CNN特征提取（解决R-CNN速度问题）
+2. 加入了ROI pooling layer（解决R-CNN预处理图片导致的性能问题）（从SPP中获得的灵感，但又些许区别）
+
+
+* ROI pooling与SSP
+** ROI pooling层原理图 :ATTACH:
+:PROPERTIES:
+:ID:       6725dcb4-d221-45e8-852f-e7ec366514ab
+:END:
+[[attachment:_20241227_212937screenshot.png]]
+** ROI pooling与SSP对比
+- ROI pooling：一个金字塔层。将任意大小的特征图变成一个固定大小的==特征图==
+- SSP：多个金字塔层。每个层将任意大小的特征图变成一个固定长度的==向量==
+
+
+* 未解决的问题
+没有解决选择性搜索，找出所有候选框的问题。存在速度瓶颈。
+faster r-cnn解决
+
+
+* 参考链接
+https://blog.csdn.net/qq_36926037/article/details/105341514
+https://blog.csdn.net/v_JULY_v/article/details/80170182

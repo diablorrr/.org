@@ -1,0 +1,167 @@
+:PROPERTIES:
+:ID:       b5960e71-4c4e-4682-99b3-3d10935c759f
+:END:
+#+title: Mamba
+#+author:    yoshiki
+#+email:     1299331829@qq.com
+#+update:    [2024-12-23 一 20:40]
+
+* 现有架构的问题
+** Transformer
+*** 存在的问题
+- 训练：并行化 => 快
+- 推理：每次推理下一个token的时候，都会去计算该token和之前所有token的注意力 => 慢
+- 记忆能力：每次考虑完整上下文 => 好
+- 显存：会存储输入每个token的k、v => 占用大
+- 计算量：上下文长度增加，自注意机制所需要考虑的token数就多 => 大
+** RNN
+*** 存在的问题
+- 训练：无并行化 => 慢
+- 推理：只用上一个时间步的隐藏信息与当前token => 快
+- 记忆能力：隐藏信息较早的内容随时间推移而消失 => 有限
+
+* SSM
+- SSM(状态空间模型)：基于当前的状态以及输入条件来预测系统在未来的表现
+  # 原始SSM的输入为连续的
+** RNN存在的问题
+- 处理长序列时，由于梯度爆炸或梯度消失，难以记住序列中较远位置的信息 => 模型只能依赖短期记忆
+** SSM的改进
+- 引入状态空间模型，在较长的时间范围内保持信息的流动 => 模型能记住更长久的记忆
+- 通过稳定的状态更新机制 => 避免梯度消失问题
+** 组成 :ATTACH:
+:PROPERTIES:
+:ID:       d600e873-a5d4-48db-be05-60cdbb5bd7db
+:END:
+1. 输入映射序列
+2. 潜在状态表示
+3. 预测输出序列
+[[attachment:_20241223_082220screenshot.png]]
+# 一个方程描述状态的改变；另一个方程描述系统状态和输出之间的关系
+
+* 离散化SSM :ATTACH:
+:PROPERTIES:
+:ID:       b03331f2-9dc2-4a73-ae31-26919dea30f1
+:END:
+- 作用：作用于离散输入，离散输入连续化
+- 实现：采用 *零阶保持技术* 将离散输入 变成连续输入
+[[attachment:_20241223_084727screenshot.png]]
+** 零阶保持技术步骤 :ATTACH:
+:PROPERTIES:
+:ID:       b94872d2-8ee5-4b36-bfe2-4ad6760b7413
+:END:
+[[attachment:_20241223_083132screenshot.png]]
+1. 每次收到离散信号时，我们都保留其值，直到收到新的离散信号
+2. 保留值的时间，用新的学习参数表示：
+[[attachment:_20241223_082758screenshot.png]]
+3. 有了连续的输入信号后，便可以生成连续的输出，并且仅根据输入的时间步长对值进行采样
+
+* 循环结构表示的SSM
+[[id:b03331f2-9dc2-4a73-ae31-26919dea30f1][离散化SSM]]可以用循环结构表示
+- 方便快速推理 => 推理快
+- 但是不能并行计算 => 训练慢
+** 为什么可以用循环结构表示？ :ATTACH:
+:PROPERTIES:
+:ID:       7a2c1d48-96b0-4322-8305-2f8617255996
+:END:
+[[attachment:_20241223_085027screenshot.png]]
+- 由图可以看出[[id:b03331f2-9dc2-4a73-ae31-26919dea30f1][离散化SSM]]的结构和RNN一样，因此可以循环结构表示
+* 卷积结构表示的SSM :ATTACH:
+:PROPERTIES:
+:ID:       a1485393-11a4-47c6-9495-89d7c57f1c24
+:END:
+方便并行计算
+- 内核固定 => 推理慢
+- 可以像CNN一样并行训练 => 训练快
+图示：
+[[attachment:_20241223_085615screenshot.png]]
+公式：
+[[attachment:_20241223_085632screenshot.png]]
+表示为向量点积：
+[[attachment:_20241223_085737screenshot.png]]
+# 又知ABC都是常数，所以左边的可以提前计算
+* 结合前两者的SSM：SSMs
+SSMs可以看作是RNN和CNN的结合
+- 特点：
+  1. 训练用CNN结构
+  2. 推理用RNN结构
+* HiPPO
+** 先前的问题 :ATTACH:
+:PROPERTIES:
+:ID:       9815ceda-5224-48d3-8a42-584902cd7d00
+:END:
+矩阵A捕获先前的状态来构建新状态，但是矩阵A只记住之前的几个token和当前token的区别，问题就类似于RNN，不能有长久的memory
+[[attachment:_20241223_091359screenshot.png]]
+** 创新 :ATTACH:
+:PROPERTIES:
+:ID:       72039449-2355-41a3-9809-b3c3d7bc16b5
+:END:
+对于矩阵A的改造：使其可以很好地捕获最近的token并衰减旧的token状态表示
+[[attachment:_20241223_092113screenshot.png]]
+* S4：SSM+离散化(可循环表示或卷积表示)+HiPPO :ATTACH:
+:PROPERTIES:
+:ID:       39cb1071-e556-4b01-944e-3081321b4438
+:END:
+[[attachment:_20241223_092940screenshot.png]]
+* S4D
+** 创新 :ATTACH:
+:PROPERTIES:
+:ID:       86cb792c-4309-4f3f-a129-e4ac67248967
+:END:
+将参数矩阵标准化为对角结构 => 目的：提高实践中的可行性
+[[attachment:_20241223_093311screenshot.png]]
+- 左图：基于HiPPO的A矩阵变换为对角线结构后，使得其可被视为一组一维SSM
+- 右图：S4D卷积核
+* Mamba = 有选择处理信息+硬件感知算法+更简单的SSM架构
+** SSM、S4存在的问题：矩阵不随输入不同而变化，无法针对输入做针对性推理
+这里的不变性是指：
+- 推理：模型使用这些固定的矩阵来处理新的输入数据并产生预测
+- 训练：矩阵会随着训练的进行而变化
+** 一、选择性状态空间模型 => 有选择处理信息，且矩阵会随输入而变化
+*** 各模型对比 :ATTACH:
+:PROPERTIES:
+:ID:       0a8ba3af-38e3-463b-9350-c79a7ff3c033
+:END:
+[[attachment:_20241223_100857screenshot.png]]
+序列模型的效率与效果的权衡点在于它们对状态的压缩程度：
+- 高效的模型必须有一个小的状态(RNN或S4)
+- 有效的模型必须有来自上下文的所有必要信息的状态(Transformer)
+Mamba：兼顾效率和效果 => 有选择的处理信息
+[[attachment:_20241223_101147screenshot.png]]
+**** 如何做到呢？ :ATTACH:
+:PROPERTIES:
+:ID:       d17ed1d3-5094-4edd-a4f4-4172fd15d3ee
+:END:
+[[attachment:_20241223_101629screenshot.png]]
+- 步长(🔺)：类似遗忘门 => 步长较小，忽略当前输入，更多使用先前的上文；步长较大，则相反
+- A：存储着之前所有浓缩历史信息的矩阵
+- B：类似输入门 => 控制输入x进入状态h
+- C：类似输出门 => 控制状态h输出y
+** 二、硬件感知设计
+因为A B C矩阵现在是动态的了，因此 *无法使用卷积表示* 来计算它们(CNN需要固定内核)，因此我们 *只能使用循环表示*
+*** 那么如何实现并行化呢？ :ATTACH:
+:PROPERTIES:
+:ID:       c65a56bb-782d-453b-8063-df5f7816f4bf
+:END:
+- 选择性扫描算法：分段计算序列并迭代组合它们
+  [[attachment:_20241223_103047screenshot.png]]
+- Flash Attention技术的应用
+** 三、简化的SSM :ATTACH:
+:PROPERTIES:
+:ID:       762f6cc4-c42e-428f-8603-a2680e35da7f
+:END:
+[[attachment:_20241223_103302screenshot.png]]
+- 几个问题：
+  1. 为何要做线性投影？
+     线性投影使输入嵌入的维度可能增加，也就能让模型处理更高维度的特征空间，捕获更细致、更复杂的特征
+  2. 为什么SSM之前有个卷积CNN？
+     1) CNN用于提取局部短距离的特征，SSM处理这些特征并捕捉序列数据中的长期依赖关系，两者互补
+     2) CNN有助于建立token之间的局部上下文关系
+        # 先卷积，可以确保在进入SSM之前，序列中的每个token可以考虑其邻居token的信息
+*** Mamba应用实例 :ATTACH:
+:PROPERTIES:
+:ID:       4ec53cb5-a8e8-429d-b62a-140b5efc0b79
+:END:
+[[attachment:_20241223_105257screenshot.png]]
+* 参考链接
+1. [[https://blog.csdn.net/v_JULY_v/article/details/134923301][一文通透想颠覆Transformer的Mamba：从SSM、HiPPO、S4到Mamba]]
+2. [[https://zhuanlan.zhihu.com/p/684231320][挑战Transformer：全新架构Mamba详解]]

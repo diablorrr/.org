@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       1c44133a-b180-461a-8f85-0ec46ae27168
+:END:
+#+title: rg(ripgrep)
+#+LAST_MODIFIED: 2025-03-08 18:26:53
+
+
+* 使用
+#+begin_src bash
+rg 文本内容
+#+end_src
+
+** [[id:13d1007d-c805-482c-bf95-5e53ba86bf4c][doom emacs]]中使用rg搜索时显示预览内容
+#+begin_example
+C-SPC
+#+end_example
+
+
+* 概念
+- 简介 ::
+  1. 超快文本搜索工具
+  2. [[id:e3073674-91ea-4061-9ec0-afbc8fba7519][grep]]的替代品，速度更快

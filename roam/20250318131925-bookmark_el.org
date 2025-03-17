@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       dd3340ec-70a6-423b-90b2-704c20e36eda
+:END:
+#+title: bookmark.el
+#+LAST_MODIFIED: 2025-03-18 13:28:14
+
+
+* 查询
+| 函数                | 作用               |
+|---------------------+--------------------|
+| bookmark-set        | 创建书签(内存中)   |
+| bookmark-save       | 将书签保持到磁盘   |
+| bookmark-jump       | 跳转书签           |
+| [[id:c932fc25-1b47-4819-89a4-094877d7c7d2][bookmark-bmenu-list]] | 打开书签列表缓存区 |
+
+
+* 概念
+- 简介 :: [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]的书签功能

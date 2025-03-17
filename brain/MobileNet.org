@@ -1,0 +1,6 @@
+
+* MobileNet
+:PROPERTIES:
+:ID:       e5951c2b-ca07-4f30-94ce-d6587f445705
+:BRAIN_PARENTS: e1fa0fb7-873d-45c7-8e52-136edbd460fc
+:END:

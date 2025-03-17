@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       a8f646b8-1262-424f-9bba-388f572bb22f
+:END:
+#+title: bear
+#+LAST_MODIFIED: 2025-03-13 13:10:05
+
+* 使用
+#+begin_src bash
+bear -- <your-build-command>
+#+end_src
+** 为[[id:4012acd2-c162-4270-8c93-9922a3502f50][qt]]项目(qmake构建)生成[[id:9653d634-a6ed-45c9-a7f7-f7f51f024ab9][compile_commands.json]]
+1. [[id:4012acd2-c162-4270-8c93-9922a3502f50][qt]]项目根目录执行：qmake -r => 生成[[id:aa8af2c0-e0ff-4238-80bd-5c3b2d913bee][.qmake.stash]]
+2. bear -- make -j$(nproc)
+
+
+* 概念
+- 简介 ::
+  1. 用于生成[[id:64744248-ac41-4af0-ba4e-8f69a162f160][clang编译数据库]]的工具

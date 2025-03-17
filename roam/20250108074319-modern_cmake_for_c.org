@@ -1,0 +1,693 @@
+:PROPERTIES:
+:ID:       cca52d5b-d76d-4411-8605-af9499019274
+:NOTER_DOCUMENT: /home/yoshiki01/Documents/Modern-CMake-for-C++.pdf
+:NOTER_PAGE: 301
+:END:
+#+FILETAGS: book
+#+title: Modern CMake for C++
+#+LAST_MODIFIED: 2025-01-17 19:38:09
+
+
+* 第1章 初识CMake
+:PROPERTIES:
+:NOTER_PAGE: 13
+:END:
+** CMake是什么
+- 构建系统 :: 只是其他构建工具的简化配置文件(如：GNU Make或Ninja的Makefiles等)
+** CMake工作流程 :ATTACH:
+:PROPERTIES:
+:NOTER_PAGE: 15
+:ID:       4db06495-6726-4e2a-abce-6a73d8c5792d
+:END:
+[[attachment:_20250108_081848screenshot.png]]
+1. 配置
+   读取存储在源码树目录中的项目信息，并为生成阶段准备输出目录或构建树 => 执行CMakeLists.txt项目配置文件
+   # CMake首先创建一个空的构建树，并收集工作环境的信息，例如：架构、编译器、链接器和存档打包器。此外，还要检查编译器是否能编译简单的测试程序。
+   # CMkaeLists.txt告诉CMake有关项目结构、目标和依赖的信息
+2. 生成
+   读取项目配置之后，CMake将为当前工作环境生成一个构建系统
+   # 生成阶段在配置阶段之后自动执行
+3. 构建
+   运行适当的构建工具
+   - 构建工具 :: 执行构建步骤，使用编译器、链接器、静态和动态分析工具、测试框架、报告工具，以及其他工具来生成目标
+** CMake命令行
+CMake 是一个工具集，由五个可执行程序组成:
+- cmake: 配置、生成和构建项目的主要可执行文件
+- ctest: 用于运行和报告测试结果的测试驱动程序
+- cpack: 用来生成安装程序和源包的打包程序
+- cmake-gui: cmake 的图形界面
+- ccmake: cmake 基于控制台的图形界面
+*** 生成器选项
+:PROPERTIES:
+:NOTER_PAGE: 22
+:END:
+在生成阶段指定一些选项。选择和配置生成器决定了将使用哪个构建工具进行构建，构建文件是什么样子的，以及构建树的结构。
+**** 查看系统可用生成器
+cmake --help
+*** 缓存选项
+:PROPERTIES:
+:NOTER_PAGE: 24
+:END:
+CMake在配置阶段向系统查询各种信息，这些信息缓存在构建树目录中的 CMakeCache.txt 中。
+*** 用于调试和跟踪的选项
+:PROPERTIES:
+:NOTER_PAGE: 25
+:END:
+*** 预置的选项 :ATTACH:
+:PROPERTIES:
+:NOTER_PAGE: 26
+:ID:       8507a6e6-9d37-4110-b485-509e6093b938
+:END:
+[[attachment:_20250108_084145screenshot.png]]
+CMakePresets.json 文件，指定一些处理构建树路径、生成器、缓存和环境变量的默认值。这些值覆盖系统默认值和环境
+**** 查看可用的预设
+cmake --list-presets
+*** 构建项目
+:PROPERTIES:
+:NOTER_PAGE: 27
+:END:
+cmake --build <dir>
+*** 安装项目
+:PROPERTIES:
+:NOTER_PAGE: 29
+:END:
+cmake --install <dir>
+cmake --install <dir> --config <cfg>
+cmake --install <dir> --component <comp>
+cmake --install <dir> --prefix <prefix>
+** CMake项目的结构
+:PROPERTIES:
+:NOTER_PAGE: 34
+:END:
+*** 源码树
+这是项目所在的目录 (也称为项目根目录)，包含了所有的 C++ 源码和 CMake 项目文件
+*** 构建树
+CMake使用这个目录来存储构建过程中生成的所有内容:项目的构件、配置、缓存、构建日志，以及本地构建工具将创建的文件。
+*** 文件列表
+包含CMake语言的文件称为文件列表，可以通过使用include()和find_package()，或间接使用add_subdirectory() 来将其包含在另一个文件中
+*** CMakeLists.txt
+CMake项目配置为CMakeLists.txt列表文件，需要在源码树根部提供。这样的顶层文件是在配置阶段首先执行的。
+*** CMakeCache.txt
+当配置阶段第一次运行时，缓存变量将从列表文件中生成并存储在 CMakeCache.txt 中。该文件位于构建树的根目录中
+*** 包配置文件
+CMake生态系统包括项目可以依赖的外部包，允许开发人员以无缝的、跨平台的方式使用库和工具
+- 使用 find_package() 指令来包含包
+- 描述包的CMake文件命名为<PackageName>-config.cmake和<PackageName>Config.cmake
+*** cmake_install.cmake，CTestTestfile.cmake和CPackConfig.cmake
+这些文件是由生成阶段的cmake可执行文件在构建树中生成的，不应该通过手动编辑。CMake使用它们作为CMake安装操作、CTest 和 CPack 的配置
+*** CMakePresets.json 和 CMakeUserPresets.json
+预设项目的配置
+- CMakePresets.json: 项目作者提供的预设。
+- CMakeUserPresets.json:根据自己的偏好定制项目配置用户准备的
+** 脚本和模块
+:PROPERTIES:
+:NOTER_PAGE: 41
+:END:
+- 脚本文件
+  .cmake
+- 使用脚本文件
+  cmake -P script.cmake
+* 第2章 CMake语法
+:PROPERTIES:
+:NOTER_PAGE: 44
+:END:
+** 基本语法
+*** 注释
+:PROPERTIES:
+:NOTER_PAGE: 45
+:END:
+*** 执行指令 :ATTACH:
+:PROPERTIES:
+:NOTER_PAGE: 46
+:ID:       d5214e20-6481-4f2a-8720-6a8a98686d9d
+:END:
+[[attachment:_20250108_092729screenshot.png]]
+- 脚本指令:脚本指令可用，会改变指令处理器、访问变量的状态，并影响其他指令和环境
+- 项目指令: 这些指令在项目中可用，操纵项目状态并构建目标
+- CTest 指令: 这些指令在 CTest 脚本中可用，管理测试
+*** 指令参数
+:PROPERTIES:
+:NOTER_PAGE: 47
+:END:
+在底层，CMake识别的唯一数据类型是字符串
+- 方括号参数
+- 引号参数
+- 非引号参数
+**** 方括号参数
+方括号参数不会进行求值，并用于将多行字符串作为单个参数逐字传递给命令。所以将包括制表符和换行符形式的空白。这些参数的结构与注释完全相同，唯一区别是不能嵌套括号参数
+**** 引号参数
+带引号的参数类似于常规的C++字符串——这些参数将多个字符组合在一起，包括空格，它们将展开转义序列。与C++字符串一样，开始和结束都使用双引号(”)，因此要在输出字符串中包含一个引号字符，必须使用反斜杠对其进行转义 (\”)。
+**** 非引号参数 :ATTACH:
+:PROPERTIES:
+:ID:       06e87963-d6ac-40ee-b62d-256c8b82a8a6
+:END:
+分号(;)会被当作分隔符，将参数拆分为多个参数，可用反斜杠转义(\;)
+[[attachment:_20250108_094114screenshot.png]]
+** 变量
+:PROPERTIES:
+:NOTER_PAGE: 50
+:END:
+CMake中所有变量都存储为字符串
+- 普通变量
+- 缓存变量
+- 环境变量
+*** 引用变量
+:PROPERTIES:
+:NOTER_PAGE: 51
+:END:
+语法：
+- ${} 用于引用普通变量或缓存变量
+- $ENV{} 用于引用环境变量
+- $CACHE{} 用于引用缓存变量
+*** 环境变量
+:PROPERTIES:
+:NOTER_PAGE: 52
+:END:
+*** 缓存变量
+:PROPERTIES:
+:NOTER_PAGE: 53
+:END:
+存储在构建树中的CMakeCache.txt文件中
+- 包含项目配置阶段收集的信息
+  + 系统：编译器、链接器、工具和其他的路径
+  + GUI：从用户收集的信息
+*** 变量作用域
+:PROPERTIES:
+:NOTER_PAGE: 54
+:END:
+CMake 有两个作用域:
+- 函数作用域: 用于执行用 function() 定义的自定义函数
+- 目录作用域: 当从 add_subdirectory() 指令执行嵌套目录中的 CMakeLists.txt 文件时
+** 列表
+:PROPERTIES:
+:NOTER_PAGE: 56
+:END:
+** 控制结构
+:PROPERTIES:
+:NOTER_PAGE: 57
+:END:
+*** 条件块
+:PROPERTIES:
+:NOTER_PAGE: 57
+:END:
+**** if
+#+begin_src cmake
+if(<condition>)
+  <commands>
+elseif(<condition>) # optional block, can be repeated
+  <commands>
+else() # optional block
+  <commands>
+endif()
+#+end_src
+*** 循环
+:PROPERTIES:
+:NOTER_PAGE: 60
+:END:
+**** while
+#+begin_src cmake
+while(<condition>)
+  <commands>
+endwhile()
+#+end_src
+**** foreach
+*** 定义指令
+:PROPERTIES:
+:NOTER_PAGE: 62
+:END:
+两种方式定义自己的命令
+1. macro()
+2. function()
+**** 命令调用中的参数
+:PROPERTIES:
+:ID:       93646e86-6a6a-473c-b4f2-d188d195bffd
+:END:
+- ${ARGC}: 参数的数量
+- ${ARGV}: 所有参数的列表
+- ${ARG0}, ${ARG1}, ${ARG2}: 特定索引处的实参值
+- ${ARGN}: 最后一个预期参数之后，由调用者传递的匿名参数列表
+**** macro()
+工作方式更像查找和替换指令
+不会在调用堆栈上创建单独的条目
+因此宏中调用return()比在函数上返回调用语句的级别高一级
+***** 语法
+#+begin_src cmake
+macro(<name> [<argument> …])
+  <commands>
+endmacro()
+#+end_src
+**** function()
+为本地变量创建一个单独的作用域
+***** 语法
+#+begin_src cmake
+function(<name> [<argument> …])
+  <commands>
+endfunction()
+#+end_src
+***** 细节
+若函数调用传递的参数多于声明的参数，多余的参数将解释为匿名参数并存储在 [[id:93646e86-6a6a-473c-b4f2-d188d195bffd][ARGN]] 变量中。
+** 实用指令
+:PROPERTIES:
+:NOTER_PAGE: 66
+:END:
+*** message()
+将文本打印到标准输出
+*** include()
+可以将CMake代码划分到单独的文件中，然后通过include()从父列表文件引用
+*** include_guard()
+包含有副作用的文件时，可能想要限制它们，以便它们只包含一次
+*** file()
+:PROPERTIES:
+:NOTER_PAGE: 68
+:END:
+file()指令 会以一种与系统无关的方式 读取、写入和传输文件
+*** execute_process()
+使用系统中可用的工具，可使用该指令运行其他进程并收集它们的输出
+
+* 第3章 CMake项目
+:PROPERTIES:
+:NOTER_PAGE: 71
+:END:
+
+** 指令和命令
+:PROPERTIES:
+:NOTER_PAGE: 72
+:END:
+*** cmake_minimum_required()
+检查系统是否有正确版本的cmake版本
+*** project()
+定义语言和元数据
+**** 语法
+#+begin_src cmake
+project(<PROJECT-NAME>
+  [VERSION <major>[.<minor>[.<patch>[.<tweak>]]]]
+  [DESCRIPTION <project-description-string>]
+  [HOMEPAGE_URL <url-string>]
+  [LANGUAGES <language-name>...])
+#+end_src
+# CMake默认启动C和C++，但我们还是可以指定LANGUAGES => 可以跳过语言检测和测试可用的编译器 => 节省时间
+** 划分项目
+:PROPERTIES:
+:NOTER_PAGE: 73
+:END:
+*** add_subdirectory()
+作用域的子目录
+**** 语法
+#+begin_src cmake
+add_subdirectory(source_dir [binary_dir]
+  [EXCLUDE_FROM_ALL])
+#+end_src
+这个指令将在source_dir路径中查找CMakeLists.txt文件，这个文件将在目录作用域中进行解析
+** 项目结构 :ATTACH:
+:PROPERTIES:
+:NOTER_PAGE: 77
+:ID:       48c9ca4c-dfff-4656-a1d8-fb464c82e3db
+:END:
+*** 项目目录结构示例
+[[attachment:_20250113_160351screenshot.png]]
+组件：
+- cmake: 宏和函数，查找模块和一次性脚本
+- src: 将存储的二进制文件和库的源代码
+- doc: 用于构建文档
+- extern: 从源代码构建的外部项目的配置
+- test: 包含自动测试的代码
+# 此结构中CMakeLists.txt应该存在于以下目录中：顶级项目目录、src、doc、extern、test
+**** 可执行文件目录结构
+[[attachment:_20250113_160906screenshot.png]]
+**** 库的目录结构 :ATTACH:
+:PROPERTIES:
+:ID:       19008964-34c6-403b-bc1d-4900bade9042
+:END:
+[[attachment:_20250113_161101screenshot.png]]
+**** CMake如何在单个项目中工作
+:PROPERTIES:
+:NOTER_PAGE: 80
+:END:
+** 环境范围
+:PROPERTIES:
+:NOTER_PAGE: 81
+:END:
+CMake查询环境信息的方法：
+- CMAKE_变量
+- ENV变量
+- 特殊命令
+# 查询环境信息有什么用 => 支持跨平台脚本
+*** 识别操作系统
+例如：windows和unix在大小写、文件路径结构、扩展名、特权等方面不同
+*** 交叉编译
+- 定义 :: 在一台机器上编译要在另一台机器上运行的代码
+*** 简化变量
+*** 主机系统信息
+*** 平台是32位还是64位架构
+*** 系统的端序
+** 配置工具链
+*** 设定C++标准
+CMAKE_CXX_STANDARD
+*** 坚持支持标准
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+*** 特定于供应商的扩展
+set(CMAKE_CXX_EXTENSIONS OFF)
+*** 过程间优化
+*** 检查支持的编译器特性
+CMAKE_CXX_COMPILE_FEATURES
+** 禁用内构建
+:PROPERTIES:
+:NOTER_PAGE: 88
+:END:
+
+* 第4章 使用目标
+:PROPERTIES:
+:NOTER_PAGE: 91
+:END:
+** 目标的概念
+- 定义 :: 构建系统用来将文件列表编译为另一个文件的一个方式
+*** 创建目标的指令
+- add_executable()
+- add_library()
+- add_custom_target()
+*** 依赖图 :ATTACH:
+:PROPERTIES:
+:ID:       17b918fd-05e8-4150-83cb-d77564a83968
+:END:
+[[attachment:_20250113_172302screenshot.png]]
+target_link_libraries()
+add_dependencies()
+*** 目标属性
+*** 传递性使用需求
+:PROPERTIES:
+:NOTER_PAGE: 96
+:END:
+**** 名称解释
+- 使用 :: 一个目标可能依赖于另一个目标，这种依赖称为使用
+- 需求 :: 或简单地称为属性，这样的已用目标具有使用目标必须满足的特定需求: 链接一些库，包含一个目录，或要求特定的编译特性
+- 传递 :: CMake将使用目标的一些属性/需求附加到使用它们的目标的属性中
+简化概念，源目标 (使用的目标) 和目标目标 (使用其他目标的目标) 之间的传播属性
+**** target与source
+- target
+  一般指当前被操作的目标（可执行文件、库等）。
+  在依赖关系中，target 也可以是依赖的目标。
+- source
+  通常指源文件，表示构建目标时的原材料。
+  在依赖上下文中，可能指代文件而非逻辑目标
+**** 传递关键字
+- PUBLIC :: 该属性或依赖即适用于目标本身，也传递给依赖它的其他目标
+- PRIVATE :: 属性或依赖仅适用于目标本身，不会传递给其他目标
+- INTERFACE :: 属性或依赖仅对依赖此目标的其他目标可见，不适用于目标本身
+  # INTERFACE属性仅用于在链中进一步传播属性，而目标不会在其构建过程中使用它们
+***** 示例
+#+begin_src cmake
+add_library(libA SHARED libA.cpp)
+add_library(libB STATIC libB.cpp)
+target_link_libraries(libB PUBLIC libA)
+
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE libB)
+#+end_src
+my_app依赖libB，因此libA的链接需求会传递到my_app
+*** 处理冲突的传播属性
+*** 实现伪目标
+- 伪目标(phony target) :: 一种特殊的目标类型，它不会生成文件或二进制产物，用于执行一些构建过程中的辅助操作。例如运行自定义命令、组织目标依赖关系或控制构建流程
+**** 导入目标
+**** 别名目标
+**** 接口库
+:PROPERTIES:
+:NOTER_PAGE: 100
+:END:
+- 简介：一个不编译任何东西的库，围绕着传递性使用需求而存在的概念
+- 用途：
+  1. 纯头文件库
+  2. 一个逻辑单元(包含一堆传播属性)
+** 编写自定义命令
+:PROPERTIES:
+:NOTER_PAGE: 101
+:END:
+** 生成器表达式
+:PROPERTIES:
+:NOTER_PAGE: 104
+:END:
+*** 问题
+一个目标需要知道另一个目标的二进制工件的路径。但是，只有在解析所有列表文件并完成配置阶段之后，这些信息才可用
+*** 解决
+生成器表达式：为该信息创建一个占位符，并将其评估推迟到下一个阶段——生成阶段
+# $<>(生成器表达式)在生成阶段展开，${}(变量)在配置阶段展开
+*** 语法 :ATTACH:
+:PROPERTIES:
+:ID:       1c202218-ce00-415a-8865-8bdd063680ff
+:END:
+[[attachment:_20250114_213503screenshot.png]]
+- 以 $ 和括号 ($<) 开头
+- 添加 EXPRESSION 名称
+- 若表达式需要参数，则添加冒号 (:) 并提供 arg1、arg2 和 arg3 值，用逗号分隔。
+- 用 > 关闭表达式。
+*** 条件表达式
+*** 计算类型
+:PROPERTIES:
+:NOTER_PAGE: 106
+:END:
+生成器表达式可以计算成两种类型——布尔或字符串。布尔值由 1(真) 和 0(假) 表示。其他的都只是一个字符串。
+*** 用法
+:PROPERTIES:
+:NOTER_PAGE: 113
+:END:
+
+* 第5章 CMake编译C++
+:PROPERTIES:
+:NOTER_PAGE: 118
+:END:
+** 编译基础
+:PROPERTIES:
+:NOTER_PAGE: 118
+:END:
+创建和运行C++程序的步骤
+1. 编写：编写源码。
+2. 编译：将.cpp编译为目标文件。
+3. 链接：将目标文件链接到一个可执行文件中，并添加所有其他依赖项——动态库和静态库。
+4. 加载：为了运行该程序，操作系统将使用一个名为加载器的工具，将其机器码和所有必需的动态库映射到虚拟内存。然后加载器读取头文件以检查程序从哪里开始，并将控制权移交给代码。
+5. 执行：C++ 运行时启动。执行一个 special_start 函数来收集命令行参数和环境变量。启动线程，初始化静态符号，并注册清理回调。这样，才能调用 main()(其中代码由开发者书写)。
+*** 编译工作
+:PROPERTIES:
+:NOTER_PAGE: 119
+:END:
+编译器创建一个目标文件的步骤
+1. 预处理
+2. 语言分析
+3. 汇编
+4. 优化
+5. 生成二进制文件
+*** 管理目标源
+:PROPERTIES:
+:NOTER_PAGE: 121
+:END:
+- 方式1：(不建议[fn:1])GLOB模式下使用file()指令
+  可以从子目录收集所有文件并将它们存储在一个变量中
+- 方式2：可以使用 target_sources() 指令追加源文件到之前创建的目标
+** 预处理
+*** 提供包含头文件的路径
+:PROPERTIES:
+:NOTER_PAGE: 122
+:END:
+#include指令包含头文件形式：
+- #include <path-spec>: 尖括号式
+- #include ”path-spec”: 引号式
+预处理器将用指定路径中的文件内容替换这些指令
+尖括号形式将检查标准包含目录，包括标准 C++ 库和标准 C 库头文件存储在系统中的目录
+引号式将开始在当前文件的目录中搜索包含的文件，然后在目录中查找带尖括号的目录
+
+CMake 提供了一个指令来操作头文件的搜索路径，以找到需要包含的头文件
+target_include_directories()指令
+*** 预处理宏定义
+编译阶段时的预处理器的 #define 和 #if、#elif 和 #endif 指令
+target_compile_definitions()指令 将值从CMake传递到C++编译器
+例如：下面代码只有#define ABC后才会执行...
+#+begin_src c++
+#if defined(ABC)
+  ...
+#endif
+#+end_src
+因此我们可以在CMakeLists.txt设置ABC传递到C++编译器
+*** 配置头文件
+:PROPERTIES:
+:NOTER_PAGE: 125
+:END:
+** 配置优化器
+:PROPERTIES:
+:NOTER_PAGE: 126
+:END:
+优化器作用：提高代码的性能
+优化器不仅将决定哪些函数可以删除或压缩，还会移动代码，甚至复制代码
+target_compile_options()
+*** 优化级别
+:PROPERTIES:
+:NOTER_PAGE: 127
+:END:
+大多数编译器提供了从0到3的四个基本优化级别，优化级别从低到高，用-O<level> 选项来指定
+- CMAKE_CXX_FLAGS_DEBUG 等于 -g
+- CMAKE_CXX_FLAGS_RELEASE 等于 -O3 -DNDEBUG
+*** 函数内联
+:PROPERTIES:
+:NOTER_PAGE: 128
+:END:
+将代码替换原始的函数调用，节省CPU周期
+在调试版本禁用内联：
+可以通过为目标指定-O0 级别，或者直接在负责的标志后面执行...
+*** 循环展开
+:PROPERTIES:
+:NOTER_PAGE: 129
+:END:
+将循环转换为一组语句，用程序的大小来换取执行速度
+*** 循环向量化
+:PROPERTIES:
+:NOTER_PAGE: 130
+:END:
+可以同时对多条信息执行相同的操作
+** 编译过程
+:PROPERTIES:
+:NOTER_PAGE: 130
+:END:
+*** 查找错误
+:PROPERTIES:
+:NOTER_PAGE: 134
+:END:
+**** 错误和警告的配置
+**** 调试构建
+**** 头文件的调试问题
+**** 为调试器提供信息
+
+* 第6章 进行链接
+** 掌握正确的链接方式 :ATTACH:
+:PROPERTIES:
+:NOTER_PAGE: 141
+:ID:       d173256c-6118-41c6-8dab-e426e6f9d7b3
+:END:
+[[attachment:_20250115_134907screenshot.png]]
+- ELF 头标识目标操作系统、ELF 文件类型、目标指令集体系结构，以及 ELF 文件中两个头表的位置和大小信息——程序头表 (不存在于目标文件中) 和节头表
+- 包含按类型分组的信息的部分
+  + .text 区段: 机器代码，包含处理器要执行的所有指令
+  + .data 区段: 初始化的全局对象和静态对象 (变量) 的所有值
+  + .bss 区段: 未初始化的全局对象和静态对象 (变量) 的所有值，这些值将在程序启动时初始化为零
+  + .rodata 区段: 常量的所有值 (只读数据)
+  + .strtab 区段: 一个字符串表，包含所有常量字符串，例如 hello.cpp 示例中的 Hello World
+  + .shstrtab 区段: 包含所有部分名称的字符串表
+- 节头表，包含关于名称、类型、标志、内存中的目标地址、文件中的偏移量和其他杂项信息，用于了解文件中的哪些部分，以及它们在哪里，就像目录一样
+
+ [[attachment:_20250115_135214screenshot.png]]
+
+链接器解析引用
+[[attachment:_20250115_145521screenshot.png]]
+
+最终的可执行文件
+[[attachment:_20250115_145619screenshot.png]]
+
+** 构建不同类型的库
+:PROPERTIES:
+:NOTER_PAGE: 144
+:END:
+*** 静态库
+add_library
+*** 动态库
+add_library
+*** 模块库
+add_library
+** 用定义规则解决问题
+:PROPERTIES:
+:NOTER_PAGE: 146
+:END:
+** 链接顺序和未定义符号
+:PROPERTIES:
+:NOTER_PAGE: 150
+:END:
+解析未定义符号的工作方式
+链接器从左向右处理二进制文件。当链接器遍历二进制文件时，将执行以下操作
+1. 收集从此二进制文件导出的所有未定义符号，并存储起来以备以后使用
+2. 尝试用此二进制文件中定义的符号解析未定义的符号 (从处理的二进制文件中收集)
+3. 对下一个二进制文件重复此过程
+若在整个操作完成后，若有符号仍未定义，则链接失败
+** 分离main()进行测试
+:PROPERTIES:
+:NOTER_PAGE: 152
+:END:
+
+* 第7章 管理依赖关系
+** 如何查找已安装的软件包
+:PROPERTIES:
+:NOTER_PAGE: 155
+:END:
+我们在系统中安装了依赖项 => 让CMake查找并引用这个外部依赖 => find_package() => 在系统中发现包 => 每个系统都有自己的安装和管理包的方法 => 寻找包所在的路径可能是棘手的 => 一般包都提供了适当的配置文件 => 允许CMake确定支持包所需的变量 => 若包没有提供适当的配置文件 => 为包提供查找模块或编写一个配置文件
+CMake 查找匹配的查找模块，若找不到，就会查找配置文件
+** 使用 FindPkgConfig
+:PROPERTIES:
+:NOTER_PAGE: 160
+:END:
+** 编写自己的查找模块
+:PROPERTIES:
+:NOTER_PAGE: 162
+:END:
+当我们想要使用一个还没有专门的查找模块的第三方库时
+** 使用Git库
+:PROPERTIES:
+:NOTER_PAGE: 166
+:END:
+** 使用 ExternalProject 和 FetchContent 模块
+:PROPERTIES:
+:NOTER_PAGE: 170
+:END:
+* 第8章 测试框架
+:PROPERTIES:
+:NOTER_PAGE: 181
+:END:
+** 为CTest创建最基本的单元测试
+:PROPERTIES:
+:NOTER_PAGE: 188
+:END:
+** 单元测试框架
+:PROPERTIES:
+:NOTER_PAGE: 195
+:END:
+* 第9章 分析工具
+:PROPERTIES:
+:NOTER_PAGE: 211
+:END:
+** 格式化
+:PROPERTIES:
+:NOTER_PAGE: 211
+:END:
+** 静态检查
+:PROPERTIES:
+:NOTER_PAGE: 215
+:END:
+静态程序分析是在不运行编译版本的情况下检查源代码的过程
+Cppcheck在手册中推荐以下步骤：
+1. 找到静态检查器的可执行文件
+2. 生成一个编译数据库
+   cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .
+3. 生成的 JSON 文件上运行检查器
+   <path-to-cppcheck> --project=compile_commands.json
+* 第10章 生成文档
+:PROPERTIES:
+:NOTER_PAGE: 227
+:END:
+* 第11章 安装和打包
+:PROPERTIES:
+:NOTER_PAGE: 235
+:END:
+** 在系统上安装
+:PROPERTIES:
+:NOTER_PAGE: 238
+:END:
+** 创建可重用的包
+:PROPERTIES:
+:NOTER_PAGE: 249
+:END:
+** 使用CPack打包
+:PROPERTIES:
+:NOTER_PAGE: 261
+:END:
+* 第12章 创建完整的项目
+:PROPERTIES:
+:NOTER_PAGE: 266
+:END:
+
+
+* Footnotes
+
+[fn:1]

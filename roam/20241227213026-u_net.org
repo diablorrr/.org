@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       40142c45-af06-414e-8f33-8a5737bf7487
+:END:
+#+title: U-Net
+# 2015.5
+# 标题：U-Net: Convolutional Networks for Biomedical Image Segmentation
+# 任务：医学图像分割
+
+* 核心思想
+浅层特征更local视角，深层特征更global视角。
+# 问题：浅层抓到的特征，随着经过下层的卷积层而丢失
+# 我们希望：既有local视角，又有global视角
+方法：将浅层特征和深层特征串接
+# 因此，我们的模型能抓到local和global的特征
+# 例如：细胞核的边界和形态这种非常local的特征
+
+
+* 模型 :ATTACH:
+:PROPERTIES:
+:ID:       66f7b6b7-d9fc-4844-b40e-76c0e90012b3
+:END:
+[[attachment:_20241227_213149screenshot.png]]
+# U的左半边，理解为Encoder；U的右半部，理解为Decoder。

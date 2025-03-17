@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       1ff40557-56dc-4670-b38f-59586d545315
+:END:
+#+title: shell
+#+LAST_MODIFIED: 2025-02-05 21:39:54

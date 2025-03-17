@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       5fbaddcf-d410-4b42-a7de-9ebaf950cc61
+:NOTER_DOCUMENT: /home/yoshiki01/Documents/C++ Primer 5th.pdf
+:NOTER_PAGE: 83
+:END:
+#+title: 引用
+#+LAST_MODIFIED: 2025-01-28 21:54:44
+#+filetags: cpp
+
+* 引用
+:PROPERTIES:
+:NOTER_PAGE: 71
+:END:
+- 简介 :: 一个对象的别名
+- 特点 ::
+  1. 引用本身不是对象
+  2. 引用必须初始化

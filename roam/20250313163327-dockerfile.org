@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       8987bd3a-de7e-4c6c-83de-96d8b42ccfdd
+:END:
+#+title: Dockerfile
+#+LAST_MODIFIED: 2025-03-13 16:42:24
+
+* 概念
+- 简介 ::
+  1. 包含一系列指令的文本文件
+  2. 用于自动化构建[[id:a47cc941-ccc6-4893-9862-d5b245ea912b][docker]]镜像

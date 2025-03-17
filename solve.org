@@ -1,0 +1,41 @@
+#+title: Solve
+#+LAST_MODIFIED: 2025-02-02 17:09:31
+
+* emacs
+[[http://xahlee.info/emacs/index.html][Xah Emacs Tutorial]]
+[[https://emacs-china.org/t/tip-kde-emacs/19993][KDE设置Emacs忽略系统的全局快捷键]]
+[[https://emacs-china.org/t/emacs/19319/7#cc-mode-2][cpp-mode缩进问题]]
+* cpp
+[[https://zh-google-styleguide.readthedocs.io/en/latest/index.html][Google开源项目风格指南]]
+* 学习路线
+[[https://csdiy.wiki/][CS自学指南]]
+[[https://www.code-nav.cn/course/1789189862986850306/section/1789190170773266433?type=#heading-0][编程导航]]
+[[https://www.blogchn.com/pages/3001d9/#c-%E8%87%AA%E6%95%91%E6%8C%87%E5%8D%97-%E6%80%BB%E8%A7%88][C++自救指南]]
+[[https://cppguide.cn/][CppGuide]]
+[[https://betterexplained.com/][betterexplained：理解数学]]
+[[https://www.3blue1brown.com/][3blue1brown：理解AI]]
+
+* Git
+[[https://tech.codelc.com/docs/engineering/gitflow.html][Git使用流程和规范]]
+
+* JavaScript
+[[https://zh.javascript.info/][现代JavaScript教程]]
+
+* 虚拟机
+[[https://github.com/suv80/libs/blob/master/Linux/%E5%AE%89%E8%A3%85VirtualBox%E5%A2%9E%E5%BC%BA%E5%8A%9F%E8%83%BD%EF%BC%88%E5%91%BD%E4%BB%A4%E8%A1%8C%EF%BC%89.md][virtualbox安装增强功能]]
+[[https://blog.csdn.net/qq_27462573/article/details/130484723][虚拟机共享本机VPN]]
+
+* 英语
+[[https://llwslc.github.io/grammar-club/][英语语法俱乐部]]
+[[https://doc.zkbhj.com/english/index.html][英语全面提升手册]]
+
+* 网络
+[[https://www.nslookup.io/][NsLookup：域名解析]]
+[[https://sakronos.github.io/Note/2021/03/06/%E4%BD%BF%E7%94%A8Clash-APIj%E5%88%87%E6%8D%A2%E8%8A%82%E7%82%B9/][命令行切换clash节点]]
+
+* linux
+[[https://arch.icekylin.online/guide/rookie/basic-install][archlinux安装(非官网版)]]
+[[https://blog.linioi.com/posts/clash-on-arch/][archlinux安装clash]]
+[[https://archlinuxstudio.github.io/ShellTutorial/#/][Linux命令行与Shell脚本编程(精简版)]]
+[[https://linuxtools-rst.readthedocs.io/zh-cn/latest/index.html][Linux工具快速教程]]
+[[https://blog.csdn.net/qq_38892528/article/details/103870163][Linux程序运行出现Segmentation fault(core dumped)的通用解决方法]]

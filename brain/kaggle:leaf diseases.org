@@ -1,0 +1,6 @@
+
+* kaggle:leaf diseases
+:PROPERTIES:
+:ID:       83c48f60-b3b4-41ee-b2a0-7901dc6fd6f7
+:BRAIN_PARENTS:
+:END:

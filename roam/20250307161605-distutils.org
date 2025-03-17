@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       171e3be2-aab7-4070-913c-47365e0bc854
+:END:
+#+title: distutils
+#+LAST_MODIFIED: 2025-03-07 16:16:34
+
+
+* 概念
+- 简介 :: [[id:28b7f709-6465-4cec-98ac-67356f67f8b4][python]]早期的[[id:6fec908a-0f7c-429a-b4b1-56f9fdc4213b][打包]]工具

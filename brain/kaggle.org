@@ -1,0 +1,9 @@
+
+* kaggle
+:PROPERTIES:
+:ID:       778f79e2-a2c6-471d-94d4-5837e7a7b1fc
+:BRAIN_PARENTS: 2cbaa2c4-c926-455e-97c9-90a6507ce43e
+:END:
+:RESOURCES:
+- [[https://www.kaggle.com/datasets][kaggle datasets]]
+:END:

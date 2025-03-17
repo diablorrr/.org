@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       48bd006e-5444-4586-a43a-8888a45963e9
+:END:
+#+title: Konsole
+* 快捷键
+- 新建标签页 Alt-N
+- 关闭标签页 Ctrl-Shift-W
+- 切换标签页 Shift-←或→
+
+- 关闭Konsole Alt-F4

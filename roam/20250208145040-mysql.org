@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID:       4c1ab286-7f66-46b2-a65a-35c20b6e7251
+:END:
+#+title: mysql
+#+LAST_MODIFIED: 2025-02-10 17:06:14
+
+* 概念
+** 事务
+一组SQL操作的集合，要么全部执行成功，要么全部回滚 => 保证数据的一致性
+** MySQL Connector/C++
+- 简介 :: 是MySQL 官方提供的一个C++库，用于[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]程序与mysql数据库交互
+** Schema(模式)
+- 简介 :: 等价于database，用于组织和管理数据库中的
+  1. 表(Tables)
+  2. 视图(Views)
+  3. 存储过程(Stored Procedures)
+  4. 索引(Indexes)等对象
+** 存储过程(Stored Procedure)
+- 简介 :: 数据库系统提供的一种预编译SQL代码块 => 类似于函数
+** 主键(Primary Key，PK)
+- 简介 :: 用于唯一标识表中每一行数据
+
+
+* 命令行
+- 登录mysql :: mysql -u 用户名 -p
+** 数据库命令
+- 列出所有数据库 :: show databases;
+- 查看当前数据库 :: select database();
+- 使用数据库 :: use 数据库名;
+- 创建数据库(模式) :: create database/schema 数据库名;
+- 删除数据库(模式) :: drop database 数据库名;
+** 表命令
+- 查看表中全部数据 :: select * from 表名
+
+
+* 语法
+** 异常处理 - DECLARE HANDLER
+#+begin_src sql
+DECLARE handler_type HANDLER FOR condition_value
+BEGIN
+    -- 处理异常的 SQL 语句
+END;
+#+end_src
+- handler_type ::
+  + CONTINUE :: 发生异常时继续执行后续代码
+  + EXIT :: 发生异常时退出存储过程，并执行处理器中的代码
+- condition_value :: 指定条件类型，用于触发处理器的异常
+  + SQLEXCEPTION :: 所有 SQL 错误(如语法错误、约束冲突等)
+  + SQLWARNING :: SQL 警告
+  + NOT FOUND :: 未查询到结果
+** 存储过程
+*** 创建
+#+begin_src sql
+CREATE PROCEDURE procedure_name (parameters)
+[characteristics]
+routine_body;
+#+end_src
+- procedure_name :: 存储过程名称
+- parameters :: 存储过程输入和输出参数
+- characteristics :: 存储过程的一些特性(可选)
+- routine_body :: 存储过程的 SQL 语句部分，使用 BEGIN ... END 包裹
+* 问题解决
+[[https://blog.csdn.net/vkingnew/article/details/80105323][Authentication plugin 'caching_sha2_password' cannot be loaded]]
+[[https://blog.csdn.net/qq_39545674/article/details/106618299][linux(ubuntu) 下安装mysql connector c++ 来连接mysql]]

@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       3e9409a2-89df-4ee7-b5de-6fe57544cee6
+:END:
+#+title: boost
+#+LAST_MODIFIED: 2025-03-08 17:33:08
+
+* 使用
+** [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]编译安装boost库
+:PROPERTIES:
+:ID:       a1ec5ccd-270f-4ca6-8c0b-b1bb9b815c62
+:END:
+1. [[https://www.boost.org/users/download/][官网]]下载boost库
+2. 解压、执行以下命令
+#+begin_src bash
+./bootstrap.sh               # 启动引导脚本
+.b2                          # 编译
+sudo ./b2 install            # 安装
+ls /​usr/local/include/boost  # 验证安装
+#+end_src
+- 注：[[https://www.limerence2017.com/2023/01/31/asio01/][window配置cpp以及boost库]]

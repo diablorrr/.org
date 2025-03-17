@@ -1,0 +1,58 @@
+:PROPERTIES:
+:ID:       e618ce46-af56-46ea-b5d0-15576d0fd45d
+:END:
+#+title: AlexNet
+# 2012.6
+# 标题：ImageNet Classification with Deep Convolutional Neural Networks
+
+
+
+* 模型 :ATTACH:
+:PROPERTIES:
+:ID:       cd9613f0-05c7-4cc6-8cc0-41c3fc9c9307
+:END:
+[[attachment:_20241227_210639screenshot.png]]
+- 相比于LeNet，AlexNet的网络更深
+- 使用ReLU替代sigmoid作为激活函数
+
+
+* ReLU和sigmoid
+** 四种激活函数对比图 :ATTACH:
+:PROPERTIES:
+:ID:       209b07cb-f5e0-46df-81e3-7c5bee7aca94
+:END:
+[[attachment:_20241227_210707screenshot.png]]
+** ReLU和sigmoid导数图
+*** ReLU导数图 :ATTACH:
+:PROPERTIES:
+:ID:       bb5afbfd-fdb5-482b-89b1-eb3036184a4d
+:END:
+[[attachment:_20241227_210732screenshot.png]]
+*** sigmoid导数图 :ATTACH:
+:PROPERTIES:
+:ID:       a3e440d2-d86d-485e-bea9-e08c9c66aa02
+:END:
+[[attachment:_20241227_210756screenshot.png]]
+
+
+* 过拟合
+** 出现的三种原因
+1. 样本==数据分布==区间不稳定，样本值出现范围很大的变化区间
+2. 模型==神经元==过多，考虑了过多不必要的样本特征
+3. ==训练样本==少
+** 解决方法
+# 与以上三种原因一一对应
+1. 数据预处理、数据缩放
+2. 暂退法
+3. 添加样本数据集
+
+
+* 暂退法（dropout）
+** 主要思想
+减少神经网络隐藏层中的隐藏单元数量来降低模型复杂度，以避免过拟合
+** 具体做法 :ATTACH:
+:PROPERTIES:
+:ID:       14db023d-ac9a-4d96-bfd3-23bb9546256f
+:END:
+对某层神经元，随机删除一些神经元，保持输入层和输出层神经元数量不变，前向传播反向传播更新参数。下一次迭代，重新随机删除一些神经元，直到训练结束。
+[[attachment:_20241227_210835screenshot.png]]

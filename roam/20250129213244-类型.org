@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       d6e33ae0-099c-40bc-8583-239f6cbbfa5c
+:END:
+#+title: 类型
+#+LAST_MODIFIED: 2025-01-29 21:35:04
+#+filetags: cpp
+
+* 内置类型
+# [[引用]]不是内置类型
+- 算数类型
+  + 整型
+    - int
+    - char
+    - bool
+    - short、long...
+  + 浮点型
+    - float
+    - double
+    - long double...
+- 指针类型
+- 空类型
+
+* 复合类型
+- 指针类型
+- [[id:5fbaddcf-d410-4b42-a7de-9ebaf950cc61][引用]]类型
+- 数组类型(?)

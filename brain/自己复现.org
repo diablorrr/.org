@@ -1,0 +1,6 @@
+
+* 自己复现
+:PROPERTIES:
+:ID:       9d3f80f8-78ad-4d9d-ba37-5875fe9be25f
+:BRAIN_PARENTS: c200f50b-a246-400e-aeb0-b9b6c5822e8e
+:END:

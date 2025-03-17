@@ -1,0 +1,125 @@
+:PROPERTIES:
+:ID:       183c9f25-d3a3-4a95-baa1-5e1a3b201a11
+:END:
+#+title: CMakeLists.txt
+#+LAST_MODIFIED: 2025-03-06 10:49:43
+
+
+* 使用
+** 设置智能感知
+- 方法 :: 使用 target_compile_features(推荐)
+  # 这是最现代化的方式，适用于 CMake 3.1 及以上版本
+  # 它会根据 C++17 标准自动为目标启用适当的编译选项
+- 示例 :: cmake项目智能感知c++17标准
+#+begin_src cmake
+cmake_minimum_required(VERSION 3.10)
+project(MyProject CXX)
+
+set(CMAKE_CXX_STANDARD 17)  # 设置 C++17 标准
+set(CMAKE_CXX_STANDARD_REQUIRED ON)  # 强制使用 C++17，不允许降级
+set(CMAKE_CXX_EXTENSIONS OFF)  # 使用纯 C++17 标准，不使用编译器扩展
+
+add_executable(myapp main.cpp)
+target_compile_features(myapp PRIVATE cxx_std_17)  # 为 myapp 启用 C++17
+#+end_src
+
+** 语法
+*** cmake_minimum_required :: 设置最低[[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]版本
+
+*** project :: 定义项目名称
+*** set :: 定义、修改变量
+ - 设置cpp标准 ::
+   #+begin_src cmake
+   set(CMAKE_CXX_STANDARD 17)
+   set(CMAKE_CXX_STANDARD_REQUIRED ON)
+   #+end_src
+ - 设置cpp编译选项 ::
+   #+begin_src cmake
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+   #+end_src
+
+*** file :: 处理文件系统相关操作
+ - 获取文件列表 ::
+   #+begin_src cmake
+   file(GLOB <variable> [RELATIVE <path>] <glob_pattern>...)
+   file(GLOB_RECURSE <variable> [RELATIVE <path>] <glob_pattern>...)
+   #+end_src
+   + GLOB :: 获取符合模式的文件（不递归子目录）
+   + GLOB_RECURSE :: 递归获取子目录中的符合模式的文件
+   + <variable> :: 存储匹配文件路径的变量
+   + <glob_pattern> :: 通配符模式，通常是文件扩展名，如 *.cpp、*.h
+
+*** add_executable :: 添加可执行文件
+
+*** target_include_directories :: 头文件搜索路径
+  #+begin_src cmake
+  target_include_directories(<target> <INTERFACE|PUBLIC|PRIVATE> [<directory>...])
+  #+end_src
+
+*** target_link_libraries :: 链接静态/动态库
+  #+begin_src cmake
+  target_link_libraries(<target> <INTERFACE|PUBLIC|PRIVATE> <library>...)
+  #+end_src
+
+*** [[id:2e20f81d-56f0-4af5-a00c-b77fce675287][find_package()]] ::
+  #+begin_src cmake
+  find_package(<package> [version] [EXACT] [QUIET] [REQUIRED] [CONFIG|NO_MODULE] [MODULE])
+  #+end_src
+  + <package> :: 包的名称
+  + [REQUIRED] :: 包未找到，CMake会停止并报错
+  + [CONFIG] :: 查找 <Package>Config.cmake
+  + [MODULE] :: 查找 Find<Package>.cmake
+  + [version] :: 包的版本要求（可选）
+  + [EXACT] :: 要求精确匹配指定的版本
+  + [QUIET] :: 不会显示找不到包的警告信息。即使包未找到，CMake也不会发出警告
+*** pkg_check_modules :: 使用[[id:0867edf9-0f48-48ed-92be-e197f1546b05][pkg-config]]查找库
+#+begin_src cmake
+pkg_check_modules(<prefix> [REQUIRED] <package> [<version>])
+#+end_src
+- <prefix> :: 指定一个前缀，CMake 将使用这个前缀为库的相关变量命名。通常是大写的库名称，如 HIREDIS。
+- [REQUIRED] :: 如果找不到指定的库，CMake会报错并停止构建
+- <package> :: 库的名称，和 pkg-config 的 .pc 文件名相同
+- [<version>] :: 指定库版本
+
+- 示例 :: prefix设置为HIREDIS => 所以hiredis的头文件目录为HIREDIS_INCLUDE_DIRS、库文件路径变为HIREDIS_LIBRARIES
+#+begin_src cmake
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(HIREDIS REQUIRED hiredis)
+...
+target_include_directories(test_redis PRIVATE ${HIREDIS_INCLUDE_DIRS})
+target_link_libraries(test_redis PRIVATE ${HIREDIS_LIBRARIES})
+#+end_src
+*** message :: 输出消息到控制台
+  #+begin_src cmake
+  message([<mode>] "message" ...)
+  #+end_src
+ - <mode> :: 指定消息的类型
+   + STATUS :: 输出正常状态消息
+
+*** add_library :: 定义一个库
+
+*** add_subdirectory :: 在主CMakeLists.txt中添加子目录，读取子目录中的CMakeLists.txt
+*** <INTERFACE|PUBLIC|PRIVATE>关键字
+- 作用 :: 控制对目标的可见性
+  + PRIVATE :: 仅对当前目标可见，不会传递给链接到此目标的其他目标
+  + PUBLIC :: 不仅对当前目标可见，还会传递给链接到此目标的其他目标
+  + INTERFACE :: 对当前目标不可见，只会传递给链接到此目标的其他目标
+*** 预定义变量
+- CMAKE_CURRENT_SOURCE_DIR :: 当前CMakeLists.txt文件所在的目录
+- CMAKE_CXX_STANDARD :: 设置cpp标准
+- CMAKE_CXX_STANDARD_REQUIRED :: 强制编译器使用标准
+** 没有[[id:c4819291-b93f-4864-b210-aa436634ac22][.cmake]]配置文件的package
+- 做法 :: 我们会先包含库文件目录，将目录里我们需要的文件存到一个变量里，然后目标再去链接
+- 示例 ::
+#+begin_src cmake
+include_directories(/usr/lib)
+file(GLOB absl_libs "/usr/lib/libabsl_*.so")
+target_link_libraries(main ${absl_libs})
+#+end_src
+
+
+* 概念
+- 简介 ::
+  1. 是 [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]] 的配置文件
+  2. 用于定义如何构建 c/[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]] 项目
+  3. [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]] 通过解析 CMakeLists.txt 生成 Makefile、Ninja 文件或 Visual Studio 项目，适配不同的构建系统

@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       aa9d4dcf-e301-4026-8cc9-eec13d55ef50
+:END:
+#+title: 网络编程
+
+
+* endpoint和socket
+1. 概念区别
+- socket（套接字）
+  是用于通信的抽象接口，代表了网络连接的一个端点。它可以进行读写操作，例如接收和发送数据
+  在 Boost.Asio 中，boost::asio::ip::tcp::socket 是专门为 TCP 协议设计的 socket。
+  socket进行通信的时候必须有一个参数 -- 上下文(asio::io_context)
+- endpoint（端点）
+  代表一个网络地址和端口的组合，标识通信双方之一的位置。
+  endpoint 服务器用来绑定，客户端用来连接
+  在 Boost.Asio 中，boost::asio::ip::tcp::endpoint 是 TCP 协议的端点类型。
+
+2. 关系与作用
+- endpoint 定位通信目标：
+  endpoint 指定了 IP 地址和端口，用于告诉 socket 应该连接到哪里或监听哪个地址和端口。
+- socket 使用 endpoint：
+  在客户端，socket 使用一个远程 endpoint 进行连接操作；在服务器端，acceptor 使用本地 endpoint 来监听连接。endpoint只是socket发送的一个工具
+* 序列化(传类对象)
+类对象 序列化 字节流
+字节流 反序列化 类对象
+client classA =序列化=> ByteArray => [0,1,1,....] =>
+[0,1,1,...] => ByteArray =反序列化=> Server classA

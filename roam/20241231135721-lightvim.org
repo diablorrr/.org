@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID:       af21cc91-a063-473f-abc3-204aef34b6c2
+:END:
+#+title: LightViM
+# 2024.6
+# 标题：A lightweight visual mamba network for image recognition under resource-limited environments
+# 期刊&会议：Applied Soft Computing Journal (中科院sci一区)
+
+* 动机
+** 先前的问题
+- 资源消耗大 :: 需要较大的性能需求(例如ViT相关的轻量级模型)
+- 依赖数据增强技术 :: 一些模型为了提升性能，依赖复杂的数据增强技术
+- 模型结构复杂 :: 一些模型结构复杂，难以在多种设备上部署
+
+** 这篇论文的改进
+- 使用改进的[[id:b5960e71-4c4e-4682-99b3-3d10935c759f][Mamba]]结构:LGF-Mamba Block :: 减少了参数数量和浮点运算次数，同时保持一定的性能
+- 模型结构简单 :: 易于在多种设备部署
+
+
+* 模型 :ATTACH:
+:PROPERTIES:
+:ID:       b6308368-a3c7-44dc-a397-36e079e8e747
+:END:
+[[attachment:_20241231_153911screenshot.png]]
+- LocalIE：局部特征提取模块
+- LGF-Mamba Block：局部特征和全局特征捕获和融合
+
+
+
+* 实验
+** 硬件配置
+- GPU：2080Ti
+
+** 基线模型
+- MobileFormer： *结合MobileNet和Transformer* ，有效融合全局和局部特征
+- EdgeNeXt：专为移动视觉设计的 *CNN和Transformer融合架构* ，提高效率
+- EdgeViT：为移动设备优化的 *轻量级Vision Transformer* ，平衡了准确性和效率
+- MobileViTv3：MobileViT的改进版，提供了更有效的特征融合
+- DilateFormer：使用 *多尺度膨胀Transformer* ，增强了模型对不同尺度特征的捕捉能力
+- MobileOne：Apple提出的 *超轻量级网络* ，速度极快，适合移动端使用
+- RepViT：一种新的 *轻量级CNN架构* ，性能优于现有的轻量级ViT
+- EMO： *结合CNN和Transformer* ，为移动设备提供高效的深度学习解决方案
+
+** 评估指标
+- 参数数量（Params）：衡量 *模型大小* ，即模型中可学习的参数总数
+- 浮点运算次数（FLOPs）：衡量模型在 *推理时的计算复杂度*
+- 准确率（Accuracy）：衡量模型 *识别图像的正确率*
+
+** 数据集
+- BIRDS数据集：包含525个类别的鸟类图片，用于鸟类物种识别
+- ISIC2019数据集：这是一个公开的医学成像数据集，包含各种皮肤疾病图像，涵盖多种皮肤状况和病变
+- Endoscopic BT数据集：包含专门针对膀胱组织的内窥镜图像
+- Fish数据集：这是一个早期的经典数据集，用于鱼类识别，包含由水下相机捕获的图像，没有额外的优化策略，如去模糊或去噪
+
+** 比较实验 :ATTACH:
+:PROPERTIES:
+:ID:       ea874dff-a86d-42b4-8063-ca6f9d269685
+:END:
+[[attachment:_20241231_153036screenshot.png]]
+
+** 消融实验 :ATTACH:
+:PROPERTIES:
+:ID:       45bffc1e-1885-4484-ab79-860da26df82e
+:END:
+-[[attachment:_20241231_153207screenshot.png]]
+- 组件
+  1. Mamba子模块：替换为传统Transformer多头注意力机制
+  2. LGF-Mamba模块：串联(seriald)和并联(parallel)配置对模型性能的影响
+     [[attachment:_20241231_153635screenshot.png]]
+
+
+
+* 结论
+** 局限性
+- 不适合高精度任务
+
+
+* 杂项
+** 主流轻量级识别方法
+  1. 基于CNN
+  2. 基于ViT
+  3. 结合CNN和ViT的混合方法
+** 资源受限数据集
+- 数据集规模：规模小的数据集，模拟获取不到大量数据集的情况
+- 长尾分布：某些类别的样本数量远多于其他类别，模拟数据不平衡情况
+- 环境干扰：图像可能包含模糊或噪声，模拟图像质量不佳的情况

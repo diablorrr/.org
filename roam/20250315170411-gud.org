@@ -1,0 +1,36 @@
+:PROPERTIES:
+:ID:       83c484d7-c8a8-40af-a728-0c27d5f270e2
+:END:
+#+title: gud
+#+LAST_MODIFIED: 2025-03-15 19:42:13
+
+* 使用
+
+** TODO 使用gud进行调试
+1. M-x gdb                  => 在minibuffer输入命令：gdb -i=mi 二进制文件
+2. M-x gdb-many-windows     => 打开多个gud窗口，且可与鼠标互动
+3. M-x gud-tooltip-mode         => 开启工具提示
+4. C-x 1 最大化源代码窗口浏览代码；[[id:11977166-7689-4c97-ae82-d294ea1657c1][winner mode]] 或 gdb-restore-windows 还原窗口布局
+5. 在源代码窗口 创建断点、代码跳转 [todo：考虑lsp或者etags]
+6. 有用的操作：
+   - gud-until 程序运行到光标所在语句
+
+** 常用命令
+| 命令                | 作用                                |
+|---------------------+-------------------------------------|
+| gdb                 | 开启gdb调试                         |
+| gdb-many-windows    | 打开一系列gud窗口，都可使用鼠标互动 |
+| gdb-restore-windows | 恢复窗口布局                        |
+|---------------------+-------------------------------------|
+| gud-until           | 程序运行到光标所在语句              |
+| gud-tooltip-mode    | 开启工具提示，鼠标停留变量名提示值  |
+
+
+* 概念
+- 简介 ::
+  1. 全称：大统一调试器(Grand Unified Debugger)
+  2. 是[[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]下的一个mode
+
+
+* 参考 [0/1]
+- [ ] [[https://github.com/shwangdev/dea/blob/master/emacser.com/emacs-gdb.org][在Emacs中使用gdb调试程序]]

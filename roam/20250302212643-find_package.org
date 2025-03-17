@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       2e20f81d-56f0-4af5-a00c-b77fce675287
+:END:
+#+title: find_package()
+#+LAST_MODIFIED: 2025-03-02 21:31:13
+
+* 概念
+- 简介 :: 用于查找有[[id:c4819291-b93f-4864-b210-aa436634ac22][.cmake]]配置文件的package
+** 工作流程 :ATTACH:
+:PROPERTIES:
+:ID:       bf89e95f-7114-4f45-af47-3d76d4cfa777
+:END:
+[[attachment:_20250302_212917screenshot.png]]
+
+
+[[https://blog.csdn.net/zhanghm1995/article/details/105466372]]

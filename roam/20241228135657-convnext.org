@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       e2bbbc0c-2d33-4704-a45a-519fc49393f0
+:END:
+#+title: ConvNeXt
+# 2022.1
+# 标题：A ConvNet for the 2020s
+
+* 核心思想
+基于ResNet-50结构，参考swin transforer结构进行现代化改造
+# 因为先前的一些工作似乎证明transformer的优越性似乎不是来自self-attention，因此推断可能是因为transformer的结构导致其性能出彩。参考==MLP-Mixer和ConvMixer==
+
+
+* 模型 :ATTACH:
+:PROPERTIES:
+:ID:       4b313d35-f5bd-4fb1-b245-f6a3676b9a42
+:END:
+[[attachment:_20241228_135819screenshot.png]]
+
+
+# 如此设计是参考了swin transformer的结构以及一些先前工作
+** 改进与效果总览 :ATTACH:
+:PROPERTIES:
+:ID:       2ac6bb79-bc65-4616-8817-1bb06754c54b
+:END:
+[[attachment:_20241228_135840screenshot.png]]
+*** 部分介绍 :ATTACH:
+:PROPERTIES:
+:ID:       b3c70f08-ade9-4188-97cf-6027800ae863
+:END:
+- stage ratio：参考swin transformer各阶段堆叠block块的比例
+- depth conv(深度可分离卷积)：参考ResNext
+- Inverted bottleneck：参考Transformer 网络当中的 MLP 模块与 MobileNet V2 中的 Inverted Bottleneck 模块类型，均是“两头细，中间粗”的反瓶颈结构
+  [[attachment:_20241228_135914screenshot.png]]
+- Large kernel size：使用7x7，swin中window大小也是7
+  # 当然实验中，发现7比3感受野更大，又避免9导致参数量急剧上升
+
+
+* 卷积块设计 :ATTACH:
+:PROPERTIES:
+:ID:       d4d60e2e-64b7-428c-850d-9bae4716337e
+:END:
+[[attachment:_20241228_135935screenshot.png]]
+
+
+* 参考链接
+https://zhuanlan.zhihu.com/p/
+https://zhuanlan.zhihu.com/p/459163188

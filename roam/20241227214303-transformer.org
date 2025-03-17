@@ -1,0 +1,99 @@
+:PROPERTIES:
+:ID:       a671c4c4-4c8e-49a5-bc5c-f118503b764c
+:END:
+#+title: Transformer
+#+LAST_MODIFIED: 2025-02-27 15:28:34
+# 2017.6
+# 标题：Attention Is All You Need
+#+filetags: 论文
+
+* 先前工作的问题
+RNN和CNN都能获取全局信息，但存在以下问题
+- RNN：运算难以平行化
+- CNN：第一层无法获取全局信息
+
+
+* Transformer架构 :ATTACH:
+:PROPERTIES:
+:ID:       3c2597a5-0681-4e8b-979f-ba2ce48710a4
+:END:
+[[attachment:_20241227_214348screenshot.png]]
+
+
+* Positional Encoding :ATTACH:
+:PROPERTIES:
+:ID:       f071b114-418c-4398-8eb6-f8d4e5ad27d3
+:END:
+self attention本身是没有位置信息的，例如：“a打b” 和 “b打a” 的效果是一样的。因此
+作用：考虑输入序列中不同位置信息的重要程度
+[[attachment:_20241227_214409screenshot.png]]
+** 为什么是相加操作而不是拼接操作 :ATTACH:
+:PROPERTIES:
+:ID:       1d426cd8-53fc-4bf4-9ac4-32b893c93050
+:END:
+[[attachment:_20241227_214433screenshot.png]]
+另一种理解的图：
+
+[[attachment:_20241227_214452screenshot.png]]
+
+
+* Self-Attention :ATTACH:
+:PROPERTIES:
+:ID:       9fa4df48-a4d9-4399-bfa5-043a53fd5855
+:END:
+[[attachment:_20241227_214521screenshot.png]]
+作用：输入序列中的每一个元素对其他元素的关注程度
+# 例如：
+# 输入序列为x^1^，x^2^，x^3^；输出为b^1^
+# b^1^考虑了整个输入的信息
+
+
+* Multi-Head Self-Attention :ATTACH:
+:PROPERTIES:
+:ID:       cecec7a2-c414-48e6-9a82-ae442db0a850
+:END:
+[[attachment:_20241227_214611screenshot.png]]
+作用：每个注意力头都可以让模型学习到不同的行为，最后将不同行为作为知识组合起来
+
+
+* decoder的输入是什么 :ATTACH:
+:PROPERTIES:
+:ID:       8cb9aa42-08e5-4004-85eb-58a1a4535479
+:END:
+是上一个时间步decoder的输出
+[[attachment:_20241227_214634screenshot.png]]
+
+
+* Masked Multi-Head Attention
+作用：使得decoder在生成每个词的时候只会看到先前的信息，不会看到未来的信息
+# 例如：一个序列 I am happy
+# decoder输出I作为下一个时间步decoder的输入
+# 此时，decoder应该只能看到I来预测am，而不能看到am happy之类的后面的信息来预测
+# 同理，decoder预测happy时，只能看到I am来预测
+
+
+* encoder与decoder是如何连接的 :ATTACH:
+:PROPERTIES:
+:ID:       fa479bac-bf25-444c-91df-11522448de3b
+:END:
+[[attachment:_20241227_214714screenshot.png]]
+可以看到decoder的两个输入来自encoder，作为key和value
+
+[[attachment:_20241227_214730screenshot.png]]
+
+
+* self-attention和CNN :ATTACH:
+:PROPERTIES:
+:ID:       55038df3-d11e-4e7a-a852-911a62a4623b
+:END:
+[[attachment:_20241227_214746screenshot.png]]
+# 以下以小红框里的1为例
+- self-attention：小红框的pixel作为query，其他的pixel产生key。做inner-product的时候，考虑的是整张图片
+- CNN：小红框中的pixel只考虑感受野红框里的咨询，考虑的是图片的局部信息
+因此，self-attention是复杂化的CNN，因此前者更flexible，训练所需的数据量也就越多。当数据量少的时候，前者性能不如后者。
+
+
+* 参考链接
+https://zhuanlan.zhihu.com/p/410258597
+https://www.cvmart.net/community/detail/4032
+https://zhuanlan.zhihu.com/p/340149804

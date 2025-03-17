@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       d9ec78e3-9bc9-42e0-ad04-eebc8f0efd01
+:END:
+#+title: org-export
+#+LAST_MODIFIED: 2025-03-16 20:58:34
+
+* 使用
+** 导出目录设置
+# 导出函数，如org-pandoc-export-to-markdown_mmd中发现用到org-export-output-file-name来导出，而该函数又与EXPORT_FILE_NAME属性有关
+1. 在org文件中加入属性EXPORT_FILE_NAME
+   #+begin_example
+   DoomEmacs使用手册.org中
+   1 #+title: DoomEmacs使用手册
+   2 #+EXPORT_FILE_NAME: ~/.org/export/DoomEmacs使用手册
+   3 ...
+   #+end_example
+
+** 导出思维导图
+1. M-x org-freemind-export-to-freemind => 生成.mm文件
+2. 用freeplane打开
+
+
+* 概念
+- 简介 ::
+  1. 导出为其他类型的文件
+  2. [[id:604b863d-174c-4ce5-95cb-b6175b4c7c05][org-pandoc]]的很多函数是基于[[id:d9ec78e3-9bc9-42e0-ad04-eebc8f0efd01][org-export]]的

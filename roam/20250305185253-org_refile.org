@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       dba4c85d-5a01-44d7-be35-717d76ac8ea3
+:END:
+#+title: org-refile
+#+LAST_MODIFIED: 2025-03-16 20:38:49
+
+* 使用
+** 设置refile的目标文件和层级
+1. M-x customize
+2. org-refile-targets
+
+* 概念
+- 简介 ::
+  1.  将笔记从一个buffer移动到另一个buffer

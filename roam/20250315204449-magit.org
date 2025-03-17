@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       c492f05c-da8f-4eff-98a4-4b68f90e36fb
+:END:
+#+title: magit
+#+LAST_MODIFIED: 2025-03-15 20:44:50

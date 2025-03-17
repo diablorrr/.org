@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       11977166-7689-4c97-ae82-d294ea1657c1
+:END:
+#+title: winner mode
+#+LAST_MODIFIED: 2025-03-15 19:14:51
+
+
+* 概念
+- 简介 ::
+  1. [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]的副mode
+  2. 用于还原窗口布局

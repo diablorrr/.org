@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID:       d6d8b066-c84e-4c09-9e37-43df5e0c1304
+:END:
+#+title: SPP
+# 2014.06
+# 标题：Spatial Pyramid Pooling in Deep ConvolutionalNetworks for Visual Recognition
+# 任务：目标检测
+
+* 先前工作的问题
+- R-CNN：因为全连接层的存在，因此需要将图片使用crop和warp预处理，使其统一大小后输入CNN => 导致图像拉伸变形、物体不全等问题，限制了识别精度
+
+
+* R-CNN与SPP Net对比 :ATTACH:
+:PROPERTIES:
+:ID:       d463d39f-2c26-4601-b1fa-15b2c0e05430
+:END:
+[[attachment:_20241227_212005screenshot.png]]
+# 上面为R-CNN；下面为SPP Net
+** spatial pyramid pooling
+作用：任意大小的输入，固定的输出
+** 原理图 :ATTACH:
+:PROPERTIES:
+:ID:       74388a5c-16c7-492c-8cef-98c2218c3782
+:END:
+[[attachment:_20241227_212036screenshot.png]]
+如图：三个金字塔层，分别产生三个固定的输出
+具体做法：以蓝色的金字塔层为例，切割为16块，每一块里做最大池化，这样无论输入图片的大小如何，最终输出大小都是16x256-d
+
+
+* 参考链接
+https://blog.csdn.net/qq_36926037/article/details/105310907
+https://blog.csdn.net/v_JULY_v/article/details/80170182

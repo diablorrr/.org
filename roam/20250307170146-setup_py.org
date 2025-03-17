@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       7a9c11d5-18cf-4d59-9701-3040e0d7892c
+:END:
+#+title: setup.py
+#+LAST_MODIFIED: 2025-03-07 17:06:37
+
+* 概念
+- 简介 :: python模块分发与安装的指导文件

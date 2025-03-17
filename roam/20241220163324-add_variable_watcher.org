@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       42cbcb5f-e832-4245-b59b-21c87f4a9a3d
+:END:
+#+title: elisp
+#+LAST_MODIFIED: 2025-03-16 21:29:03
+
+#+filetags: :emacs:elisp:
+
+
+* 语法
+** 列表和cons cell
+# cons cell其实就是一个键值对
+#+begin_src elisp
+(11 12)   # 列表
+(11 . 12) # cons cell(键值对)
+#+end_src
+** add-variable-watcher
+:PROPERTIES:
+:ID:       85b21b6b-2f6d-492e-9f36-08e0a2323e12
+:END:
+- 函数签名：(add-variable-watcher SYMBOL WATCH-FUNCTION)
+- SYMBOL被set后，会调用WATCH-FUNCTION
+
+
+* 代码片段
+** 创建一个新buffer
+#+begin_src elisp
+(defun open-artist-mode-buffer ()
+  "Create a new buffer and open it in artist-mode."
+  (interactive)
+  (let ((buffer (generate-new-buffer "*Artist*"))) ; 创建一个新的 buffer
+    (switch-to-buffer buffer)                     ; 切换到新 buffer
+    (artist-mode)))                               ; 启用 artist-mode
+#+end_src

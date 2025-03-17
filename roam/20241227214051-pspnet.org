@@ -1,0 +1,40 @@
+:PROPERTIES:
+:ID:       0c0e34f8-6f45-41f5-a5a5-0dfcfc2d8247
+:END:
+#+title: PSPNet
+# 2017.4
+# 标题：Pyramid Scene Parsing Network
+# 任务：语义分割
+
+* 先前工作的问题
+** 场景解析
+与场景的标签密切相关
+** FCN存在的问题 :ATTACH:
+:PROPERTIES:
+:ID:       c15a765c-ea17-4910-9117-3cae12b8c110
+:END:
+- 缺乏考虑上下文进行推断的能力
+# 第一行：将车错误的识别为船
+- 标签之间是存在关联的，可以通过类别之间的关系来弥补
+# 第二行：摩天大楼的一部分被识别为建筑物，但它们应该是属于同一个摩天大楼的，不应该分开识别。
+- 模型忽略了小的东西，而大的东西可能超出FCN的范围，导致预测的不连续性。
+# 第三行：枕头和被子材质一致，被识别到了一起
+[[attachment:_20241227_214155screenshot.png]]
+
+
+* 模型 :ATTACH:
+:PROPERTIES:
+:ID:       ecb4e13f-f169-4a26-8eb1-0527b2fa6c7f
+:END:
+[[attachment:_20241227_214220screenshot.png]]
+核心是Pyramid Pooling Module（PPM模块）
+
+
+* 卷积操作降低通道维度的目的
+1. 降低参数量，优化计算效率
+2. 保留关键特征（就和卷积核处理图片一个道理）
+
+
+* 参考链接
+https://blog.csdn.net/u011974639/article/details/78985130
+https://blog.csdn.net/xuzz_498100208/article/details/108330906

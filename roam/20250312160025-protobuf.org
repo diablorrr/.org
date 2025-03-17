@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       13f67abf-4087-4d20-87d7-ed11e5b99edc
+:END:
+#+title: protobuf
+#+LAST_MODIFIED: 2025-03-12 16:27:28
+
+* 概念
+- 简介 :: Protocol Buffers的简称
+  1. [[id:247f3c54-b3b7-4a77-8fdf-bad941b8fc2e][google]]公司开发的一种 数据描述语言
+  2. 序列化数据体积小，反序列化速度块；序列化、反序列化代码自动生成
+  3. 与[[id:a5c426e4-365b-447d-89f3-eddc9c517a01][gRPC]]相互配合使用
+  4. 文件扩展名为[[id:09dcf76d-daf7-49ba-844c-cb8d639b398a][.proto]]

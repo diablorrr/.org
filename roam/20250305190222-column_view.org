@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       3947c780-c42b-4786-b3ef-b162ff78e7f5
+:END:
+#+title: column view
+#+LAST_MODIFIED: 2025-03-05 19:02:23

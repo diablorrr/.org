@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       589f3889-a262-4d46-9e4b-92ae28145b05
+:END:
+#+title: vue.js
+#+filetags: :前端:
+* 解包
+
+* 响应式
+- ref()：变量
+- reactive()：对象
+
+* 计算属性
+- 作用：自动追踪响应式依赖
+- 使用方式：
+  #+begin_example
+  computed(getter函数)
+  + getter函数：
+  + 返回值：计算属性ref
+  #+end_example
+- 示例：
+  #+begin_example js
+  const publishedBooksMessage = computed(() => {
+    return author.books.length > 0 ? 'Yes' : 'No'
+  })
++ 此例中计算属性会检测到publishedBooksMessage依赖于author.books，所以当author.books改变时，
+  任何依赖于publishedBooksMessage的绑定都会同时更新
+  #+end_example
+
+
+* 侦听器
+- 作用：每次响应式状态(如：ref)发生变化时，触发回调函数
+- 使用方式：侦听参数1变化，调用回调函数
+  #+begin_example js
+  watch(参数1,回调函数)
+  + 参数1：ref(包括计算属性)、响应式对象、、多个数据源组成的数组
+  #+end_example
+
+* 生命周期
+
+
+
+* 相关API
+| api        | 使用 | 说明                                                                   |
+|------------+-----+-----------------------------------------------------------------------|
+| nextTick() |     | vue更改响应式状态，DOM更新不是同步生效的;由vue缓存在队列中，在下一个tick才一起执行 |
+|            |     |                                                                       |

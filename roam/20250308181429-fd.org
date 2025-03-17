@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       e15008e9-069c-4a13-a56d-89b4aa8c6cb6
+:END:
+#+title: fd
+#+LAST_MODIFIED: 2025-03-08 18:16:10
+
+
+* 使用
+#+begin_src bash
+fd 文件名 路径
+#+end_src
+
+
+* 概念
+- 简介 ::
+  1. 查找文件或目录
+  2. [[id:5c64ecb1-a49c-4a4e-972e-5438c0c278eb][find]]的替代品，速度更快

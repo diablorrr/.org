@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       9653d634-a6ed-45c9-a7f7-f7f51f024ab9
+:END:
+#+title: compile_commands.json
+#+LAST_MODIFIED: 2025-03-02 19:43:23
+
+
+* 使用
+** 生成方法
+1. 在工程根目录的[[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]中写入set(CMAKE_EXPORT_COMPILE_COMMANDS ON)，build目录中cmake ..
+2. 在工程根目录的[[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]的地方，用命令行cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+   # 原因：1.cmake的构建体系一般是树状结构，一个项目有多个CMakeLists.txt，我们在顶层处理了，顶层就会生成一个包含整个项目编译信息的compile_commands.json文件，包含所有子目录的头文件路径和编译选项
+
+
+* 概念
+- 简介 ::
+  1. 是 [[id:64744248-ac41-4af0-ba4e-8f69a162f160][clang编译数据库]] 的具体实现格式，也能说等价于[[id:64744248-ac41-4af0-ba4e-8f69a162f160][clang编译数据库]]
+  2. 主要用于记录 c/[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]] 项目的编译信息
+  3. 通常由 [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]] 生成，并被 [[id:ef5b7883-d43b-4765-bdc9-daf62b50a036][lsp]]服务器 (如：[[id:db21c347-0dd3-49ee-a698-455d3e88aa7e][clangd]]) 用于代码补全、跳转、语法检查等功能
+
+** 在[[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]项目中的作用
+- 流程 :: cmake项目 => 生成[[id:9653d634-a6ed-45c9-a7f7-f7f51f024ab9][compile_commands.json]] => 将编译选项传递给[[id:ef5b7883-d43b-4765-bdc9-daf62b50a036][lsp]]服务器 => lsp服务器能正确的解析
