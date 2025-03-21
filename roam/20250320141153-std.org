@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       927fd560-f18f-424c-8df9-8c62a1ca6562
+:END:
+#+title: std

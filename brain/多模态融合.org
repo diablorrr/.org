@@ -1,6 +1,0 @@
-
-* 多模态融合
-:PROPERTIES:
-:ID:       7999e1e4-485b-411b-99f8-daa4ffdb16c7
-:BRAIN_PARENTS: 32ef0fd9-8af1-4175-a7cc-2766b06e9bce
-:END:

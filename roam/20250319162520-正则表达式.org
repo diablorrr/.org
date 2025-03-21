@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       08ab2130-64a6-4f0d-82d1-1e197f5aef4e
+:END:
+#+title: 正则表达式
+
+* 查询

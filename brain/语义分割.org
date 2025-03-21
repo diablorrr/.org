@@ -1,7 +1,0 @@
-
-
-* 语义分割
-:PROPERTIES:
-:ID:       7844188b-38bd-4e10-b1f6-2ca924cf8fb5
-:BRAIN_PARENTS: 32ef0fd9-8af1-4175-a7cc-2766b06e9bce
-:END:

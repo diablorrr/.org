@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       41a1507d-2a5c-4ea7-a8d8-9ee6c1fb5915
+:END:
+#+title: pdf-tools
+
+* 使用
+** pdf-tools使用鼠标勾画的细粒度设置
+1. 在pdf鼠标右键
+2. Select style
+
+
+* 查询
+| 函数              | 作用              |
+|-------------------+-------------------|
+| pdf-tools-install | 编译安装pdf-tools |
+
+
+* 配置
+| 配置                                      | 说明     |
+|-------------------------------------------+----------|
+| pdf-annot-add-highlight-markup-annotation | 增加高亮 |
+
+
+* 概念
+- 简介 ::
+  1. [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中用于查看和操作pdf文件的插件
+  2. 常与[[id:d65dd25a-e032-4237-b38b-e1a9eec370f0][org-noter]]一起使用

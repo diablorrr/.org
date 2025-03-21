@@ -8,28 +8,9 @@
 * 概念
 ** 简介
 - 语言服务器协议。一种用于 编辑器和语言服务器通信 的开放协议
+- 例如[[id:db21c347-0dd3-49ee-a698-455d3e88aa7e][clangd]]
 
 ** clangd
-:PROPERTIES:
-:ID:       e3917c2a-f2a1-4b42-943e-40eae4ec11ed
-:END:
-- 基于clang的语言服务器，用于解析C、C++、Objective-C代码。实现：
-  1. 代码补全
-  2. 语法检查
-  3. 代码导航
-  4. 头文件索引 等功能
-*** compile_commands.json
-**** 作用
-使用 *compile_commands.json* 获取项目的编译配置
-**** 生成
-cmake构建的项目
-- 方式1
-
-#+begin_src shell
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON /项目根目录路径/
-#+end_src
-- 方式2
-
 **** 配置.clangd文件，
 ***** 问题
 compile_commands.json有时候会生成clangd不支持的选项，比如gcc的一些选项。

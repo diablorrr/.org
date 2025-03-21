@@ -1,5 +1,4 @@
 #+title: Someday
-#+LAST_MODIFIED: 2025-03-18 20:32:19
 #+STARTUP: show2levels
 
 * A
@@ -49,27 +48,6 @@ CLOCK: [2025-01-01 三 12:25]--[2025-01-01 三 13:39] =>  1:14
 *** DONE 运行mamba
 *** TODO 研究mamba源代码
 ** TODO [#B] 三篇论文 [0/0] :科研:
-** TODO [#B] C++并发编程实战 [3/11] :书:
-*** DONE 第1章 你好，C++并发世界
-SCHEDULED: <2025-01-15 三>
-:LOGBOOK:
-CLOCK: [2025-01-15 三 20:26]--[2025-01-15 三 21:52] =>  1:26
-CLOCK: [2025-01-15 三 16:15]--[2025-01-15 三 16:50] =>  0:35
-:END:
-*** DONE 第2章 线程管控
-SCHEDULED: <2025-01-15 三>
-:LOGBOOK:
-CLOCK: [2025-01-16 四 12:40]--[2025-01-16 四 15:15] =>  2:35
-:END:
-*** DONE 第3章 在线程间共享数据
-*** TODO 第4章 并发操作的同步
-*** TODO 第5章 C++内存模型和原子操作
-*** TODO 第6章 设计基于锁的并发数据结构
-*** TODO 第7章 设计无锁数据结构
-*** TODO 第8章 设计并发代码
-*** TODO 第9章 高级线程管理
-*** TODO 第10章 并行算法函数
-*** TODO 第11章 多线程应用的测试和除错
 ** TODO [#B] magit [0/3]
 *** TODO [#B] Learn Git Branching
 :LOGBOOK:
@@ -79,7 +57,6 @@ CLOCK: [2025-01-10 五 15:38]--[2025-01-10 五 16:00] =>  0:22
 :END:
 *** TODO [#B] git变基
 *** TODO [#B] magit
-** TODO [#B] git commit规范
 ** TODO [#B] lsp问题 [2/4]
 *** DONE cpp-mode缩进问题
 - Note taken on [2025-02-02 日 17:05] \\

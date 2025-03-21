@@ -1,6 +1,0 @@
-
-* 轻量级
-:PROPERTIES:
-:ID:       a8f978fb-9da2-4dde-9d29-40655ba8f4d4
-:BRAIN_PARENTS: 32ef0fd9-8af1-4175-a7cc-2766b06e9bce
-:END:

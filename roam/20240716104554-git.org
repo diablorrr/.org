@@ -2,7 +2,6 @@
 :ID:       52880cac-b451-4efc-bf87-3edde817eb06
 :END:
 #+title: git
-#+LAST_MODIFIED: 2025-03-19 11:17:26
 #+startup: show2levels
 
 
@@ -31,7 +30,7 @@
 6. git cherry-pick --continue
 7. 删除多余分支：git rebase --hard 或 git branch -D
 
-** 让本地文件修改、历史记录被远程仓库覆盖
+** 让本地记录被远程仓库覆盖
 1. git fetch
 2. git reset --hard origin/main
 
@@ -99,8 +98,7 @@ git checkout
 |                 | --amend                                     | 修改上一次提交的提交消息                     |
 |-----------------+---------------------------------------------+----------------------------------------------|
 | [[id:4e6206ae-df01-4811-8ffe-8c49689169b5][git diff]]        |                                             | 差异：工作区、暂存区                         |
-|                 | --cached                                    | 差异：暂存区、最新提交                       |
-|                 | --staged                                    | 同上                                         |
+|                 | --cached/staged                             | 差异：暂存区、最新提交                       |
 |                 | HEAD                                        | 差异：工作区、最新提交                       |
 |                 | <commit1> <commit2>                         | 差异：两个提交                               |
 |                 | <分支>                                      | 差异：当前分支、其他分支                     |

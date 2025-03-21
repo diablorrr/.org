@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       78c972d0-8190-4176-a7ee-09e6a1b6c618
+:END:
+#+title: std::vector

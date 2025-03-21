@@ -1,6 +1,0 @@
-
-* 机器人与自动化
-:PROPERTIES:
-:ID:       a5739cc8-b043-41f7-86bd-6c3528f40f53
-:BRAIN_PARENTS: fb0a05f9-f61c-410a-b01d-977257502b52
-:END:

@@ -5,8 +5,16 @@
 #+LAST_MODIFIED: 2025-03-15 19:53:18
 
 * 使用
-** api查找
-[[https://pytorch.org/docs/stable/index.html][pytorch官方文档]]
+** pytorch(带cuda)安装
+1. 查看官网：选择安装方式conda、wheel
+   [[https://pytorch.org/get-started/locally/][新版本]] [[https://pytorch.org/get-started/previous-versions/][老版本]]
+2. 验证是否安装成功
+   #+begin_src python
+   python -c 'import torch;print(torch.__version__);print(torch.version.cuda)'
+   #+end_src
+3. 若import torch出现模块未找到问题：
+   [[id:f3c23bfd-80db-4d03-a687-3e520c4a7901][conda环境中存在pytorch但是import时找不到模块]]
+
 
 
 * 概念

@@ -1,7 +1,0 @@
-
-* 数据集
-:PROPERTIES:
-:ID:       45fa9f7a-8833-4613-94d4-fe31155e2312
-:BRAIN_PARENTS: 5f6ca75a-2fbd-48fe-b4c3-d133b4bc0b98
-:BRAIN_CHILDREN: 0fe4841d-b6a0-4add-a9ab-da192530dee2 2cbaa2c4-c926-455e-97c9-90a6507ce43e
-:END:

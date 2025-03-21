@@ -1,5 +1,4 @@
 #+title: Done
-#+LAST_MODIFIED: 2025-03-18 20:31:51
 #+STARTUP: show2levels
 
 

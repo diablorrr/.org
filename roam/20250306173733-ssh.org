@@ -14,7 +14,7 @@
 ** 本地打开 服务器中jupyter暴露出来的地址
 1. 本地转发端口
    #+begin_src bash
-   ssh -L 8888:localhost:8888 user@192.168.1.100 # 将192.168.0.100服务器的8888端口映射到本地8888端口
+   ssh -L 8888:localhost:8888 hubu@111.47.28.118 # 将111.47.28.118服务器的8888端口映射到本地8888端口
    #+end_src
 2. 服务器安装 [[id:6a95d71e-f7ea-4258-bf08-62ce584d3842][jupyter notebook]]
    #+begin_src bash

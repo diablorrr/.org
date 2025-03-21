@@ -3,3 +3,34 @@
 :END:
 #+title: magit
 #+LAST_MODIFIED: 2025-03-15 20:44:50
+
+* 使用
+** 切换到其他仓库
+1. M-x [[id:f7692632-d29a-42bb-959f-505a78768643][projectile]]-switch-project
+2. C-x g
+
+
+* 查询
+| 快捷键  | 作用                 |
+|---------+----------------------|
+| p/n     | 上下移动             |
+| M-p/M-n | 同level间移动        |
+| RET     | 查看commit信息       |
+| d d     | (Dwim[fn:1])查看diff |
+| l       | 日志                 |
+
+
+
+* 参考 [0/2]
+- [ ] [[https://emacsair.me/2017/09/01/magit-walk-through/][(入门) A walk through the Magit interface]]
+- [ ] [[https://magit.vc/manual/][(官方) It's Magit!]]
+
+
+* 概念
+- 简介 ::
+  1. 是一个基于[[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]的[[id:52880cac-b451-4efc-bf87-3edde817eb06][git]]客户端
+
+
+
+* Footnotes
+[fn:1] do what I mean

@@ -1,5 +1,4 @@
 #+title: Solve
-#+LAST_MODIFIED: 2025-02-02 17:09:31
 
 * emacs
 [[http://xahlee.info/emacs/index.html][Xah Emacs Tutorial]]

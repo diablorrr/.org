@@ -1,6 +1,0 @@
-
-* labelme
-:PROPERTIES:
-:ID:       4ef992aa-24d2-42f9-9f5b-549dbaf1bd63
-:BRAIN_PARENTS: 0fe4841d-b6a0-4add-a9ab-da192530dee2
-:END:

@@ -1,0 +1,298 @@
+#+title: Leetcode
+#+startup: show2levels
+
+* 1.两数之和
+** 解法1:暴力枚举
+#+begin_src cpp :results output :includes '(<vector> <iostream>) :main no :namespaces std
+vector<int> twoSum(vector<int>& nums, int target){
+    int i,j;
+    for(i=0; i < nums.size()-1; ++i){
+        for(j=i+1; j < nums.size(); ++j){
+            if(nums[i]+nums[j] == target){
+                return {i,j};
+            }
+        }
+    }
+    return {};
+}
+
+int main(){
+    vector<int> nums = {2,4,6,7};
+    int target = 9;
+    vector<int> vec = twoSum(nums, target);
+    for (auto v : vec){
+        cout << v << endl;
+    }
+}
+
+#+end_src
+
+#+RESULTS:
+: 0
+: 3
+* 49.字母异位词分组
+** 解法1:排序
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_map>) :main no :namespaces std
+vector<vector<string>> groupAnagrams(vector<string>& strs) {
+    unordered_map<string, vector<string>> mp;
+    for(auto& str:strs){
+        string key = str;
+        sort(key.begin(), key.end());
+        mp[key].emplace_back(str);
+    }
+
+    vector<vector<string>> ans;
+    for(auto it=mp.begin(); it!=mp.end(); ++it){
+        ans.emplace_back(it->second);
+    }
+    return ans;
+}
+
+int main(){
+    vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
+    auto ga = groupAnagrams(strs);
+    for(auto& g:ga){
+        for(auto& s:g){
+            cout << s << endl;
+        }
+    }
+}
+#+end_src
+
+#+RESULTS:
+: bat
+: tan
+: nat
+: eat
+: tea
+: ate
+*** 复杂度
+- 字符串数量m，平均字符串长度n
+- 复杂度消耗在排序
+- 时间复杂度 :: O(mnlogn)
+- 空间复杂度 ::
+** 解法2:ASCII码作为hash map的key
+- 思路 :: 将26个字母通过[[id:bc0b7272-ae2a-43e6-9727-0992493ddc04][ASCII]]映射到string，string为26个数字组成；将string作为hash map的key，以此分组
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_map>) :main no :namespaces std
+class Solution {
+public:
+vector<vector<string>> groupAnagrams(vector<string>& strs) {
+    vector<vector<string>> res;
+    unordered_map<string, vector<string>> u_mapRes;
+    for(auto& str:strs){
+        string count(26, 0);
+        for(auto& c:str){
+            count[c-'a'] += 1;
+        }
+        u_mapRes[count].push_back(str);
+    }
+    for(auto& pair:u_mapRes){
+        res.push_back(pair.second);
+    }
+    return res;
+}
+};
+
+int main(){
+    vector<string> strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
+    Solution sol;
+    auto ga = sol.groupAnagrams(strs);
+    for(auto& g:ga){
+        for(auto& s:g){
+            cout << s << endl;
+        }
+    }
+}
+#+end_src
+
+#+RESULTS:
+: bat
+: tan
+: nat
+: eat
+: tea
+: ate
+*** 复杂度
+- 字符串数量m，平均字符串长度n
+- 复杂度消耗在排序
+- 时间复杂度 :: O(mn)
+- 空间复杂度 ::
+*** 参考
+[[https://www.bilibili.com/video/BV1Fm42157HG/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【小白都能听懂的算法课】【力扣】【LeetCode 49】]]
+* 128.最长连续序列
+** 解法1:unordered_set
+- 思路 :: 遍历数组，通过左边数是否存在判断是否为序列开始；通过判断右边是否存在持续更新数组长度
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int max_len = 0;
+        unordered_set<long long> u_set;
+        for(int i = 0; i < nums.size(); ++i){
+            u_set.emplace(nums[i]);
+        }
+        for(auto& num:u_set){
+            if(u_set.find(num - 1) == u_set.end()){
+                int len = 0;
+                while(u_set.find(num + len) != u_set.end()){
+                    ++len;
+                    max_len = max(max_len, len);
+                }
+            }
+        }
+        return max_len;
+    }
+};
+
+int main(){
+    vector<int> nums = {0,3,7,2,5,8,4,6,0,1};
+    Solution sol;
+    cout << sol.longestConsecutive(nums) << endl;
+}
+#+end_src
+
+#+RESULTS:
+: 9
+*** 复杂度
+- 时间复杂度 :: O(n)
+- 空间复杂度 ::
+*** 参考
+[[https://www.bilibili.com/video/BV1qqHKetETN?spm_id_from=333.788.videopod.sections&vd_source=4441bc96046659b39d059d583f36ff52][【大厂程序员带你刷力扣】【LeetCode 128】]]
+* 283.移动零
+** 解法1:双指针
+- 思路 :: 右指针遍历，遇到0元素移动；遇到非0元素与左指针交换，左指针移动一个元素
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int left = 0;
+        for(int right = 0; right < nums.size(); ++right){
+            if(nums[right]){
+                int tmp = nums[right];
+                nums[right] = nums[left];
+                nums[left] = tmp;
+                ++left;
+            }
+        }
+    }
+};
+
+int main(){
+    vector<int> nums = {0,1,0,3,12};
+    Solution sol;
+    sol.moveZeroes(nums);
+    for(auto& num:nums){
+        cout << num << endl;
+    }
+}
+#+end_src
+
+#+RESULTS:
+: 1
+: 3
+: 12
+: 0
+: 0
+
+*** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 :: O(1)
+*** 参考
+[[https://www.bilibili.com/video/BV1tZtVeUE2o/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【力扣hot100】【LeetCode 283】]]
+* 11.盛最多水的容器
+** 解法1:双指针
+- 思路 :: 指针在数组两端，只有移动指针值小的，面积才可能变大；因此指针移动策略为移动指针值小的那端指针
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int L = 0, R = height.size() - 1;
+        int max_area = 0;
+        while (L < R){
+            int area = (R - L) * min(height[L], height[R]);
+            max_area = max(max_area, area);
+            if (height[L] < height[R]){
+                ++L;
+            } else {
+                --R;
+            }
+        }
+        return max_area;
+    }
+};
+
+int main(){
+    vector<int> height = {1,8,6,2,5,4,8,3,7};
+    Solution sol;
+    cout << sol.maxArea(height) << endl;
+}
+#+end_src
+
+#+RESULTS:
+: 49
+
+*** 复杂度
+*** 参考
+[[https://www.bilibili.com/video/BV1Dm411k78M/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【小白都能听懂的算法课】【力扣】【Leetcode11】]]
+* 15.三数之和
+** 解法1:双指针
+- 思路 :: 排序数字；第一个数从左到右遍历(需去重)；同时第二、三个数用双指针控制，第二个数向第三个数遍历，期间三数之和相加结果符合要求，就放入结果数组；相加结果小了，移动第二个数的指针；大了，移动第三个数的指针
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+        for (int a = 0; a < nums.size(); ++a){
+            if (a > 0 && nums[a] == nums[a - 1]){
+                continue;
+            }
+            int left = a + 1, right = nums.size() - 1;
+            while (left < right) {
+                if (nums[a] + nums[left] + nums[right] == 0){
+                    res.push_back({nums[a], nums[left], nums[right]});
+                    ++left;
+                    while (left < right && nums[left - 1] == nums[left]){
+                        ++left;
+                    }
+                } else if (nums[a] + nums[left] + nums[right] < 0) {
+                    ++left;
+                } else {
+                    --right;
+                }
+            }
+        }
+        return res;
+    }
+};
+
+int main(){
+    vector<int> nums = {-1,0,1,2,-1,-4};
+    Solution sol;
+    auto vec = sol.threeSum(nums);
+    for (auto& v:vec) {
+        for (auto& vv:v) {
+            cout << vv << endl;
+        }
+    }
+}
+#+end_src
+
+#+RESULTS:
+: -1
+: -1
+: 2
+: -1
+: 0
+: 1
+
+*** 复杂度
+- 时间复杂度 :: O(n^2)
+- 空间复杂度 ::
+*** 参考
+[[https://www.bilibili.com/video/BV1Ux4y127uZ/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【小白都能听懂的算法课】【力扣】【Leetcode15】]]
+* 42.接雨水
+** 解法1:双指针
+- 思路 ::
+*** 复杂度
+*** 参考

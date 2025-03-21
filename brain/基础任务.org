@@ -1,7 +1,0 @@
-
-* 基础任务
-:PROPERTIES:
-:ID:       287d78c0-43a0-4665-b8ea-2440d6caa9be
-:BRAIN_PARENTS:
-:BRAIN_CHILDREN:
-:END:

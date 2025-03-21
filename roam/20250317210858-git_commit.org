@@ -2,8 +2,7 @@
 :ID:       2eb9155c-17e3-4718-b254-70041a1966d1
 :END:
 #+title: git commit
-#+LAST_MODIFIED: 2025-03-18 11:18:25
-#+startup: show3levels
+#+LAST_MODIFIED: 2025-03-19 11:18:34
 
 * 使用
 ** Angular规范

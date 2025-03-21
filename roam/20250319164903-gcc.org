@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       50308b68-ea6c-4de6-a9dd-67c20bb0082b
+:END:
+#+title: gcc
+
+
+* 概念
+- 简介 ::
+  1. gcc (GNU C Compiler) 用于编译c代码

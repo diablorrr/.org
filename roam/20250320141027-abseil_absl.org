@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       afb8588c-992c-4dbd-9dfe-97ad0f845336
+:END:
+#+title: abseil(absl)
+
+* 使用
+** absl链接失败问题
+1. (我的解决方式) [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]中将编译器clang++改成[[id:3aa872a4-290a-4fc8-8e37-add919e44822][g++]]
+*** 参考
+[[https://blog.csdn.net/witton/article/details/144182568][MSYS2 MinGW64使用Protobuf新版本踩坑]]
+
+
+* 概念
+- 简介 ::
+  1. [[id:247f3c54-b3b7-4a77-8fdf-bad941b8fc2e][google]]开源的[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]库集合
+  2. 作为[[id:927fd560-f18f-424c-8df9-8c62a1ca6562][std]]库补充
+  3. 性能优化、跨平台支持

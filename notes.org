@@ -1,16 +1,124 @@
 #+TAGS: cpp(c) cmake(m) 网络(n) emacs(e) 多线程(p)
 #+title: Notes
-#+LAST_MODIFIED: 2025-03-14 10:48:52
+
 
 * Inbox
+** [2025-03-20 四]
+dir 查看模块、方法
+help 查看模块、函数的具体信息
+
+** [2025-03-20 四]
+std::set vs std::unordered_set
+特性	std::set（红黑树）	std::unordered_set（哈希表）
+底层数据结构	红黑树（Red-Black Tree）	哈希表（Hash Table）
+元素存储顺序	有序（按 operator< 排序）	无序
+插入复杂度
+𝑂(log n)
+O(logn)
+𝑂
+(
+1
+)
+O(1) 平均，最坏
+𝑂
+(
+𝑛
+)
+O(n)
+删除复杂度
+𝑂
+(
+log
+⁡
+𝑛
+)
+O(logn)
+𝑂
+(
+1
+)
+O(1) 平均，最坏
+𝑂
+(
+𝑛
+)
+O(n)
+查找复杂度
+𝑂
+(
+log
+⁡
+𝑛
+)
+O(logn)
+𝑂
+(
+1
+)
+O(1) 平均，最坏
+𝑂
+(
+𝑛
+)
+O(n)
+范围查询	支持 (lower_bound() / upper_bound())	不支持
+是否允许重复元素	否（可用 std::multiset）	否（可用 std::unordered_multiset）
+适用场景	需要排序或范围查询	只需要快速查找
+
+** [2025-03-20 四]
+特性	unordered_map	map
+底层数据结构	哈希表（Hash Table）	红黑树（Red-Black Tree）
+键的顺序	无序存储	按键排序存储
+查找时间复杂度	平均
+𝑂(1)
+O(1)，最坏 𝑂(𝑛)
+O(n)
+𝑂(log⁡ n)
+O(logn)
+插入时间复杂度	平均
+𝑂(1)
+O(1)，最坏 𝑂(𝑛)
+O(n)
+𝑂(log 𝑛)
+O(logn)
+删除时间复杂度	平均
+𝑂
+(
+1
+)
+O(1)，最坏
+𝑂
+(
+𝑛
+)
+O(n)
+𝑂
+(
+log
+⁡
+𝑛
+)
+O(logn)
+迭代器性能	遍历无序，性能较低	遍历有序，性能较好
+是否支持范围查询	不支持	支持 lower_bound() / upper_bound()
+适用场景	适用于快速查找，键无序	适用于有序存储和范围查询
+
+** push_back() vs emplace_back()
+| 函数                  | 作用                           | 额外的拷贝/移动    | 适用情况           |
+|-----------------------+--------------------------------+--------------------+--------------------|
+| push_back(T obj)      | 传入对象并插入 vector 末尾     | 需要一次拷贝或移动 | 适用于已构造的对象 |
+| push_back(T&& obj)    | 传入右值对象并插入 vector 末尾 | 需要一次移动       | 适用于右值         |
+| emplace_back(args...) | 直接在 vector 末尾构造对象     | 无拷贝/移动        | 适用于构造新对象   |
+
+
+
+** lsp
+变量lsp-completion-provider
+用于选择lsp补全的后端
+capf是一组函数，completion-at-point会依次调用capf里的函数
 ** llfc语录
 做任何逻辑的时候 先实现 内存层面 => 缓存层面 => 数据库层面
 
-
-** 编译器看到一个声明的类，会自己去找.h和.cpp去找实现
-** absl链接失败问题
-自己的解决方式 cmake中将编译器clang++改成g++
-[[https://blog.csdn.net/witton/article/details/144182568][MSYS2 MinGW64使用Protobuf新版本踩坑]]
 
 
 ** [2025-02-19 三]
@@ -49,12 +157,7 @@ notify_one()只通知wait()挂起的线程
 ** 为什么构造函数加锁、析构函数不加锁
 cpp中，对象的构造是在单线程中进行的，构造函数执行期间，对象还未被其他线程看到或使用；但是析构函数中，对象可能正在被其他多个线程使用
 
-** [2025-02-07 五]
-std::atomic<bool>能够在不依赖锁的情况下，提供安全的并发访问保证
-不同于bool，std::atomic<bool>具有原子性
 
-** [2025-02-05 三]
-ldd app  # Linux: 检查可执行文件的动态库依赖
 
 ** asio
 完成队列、事件循环、执行器、socket之间的关系：
@@ -63,11 +166,6 @@ io_context启动事件循环来取出任务，执行其中的回调；事件调�
 执行器将任务提交给io_context
 socket具体的io对象，socket与执行器关联
 
-
-** [2025-01-24 五] :cpp:
-右值引用是右值具名，只是代表右值，用于减少复制构造，本身是左值
-** [2025-01-24 五] :cpp:
-decltype推断表达式的类型
 
 ** [2025-01-19 日]
 promise 是用来设置值的，通常在生产者线程中使用。
@@ -100,31 +198,16 @@ self->SendCallBack(std::move(send_msg));
 局部绑定（如 :map <mode>-map）仅在特定模式激活时生效，其他模式不会受到影响。
 
 ** [2025-01-14 二]
-服务器 服务
+服务（Service） 和 服务器（Server） 是相关但不同的概念：
+服务器（Server）：指运行服务的物理机器或虚拟机，可以是本地服务器、云服务器等。
+服务（Service）：指运行在服务器上的软件或进程，提供特定功能，如 Web 服务、数据库服务等。
+简单理解：
+服务器是“硬件”，服务是“软件”。
 
 ** ldconfig更新缓存(刷新环境变量)
 比如新安装一个库，使新安装的库可用，确保程序可以找到新的库
 
 
-
-
-
-** pdf中高亮勾画区域 :emacs:
-pdf-annot-add-highlight-markup-annotation
-
-pdf-tools使用鼠标勾画的细粒度设置
-在pdf鼠标右键 => Select style
-
-*
-
-
-** [2025-01-08 三] :网络:
-*** protobuf
-效率高，可读性差
-服务器和服务器通信
-*** jsoncpp
-效率低，简单，可读性好
-客户端和服务器通信
 ** [2025-01-11 六] :网络:
 tcp服务器、http服务器、websocket服务器
 
@@ -136,9 +219,6 @@ tcp服务器、http服务器、websocket服务器
 ** [2025-01-11 六] :网络:
 executor 负责定义如何以及在哪里执行异步操作
 io_context 自带一个默认的 executor，当我们调用 post() 等操作时，实际上是在使用 io_context 的 executor 来调度任务
-** [2025-01-11 六] :cpp:
-cpp 20标准引入协程
-
 
 
 ** [2025-01-11 六] :网络:

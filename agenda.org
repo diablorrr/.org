@@ -1,5 +1,4 @@
 #+title: Agenda
-#+LAST_MODIFIED: 2025-03-18 20:32:20
 #+COLUMNS: %25ITEM %25TODO %25PRIORITY %25SCHEDULED
 #+TAGS: 项目(j) 科研(p) 杂事(o) 书(b)
 #+STARTUP: show2levels
@@ -42,11 +41,18 @@ SCHEDULED: <2025-01-17 五>
 *** TODO using声明
 *** TODO cpp SFINAE机制
 ** TODO [#B] 八股
-** TODO [#B] 算法
+** TODO [#B] hot 100
 ** TODO [#C] 买眼镜
 ** TODO [#C] [[https://github.com/xiaotudui/pytorch-tutorial][pytorch教程]]
+** TODO vscode jupyter
+SCHEDULED: <2025-03-21 五>
+** TODO seaformer
+SCHEDULED: <2025-03-21 五>
+** TODO 数据集小的论文
+SCHEDULED: <2025-03-21 五>
 * 未安排
 ** TODO [#C] 培养计划
-** TODO [#C] emacs gud
 ** TODO [#C] emacs magit
 ** TODO [#C] emacs calfw
+** TODO [#C] leetcode.el
+** TODO org-babel不能补全

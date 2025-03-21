@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       b3490828-3e78-44fe-b25c-840ef54cdd7f
+:END:
+#+title: mmcv
+
+* 使用
+** 安装mmcv-full
+1. 查阅官方文档 [[https://mmcv.readthedocs.io/zh-cn/v1.7.0/get_started/installation.html][在使用pip安装这节对应 pytorch、cuda、mmcv版本]]
+2. 使用命令安装
+3. 验证是否可用
+   #+begin_src bash
+   python -c 'import mmcv;print(mmcv.__version__)'
+   #+end_src
+
+* 查询
+| 版本      | 介绍                                      |
+|-----------+-------------------------------------------|
+| mmcv      | 精简版                                    |
+| mmcv-full | 完整版，包含开箱即用的cpu和[[id:1ad28819-7ca5-4497-a875-053abe7c08a6][cuda]]算子[fn:1] |
+
+
+* 概念
+- 简介 ::
+  1. 开源计算机视觉库
+  2. [[id:86653b12-1c9c-4961-a097-cdfaebb67dd0][OpenMMLab]]项目的一部分
+
+
+* Footnotes
+[fn:1] 用gpu就用这个版本

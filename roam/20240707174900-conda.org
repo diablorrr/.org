@@ -2,11 +2,24 @@
 :ID:       f3c23bfd-80db-4d03-a687-3e520c4a7901
 :END:
 #+title: conda
-#+LAST_MODIFIED: 2025-03-10 08:38:52
 #+filetags: :python:
 
 
 * 使用
+** conda环境中存在pytorch但是import时找不到模块
+1. 检查conda环境中python解释器与当前激活环境是否匹配
+   #+begin_src bash
+   which python
+   #+end_src
+   - 系统环境 :: /anaconda3/bin/python (错误)
+   - 虚拟环境 :: /anaconda3/envs/seaformer_ysh/bin/python (正确)
+2. 强制重新激活环境
+   #+begin_src bash
+   source activate /medias/software/anaconda3/envs/seaformer_ysh
+   which python
+   #+end_src
+
+* 查询
 ** 常用命令行
 - 更新conda :: conda update conda
 - 查看虚拟环境 :: conda env list
@@ -26,6 +39,6 @@ which pip
 - 两种方法 ::
   1. conda环境中安装[[id:28b7f709-6465-4cec-98ac-67356f67f8b4][python]]，会自带[[id:1f8e3fa6-ad53-4b9c-8d06-43ffa046fb1c][pip]]；
   2. conda环境中安装pip，会自带python
-- 参考 :: [[https://blog.csdn.net/qq_44856695/article/details/131378398][如何在conda环境中正确地使用pip]]
 
-**
+* 参考
+[[https://blog.csdn.net/qq_44856695/article/details/131378398][如何在conda环境中正确地使用pip]]

@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       99dc145b-93bc-423d-9aa4-1cd1f24318b0
+:END:
+#+title: project.el
+
+* 概念
+- 简介 ::
+  1. [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]内置的项目管理工具
