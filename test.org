@@ -1,0 +1,33 @@
+#+title: Test
+
+
+#+begin_src cpp :includes '(<iostream> <vector>) :namespaces std
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<int> prefixSum(const vector<int>& A) {
+    int n = A.size();
+    vector<int> S(n + 1, 0);
+    for (int i = 1; i <= n; ++i) {
+        S[i] = S[i - 1] + A[i - 1];
+    }
+    return S;
+}
+
+int rangeSum(const vector<int>& S, int l, int r) {
+    return S[r + 1] - S[l];
+}
+
+int main() {
+    vector<int> A = {2, 3, 5, 7, 11};
+    vector<int> S = prefixSum(A);
+
+    cout << "Sum from index 1 to 3: " << rangeSum(S, 1, 3) << endl; // 15
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Sum from index 1 to 3: 15

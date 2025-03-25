@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       19129d5a-9cff-47db-9ef6-59b7d2dc7b00
+:END:
+#+title: 服务(service)
+
+
+* 概念
+- 简介 ::
+  服务(service)：指运行在服务器上的软件或进程，提供特定功能，如 Web 服务、数据库服务等

@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       63b566c0-534a-4b5b-8e5d-5c871cbf3227
+:END:
+#+title: 服务器(server)
+
+
+* 概念
+- 简介 ::
+  1. 服务器(server)：指运行[[id:19129d5a-9cff-47db-9ef6-59b7d2dc7b00][服务]]的物理机器或虚拟机，可以是本地服务器、云服务器等

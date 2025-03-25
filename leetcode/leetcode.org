@@ -1,7 +1,7 @@
 #+title: Leetcode
 #+startup: show2levels
 
-* 1.两数之和
+* [[https://leetcode.cn/problems/two-sum/description/?envType=study-plan-v2&envId=top-100-liked][1.两数之和]]
 ** 解法1:暴力枚举
 #+begin_src cpp :results output :includes '(<vector> <iostream>) :main no :namespaces std
 vector<int> twoSum(vector<int>& nums, int target){
@@ -30,7 +30,7 @@ int main(){
 #+RESULTS:
 : 0
 : 3
-* 49.字母异位词分组
+* [[https://leetcode.cn/problems/group-anagrams/?envType=study-plan-v2&envId=top-100-liked][49.字母异位词分组]]
 ** 解法1:排序
 #+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_map>) :main no :namespaces std
 vector<vector<string>> groupAnagrams(vector<string>& strs) {
@@ -119,7 +119,7 @@ int main(){
 - 空间复杂度 ::
 *** 参考
 [[https://www.bilibili.com/video/BV1Fm42157HG/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【小白都能听懂的算法课】【力扣】【LeetCode 49】]]
-* 128.最长连续序列
+* [[https://leetcode.cn/problems/longest-consecutive-sequence/description/?envType=study-plan-v2&envId=top-100-liked][128.最长连续序列]]
 ** 解法1:unordered_set
 - 思路 :: 遍历数组，通过左边数是否存在判断是否为序列开始；通过判断右边是否存在持续更新数组长度
 #+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
@@ -158,7 +158,8 @@ int main(){
 - 空间复杂度 ::
 *** 参考
 [[https://www.bilibili.com/video/BV1qqHKetETN?spm_id_from=333.788.videopod.sections&vd_source=4441bc96046659b39d059d583f36ff52][【大厂程序员带你刷力扣】【LeetCode 128】]]
-* 283.移动零
+
+* [[https://leetcode.cn/problems/move-zeroes/?envType=study-plan-v2&envId=top-100-liked][283.移动零]]
 ** 解法1:双指针
 - 思路 :: 右指针遍历，遇到0元素移动；遇到非0元素与左指针交换，左指针移动一个元素
 #+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
@@ -199,7 +200,8 @@ int main(){
 - 空间复杂度 :: O(1)
 *** 参考
 [[https://www.bilibili.com/video/BV1tZtVeUE2o/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【力扣hot100】【LeetCode 283】]]
-* 11.盛最多水的容器
+
+* [[https://leetcode.cn/problems/container-with-most-water/?envType=study-plan-v2&envId=top-100-liked][11.盛最多水的容器]]
 ** 解法1:双指针
 - 思路 :: 指针在数组两端，只有移动指针值小的，面积才可能变大；因此指针移动策略为移动指针值小的那端指针
 #+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
@@ -234,7 +236,8 @@ int main(){
 *** 复杂度
 *** 参考
 [[https://www.bilibili.com/video/BV1Dm411k78M/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【小白都能听懂的算法课】【力扣】【Leetcode11】]]
-* 15.三数之和
+
+* [[https://leetcode.cn/problems/3sum/?envType=study-plan-v2&envId=top-100-liked][15.三数之和]]
 ** 解法1:双指针
 - 思路 :: 排序数字；第一个数从左到右遍历(需去重)；同时第二、三个数用双指针控制，第二个数向第三个数遍历，期间三数之和相加结果符合要求，就放入结果数组；相加结果小了，移动第二个数的指针；大了，移动第三个数的指针
 #+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
@@ -291,8 +294,338 @@ int main(){
 - 空间复杂度 ::
 *** 参考
 [[https://www.bilibili.com/video/BV1Ux4y127uZ/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【小白都能听懂的算法课】【力扣】【Leetcode15】]]
-* 42.接雨水
+
+* [[https://leetcode.cn/problems/trapping-rain-water/?envType=study-plan-v2&envId=top-100-liked][42.接雨水]]
 ** 解法1:双指针
+- 思路 :: 每一个点能存储雨水的量取决于 该点左右较大边界中较小的一个 与自身的差值；根据木桶效应，左右边界中较小的一方移动，移动过程中更新自身的值，并与当前点的差值更新总的雨水量
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int res = 0;
+        int left = 0, right = height.size() - 1;
+        int maxL = height[left], maxR = height[right];
+        while (left < right) {
+            if (maxL < maxR) {
+                ++left;
+                maxL = max(maxL, height[left]);
+                res += (maxL - height[left]);
+            } else {
+                --right;
+                maxR = max(maxR, height[right]);
+                res += (maxR - height[right]);
+            }
+        }
+        return res;
+    }
+};
+
+int main(){
+    Solution sol;
+    vector<int> height = {0,1,0,2,1,0,1,3,2,1,2,1};
+    cout << sol.trap(height) << endl;
+}
+
+#+end_src
+
+#+RESULTS:
+: 6
+
+*** 复杂度
+- 时间复杂度 :: O(n)
+- 空间复杂度 :: O(1)
+*** 参考
+[[https://www.bilibili.com/video/BV1CmtZePErE/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【力扣hot100】【LeetCode 42】]]
+** TODO 解法2:辅助数组
 - 思路 ::
 *** 复杂度
+- 时间复杂度 :: O(n)
+- 空间复杂度 :: O(n)
 *** 参考
+[[https://www.bilibili.com/video/BV1CmtZePErE/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【力扣hot100】【LeetCode 42】]]
+
+* [[https://leetcode.cn/problems/longest-substring-without-repeating-characters/?envType=study-plan-v2&envId=top-100-liked][3.无重复字符的最长子串]]
+** 解法1:滑动窗口
+- 思路 :: 右边界遍历一遍，不重复的元素加入窗口，重复的元素从左边界删除
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_set<char> u_set;
+        int res = 0;
+        int cur_window = 0;
+        for (int left = 0, right = 0; right < s.length(); ++right) {
+            while (left < right && u_set.count(s[right])) {
+                u_set.erase(s[left]);
+                ++left;
+                --cur_window;
+            }
+            u_set.insert(s[right]);
+            ++cur_window;
+            res = max(res, cur_window);
+        }
+        return res;
+    }
+};
+
+int main(){
+    Solution sol;
+    string s = "pwwkew";
+    cout << sol.lengthOfLongestSubstring(s) << endl;
+}
+#+end_src
+
+#+RESULTS:
+: 3
+
+*** 复杂度
+- 时间复杂度 :: O(n)
+- 空间复杂度 ::
+*** 参考
+[[https://www.bilibili.com/video/BV17D421G7Nv/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][【小白都能听懂的算法课】【力扣】【Leetcode3】]]
+* [[https://leetcode.cn/problems/find-all-anagrams-in-a-string/?envType=study-plan-v2&envId=top-100-liked][438.找到字符串中所有字母异位词]]
+** 解法1:滑动窗口
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> res;
+        if (s.size() < p.size()) {
+            return res;
+        }
+        vector<int> counts(26);
+        for (int i = 0; i < p.size(); ++i) {
+            ++counts[p[i] - 'a'];
+        }
+        vector<int> curCounts(26);
+        for (int i = 0; i < p.size() - 1; ++i) {
+            ++curCounts[s[i] - 'a'];
+        }
+        for (int left = 0, right = p.size() - 1; right < s.size(); ++left, ++right) {
+            ++curCounts[s[right] - 'a'];
+            if (counts == curCounts) {
+                res.push_back(left);
+            }
+            --curCounts[s[left] - 'a'];
+        }
+        return res;
+    }
+};
+
+int main(){
+    Solution sol;
+    string s = "cbaebabacd", p = "abc";
+    vector<int> resVec = sol.findAnagrams(s, p);
+    for (auto& res:resVec) {
+        cout << res << endl;
+    }
+}
+#+end_src
+
+#+RESULTS:
+: 0
+: 6
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+[[https://www.bilibili.com/video/BV1mf4y1f78S/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][史上最燃算法刷题！滑动窗口的逆袭！Leetcode 438]]
+
+* [[https://leetcode.cn/problems/subarray-sum-equals-k/?envType=study-plan-v2&envId=top-100-liked][560.和为 K 的子数组]]
+** 解法1:[[id:aa4d00a0-0fa0-453f-826e-56d34b4fe5ed][前缀和数组]]+哈希表
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_map>) :main no :namespaces std
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int res = 0;
+        unordered_map<int, int> u_map;
+        int cur_sum = 0;
+        u_map[cur_sum] = 1;
+        for (int i = 0; i < nums.size(); ++i) {
+            cur_sum += nums[i];
+            if (u_map[cur_sum - k]) {
+                res += u_map[cur_sum - k];
+            }
+
+            u_map[cur_sum] += 1;
+        }
+        return res;
+    }
+};
+
+int main(){
+    Solution sol;
+    vector<int> nums = {1,2,3};
+    int k = 3;
+    cout << sol.subarraySum(nums, k) << endl;
+}
+
+#+end_src
+
+#+RESULTS:
+: 2
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+[[https://www.bilibili.com/video/BV13t4y1y7ya/?vd_source=4441bc96046659b39d059d583f36ff52][560. 和为 K 的子数组 Subarray Sum Equals K【LeetCode 力扣官方题解】]]
+[[https://www.bilibili.com/video/BV1UnsbeEETq/?spm_id_from=333.1387.search.video_card.click&vd_source=4441bc96046659b39d059d583f36ff52][【力扣hot100】【LeetCode 560】]]
+* [[https://leetcode.cn/problems/sliding-window-maximum/?envType=study-plan-v2&envId=top-100-liked][239.滑动窗口最大值]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/minimum-window-substring/?envType=study-plan-v2&envId=top-100-liked][76.最小覆盖子串]]
+** 解法1:滑动窗口
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/maximum-subarray/?envType=study-plan-v2&envId=top-100-liked][53.最大子数组和]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/merge-intervals/?envType=study-plan-v2&envId=top-100-liked][56.合并区间]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/rotate-array/?envType=study-plan-v2&envId=top-100-liked][189.轮转数组]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/product-of-array-except-self/?envType=study-plan-v2&envId=top-100-liked][238.除自身以外数组的乘积]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/first-missing-positive/description/?envType=study-plan-v2&envId=top-100-liked][41.缺失的第一个正数]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/set-matrix-zeroes/?envType=study-plan-v2&envId=top-100-liked][73.矩阵置零]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/spiral-matrix/?envType=study-plan-v2&envId=top-100-liked][54.螺旋矩阵]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/rotate-image/?envType=study-plan-v2&envId=top-100-liked][48.旋转图像]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/search-a-2d-matrix-ii/?envType=study-plan-v2&envId=top-100-liked][240.搜索二维矩阵 II]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/intersection-of-two-linked-lists/?envType=study-plan-v2&envId=top-100-liked][160.相交链表]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考
+
+* [[https://leetcode.cn/problems/reverse-linked-list/?envType=study-plan-v2&envId=top-100-liked][206.反转链表]]
+** 解法1:
+- 思路 ::
+#+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+
+#+end_src
+
+**** 复杂度
+- 时间复杂度 ::
+- 空间复杂度 ::
+**** 参考

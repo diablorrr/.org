@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       aa4d00a0-0fa0-453f-826e-56d34b4fe5ed
+:END:
+#+title: 前缀和数组
+
+
+
+
+
+* 概念
+- 简介 ::
+  1. 是一种通过预处理数组来快速计算 区间和 的技巧
+
+** 定义 :ATTACH:
+:PROPERTIES:
+:ID:       88fe0a99-c390-4e62-9461-36150e6840dc
+:END:
+- 准备 :: 数组 nums，前缀和数组 prefixSum
+- 定义 ::
+  #+begin_example
+  prefixSum[0] = nums[0]
+  prefixSum[i] = prefixSum[i-1] + nums[i] （对于 i > 0）
+  #+end_example
+[[attachment:_20250324_164220screenshot.png]]
+
+** 应用场景
+1. 子数组和问题
+2. 滑动窗口问题
+3. 动态规划优化

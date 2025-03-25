@@ -15,3 +15,11 @@ python -c "代码"                                    # 命令行中直接执行
 python -c "import torch; print(torch.__version__)"  # 检查torch版本
 python -c "import mmcv; print(mmcv.__version__)"    # 检查mmcv版本
 #+end_src
+
+
+
+* 查询
+| 函数 | 作用                     |
+|------+--------------------------|
+| dir  | 查看模块、方法           |
+| help | 查看模块、函数的具体信息 |
