@@ -2,9 +2,7 @@
 :ID:       13d1007d-c805-482c-bf95-5e53ba86bf4c
 :END:
 #+title: doom emacs
-#+LAST_MODIFIED: 2025-03-16 21:31:57
 #+FILETAGS: emacs
-#+EXPORT_FILE_NAME: ~/.org/export/DoomEmacs使用手册
 
 * 使用
 ** 查看帮助
@@ -19,11 +17,7 @@ doom sync
 
 
 
-
 * 概念
-
-
-
 
 
 

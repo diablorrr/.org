@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       56480af0-4c4d-49a5-8f50-abe024b083f1
+:END:
+#+title: vim
+
+* 使用
+** leetcode vim模式无法复制文本到系统剪切板
+1. 鼠标选中
+2. Ctrl + Insert
+
+*** 参考链接
+[[https://blog.csdn.net/m0_58636750/article/details/139057757][刷leecode小技巧:LeetCode代码编辑器vim模式无法复制文本到系统剪贴板]]

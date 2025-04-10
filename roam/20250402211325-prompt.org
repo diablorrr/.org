@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       69db2457-7853-4b25-b4fd-8a67d408e4e5
+:END:
+#+title: prompt
+
+1. 我需要你简洁准确的回复我的问题，尽量采用表格形式回复

@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       6abdd033-f2d1-44b0-af11-51132b1c3414
+:END:
+#+title: MAC地址表
+
+* 概念 :ATTACH:
+:PROPERTIES:
+:ID:       77c3f5c0-0c40-4b9f-92c4-ef1d37626efb
+:END:
+[[attachment:_20250402_161920screenshot.png]]
+- 简介 ::
+  1. 用于映射 交换机端口号 与 目标设备的地址 的关系

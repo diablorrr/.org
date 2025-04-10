@@ -6,12 +6,6 @@
 #+startup: show2levels
 
 * 使用
-** TODO vscode的cpp配置文件
-| 文件                  | 作用                     | 生成方式                      |
-|-----------------------+--------------------------+-------------------------------|
-| c_cpp_properties.json | 配置编译器设置、[[id:96ca4e3b-31e8-4e28-989e-c66aa6b67bc3][智能感知]] | [[id:7a2d69bf-554b-4132-8d90-3b818adbe730][C/C++:Edit Configurations(UI)]] |
-| tasks.json            | 配置[[id:0e613551-8941-4d69-b64b-6e1c3433027e][构建]]任务             | [[id:3fcb1ebe-583e-404b-a01c-0d0fc62a372c][Task:Task:Configure Task]]      |
-| launch.json           | 配置[[id:a919522a-6e1d-44e5-8ad8-25e2af115e8a][调试]]设置             |                               |
 
 ** root权限运行vscode(且使用普通用户的配置)
 #+begin_src bash
@@ -25,6 +19,24 @@ sudo code --user-data-dir="$HOME/.config/Code" --extensions-dir="$HOME/.vscode/e
 
 ** 远程连接到服务器使用jupyter notebook
 1. [[id:956841e6-7532-44bb-aa20-168fad48365f][vscode连接到远程服务器使用jupyter notebook]]
+
+** vscode连接远程后，无法为jupyter选择内核
+1. 在远程服务器上重新安装[[id:6a95d71e-f7ea-4258-bf08-62ce584d3842][jupyter]]
+*** 参考链接
+[[https://blog.csdn.net/jyk19991222/article/details/131486776][vscode中 ssh连接服务器后 无法为jupyter文件选择内核kernel]]
+** debug深度学习项目
+1. 控制面板 => Python: Select Interpreter => 选择conda环境
+2. 编写[[id:3bc9bc09-2279-40c8-8269-532289bf2bfe][launch.json]][fn:1]
+3. 控制面板 => [[id:37f43feb-ef0e-4261-aa70-6bdd8f2b1c2f][Python Debugger]]: Debug using launch.json
+
+
+* 查询
+** TODO vscode的cpp配置文件
+| 文件                  | 作用                     | 生成方式                      |
+|-----------------------+--------------------------+-------------------------------|
+| c_cpp_properties.json | 配置编译器设置、[[id:96ca4e3b-31e8-4e28-989e-c66aa6b67bc3][智能感知]] | [[id:7a2d69bf-554b-4132-8d90-3b818adbe730][C/C++:Edit Configurations(UI)]] |
+| tasks.json            | 配置[[id:0e613551-8941-4d69-b64b-6e1c3433027e][构建]]任务             | Task:Configure Task           |
+| [[id:3bc9bc09-2279-40c8-8269-532289bf2bfe][launch.json]]           | 配置[[id:a919522a-6e1d-44e5-8ad8-25e2af115e8a][调试]]设置             |                               |
 
 
 * 配置
@@ -49,3 +61,7 @@ sudo code --user-data-dir="$HOME/.config/Code" --extensions-dir="$HOME/.vscode/e
 *** 运行C/C++文件的机制
 - 来源 :: Microsoft C/C++ 扩展
 - 运行代码 :: 使用tasks.json中的编译选项
+
+* Footnotes
+
+[fn:1] 参考：[[https://www.cnblogs.com/swx123/p/17827203.html][vscode python remote debug极速入门]]

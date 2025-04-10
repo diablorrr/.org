@@ -1,15 +1,12 @@
 :PROPERTIES:
 :ID:       6a95d71e-f7ea-4258-bf08-62ce584d3842
 :END:
-#+title: jupyter notebook
+#+title: jupyter
 #+LAST_MODIFIED: 2025-03-16 17:08:34
 
 * 使用
-** vscode连接到远程服务器使用jupyter notebook
-:PROPERTIES:
-:ID:       956841e6-7532-44bb-aa20-168fad48365f
-:ROAM_REFS: https://blog.csdn.net/weixin_44244168/article/details/125698441
-:END:
+
+** 远程服务器中使用jupyter notebook
 1. [[id:eb955da4-d9f2-4122-bf2c-cd2900c71a53][ssh]]连接上远程服务器
 2. 远程服务器上安装jupyter插件
    #+begin_src bash
@@ -17,7 +14,7 @@
    #+end_src
 3. 服务器中运行jupyter(二选一)：
    #+begin_src bash
-   jupyter notebook --allow-root
+jupyter notebook --allow-root
    jupyter notebook --port 端口 --allow-root设置特定端口
    #+end_src
 4. 打开网站，输入密码

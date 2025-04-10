@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       5828ed21-86ce-4fd9-b1bd-3f7e387bef79
+:END:
+#+title: NDCG
+
+
+* 概念
+- 简介 ::
+  1. Normalized Discounted Cumulative Gain (归一化折损累计增益)
+  2. 推荐系统常用的评估指标，用于衡量排序结果的质量 => 相关性、顺序 => 值越接近1 => 排序越好
+  3. 在推荐系统中，比准确率(Precision)更精细 => 因为：用户一般只看前几页的结果；且考虑了相关性和顺序
+
+** 示例
+#+begin_example
+NDCG@20
+#+end_example
+- 只考虑排序结果的前20个物品(TOP-20)，忽略后面的结果

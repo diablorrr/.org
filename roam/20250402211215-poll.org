@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       5aa7d6ac-3b07-4068-a253-525aab291730
+:END:
+#+title: poll
+
+* 概念
+- 简介 ::
+  1. [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]中的系统调用

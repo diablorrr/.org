@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       a169314d-76e0-4318-b4d1-d55f05ac42ec
+:END:
+#+title: 双向队列

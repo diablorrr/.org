@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       d4215449-8882-47a2-90af-c9f3b929f1f1
+:END:
+#+title: 前缀积
+
+
+* 概念
+- 定义 :: 前缀积数组 prefix 中，prefix[i] 表示原数组 nums 从第 0 个元素到第 i 个元素的乘积(包含 nums[i])
+- 变形形式 :: prefix[i] 表示 0 到 i-1 个元素的乘积
+- 公式 ::
+  prefix[0] = nums[0]
+  prefix[i] = prefix[i-1] * nums[i] (当 i > 0)
+- 示例 ::
+  #+begin_example
+  原数组：nums = [2, 3, 4, 5]
+  前缀积：prefix = [2, 6, 24, 120]
+  (计算过程：2, 2 * 3=6, 6 * 4=24, 24 * 5=120)
+  #+end_example

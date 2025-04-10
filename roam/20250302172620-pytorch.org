@@ -15,6 +15,11 @@
 3. 若import torch出现模块未找到问题：
    [[id:f3c23bfd-80db-4d03-a687-3e520c4a7901][conda环境中存在pytorch但是import时找不到模块]]
 
+** undefined symbol: iJIT_NotifyEvent[fn:1]
+- 错误原因 :: mkl包版本不匹配，[[id:f3c23bfd-80db-4d03-a687-3e520c4a7901][conda]]和[[id:1f8e3fa6-ad53-4b9c-8d06-43ffa046fb1c][pip]]使用不同的[[id:91a955ee-2ffc-4c38-ae74-85d18df57106][mkl]]版本
+1. 对mkl进行降级
+   conda install mkl=2024.0
+
 
 
 * 概念
@@ -25,3 +30,7 @@
 | pytorch-cuda | CUDA 相关库，提供 GPU 加速（需匹配 CUDA 版本）           | 选装（若使用 GPU） |
 | torchvision  | 处理计算机视觉任务的工具包，包含数据集加载、图像变换等   | 选装（若涉及 CV）  |
 | torchaudio   | 处理音频任务的工具包，提供音频数据加载、变换等功能       | 选装（若涉及音频） |
+
+* Footnotes
+
+[fn:1] 参考：[[https://blog.csdn.net/mr_hore/article/details/138961434][pytorch安装bug：“undefined symbol: iJIT_NotifyEvent“]]
