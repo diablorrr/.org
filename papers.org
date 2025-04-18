@@ -11,17 +11,12 @@ for i, (key, value) in enumerate(data.items()):
 #+RESULTS:
 | 0.0659 | 0.1013 | 0.0353 | 0.0445 |
 
-
-
-
-
-
-
-
+** tmp
+Test: recall@5: 0.0376    recall@10: 0.0624    recall@20: 0.0985    recall@50: 0.1658    ndcg@5: 0.0243    ndcg@10: 0.0324    ndcg@20: 0.0416    ndcg@50: 0.0552    precision@5: 0.0083    precision@10: 0.0069    precision@20: 0.0054    precision@50: 0.0037    map@5: 0.0193    map@10: 0.0226    map@20: 0.0250    map@50: 0.0271
 
 * 实验
 ** MIG-GT_3.8
-#+NAME: 实验_baby_SumPooling:增加权重
+#+NAME: 实验_baby_SumPooling:手工权重
 |   R@10 |   R@20 |   N@10 |   N@20 | 方法    |      |
 |--------+--------+--------+--------+---------+------|
 | 0.0634 |  0.099 | 0.0344 | 0.0436 | etv:334 |      |
@@ -46,19 +41,22 @@ for i, (key, value) in enumerate(data.items()):
 | 0.0636 | 0.0934 | 0.0347 | 0.0422 | clothing |
 
 
-* route [2/7]
-- [X] vscode远程debug
-- [X] Sum Pooling: 权重
-- [ ] autodl上部署MIG-GT、测试
-- [ ] 脚本：多次实验并给出最佳结果
-- [ ] Sum Pooling: 自适应权重
-- [ ] 多任务学习
-- [ ] 新论文
-
+* TODO route [1/8]
+** [X] Sum Pooling: 手工权重
+** [-] Sum Pooling: 自适应权重 => 效果一般
+** [?] autodl上部署MIG-GT、测试 => 暂时无卡
+** [ ] 脚本：多次实验并给出最佳结果
+** [ ] Sum Pooling: 自注意力机制融合
+** [ ] 读新论文:FREEDOM
+** [ ] 多任务学习
+** [ ] 对比学习
 
 ** someday
 - 农业方面的多模态语义分割
-* MIG-GT
+
+
+* 目录
+** MIG-GT
 /medias/data/202321116012525_ysh/MIG-GT-main
 ├── main.py                  # 主训练入口，包含参数解析、数据加载、模型训练、评估全流程
 ├── mig_gt                   # 核心算法实现

@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       6b01c1f5-e601-45dc-b7f8-0f9f0e3db289
+:END:
+#+title: new
+
+* 概念
+- 简介 :: 既分配内存又构造函数

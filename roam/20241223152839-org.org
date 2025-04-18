@@ -2,7 +2,6 @@
 :ID:       2d50336c-dabb-4c57-8cb5-b7853cabd245
 :END:
 #+title: org-mode
-#+LAST_MODIFIED: 2025-03-16 21:36:36
 #+startup: show2levels
 
 * 使用
@@ -14,8 +13,11 @@
 ** 显示*对应的数字
 1. M-x org-num-mode
 
-** 设置初次打开org显示的视图层级
-1. 在org文件的上方写入
+** 设置org视图层级
+:PROPERTIES:
+:ID:       6705a2aa-1639-4576-8b4f-1d458a0ee53b
+:END:
+- (文件级别)在org文件的上方写入
    #+begin_example
    #+STARTUP: overview
    #+STARTUP: content
@@ -23,6 +25,14 @@
    #+STARTUP: show<数字>levels
    #+STARTUP: showeverything(默认)
    #+end_example
+- (标题级别)在抽屉里写入:VISIBILITY:键值对
+  #+begin_example
+  * Heading 1
+  :PROPERTIES:
+  :VISIBILITY: show2levels
+  :END:
+  #+end_example
+
 
 ** 过了DEADLINE依旧显示重复任务
 # 假设我计划25-27号重复任务，SCHEDULED设置为25，DEADLINE设置为27；但是 => 27号后也会显示重复任务

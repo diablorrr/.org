@@ -2,11 +2,30 @@
 :ID:       ec7aef91-2628-4ba9-b300-16652314877f
 :END:
 #+title: linux
-#+LAST_MODIFIED: 2025-03-08 18:59:13
 #+startup: show2levels
 
 
 * 使用
+** 运行时找不到动态链接库
+*** 方法1:在.zshrc中改环境变量LD_LIBRARY_PATH(推荐)
+1. 将在.zshrc中，将库文件目录export
+   #+begin_example
+   export LD_LIBRARY_PATH=/usr/local/mysql/lib/:$LD_LIBRARY_PATH
+   #+end_example
+*** 方法2:将库放入系统库路径(不推荐)
+* 查询
+** 环境变量
+- PATH :: 可执行程序的搜索目录
+- LD_LIBRARY_PATH :: c/[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]语言 动态链接库 文件搜索的目录，不是linux缺省的环境变量
+- CLASSPATH :: [[id:19518163-c915-48da-9083-fe58e8b3afcf][java]]语言库文件搜索的目录，不是linux缺省的环境变量
+
+** linux库搜索路径
+:PROPERTIES:
+:ID:       4d6ef467-20af-4aea-aaff-836bf1056198
+:END:
+- 系统路径 :: /lib, /usr/lib, /usr/local/lib
+- 环境变量 :: $LD_LIBRARY_PATH
+
 ** 命令行工具
 - 查找进程号 :: [[id:b76cb01a-0ba6-4226-a539-c3ebadd68d1d][pidof]]
 - 远程连接 :: [[id:eb955da4-d9f2-4122-bf2c-cd2900c71a53][ssh]]
@@ -28,15 +47,8 @@
 - yazi :: 文件管理
 - tldr :: 更简单易懂的命令行帮助文档
 
-** 环境变量
-- PATH :: 可执行程序的搜索目录
-- LD_LIBRARY_PATH :: c/[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]语言 动态链接库 文件搜索的目录，不是linux缺省的环境变量
-- CLASSPATH :: [[id:19518163-c915-48da-9083-fe58e8b3afcf][java]]语言库文件搜索的目录，不是linux缺省的环境变量
-
-
 
 * 概念
-
 
 
 * 常用命令行工具

@@ -2735,24 +2735,69 @@ public:
 ** 解法1
 - 思路 ::
 #+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int left = 0, right = nums.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left)/2;
+            if (nums[mid] == target) {
+                return mid;
+            }
 
+            if (nums[left] <= nums[mid]) {
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            } else {
+                if (target > nums[mid] && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+        return -1;
+    }
+};
 #+end_src
 
 **** 复杂度
 + 时间复杂度 ::
 + 空间复杂度 ::
 **** 参考
+[[https://www.bilibili.com/video/BV1tz421r7xC/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][bilibili]]
 * [[https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/?envType=study-plan-v2&envId=top-100-liked][153.寻找旋转排序数组中的最小值]]
 ** 解法1
 - 思路 ::
 #+begin_src cpp :results output :includes '(<vector> <iostream> <algorithm> <unordered_set>) :main no :namespaces std
-
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int left = 0, right = nums.size() - 1;
+        int mid = 0;
+        while (left <= right) {
+            mid = left + (right - left) / 2;
+            if (nums[left] <= nums[mid] && nums[mid] <= nums[right]) {
+                return nums[left];
+            } else if (nums[left] <= nums[mid]) {
+                left = mid + 1;
+            } else if (nums[right] >= nums[mid]) {
+                right = mid;
+            }
+        }
+        return -1;
+    }
+};
 #+end_src
 
 **** 复杂度
 + 时间复杂度 ::
 + 空间复杂度 ::
 **** 参考
+[[https://www.bilibili.com/video/BV1VC41157ha/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][bilibili]]
 * [[https://leetcode.cn/problems/median-of-two-sorted-arrays/?envType=study-plan-v2&envId=top-100-liked][4.寻找两个正序数组的中位数]]
 ** 解法1
 - 思路 ::

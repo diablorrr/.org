@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       e396235e-8b41-475c-8fe2-40d3def9f9b2
+:END:
+#+title: .gitmodules
+
+保持各个子模块的git地址

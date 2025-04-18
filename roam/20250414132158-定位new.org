@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       9d212108-8cbf-4bec-86d4-924a4a77b1e1
+:END:
+#+title: 定位new
+
+* 概念
+- 定位new(Placement new) ::
+  1. 在已分配的内存上，调用构造函数
+  2. 常用于内存池
+
+** 示例
+#+begin_src cpp
+void* memory = /* 预分配的内存 */;
+T* obj = new(memory) T(args...);  // 在 memory 上构造 T 类型的对象
+#+end_src

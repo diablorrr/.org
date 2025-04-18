@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       84bf17e6-4369-4bdf-b8a9-0b44fd404c30
+:END:
+#+title: 参数包
+
+可变参数模板使用参数包，参数包用...表示
+# args为参数名称
+1. ...args => 声明参数包
+2. args... => 展开参数包
+#+begin_src cpp :results outpt :includes <iostream>
+void printAll() {
+    std::cout << std::endl;
+}
+// Args为模板参数包、args为函数参数包
+// Args&... args => 将Args展开(为很多类型)，应用到args上
+template <typename T, typename... Args>
+void printAll(const T& first, const Args&... args) {
+    std::cout << first << " ";
+    printAll(args...); // 递归调用
+}
+
+int main() {
+    printAll(1, 2.5, "Hello", 'A'); // 输出：1 2.5 Hello A
+    return 0;
+}
+#+end_src

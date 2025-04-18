@@ -2,21 +2,24 @@
 :ID:       9653d634-a6ed-45c9-a7f7-f7f51f024ab9
 :END:
 #+title: compile_commands.json
-#+LAST_MODIFIED: 2025-03-02 19:43:23
 
 
 * 使用
 ** compile_commands.json生成方法
+*** 方法1
 1. 在工程根目录的[[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]中写入
    #+begin_src cmake
-   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)，build目录中cmake ..
+   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
    #+end_src
-
-2. 在工程根目录的[[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]的地方，用命令行
+2. build目录中cmake ..
+*** 方法2
+1. 在工程根目录的[[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]的地方(CML.txt文件中无需写入方法1中的set)，用命令行
    #+begin_src bash
-   cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+   cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .
    #+end_src
    # 原因：1.cmake的构建体系一般是树状结构，一个项目有多个CMakeLists.txt，我们在顶层处理了，顶层就会生成一个包含整个项目编译信息的compile_commands.json文件，包含所有子目录的头文件路径和编译选项
+*** 方法3
+1. [[id:a8f646b8-1262-424f-9bba-388f572bb22f][bear]] -- make -j$(nproc)
 
 
 * 概念

@@ -4,14 +4,14 @@
 :NOTER_PAGE: 81
 :END:
 #+title: const
-#+LAST_MODIFIED: 2025-01-29 20:06:28
-#+filetags: cpp
 
 * const
 :PROPERTIES:
 :NOTER_PAGE: 79
 :END:
-- 简介 :: 限定一个对象的值不被修改
+- 简介 ::
+  1. 限定一个对象的值不被修改
+  2. 编译期或运行期求得值
 - 特点 ::
   1. const对象必须被初始化
   2. const对象仅在文件内有效

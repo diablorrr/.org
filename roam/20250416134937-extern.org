@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       64c13c3f-73f2-46f1-abe5-79ef902f6590
+:END:
+#+title: extern
+
+* 概念
+- 简介 ::
+  1. [[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]中的一个关键字，用于指示变量或函数在其他文件或当前文件的其他位置定义的

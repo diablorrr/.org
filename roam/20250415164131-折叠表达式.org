@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       d3d8b7e8-36c4-4c91-a79b-f297ec09b32e
+:END:
+#+title: 折叠表达式
+
+[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]17标准引入，简化对参数包的操作
