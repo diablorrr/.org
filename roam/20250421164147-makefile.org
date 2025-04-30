@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID:       bebf1ef4-09f4-44f9-98c6-a9f3c35abcb9
+:END:
+#+title: makefile
+
+* 使用
+:PROPERTIES:
+:VISIBILITY: show2levels
+:END:
+** makefile编写和使用
+#+begin_example
+.
+├── demo01
+├── demo01.cpp
+├── demo02
+├── demo02.cpp
+├── demo03
+├── demo03.cpp
+└── makefile
+#+end_example
+
+#+begin_src makefile
+INCLUDEDIR=-I/home/yoshiki01/test/demo01/tools -I/home/yoshiki01/test/demo01/api
+LIBDIR=-L/home/yoshiki01/test/demo01/tools -L/home/yoshiki01/test/demo01/api
+
+# 指定编译目标文件
+all:demo01 demo02 demo03
+
+demo01:demo01.cpp
+	g++ -o demo01 demo01.cpp $(INCLUDEDIR) $(LIBDIR) -lpublic -lmyapi
+
+demo02:demo02.cpp
+	g++ -o demo02 demo02.cpp $(INCLUDEDIR) $(LIBDIR) -lpublic -lmyapi
+
+demo03:demo03.cpp
+	g++ -o demo03 demo03.cpp $(INCLUDEDIR) $(LIBDIR) -lpublic -lmyapi
+
+# 用于清理编译目标文件，make clean执行
+clean:
+	rm -f demo01 demo02 demo03
+#+end_src
+1. make       => 生成demo01 demo02 demo03
+2. make clean => 清理demo01 demo02 demo03
+
+
+
+* 概念
+- 简介 ::
+  1. 增量编译 => 不需要编译的文件不会重新编译

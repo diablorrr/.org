@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID:       cf9edd3d-149a-40ac-87bf-ed4256128db9
+:END:
+#+title: ulimit
+
+* 使用
+** 生成[[id:9fa181ca-96dc-4987-af7d-fcff90769347][core dump]]文件
+1. ulimit -c unlimited
+
+
+* 查询
+| 命令   | 参数               | 作用             |
+|--------+--------------------+------------------|
+| ulimit | -a                 | 查看用户限制     |
+|        | -<选项>[fn:1] <值> | 设置用户限制的值 |
+
+
+* 概念
+- 简介 ::
+  1. [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]命令行工具，用于查看和设置用户限制
+
+
+* Footnotes
+[fn:1] 查看选项有哪些：ulimit -a

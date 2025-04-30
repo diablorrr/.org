@@ -1,18 +1,30 @@
 :PROPERTIES:
 :ID:       3ab70f69-74de-4653-b92e-5126303a692e
 :END:
-#+title: tar(Tape Archive)
-#+LAST_MODIFIED: 2025-03-08 18:00:51
+#+title: tar
 
 * 使用
 ** 解压.tar.gz文件
-#+begin_src bash
-tar -zxvf file.tar.gz
-#+end_src
-- 参数解释 ::
-  -z → 使用 gzip 解压（gzip）
-  -x → 解压（extract）
-  -v → 显示详细信息（verbose）
-  -f → 指定文件名（file）
+1. tar -zxvf file.tar.gz
+
+
+
+* 查询
+| 参数 | 作用                               |
+|------+------------------------------------|
+| -x   | 解压文件                           |
+| -v   | 显示解压详细信息                   |
+| -f   | 指定操作的文件名(必须放最后)       |
+| -z   | 使用gzip压缩/解压 :: .tar.gz或.tgz |
+| -j   | 使用bzip2压缩/解压 :: .tar.bz2     |
+| -J   | 使用xz压缩/解压 :: .tar.xz         |
+** gzip、bzip2、xz对比
+| 压缩方式 | 速度 | 压缩率 |
+|----------+------+--------|
+| gzip     | 快   | 低     |
+| bzip2    | 中   | 中     |
+| xz       | 低   | 高     |
+
 
 * 概念
+- 简介 :: [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]中用于打包和解包文件的命令行工具

@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       8a58da08-5d12-4ee2-8f18-4064148d04cb
+:END:
+#+title: alpine
+
+* 概念
+- 简介 ::
+  1. 轻量级[[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]发行版，以小巧(约5MB)和高效著称
+  2. 广泛用于[[id:a47cc941-ccc6-4893-9862-d5b245ea912b][docker]]基础镜像
+  3. 包管理器为[[id:b7f51b4e-3a4b-4b4f-ab59-c57bb2b81a9b][apk]]

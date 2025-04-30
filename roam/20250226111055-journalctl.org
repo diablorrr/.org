@@ -2,13 +2,20 @@
 :ID:       b670783d-160b-44e8-8b47-0d968d3b4b90
 :END:
 #+title: journalctl
-#+LAST_MODIFIED: 2025-02-26 11:14:49
 
-* 使用
-#+begin_src bash
-journalctl # 查看所有日志
-journalctl --since "1 hour ago" # 按时间筛选：查看最近一小时的日志
-#+end_src
+* 查询
+| 命令       | 参数                 | 作用                             |
+|------------+----------------------+----------------------------------|
+| journalctl |                      | 查看所有日志                     |
+|            | -u <服务名>          | 查看指定服务日志                 |
+|            | --since <时间>[fn:1] | 按时间筛选：查看最近一小时的日志 |
+
+
 
 * 概念
-用于查看[[id:5a19e8de-05ec-4bae-bf70-54b24b63c412][systemd]]日志的工具，可以查询、筛选、导出系统日志
+- 简介 :: 用于查看[[id:5a19e8de-05ec-4bae-bf70-54b24b63c412][systemd]]日志的命令行工具
+
+
+
+* Footnotes
+[fn:1] 示例：--since "1 hour ago"

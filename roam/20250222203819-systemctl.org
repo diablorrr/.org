@@ -2,33 +2,32 @@
 :ID:       5a19e8de-05ec-4bae-bf70-54b24b63c412
 :END:
 #+title: systemctl
-#+LAST_MODIFIED: 2025-03-08 18:08:27
 
 
-* 使用
-** 启动/停止/重启服务
-#+begin_src bash
-systemctl start <服务名>      # 启动服务
-systemctl stop <服务名>       # 停止服务
-systemctl restart <服务名>    # 重启服务
-#+end_src
-** 查看服务状态
-#+begin_src bash
-systemctl status <服务名>     # 查看服务状态
-#+end_src
-** 管理开机自启
-#+begin_src bash
-systemctl enable <服务名>  # 设置开机自启
-systemctl disable <服务名> # 取消开机自启
-#+end_src
-** 查看服务配置
-#+begin_src bash
-systemctl cat <服务名>    # 查看服务配置
-#+end_src
-** 关机
-#+begin_src bash
-systemctl poweroff
-#+end_src
+* 查询
+|--------------+-------------------------------+--------------------------|
+|              | 命令                          | 功能                     |
+|--------------+-------------------------------+--------------------------|
+| 服务控制     | systemctl start <服务名>      | 启动服务                 |
+|              | systemctl stop <服务名>       | 停止服务                 |
+|              | systemctl restart <服务名>    | 重启服务                 |
+|              | systemctl reload <服务名>     | 重新加载配置(不中断服务) |
+|--------------+-------------------------------+--------------------------|
+| 服务状态查询 | systemctl status <服务名>     | 查看服务状态             |
+|              | systemctl is-active <服务名>  | 检查服务是否运行         |
+|              | systemctl is-enabled <服务名> | 检查服务是否开机自启     |
+|              | systemctl is-failed <服务名>  | 检查服务是否启动失败     |
+|--------------+-------------------------------+--------------------------|
+| 服务配置     | systemctl cat <服务名>        | 查看服务配置             |
+|              | systemctl enable <服务名>     | 设置开机自启             |
+|              | systemctl disable <服务名>    | 取消开机自启             |
+|--------------+-------------------------------+--------------------------|
+| 系统管理     | systemctl poweroff            | 关机                     |
+|              | systemctl reboot              | 重启                     |
+|              | systemctl suspend             | 挂起(睡眠)               |
+|--------------+-------------------------------+--------------------------|
+
+
 
 * 概念
-- systemctl :: 控制[[id:669a06c1-5af2-40bd-a102-51b0b5eeb23b][systemd]]系统和服务管理器
+- 简介 :: [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]中用于管理和控制[[id:669a06c1-5af2-40bd-a102-51b0b5eeb23b][systemd]](init系统和服务管理器)的命令行工具

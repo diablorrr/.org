@@ -2,20 +2,6 @@
 :ID:       8ab4df56-e11f-42b8-87f8-4daa2fd045db
 :END:
 #+title: cpp
-#+LAST_MODIFIED: 2025-03-16 15:49:53
-
-* 惯用法
-** [[https://liam.page/2016/11/26/Introduction-to-CRTP-in-Cpp/][C++ 惯用法 CRTP 简介]]
-*** enable_shared_from_this
-**** 先前的问题
-一个类对象，我们可以在类外部使用，一般用智能指针管理；也能在类内部使用，也能用智能指针管理，但在类内部直接用std::shared_ptr去使用会存在问题：
-因为会导致两份独立的shared_ptr管理同一个对象，造成多次释放问题 => 其实就是用相同裸指针创建多个智能指针的问题 => 这样这些智能指针的引用计数是不同步的(比如智能指针a和智能指针b都同时管理内存c，a计数变为0，释放了c，但是b的计数还是1，下次b计数为0时，就会造成重复释放 => core dumple) => 因此我们想要生成一个新的智能指针，使其的计数与其他管理这片内存的智能指针同步 =>
-因此用enable_shared_from_this可以保证在类内对类对象的引用计数可以和其他管理该类对象的智能指针引用计数保持一致
-shared_from_this底层通过weak_ptr创建新的shared_ptr
-**** 使用场景
-异步编程：如http请求发送
-[[https://goyas.github.io/enable_shared_from_this/][enable_shared_from_this用法分析]]
-[[https://www.cnblogs.com/chaohacker/p/14802112.html#8-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8enable_shared_from_this][shared_ptr的一切]]
 
 * 预处理、编译、链接
 ** 预处理

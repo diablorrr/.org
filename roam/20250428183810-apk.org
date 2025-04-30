@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       b7f51b4e-3a4b-4b4f-ab59-c57bb2b81a9b
+:END:
+#+title: apk
+
+* 使用
+** 配置镜像源
+1. vi /etc/apk/repositories
+2. 修改以下内容
+   #+begin_example
+   https://dl-cdn.alpinelinux.org/alpine/v3.14/main
+   https://dl-cdn.alpinelinux.org/alpine/v3.14/community
+   <========>
+   https://mirrors.aliyun.com/alpine/v3.14/main
+   https://mirrors.aliyun.com/alpine/v3.14/community
+   #+end_example
+3. 更新包索引：apk update
+
+
+* 查询
+** 配置
+| 路径                  | 作用       |
+|-----------------------+------------|
+| /etc/apk/repositories | 配置镜像源 |
+
+* 概念
+- 简介 :: [[id:8a58da08-5d12-4ee2-8f18-4064148d04cb][alpine]] linux的包管理工具

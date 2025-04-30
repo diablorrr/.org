@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       0d617742-3be0-46fc-8cfe-ef770ccbe589
+:END:
+#+title: std::queue

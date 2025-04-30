@@ -2,15 +2,15 @@
 :ID:       47eb3326-7aac-4300-904e-33f7539709c8
 :END:
 #+title: curl
-#+LAST_MODIFIED: 2025-03-08 18:05:41
 
 
-* 使用
-#+begin_src bash
-curl https://example.com    # GET请求获取网页内容
-curl -i https://example.com # 显示响应头
-curl -v https://example.com # 详细模式：显示请求头、响应头、调试信息
-#+end_src
+* 查询
+| 命令                                | 作用                  |
+|-------------------------------------+-----------------------|
+| curl https://google.com             | 发送GET请求           |
+| curl -I https://google.com          | 仅获取响应头          |
+| curl -v https://google.com          | 显示详细请求/响应过程 |
+| curl -X <METHOD> https://google.com | 指定请求方法，如:POST |
 
 
 * 概念

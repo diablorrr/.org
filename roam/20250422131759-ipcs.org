@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       ea7cadd1-ebfc-4900-8b11-6b381bf7c8f1
+:END:
+#+title: ipcs
+
+* 概念
+- 进程间通信状态(ipcs[fn:1]) ::
+  1. 是[[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]中用于查看进程间通信资源的命令，包括：
+     1) 共享内存
+     2) 信号量
+     3) 消息队列
+
+* Footnotes
+[fn:1] Inter-Process Communication Status

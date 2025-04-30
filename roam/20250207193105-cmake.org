@@ -2,7 +2,6 @@
 :ID:       c651b8b0-bc76-451d-acac-0ea55329f0e8
 :END:
 #+title: cmake
-#+LAST_MODIFIED: 2025-03-02 21:38:49
 #+startup: show2levels
 
 * 使用

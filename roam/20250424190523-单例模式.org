@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       e25be3b9-d17f-482d-a3ae-2471729c37da
+:END:
+#+title: 单例模式
+
+* 使用
+** 单例模式实现
+
+* 概念

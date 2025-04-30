@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       17d4394b-4f3d-479f-a51b-2f821387e81b
+:END:
+#+title: boost::asio::io_context
+
+* 概念
+- 简介 ::
+  1. 是一个[[id:a853063a-5a85-4bc9-8afc-65731a28e27e][事件循环]][fn:3]，通过run()启动，开始处理任务队列中的任务
+  2. 任务队列：
+     1) 异步操作的回调函数[fn:4]
+     2) 提交的普通任务[fn:5]
+  3. 任务队列中没有任务的时候，io_context会退出
+  4. 防止io_context退出[fn:2]，使用work[fn:1]
+
+
+* Footnotes
+[fn:5] post()、dispatch()、defer()提交的任务
+[fn:4] 一些异步操作 async_xxx
+[fn:3] 一种可能的伪代码：
+       #+begin_src cpp
+       while (!stopped && 还有未完成的操作) {
+           1. 检查并执行已就绪的 I/O 事件（如 socket 可读/可写）
+           2. 执行通过 `post()` 或 `dispatch()` 提交的任务
+           3. 处理到期的定时器（如 `steady_timer`）
+       }
+       #+end_src
+[fn:2] 场景：当我们创建一个线程池，每个线程池中运行一个事件循环(io_context)，但若事件循环中的任务队列没有任务，事件循环会退出，但我们要保持事件循环存活
+[fn:1] boost::asio::executor_work_guard<boost::asio::io_context::executor_type>

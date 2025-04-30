@@ -4,8 +4,10 @@
 [[http://xahlee.info/emacs/index.html][Xah Emacs Tutorial]]
 [[https://emacs-china.org/t/tip-kde-emacs/19993][KDE设置Emacs忽略系统的全局快捷键]]
 [[https://emacs-china.org/t/emacs/19319/7#cc-mode-2][cpp-mode缩进问题]]
+
 * cpp
 [[https://zh-google-styleguide.readthedocs.io/en/latest/index.html][Google开源项目风格指南]]
+
 * 学习路线
 [[https://csdiy.wiki/][CS自学指南]]
 [[https://www.code-nav.cn/course/1789189862986850306/section/1789190170773266433?type=#heading-0][编程导航]]
@@ -17,16 +19,9 @@
 * Git
 [[https://tech.codelc.com/docs/engineering/gitflow.html][Git使用流程和规范]]
 
-* JavaScript
-[[https://zh.javascript.info/][现代JavaScript教程]]
-
 * 虚拟机
 [[https://github.com/suv80/libs/blob/master/Linux/%E5%AE%89%E8%A3%85VirtualBox%E5%A2%9E%E5%BC%BA%E5%8A%9F%E8%83%BD%EF%BC%88%E5%91%BD%E4%BB%A4%E8%A1%8C%EF%BC%89.md][virtualbox安装增强功能]]
 [[https://blog.csdn.net/qq_27462573/article/details/130484723][虚拟机共享本机VPN]]
-
-* 英语
-[[https://llwslc.github.io/grammar-club/][英语语法俱乐部]]
-[[https://doc.zkbhj.com/english/index.html][英语全面提升手册]]
 
 * 网络
 [[https://www.nslookup.io/][NsLookup：域名解析]]

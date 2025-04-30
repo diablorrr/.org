@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID:       09c9cdf8-61a3-48c9-86e3-4caa29fbdc05
+:END:
+#+title: 纯虚函数
+
+* 概念
+- 简介 ::
+  1. 用virtual关键字声明的成员函数，末尾添加=0标记
+  2. 用于提供接口规范(做什么)
+  3. 含纯虚函数的类称为[[id:82398284-df61-4c14-9eed-e4b9f587f78b][抽象类]]，派生类必须实现，否则派生类也是抽象类；[[id:82398284-df61-4c14-9eed-e4b9f587f78b][抽象类]]不可实例化
+  4. 可以有实现，但是必须在类外实现
+
+** 示例
+*** 示例1:纯虚函数
+#+begin_src cpp
+virtual void func() = 0;
+#+end_src
+*** 示例2:纯虚函数可以有实现
+#+begin_src cpp :results output
+#include <iostream>
+
+// 基类（抽象类）
+class Animal {
+public:
+    virtual void speak() = 0;  // 声明为纯虚函数
+};
+
+// 实现基类的纯虚函数（必须定义在类外部）
+void Animal::speak() {
+    std::cout << "Animal makes a sound." << std::endl;
+}
+
+// 派生类
+class Dog : public Animal {
+public:
+    void speak() override {
+        Animal::speak();       // 显式调用基类的纯虚函数实现
+        std::cout << "Dog barks: Woof!" << std::endl;
+    }
+};
+
+int main() {
+    Dog dog;
+    dog.speak();
+    // Animal animal;  // 错误：Animal 是抽象类，无法实例化
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Animal makes a sound.
+: Dog barks: Woof!

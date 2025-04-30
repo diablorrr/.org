@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       9b2cb6a9-a62a-4098-9aab-1bf35e65fd17
+:END:
+#+title: hiredis
+
+* 概念
+- 简介 :: c语言编写的Redis的客户端库，开发者可以编程连接和操控[[id:c76e9ab3-bcb3-4a97-ba1b-48809c337c51][redis]]

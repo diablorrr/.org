@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       b23cd926-82ec-489e-ad8f-96b86e5559c2
+:END:
+#+title: 虚函数
+
+* 概念
+:PROPERTIES:
+:ID:       82fb2b15-a19c-4f7b-95e9-3fc741c03963
+:END:
+- 简介 ::
+  1. 用virtual关键字声明的成员函数，允许派生类覆盖其实现，实现动态多态
+  2. 必须有实现(有花括号，如：virtual void func() {...})

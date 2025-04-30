@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID:       0c6fb4aa-2b92-4b07-bfc3-67d6e08db3c1
+:END:
+#+title: std::enable_shared_from_this
+
+* 使用
+** 让对象安全获取指向自身的shared_ptr
+1. 让类继承enable_shared_from_this<类名>
+2. 使用类enable_shared_from_this的成员函数shared_from_this()
+
+
+* 概念
+- 简介 :: [[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]][[id:1ec315ca-630e-46ab-9567-45e0520b9ca2][stl]]模板类，用于让一个对象能够安全的获取指向自身的shared_ptr，且不会造成引用计数混乱
+- 应用场景 :: 异步回调 => 在回调函数中保持对象存活
+** 为什么需要enable_shared_from_this？
+- 问题 ::
+  #+begin_src cpp
+1  class MyClass {
+2  public:
+3    void process() {
+4      std::shared_ptr<MyClass> self(this);  // 危险，控制块B引用计数=1
+5    }
+6  };
+7
+8  int main() {
+9    auto obj = std::make_shared<MyClass>(); // 控制块A引用计数=1
+10   obj->process();                         // 控制块A引用计数=1，控制块B引用计数=0，释放对象
+11 }
+   // A的引用计数=0，释放对象 => 双重释放
+  #+end_src
+  + 行9 :: 创建控制块A与MyClass对象关联
+  + 行4 :: 创建控制块B与MyClass对象关联(因为完全不知道A的存在，因此创造了独立的B)
+- 修正 ::
+  #+begin_src cpp
+  class MyClass : public std::enable_shared_from_this<MyClass> {
+  public:
+    void process() {
+        auto self = shared_from_this();  // 引用计数+1，控制块A引用计数=2
+        // self 离开作用域时引用计数-1，控制块A引用计数=1
+    }
+  };
+
+  int main() {
+    auto obj = std::make_shared<MyClass>();  // 控制块A引用计数=1
+    obj->process();                          // 过程内引用计数变化
+    // 控制块A引用计数=1
+  }
+  // obj 离开作用域时引用计数-1，控制块A引用计数=0
+  #+end_src

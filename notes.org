@@ -1,21 +1,13 @@
 #+TAGS: cpp(c) cmake(m) 网络(n) emacs(e) 多线程(p)
 #+title: Notes
 
-
 * Inbox
-** 字符串 使用 滑动窗口
-中间状态 考虑使用 vector<int> counts(26)
-更新值 counts[xxx - 'a']
-
-
 ** push_back() vs emplace_back()
 | 函数                  | 作用                           | 额外的拷贝/移动    | 适用情况           |
 |-----------------------+--------------------------------+--------------------+--------------------|
 | push_back(T obj)      | 传入对象并插入 vector 末尾     | 需要一次拷贝或移动 | 适用于已构造的对象 |
 | push_back(T&& obj)    | 传入右值对象并插入 vector 末尾 | 需要一次移动       | 适用于右值         |
 | emplace_back(args...) | 直接在 vector 末尾构造对象     | 无拷贝/移动        | 适用于构造新对象   |
-
-
 
 ** lsp
 变量lsp-completion-provider
@@ -84,21 +76,9 @@ self->SendCallBack(std::move(send_msg));
 ** ldconfig更新缓存(刷新环境变量)
 比如新安装一个库，使新安装的库可用，确保程序可以找到新的库
 
-** [2025-01-09 四] :多线程:
-lock_guard是不能使用条件变量的
-要使用条件变量就得用unique_lock
-
 ** 线程和协程的使用场景 :多线程:
 协程上下文开销更小
 - 线程：通常用于计算密集型任务。线程可以在多核CPU上并行执行，适合需要大量计算的任务，比如复杂的数学运算、大规模的数据处理等。通过多线程，可以利用多核处理器的优势，提高计算效率。
 
 - 协程：通常用于I/O密集型任务。协程轻量级，能够在单线程中异步执行多个任务，适合需要等待I/O操作（如网络请求、文件读写等）的场景。协程能够在等待I/O操作时切换执行其他任务，从而提高程序的效率。
 
-** CMake的库文件搜索机制 :cmake:
-当你写 target_link_libraries(main jsoncpp) 时，CMake 会按照以下规则来寻找并链接库文件：
-
-默认库路径：CMake 会默认查找系统的标准库路径（如 /usr/lib、/usr/local/lib 等）。因此，如果你的 jsoncpp 库已经安装到这些路径下，它会自动找到并链接该库。
-
-库名称约定：CMake 会根据库的名称来识别库文件。例如，jsoncpp 对应的库文件通常会被命名为 libjsoncpp.so（在 Linux 系统上）或者 libjsoncpp.a（静态库）。所以当你指定 jsoncpp 时，CMake 会在系统的标准库路径中查找与之对应的 libjsoncpp.so 或 libjsoncpp.a 文件。
-
-link_directories：如果库文件位于非标准路径（如 /usr/local/lib），你可以使用 link_directories 显式地告诉 CMake 查找该路径。但如果你的库已经位于标准路径，CMake 会自动找到它。

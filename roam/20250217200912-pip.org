@@ -29,5 +29,4 @@ pip install timm==0.4.12  # 成功 速度很快
   #+end_example
 
 * Footnotes
-
 [fn:1] 参考：[[https://blog.csdn.net/aixuexideou/article/details/125597407][解决pip install错误“OSError: [Errno 28] No space left on device”]]

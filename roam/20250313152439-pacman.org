@@ -2,22 +2,44 @@
 :ID:       682195ed-75db-4183-a437-fcf107cec05d
 :END:
 #+title: pacman
-#+LAST_MODIFIED: 2025-03-13 16:32:35
 
 * 使用
+:PROPERTIES:
+:VISIBILITY: show2levels
+:END:
 ** 包缓存目录
 #+begin_src bash
 /var/cache/pacman/pkg/
 #+end_src
-
 ** 查看帮助
 #+begin_src bash
 man pacman
 #+end_src
-
 ** 降级包版本
 1. 检查包缓存目录 => 是否存在低版本包
 2. sudo pacman -U 低版本包所在路径
+
+
+* 查询
+:PROPERTIES:
+:VISIBILITY: show2levels
+:END:
+| 命令      | 选项 | 作用                 |
+|-----------+------+----------------------|
+| pacman -Q |      | (精确匹配)查找本地包 |
+|           | s    | (模糊匹配)查找本地包 |
+|-----------+------+----------------------|
+| pacman -S |      | 从远程安装包         |
+|           | s    | (模糊匹配)搜索远程包 |
+** 重要目录/文件
+|      | 路径                  | 作用               |
+|------+-----------------------+--------------------|
+| 目录 | /var/lib/pacman/local | 本地已安装包数据库 |
+|      | /var/lib/pacman/sync  | 远程仓库数据库     |
+|      | /var/cache/pacman/pkg |                    |
+|------+-----------------------+--------------------|
+| 文件 | /etc/pacman.conf      | 配置文件           |
+
 
 
 * 概念

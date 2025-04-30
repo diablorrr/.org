@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       b7d2806d-6d52-4b5e-a5af-eb3d8ae6915c
+:END:
+#+title: crtp
+
+* 概念
+- CRTP(Curiously Recurring Template Pattern) :: 奇异递归模板模式
+  1. [[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]模板编程的一种惯用法。利用子类信息生成父类代码
+- 具体做法 :: 派生类继承以自身为模板参数的基类
