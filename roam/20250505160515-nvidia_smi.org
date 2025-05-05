@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       c8d3b770-6c1f-40d5-b4a0-ece2c555765e
+:END:
+#+title: nvidia-smi

@@ -18,10 +18,11 @@ DEADLINE: <2025-04-22 二> SCHEDULED: <2025-04-21 一>
 DEADLINE: <2025-04-25 五> SCHEDULED: <2025-04-23 三>
 *** TODO 吃透项目代码:客户端代码运行逻辑
 *** TODO 一键运行全部服务器脚本
-*** TODO 迁移到docker环境 [1/5]
+*** TODO 迁移到docker环境 [2/6]
 DEADLINE: <2025-05-05 一> SCHEDULED: <2025-04-28 一>
 **** DONE GeekHour视频:docker使用
-**** TODO 容器内基于alpine基础镜像编译boost环境
+**** DONE 容器内基于alpine基础镜像编译boost环境
+**** TODO 容器内编译grpc
 **** TODO dockerfile编写
 **** TODO docker compose编写
 **** TODO 迁移聊天项目到docker环境

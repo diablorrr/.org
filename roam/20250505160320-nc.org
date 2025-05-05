@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       d0c40c78-a74b-4e5d-8811-268a65113e21
+:END:
+#+title: nc

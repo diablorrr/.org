@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       0a77e711-99f9-4df3-900d-53f04ade89df
+:END:
+#+title: nslookup

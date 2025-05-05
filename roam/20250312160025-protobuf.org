@@ -2,16 +2,20 @@
 :ID:       13f67abf-4087-4d20-87d7-ed11e5b99edc
 :END:
 #+title: protobuf
-#+LAST_MODIFIED: 2025-03-12 16:27:28
+
 
 * 概念
 - 简介 :: Protocol Buffers的简称
   1. [[id:247f3c54-b3b7-4a77-8fdf-bad941b8fc2e][google]]公司开发的一种 数据描述语言，文件扩展名为[[id:09dcf76d-daf7-49ba-844c-cb8d639b398a][.proto]]
-  2. 与[[id:a5c426e4-365b-447d-89f3-eddc9c517a01][gRPC]]相互配合使用
-  3. 序列化数据体积小，反序列化速度块；序列化、反序列化代码自动生成
+  2. 定义和序列化[fn:1][[id:a5c426e4-365b-447d-89f3-eddc9c517a01][grpc]]的请求/响应消息
+  3. 与[[id:afb8588c-992c-4dbd-9dfe-97ad0f845336][abseil(absl)]]一起作为[[id:a5c426e4-365b-447d-89f3-eddc9c517a01][gRPC]]的基础依赖
 
 ** protobuf vs jsoncpp
 |          | protobuf           | jsoncpp                |
 |----------+--------------------+------------------------|
 | 特点     | 效率高，可读性差   | 效率低，简单，可读性好 |
 | 使用场景 | 服务器和服务器通信 | 客户端和服务器通信     |
+
+* Footnotes
+
+[fn:1] 序列化数据体积小，反序列化速度块；序列化、反序列化代码自动生成

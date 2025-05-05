@@ -11,9 +11,22 @@
 cmake --system-information | grep <感兴趣的变量>
 #+end_src
 
+
+* 查询
+| 命令                       | 作用                             |
+|----------------------------+----------------------------------|
+| cmake <源码路径>           | 配置项目、生成构建系统文件[fn:1]  |
+| cmake --build <构建目录>   | 构建项目                         |
+| cmake --install <构建目录> | 安装到默认路径(通常为/usr/local) |
+
+
 * 概念
 - 简介 ::
   1. 是一个 跨平台的构建系统，用于管理 c/[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]] 项目的编译过程
   2. 通过解析 [[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]] 生成 适用于不同平台的构建文件（如 Makefile、Ninja 文件、Visual Studio 项目等） => 从而简化编译和依赖管理
 - 配置文件 :: [[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]
 - 脚本文件 :: [[id:c4819291-b93f-4864-b210-aa436634ac22][.cmake]]
+
+* Footnotes
+
+[fn:1] 读取<源码路径>下的CMakeLists.txt文件，配置项目、生成构建系统文件(如：Makefile)

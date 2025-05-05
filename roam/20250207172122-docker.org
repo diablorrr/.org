@@ -2,6 +2,13 @@
 :ID:       a47cc941-ccc6-4893-9862-d5b245ea912b
 :END:
 #+title: docker
+* 使用
+** docker容器内走代理
+:PROPERTIES:
+:ID:       701e41cb-af1b-44de-abc6-d83a0aadd738
+:END:
+1. docker run -it --network host <镜像名> bash
+
 
 * 查询
 |                  | 命令                                        | 参数                   | 功能                                     |
@@ -14,6 +21,7 @@
 |                  |                                             | -p <宿主端口:容器端口> | 端口映射                                 |
 |                  |                                             | -v <宿主路径:容器路径> | 挂载卷                                   |
 |                  |                                             | --rm                   | 容器退出时，自动删除容器(用于测试)       |
+|                  |                                             | --network host         | 使用宿主机的网络                                 |
 |                  | ls                                          |                        | 查看运行中的容器                         |
 |                  |                                             | -a                     | 查找所有容器                             |
 |                  | start <容器名>                              |                        | 启动已停止的容器                         |

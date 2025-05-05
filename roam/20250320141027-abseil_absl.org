@@ -4,14 +4,19 @@
 #+title: abseil(absl)
 
 * 使用
-** absl链接失败问题
+** absl链接失败问题[fn:1]
 1. (我的解决方式) [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]中将编译器clang++改成[[id:3aa872a4-290a-4fc8-8e37-add919e44822][g++]]
-*** 参考
-[[https://blog.csdn.net/witton/article/details/144182568][MSYS2 MinGW64使用Protobuf新版本踩坑]]
-
 
 * 概念
 - 简介 ::
-  1. [[id:247f3c54-b3b7-4a77-8fdf-bad941b8fc2e][google]]开源的[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]库集合
-  2. 作为[[id:927fd560-f18f-424c-8df9-8c62a1ca6562][std]]库补充
-  3. 性能优化、跨平台支持
+  1. [[id:247f3c54-b3b7-4a77-8fdf-bad941b8fc2e][google]]开源的[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]基础库集合
+  2. 为[[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][protobuf]]和grpc提供高性能的[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]组件
+** abseil、protobuf和grpc协作关系图 :ATTACH:
+:PROPERTIES:
+:ID:       e9b3a6d1-0ec1-4891-935c-8a90d3e54259
+:END:
+[[attachment:_20250430_180211screenshot.png]]
+
+
+* Footnotes
+[fn:1] 参考：[[https://blog.csdn.net/witton/article/details/144182568][MSYS2 MinGW64使用Protobuf新版本踩坑]]

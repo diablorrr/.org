@@ -3,9 +3,7 @@
 :END:
 #+title: grpc
 
-
-
 * 概念
 - 简介 ::
   1. 是[[id:247f3c54-b3b7-4a77-8fdf-bad941b8fc2e][google]]公司开发的一个高性能、开源的 远程调用([[id:3ec78292-c01a-491f-a35c-e745a87a05f6][rpc]])框架，是[[id:3ec78292-c01a-491f-a35c-e745a87a05f6][rpc]]协议的一种实现
-  2. 与[[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][protobuf]]相互配合使用
+  2. 使用[[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][protobuf]]序列化消息，并通过HTTP/2实现网络传输
