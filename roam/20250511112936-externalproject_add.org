@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       168fe76e-eaf9-44df-b0b8-a17935bd5f1b
+:END:
+#+title: ExternalProject_Add
+
+#+begin_src cmake
+ExternalProject_Add(<name>
+    [URL <url> | SOURCE_DIR <path>] # 网络源码 | 本地源码
+    [BINARY_DIR <path>]             # 编译目录：默认${name}-build
+    [INSTALL_DIR <path>]            # 安装路径
+    [CMAKE_ARGS <arg1> <arg2> ...]  # 传给外部项目的cmake参数
+    [BUILD_COMMAND <cmd>]           # 自定义构建命令
+    [INSTALL_COMMAND <cmd>]         # 自定义安装命令
+    [LOG_CONFIGURE 1]
+    [LOG_BUILD 1]
+    [LOG_INSTALL 1]
+    ...
+)
+
+#+end_src
+- 什么时候运行 :: 构建主项目时，cmake会
+  1. 构建子项目
+  2. 安装子项目

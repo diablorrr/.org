@@ -10,15 +10,17 @@
    #+begin_example
    https://dl-cdn.alpinelinux.org/alpine/v3.14/main
    https://dl-cdn.alpinelinux.org/alpine/v3.14/community
-   <========>
+   <====1====>
    https://mirrors.aliyun.com/alpine/v3.14/main
    https://mirrors.aliyun.com/alpine/v3.14/community
+   <====2====>
+   https://mirror.tuna.tsinghua.edu.cn/alpine/v3.14/main
+   https://mirror.tuna.tsinghua.edu.cn/alpine/v3.14/community
    #+end_example
 3. 更新包索引：apk update
 
 
 * 查询
-|------+------+----------------+------------------------|
 | 命令 |      |                | 作用                   |
 |------+------+----------------+------------------------|
 | apk  | 安装 | add            | 安装软件包             |
@@ -28,7 +30,6 @@
 |      |      | upgrade        | 升级所有已安装的软件包 |
 |------+------+----------------+------------------------|
 |      | 查询 | info           | 查看软件包的信息       |
-|------+------+----------------+------------------------|
 ** 配置
 | 路径                  | 作用           |
 |-----------------------+----------------|
@@ -37,4 +38,4 @@
 
 * 概念
 
-- 简介 :: [[id:8a58da08-5d12-4ee2-8f18-4064148d04cb][alpine]] linux的包管理工具
+- 简介 :: [[id:8a58da08-5d12-4ee2-8f18-4064148d04cb][alpine]] linux的包管理器

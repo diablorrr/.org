@@ -2,8 +2,12 @@
 :ID:       362a1bfe-9b93-427b-80ad-853b3ea46ec2
 :END:
 #+title: bash
-#+LAST_MODIFIED: 2025-02-05 21:46:43
 
+* 查询
+| 命令 | 参数 | 作用                                               |
+|------+------+----------------------------------------------------|
+| bash |      | 交互式启动子[[id:1ff40557-56dc-4670-b38f-59586d545315][Shell]][fn:1]，需手动退出，加载[[id:d3077f97-a2b2-4e13-aa26-9a8686e6cd96][.bashrc]]   |
+|      | -c   | 非交互式启动子[[id:1ff40557-56dc-4670-b38f-59586d545315][Shell]]，执行命令后退出，不加载[[id:d3077f97-a2b2-4e13-aa26-9a8686e6cd96][.bashrc]] |
 
 * 命令
 ** strings
@@ -16,3 +20,5 @@
 strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBCXX
 #+end_src
 
+* Footnotes
+[fn:1] 进入子Shell中

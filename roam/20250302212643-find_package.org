@@ -1,16 +1,24 @@
 :PROPERTIES:
 :ID:       2e20f81d-56f0-4af5-a00c-b77fce675287
 :END:
-#+title: find_package()
-#+LAST_MODIFIED: 2025-03-02 21:31:13
+#+title: find_package
 
 * 概念
-- 简介 :: 用于查找有[[id:c4819291-b93f-4864-b210-aa436634ac22][.cmake]]配置文件的package
-** 工作流程 :ATTACH:
-:PROPERTIES:
-:ID:       bf89e95f-7114-4f45-af47-3d76d4cfa777
-:END:
-[[attachment:_20250302_212917screenshot.png]]
-
-
-[[https://blog.csdn.net/zhanghm1995/article/details/105466372]]
+- 简介 :: 用于查找并加载外部依赖包
+** 查找包配置
+- 官方参考 :: [[https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html][cmake-packages(7)]] [[https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure][find_package]]
+*** Config-file Packages
+- 设置查找 :: 设置CONFIG模式或什么都不设置
+- 包搜索路径 :: [[https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure][Config Mode Search Procedure]]
+- 对应文件 ::
+  + 包配置文件 :: <Package>Config.cmake / <Package>-config.cmake；
+  + 包版本文件 :: <Package>ConfigVersion.cmake / <Package>-config-version.cmake；
+| 变量/缓存变量         | 作用                                                                           |
+|-----------------------+--------------------------------------------------------------------------------|
+| <PackageName>_FOUND   | 找到包时，自动设置；包是否找到                                                 |
+| <PackageName>_DIR     | 找到包时，自动设置；包所在目录，也可用于指定包所在目录，在使用find_package找包 |
+| <PackageName>_VERSION | 找到包时，自动设置；包版本                                                     |
+*** Find-module Packages
+- 设置查找 :: 设置MODULE模式或什么都不设置
+- 对应文件 :: Find<Package>.cmake
+- 官方支持 :: [[https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html][cmake-modules(7)]]

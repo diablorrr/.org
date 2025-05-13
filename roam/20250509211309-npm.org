@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       81198ba3-978f-4f7f-a71d-1c3480b183ee
+:END:
+#+title: npm
+
+* 查询
+| 命令    | 作用                               |
+|---------+------------------------------------|
+| init    | 初始化项目，创建[[id:b3b060b0-41d3-4269-b0f9-eb996e5c7da4][package.json]]       |
+| install | 安装所有依赖，根据package.json安装 |

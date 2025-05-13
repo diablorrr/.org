@@ -1,51 +1,52 @@
 :PROPERTIES:
 :ID:       ca075f9e-f498-4059-86f6-d62674884833
 :END:
-#+title: Reactor模式
+#+title: reactor
 
-* 简介
-一种I/O服务模型。实现依赖于[[id:706ae573-ec8c-400d-841c-3d3cd47ec8f2][I/O多路复用]]
-
-* 传统阻塞I/O服务模型 :ATTACH:
+* 概念[fn:3]
+- 简介 ::
+  1. reactor是一种事件驱动[fn:1]的高性能网络模式，通过[[id:706ae573-ec8c-400d-841c-3d3cd47ec8f2][io多路复用]]，监听和分发事件[fn:2]，将数据收发与业务逻辑处理解耦
+  2. 三种方案
+     1) 单reactor单进程/线程
+     2) 单reactor多进程/线程
+     3) 多reactor多进程/线程
+- 关键词 :: reactor线程(reactor、acceptor、handler)、[[id:807da0a7-ffdf-46f0-a33a-e57430a470f8][线程池]]
+** 演进
+*** 传统阻塞I/O服务模型 :ATTACH:
 :PROPERTIES:
 :ID:       72b20651-e80c-492d-bca0-22075022d0de
 :END:
 [[attachment:_20250110_233407screenshot.png]]
-** 存在的问题
+**** 存在的问题
 1. 并发数较大时，需要创建大量线程处理连接， *系统资源占用较大*
 2. 连接建立后，如果当前线程没有数据可读，则线程阻塞在read操作上， *线程资源浪费*
-
-* Reactor模式
-** 基本思想
-[[id:e71b2814-c923-4c43-b610-3efaee0a4c4d][I/O复用模型]] + [[id:5a7cdf28-08ef-4bb3-bfa9-3c7abaad09e2][线程池]]
-** 关键组成
-1. Reactor：Reactor在一个单独的线程中运行，负责监听和分发事件，分发给适当的处理程序来对IO事件做出反应。它就像公司的电话接线员，它接听来自客户的电话并将线路转移到适当的联系人；
-2. Handlers：处理程序执行 I/O 事件要完成的实际事件，类似于客户想要与之交谈的公司中的实际官员。Reactor 通过调度适当的处理程序来响应 I/O 事件，处理程序执行非阻塞操作。
-** 单Reactor单线程 :ATTACH:
+*** 单Reactor单线程 :ATTACH:
 :PROPERTIES:
 :ID:       7d14c113-035d-408d-999c-baa230747759
 :END:
 [[attachment:_20250110_234049screenshot.png]]
-*** 工作流程
+**** 工作流程
 1. Reactor 对象通过 Select 监控客户端请求事件，收到事件后通过 Dispatch 进行分发；
 2. 如果是建立连接请求事件，则由 Acceptor 通过 Accept 处理连接请求，然后创建一个 Handler 对象处理连接完成后的后续业务处理；
 3. 如果不是建立连接事件，则 Reactor 会分发调用连接对应的 Handler 来响应；
 4. Handler 会完成 Read→业务处理→Send 的完整业务流程。
-*** 缺点
+**** 缺点
 性能问题，只有一个线程，无法完全发挥多核 CPU 的性能。Handler 在处理某个连接上的业务时，整个进程无法处理其他连接事件，很容易导致性能瓶颈
-** 单Reactor多线程 :ATTACH:
+*** 单Reactor多线程 :ATTACH:
 :PROPERTIES:
 :ID:       0c30cb0c-7aab-451c-9d50-6761c5daafea
 :END:
 [[attachment:_20250110_234213screenshot.png]]
-*** 工作流程
+**** 工作流程
 1. Reactor 对象通过 Select 监控客户端请求事件，收到事件后通过 Dispatch 进行分发；
 2. 如果是建立连接请求事件，则由 Acceptor 通过 Accept 处理连接请求，然后创建一个 Handler 对象处理连接完成后续的各种事件；
 3. 如果不是建立连接事件，则 Reactor 会分发调用连接对应的 Handler 来响应；
 4. Handler 只负责响应事件，不做具体业务处理，通过 Read 读取数据后，会分发给后面的 Worker 线程池进行业务处理；
 5. Worker 线程池会分配独立的线程完成真正的业务处理，如何将响应结果发给 Handler 进行处理；
 6. Handler 收到响应结果后通过 Send 将响应结果返回给 Client。
-** 主从Reactor多线程
+*** 多Reactor多线程
 
-* 参考链接
-[[https://blog.csdn.net/u013256816/article/details/115388239][五分钟快速理解 Reactor 模型]]
+* Footnotes
+[fn:3] 参考：[[https://blog.csdn.net/u013256816/article/details/115388239][五分钟快速理解 Reactor 模型]]
+[fn:2] 连接、读写
+[fn:1] 核心思想：当事件就绪时触发回调，而不是主动轮询

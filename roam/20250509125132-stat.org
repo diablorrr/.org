@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       2e96384b-e49b-45b1-a51a-8cbc252c7d4a
+:END:
+#+title: stat
+
+* 概念
+- 简介 :: 用于打印[[id:e52f1042-98f2-4da2-a25d-10cacc3b2192][inode]](信息节点)内容

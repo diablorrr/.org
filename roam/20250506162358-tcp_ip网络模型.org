@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       579ca6d5-b01b-4db0-bfd8-0166db88261e
+:END:
+#+title: TCP/IP网络模型
+
+* 概念
+** 层次结构
+  1. 应用层：给用户提供服务[fn:1]
+  2. 传输层：端到端数据传输，可靠通信([[id:7776770c-3a38-4d1f-8d9b-5f33a9f4e3a0][TCP]])或高效通信([[id:b68205eb-d69e-4fa4-98a5-54532b1a1159][UDP]])
+  3. 网络层：跨网络通信的主机间通信
+  4. 网络接口层：物理网络中传输数据
+** 传输单位
+  1. 报文(message)
+  2. 报文段(segment) = 报文 + tcp头
+  3. 包(packet) = 报文段 + ip头
+  4. 帧(frame) = 包 + 帧头[fn:2]帧尾
+** 封装格式 :ATTACH:
+:PROPERTIES:
+:ID:       94dad2e5-d558-4ffe-a1cd-cf7296fa94f8
+:END:
+[[attachment:_20250506_163201screenshot.png]]
+
+
+* Footnotes
+
+[fn:2] 数据链路层的头部信息，包含：[[id:1ed3f34a-88a1-419a-8879-cb9141dc461c][MAC]]头(以太网帧头)、PPP帧头、802.11帧头(Wi-Fi)
+[fn:1] 如：网页浏览、文件传输

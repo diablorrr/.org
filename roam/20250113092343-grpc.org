@@ -3,6 +3,22 @@
 :END:
 #+title: grpc
 
+* 使用
+** 编译grpc
+1. 先[[id:edf9b6ef-cd6c-4caa-bd2d-dff2131f6efb][git走代理]]
+2. git clone -b <选择Tag> https://github.com/grpc/grpc
+3. cd grpc
+4. git submodule update --init
+5. mkdir -p cmake/build
+6. cd cmake/build
+7. cmake -DCMAKE_CXX_STANDARD=17 ../..
+8. make -j$(nproc)
+9. make install
+10. 安装到/usr/local/bin，有些程序在/usr/bin下寻找；=> [[id:bb654a41-440c-468d-999c-fd8470e4f15c][软连接]]
+** 保留旧的pb和grpc文件导致编译错误
+1. 删除后，重新用protoc生成pb和grpc文件
+
+
 * 概念
 - 简介 ::
   1. 是[[id:247f3c54-b3b7-4a77-8fdf-bad941b8fc2e][google]]公司开发的一个高性能、开源的 远程调用([[id:3ec78292-c01a-491f-a35c-e745a87a05f6][rpc]])框架，是[[id:3ec78292-c01a-491f-a35c-e745a87a05f6][rpc]]协议的一种实现

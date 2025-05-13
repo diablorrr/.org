@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       cd404c74-6828-4322-add8-35cd92791e1a
+:END:
+#+title: ccmake
+
+* 概念
+- 简介 :: 查看和编辑缓存变量

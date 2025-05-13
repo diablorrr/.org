@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       e5e33538-1607-4ec4-b0c4-63d327424ec4
+:END:
+#+title: ABI
+
+* 概念
+- 简介 :: 应用程序二进制接口

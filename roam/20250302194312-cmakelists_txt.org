@@ -4,9 +4,10 @@
 #+title: CMakeLists.txt
 #+STARTUP show2levels
 
-
-
 * 使用
+:PROPERTIES:
+:VISIBILITY: show2levels
+:END:
 ** 设置cpp17标准智能感知
 1. CMakeLists.txt编写如下
    #+begin_src cmake
@@ -24,7 +25,9 @@
 2. mkdir build && cd build
 3. cmake ..
 4. cmake --build .
-
+** 常见问题:书写顺序
+[[id:2e20f81d-56f0-4af5-a00c-b77fce675287][find_package()]]顺序问题：被依赖的放上头
+eg：protobuf在grpc之前
 ** 没有[[id:c4819291-b93f-4864-b210-aa436634ac22][.cmake]]配置文件的package
 - 做法 :: 我们会先包含库文件目录，将目录里我们需要的文件存到一个变量里，然后目标再去链接
 - 示例 ::
@@ -35,165 +38,59 @@ target_link_libraries(main ${absl_libs})
 #+end_src
 
 
+
+
 * 查询
-** 术语
-- 目标 :: 可执行文件、库
-** 语法
 :PROPERTIES:
 :VISIBILITY: show2levels
 :END:
-*** cmake_minimum_required :: 设置最低[[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]版本
-*** project :: 定义项目名称
-*** set :: 定义、修改变量
- - 设置cpp标准 ::
-   #+begin_src cmake
-   set(CMAKE_CXX_STANDARD 17)
-   set(CMAKE_CXX_STANDARD_REQUIRED ON)
-   #+end_src
- - 设置cpp编译选项 ::
-   #+begin_src cmake
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-   #+end_src
-
-*** file :: 处理文件系统相关操作
- - 获取文件列表 ::
-   #+begin_src cmake
-   file(GLOB <variable> [RELATIVE <path>] <glob_pattern>...)
-   file(GLOB_RECURSE <variable> [RELATIVE <path>] <glob_pattern>...)
-   #+end_src
-   + GLOB :: glob(通配符匹配的意思)的文件(不递归子目录)
-   + GLOB_RECURSE :: 递归获取子目录中的符合模式的文件
-   + <variable> :: 存储匹配文件路径的变量
-   + <glob_pattern> :: 通配符模式，通常是文件扩展名，如 *.cpp、*.h
-
-*** add_executable :: 添加可执行文件
-*** target_include_directories :: 头文件搜索路径
-  #+begin_src cmake
-  target_include_directories(<target> <INTERFACE|PUBLIC|PRIVATE> [<directory>...])
-  #+end_src
-
-*** target_link_libraries :: 链接静态/动态库
-  #+begin_src cmake
-  target_link_libraries(<target> <INTERFACE|PUBLIC|PRIVATE> <library>...)
-  #+end_src
-*** install :: 指定文件复制到哪个文件夹
-#+begin_src cmake
-install(TARGETS target1 target2 ...
-        [EXPORT <export-name>]
-        [RUNTIME DESTINATION <dir>] # 可执行文件
-        [LIBRARY DESTINATION <dir>] # 动态库
-        [ARCHIVE DESTINATION <dir>] # 静态库
-        [INCLUDES DESTINATION <dir>]
-        [OPTIONAL])
-#+end_src
-- 安装路径 :: CMAKE_INSTALL_PREFIX 控制，默认是 /usr/local
-- 🐂注意 :: install(...)的代码，只有在cmake --install .后才会执行
-**** 示例
-#+begin_src cmake
-add_executable(myapp main.cpp)
-install(TARGETS myapp DESTINATION bin)
-#+end_src
-- 安装到：${CMAKE_INSTALL_PREFIX}/bin/myapp
-*** add_library :: 创建一个库(动态库、静态库)
-*** set_target_properties :: 设置目标的属性
-#+begin_src cmake
-set_target_properties(<target> PROPERTIES <prop1> <value1> [<prop2> <value2> ...])
-#+end_src
-**** 示例
-***** 设置运行时查找库路径
-#+begin_src cmake
-# 告诉cmake，在运行时去$ORIGIN/../lib找动态库
-set_target_properties(MyApp PROPERTIES
-  BUILD_WITH_INSTALL_RPATH TRUE
-  INSTALL_RPATH "$ORIGIN/../lib"
-)
-#+end_src
-- $ORIGIN :: 表示当前执行的可执行文件的目录
-*** ExternalProject_Add :: 构建外部项目(子项目)
-#+begin_src cmake
-ExternalProject_Add(<name>
-    [URL <url> | SOURCE_DIR <path>] # 网络源码 | 本地源码
-    [BINARY_DIR <path>]             # 编译目录：默认${name}-build
-    [INSTALL_DIR <path>]            # 安装路径
-    [CMAKE_ARGS <arg1> <arg2> ...]  # 传给外部项目的cmake参数
-    [BUILD_COMMAND <cmd>]           # 自定义构建命令
-    [INSTALL_COMMAND <cmd>]         # 自定义安装命令
-    [LOG_CONFIGURE 1]
-    [LOG_BUILD 1]
-    [LOG_INSTALL 1]
-    ...
-)
-
-#+end_src
-- 什么时候运行 :: 构建主项目时，cmake会
-  1. 构建子项目
-  2. 安装子项目
-*** add_subdirectory :: 在主CMakeLists.txt中添加子目录
-*** add_custom_command :: 构建过程中添加自定义的命令
-仅定义add_custom_command()是不会自动执行的，必须有target使用它的输出
-- 以下示例中的proto_srcs和grpc_srcs都是add_custom_command()的输出
-  1. 示例1
-   #+begin_src cmake
-   add_executable(my_app main.cpp ${proto_srcs} ${grpc_srcs})
-   #+end_src
-  2. 示例2
-   #+begin_src cmake
-   add_library(proto_files
-     ${proto_srcs}
-     ${grpc_srcs}
-   )
-   #+end_src
-  3. 示例3
-   #+begin_src cmake
-   add_dependencies(proto_files
-     ${proto_srcs} ${grpc_srcs}
-   )
-   #+end_src
-
-*** [[id:2e20f81d-56f0-4af5-a00c-b77fce675287][find_package()]] ::
-  #+begin_src cmake
-  find_package(<package> [version] [EXACT] [QUIET] [REQUIRED] [CONFIG|NO_MODULE] [MODULE])
-  #+end_src
-  + <package> :: 包的名称
-  + [REQUIRED] :: 包未找到，CMake会停止并报错
-  + [CONFIG] :: 查找 <Package>Config.cmake
-  + [MODULE] :: 查找 Find<Package>.cmake
-  + [version] :: 包的版本要求（可选）
-  + [EXACT] :: 要求精确匹配指定的版本
-  + [QUIET] :: 不会显示找不到包的警告信息。即使包未找到，CMake也不会发出警告
-*** pkg_check_modules :: 使用[[id:0867edf9-0f48-48ed-92be-e197f1546b05][pkg-config]]查找库
-#+begin_src cmake
-pkg_check_modules(<prefix> [REQUIRED] <package> [<version>])
-#+end_src
-- <prefix> :: 指定一个前缀，CMake 将使用这个前缀为库的相关变量命名。通常是大写的库名称，如 HIREDIS。
-- [REQUIRED] :: 如果找不到指定的库，CMake会报错并停止构建
-- <package> :: 库的名称，和 pkg-config 的 .pc 文件名相同
-- [<version>] :: 指定库版本
-
-- 示例 :: prefix设置为HIREDIS => 所以hiredis的头文件目录为HIREDIS_INCLUDE_DIRS、库文件路径变为HIREDIS_LIBRARIES
-#+begin_src cmake
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(HIREDIS REQUIRED hiredis)
-...
-target_include_directories(test_redis PRIVATE ${HIREDIS_INCLUDE_DIRS})
-target_link_libraries(test_redis PRIVATE ${HIREDIS_LIBRARIES})
-#+end_src
-*** message :: 输出消息到控制台
-  #+begin_src cmake
-  message([<mode>] "message" ...)
-  #+end_src
- - <mode> :: 指定消息的类型
-   + STATUS :: 输出正常状态消息
-
+** 语法
+| 指令                          | 作用                                            |
+|-------------------------------+-------------------------------------------------|
+| cmake_minimum_required        | 设置项目所需最低cmake版本                       |
+| project                       | 定义 *项目名称* (可指定语言、版本)              |
+| add_executable                | 生成 *可执行文件*                               |
+| add_library                   | 创建库(*默认静态库*)                            |
+| target_include_directories    | 为目标添加 *头文件搜索路径* (作用域控制)        |
+| target_link_libraries         | 为目标 *链接库或目标* (作用域控制)              |
+| [[id:2e20f81d-56f0-4af5-a00c-b77fce675287][find_package]]                  | 查找并加载外部依赖包                            |
+| [[id:88ee430e-b4b8-4822-952b-95597384596f][pkg_check_modules]]             | 使用[[id:0867edf9-0f48-48ed-92be-e197f1546b05][pkg-config]]查找库                            |
+| target_compile_options        | 指定 *编译选项* (如-Wall、-O3)                  |
+| set                           | 定义 *变量、缓存变量*                           |
+| [[id:add3a7d8-31e3-4c84-8103-d1c2c4be7dbd][message]]                       | *打印信息* (调试或状态信息)                     |
+| add_subdirectory              | *添加子目录* ，执行其CMakeLists.txt以构建子项目 |
+| [[id:e434d7b8-bf65-4876-bcbe-9c3116ff573a][file]]                          | *通配符匹配文件* (慎用，可能导致构建不更新)     |
+| [[id:b15f4487-4bc6-4bd6-9432-474208e9b6b2][install]]                       | 安装(复制文件到指定目录)                        |
+| [[id:24455af9-9c17-4ac2-a12d-710659b1b25c][add_custom_command]]            | 自定义构建命令(用于如：预处理或后处理)          |
+| [[id:168fe76e-eaf9-44df-b0b8-a17935bd5f1b][ExternalProject_Add]]           | 构建外部项目(子项目)                            |
+| [[id:989e79cb-35ef-402b-be97-ad3fd53d9054][set_target_properties]]         | 设置目标的属性                                  |
+|-------------------------------+-------------------------------------------------|
+| include                       | 包含其他CMake脚本文件，扩展功能                 |
+| target_compile_definitions    | 为目标添加预处理器宏定义(如-DDEBUG)             |
+| add_custom_target             | 创建自定义目标(如生成文档)，不依赖文件输出      |
+| enable_testing() + add_test() | 启用测试并定义测试用例(需配合CTest使用)         |
+| find_library/find_path        | 手动查找库或头文件路径                          |
+| option                        | 创建用户可配置的选项(如-DOPTION_NAME=ON)        |
+** 语法补充
 *** <INTERFACE|PUBLIC|PRIVATE>关键字
 - 作用 :: 控制对目标的可见性
   + PRIVATE :: 仅对当前目标可见，不会传递给链接到此目标的其他目标
   + PUBLIC :: 不仅对当前目标可见，还会传递给链接到此目标的其他目标
   + INTERFACE :: 对当前目标不可见，只会传递给链接到此目标的其他目标
-*** 预定义变量
-- CMAKE_CURRENT_SOURCE_DIR :: 当前CMakeLists.txt文件所在的目录
-- CMAKE_CXX_STANDARD :: 设置cpp标准
-- CMAKE_CXX_STANDARD_REQUIRED :: 强制编译器使用标准
+
+
+
+** 预定义变量
+| 预定义变量                  | 作用                             |
+|-----------------------------+----------------------------------|
+| CMAKE_CURRENT_SOURCE_DIR    | 当前CMakeLists.txt文件所在的目录 |
+| CMAKE_CXX_STANDARD          | 设置cpp标准                      |
+| CMAKE_CXX_STANDARD_REQUIRED | 强制编译器使用标准               |
+|-----------------------------+----------------------------------|
+| 参考链接                    | [[https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html#variables-that-control-the-build][cmake-variables]]                  |
+
+
+
 
 
 * 概念

@@ -8,9 +8,10 @@
 | 命令                                | 作用                  |
 |-------------------------------------+-----------------------|
 | curl https://google.com             | 发送GET请求           |
-| curl -I https://google.com          | 仅获取响应头          |
-| curl -v https://google.com          | 显示详细请求/响应过程 |
 | curl -X <METHOD> https://google.com | 指定请求方法，如:POST |
+| curl -I https://google.com          | 查看响应头            |
+| curl -i https://google.com          | 查看响应头+体         |
+| curl -v https://google.com          | 查看请求/响应头       |
 
 
 * 概念

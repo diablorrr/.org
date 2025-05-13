@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       b15f4487-4bc6-4bd6-9432-474208e9b6b2
+:END:
+#+title: install
+
+#+begin_src cmake
+install(TARGETS target1 target2 ...
+        [EXPORT <export-name>]
+        [RUNTIME DESTINATION <dir>] # 可执行文件
+        [LIBRARY DESTINATION <dir>] # 动态库
+        [ARCHIVE DESTINATION <dir>] # 静态库
+        [INCLUDES DESTINATION <dir>]
+        [OPTIONAL])
+#+end_src
+- 安装路径 :: CMAKE_INSTALL_PREFIX 控制，默认是 /usr/local
+- 🐂注意 :: install(...)的代码，只有在cmake --install .后才会执行
+**** 示例
+#+begin_src cmake
+add_executable(myapp main.cpp)
+install(TARGETS myapp DESTINATION bin)
+#+end_src
+- 安装到：${CMAKE_INSTALL_PREFIX}/bin/myapp

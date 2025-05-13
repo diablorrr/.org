@@ -2,12 +2,6 @@
 :ID:       6032153f-0bfe-4415-ab7c-2ca17cdf3b70
 :END:
 #+title: yasnippet
-#+author:    yoshiki
-#+email:     1299331829@qq.com
-#+update:    [2024-12-24 二 17:46]
-
-* 简介
-- 用于生成片段模板
 
 * file content
 # 一个模板文件中的内容解释
@@ -64,7 +58,10 @@
 $0
 - 解释：第一行2的制表位假设输入hello world，则set这行2的镜像位会被capitalize处理后输出Hello world
   # yas-text会绑定到制表位的文本，以便我们进行处理；capitalize是elisp中的函数，将文本的第一个字母变大写
-* Fileds with transformations
+
+
+* 概念
+- 简介 :: [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]的插件，用于生成片段模板
 
 * 参考链接
 [[https://joaotavora.github.io/yasnippet/snippet-development.html#org5e87ae3][Writing snippets]]

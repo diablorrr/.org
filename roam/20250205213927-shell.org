@@ -1,5 +1,15 @@
 :PROPERTIES:
 :ID:       1ff40557-56dc-4670-b38f-59586d545315
 :END:
-#+title: shell
-#+LAST_MODIFIED: 2025-02-05 21:39:54
+#+title: Shell
+
+* 查询
+** Shell的实现
+[[id:58607c23-40f9-42a3-b96e-4e18c52ceb53][sh]] [[id:362a1bfe-9b93-427b-80ad-853b3ea46ec2][bash]] [[id:e4d048e0-8ec1-43f8-b9a4-110b4d22db35][zsh]]
+
+
+* 概念
+- 简介 :: 用户和操作系统内核交互的 *命令行解释器*
+
+
+

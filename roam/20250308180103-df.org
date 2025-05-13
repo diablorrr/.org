@@ -2,11 +2,6 @@
 :ID:       7479e24e-0363-42a7-8fd9-be48b8be354c
 :END:
 #+title: df(Disk Free)
-#+LAST_MODIFIED: 2025-03-08 18:02:41
-
 
 * 使用
-#+begin_src bash
-df -h               # 查看磁盘使用情况
-du -h --max-depth=1 # 当前目录下所有子目录大小
-#+end_src
+df -h               # 查看挂载点对应的文件系统、磁盘使用情况等信息

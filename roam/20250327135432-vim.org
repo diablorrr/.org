@@ -4,9 +4,36 @@
 #+title: vim
 
 * 使用
-** leetcode vim模式无法复制文本到系统剪切板
+** leetcode vim模式无法复制文本到系统剪切板[fn:1]
 1. 鼠标选中
 2. Ctrl + Insert
+** vim批量注释
+1. Ctrl + v
+2. jk选择要注释的行
+3. I => 输入注释符号
+4. Esc
 
-*** 参考链接
-[[https://blog.csdn.net/m0_58636750/article/details/139057757][刷leecode小技巧:LeetCode代码编辑器vim模式无法复制文本到系统剪贴板]]
+
+
+* 查询
+| 命令                      | 作用                   |
+|---------------------------+------------------------|
+| :set number[fn:2]         | 设置绝对行号           |
+| :set relativenumber[fn:3] | 设置相对行号(方便跳转) |
+| :e .                      | 打开当前目录           |
+| :cd <目录>                | 进入目录               |
+| C-r                       | redo                   |
+|---------------------------+------------------------|
+| 0                         | 行首                   |
+| ^                         | 行首(不包含空格)       |
+| $                         | 行尾                   |
+| D                         | 删除光标至行尾         |
+
+
+
+
+* Footnotes
+
+[fn:3] 简写：rnu
+[fn:2] 简写：nu
+[fn:1] 参考链接:[[https://blog.csdn.net/m0_58636750/article/details/139057757][刷leecode小技巧:LeetCode代码编辑器vim模式无法复制文本到系统剪贴板]]

@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       d3077f97-a2b2-4e13-aa26-9a8686e6cd96
+:END:
+#+title: .bashrc

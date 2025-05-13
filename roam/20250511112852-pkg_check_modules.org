@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       88ee430e-b4b8-4822-952b-95597384596f
+:END:
+#+title: pkg_check_modules
+
+#+begin_src cmake
+pkg_check_modules(<prefix> [REQUIRED] <package> [<version>])
+#+end_src
+- <prefix> :: 指定一个前缀，CMake 将使用这个前缀为库的相关变量命名。通常是大写的库名称，如 HIREDIS。
+- [REQUIRED] :: 如果找不到指定的库，CMake会报错并停止构建
+- <package> :: 库的名称，和 pkg-config 的 .pc 文件名相同
+- [<version>] :: 指定库版本
+
+- 示例 :: prefix设置为HIREDIS => 所以hiredis的头文件目录为HIREDIS_INCLUDE_DIRS、库文件路径变为HIREDIS_LIBRARIES
+#+begin_src cmake
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(HIREDIS REQUIRED hiredis)
+...
+target_include_directories(test_redis PRIVATE ${HIREDIS_INCLUDE_DIRS})
+target_link_libraries(test_redis PRIVATE ${HIREDIS_LIBRARIES})
+#+end_src

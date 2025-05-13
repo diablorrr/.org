@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       add3a7d8-31e3-4c84-8103-d1c2c4be7dbd
+:END:
+#+title: message
+
+  #+begin_src cmake
+  message([<mode>] "message" ...)
+  #+end_src
+ - <mode> :: 指定消息的类型
+   + STATUS :: 输出正常状态消息

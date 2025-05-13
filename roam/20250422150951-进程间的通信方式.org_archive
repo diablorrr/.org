@@ -1,0 +1,19 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/yoshiki01/.org/roam/20250422150951-进程间的通信方式.org
+
+
+* 信号
+:PROPERTIES:
+:ID:       119412de-0d27-4fcf-bf3f-31abbc5d6657
+:ARCHIVE_TIME: 2025-05-08 四 13:44
+:ARCHIVE_FILE: ~/.org/roam/20250422150951-进程间的通信方式.org
+:ARCHIVE_OLPATH: 概念
+:ARCHIVE_CATEGORY: 20250422150951-进程间的通信方式
+:END:
+- 简介 :: [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]中内核或进程发送的 异步通知[fn:7]，用于通知进程发生了某些事件；属于软件中断
+- 处理方式 ::
+  1. 执行默认操作
+  2. 捕获信号
+  3. 忽略信号

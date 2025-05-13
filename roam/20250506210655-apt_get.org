@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID:       f3eee6a2-ca67-4f35-a545-7b5fd67e062d
+:END:
+#+title: apt-get
+
+* 使用
+** apt-get走代理
+** apt-get设置镜像源[fn:1]
+1. /etc/apt/sources.list.d/ubuntu.sources中加入
+#+begin_example
+# 清华源
+Types: deb
+URIs: http://mirrors.tuna.tsinghua.edu.cn/ubuntu/
+Suites: noble noble-updates noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+# 中科大源
+Types: deb
+URIs: http://mirrors.ustc.edu.cn/ubuntu/
+Suites: noble noble-updates noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+# 网易164源
+Types: deb
+URIs: http://mirrors.163.com/ubuntu/
+Suites: noble noble-updates noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+# 阿里云
+Types: deb
+URIs: http://mirrors.aliyun.com/ubuntu/
+Suites: noble noble-updates noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+#+end_example
+* 查询
+** 命令
+| 命令    | 参数 | 作用                                    |
+|---------+------+-----------------------------------------|
+| update  |      | 更新软件包列表                          |
+| upgrade |      | 升级所有已安装的软件包                  |
+| install |      | 安装软件包                              |
+| remove  |      | 删除软件包(保留配置文件)                |
+| purge   |      | 删除软件包(删除配置文件)                |
+|         | -o   | 临时设置apt配置(如：代理、缓存、超时等) |
+| clean   |      | 删除.deb软件包[fn:2]                          |
+** 配置
+| 路径                                   | 说明          |
+|----------------------------------------+---------------|
+| /etc/apt/sources.list                  | 软件源 原位置 |
+| /etc/apt/sources.list.d/ubuntu.sources | 软件源 新位置 |
+** 包
+| 命令   | 所属包       |
+|--------+--------------|
+| ping   | iputils-ping |
+| telnet | telnet       |
+
+* Footnotes
+
+[fn:2] 存放在/var/cache/apt/archives/中
+[fn:1] 参考：[[https://blog.csdn.net/xiangxianghehe/article/details/136529419][Ubuntu 24.04镜像源设置]]

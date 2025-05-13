@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       a85ff608-4da1-461b-b8b4-2ce3b4905b26
+:END:
+#+title: kNN
+
+* 概念
+- 简介 :: k近邻算法

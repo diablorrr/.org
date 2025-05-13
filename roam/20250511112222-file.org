@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       e434d7b8-bf65-4876-bcbe-9c3116ff573a
+:END:
+#+title: file
+
+ - 获取文件列表 ::
+   #+begin_src cmake
+   file(GLOB <variable> [RELATIVE <path>] <glob_pattern>...)
+   file(GLOB_RECURSE <variable> [RELATIVE <path>] <glob_pattern>...)
+   #+end_src
+   + GLOB :: glob(通配符匹配的意思)的文件(不递归子目录)
+   + GLOB_RECURSE :: 递归获取子目录中的符合模式的文件
+   + <variable> :: 存储匹配文件路径的变量
+   + <glob_pattern> :: 通配符模式，通常是文件扩展名，如 *.cpp、*.h

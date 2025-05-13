@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       04b223e7-c9e1-4c4b-a75d-733e9f16c972
+:END:
+#+title: ld(链接器)
+
+* 使用
+** 链接问题
+1. 确认库是否存在：[[id:5c64ecb1-a49c-4a4e-972e-5438c0c278eb][find]]
+2. 若存在且在/etc/ld.so.conf列出的路径：[[id:24769cfd-2851-426c-85bb-ff8b2502660d][ldconfig]]
+3. 否则添加环境变量：export LD_LIBRARY_PATH=/path/to/libs:$LD_LIBRARY_PATH
+** 查看链接器搜索路径
+1. ld --verbose | grep SEARCH_DIR
+
+
+
+* 概念
+** 链接器查找顺序
+1. [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]环境变量：LD_LIBRARY_PATH
+2. 系统缓存：/etc/ld.so.cache => 由[[id:24769cfd-2851-426c-85bb-ff8b2502660d][ldconfig]]根据/etc/ld.so.conf中列出的路径生成
+3. 默认系统路径

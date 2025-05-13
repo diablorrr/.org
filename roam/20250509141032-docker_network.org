@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       a81fe936-e0c4-43f6-87fd-8de5f4ecc68d
+:END:
+#+title: docker network
+
+* 概念
+
+** 默认网络
+- 简介 :: [[id:a47cc941-ccc6-4893-9862-d5b245ea912b][docker]]安装后自动创建3个默认网络：bridge、host、none
+  + bridge(桥接网络) :: 创建一个虚拟网络，将容器接入这个子网，容器间可以通过[[id:e89fc341-b237-4f89-be64-8041f59438ea][IP]]或容器名通信
+  + host(宿主机的网络) :: 共享宿主机的IP和端口
+  + none(禁用所有网络) :: 只有lo(本地回环)，无法与外界通信

@@ -2,3 +2,20 @@
 :ID:       0a77e711-99f9-4df3-900d-53f04ade89df
 :END:
 #+title: nslookup
+
+
+* 查询
+| 命令                        | 作用                      |
+|-----------------------------+---------------------------|
+| nslookup <域名>             | 查询域名对应的IPv4地址    |
+| nslookup <域名> <DNS服务器> | 指定到<DNS服务器>查询域名 |
+** 示例
+#+begin_src bash
+nslookup twitter.com       # 默认本地 DNS
+nslookup twitter.com 8.8.8.8 # Google DNS
+#+end_src
+
+
+
+* 概念
+- 简介 :: [[id:36774da4-2384-4014-92e1-a77e0eea1309][DNS]]诊断工具

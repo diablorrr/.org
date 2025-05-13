@@ -4,22 +4,19 @@
 #+title: pkg-config
 
 
-* 使用
-- 查看库版本 ::
-  #+begin_src bash
-  pkg-config --modversion 库名
-  #+end_src
-- 获取库的编译和链接标志 ::
-    #+begin_src bash
-  pkg-config --cflags --libs 库名
-  #+end_src
+* 查询
+** 命令
+| 参数                 | 作用                    |
+|----------------------+-------------------------|
+| --list-package-names | 列出所有包([[id:eb7f5ba2-c54d-4ba5-8a1f-bacd8bc8614a][.pc]]文件对应) |
+| --modversion <包名>  | 包版本号                |
+** 配置
+| 环境变量        | 路径                 | 作用                    |
+|-----------------+----------------------+-------------------------|
+| PKG_CONFIG_PATH |                      | .pc搜索路径(用户自定义) |
+|                 | /usr/lib/pkgconfig   | .pc搜索路径(系统默认)   |
+|                 | /usr/share/pkgconfig | .pc搜索路径(系统默认)   |
 
 
 * 概念
-- 简介 :: (命令行工具) 查询已安装库的基本信息 => 需要库的作者提供.pc文件
-  1. 版本号
-  2. (编译和链接) 库路径
-  3. (编译和链接) 头文件路径
-  4. 编译选项
-  5. 链接选项等
-
+- 简介 :: [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]的命令行工具，查询包的信息 => 需要包提供[[id:eb7f5ba2-c54d-4ba5-8a1f-bacd8bc8614a][.pc]]文件

@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID:       24455af9-9c17-4ac2-a12d-710659b1b25c
+:END:
+#+title: add_custom_command
+
+仅定义add_custom_command()是不会自动执行的，必须有target使用它的输出
+- 以下示例中的proto_srcs和grpc_srcs都是add_custom_command()的输出
+  1. 示例1
+   #+begin_src cmake
+   add_executable(my_app main.cpp ${proto_srcs} ${grpc_srcs})
+   #+end_src
+  2. 示例2
+   #+begin_src cmake
+   add_library(proto_files
+     ${proto_srcs}
+     ${grpc_srcs}
+   )
+   #+end_src
+  3. 示例3
+   #+begin_src cmake
+   add_dependencies(proto_files
+     ${proto_srcs} ${grpc_srcs}
+   )
+   #+end_src

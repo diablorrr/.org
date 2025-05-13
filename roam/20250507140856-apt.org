@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       9e154a84-71ad-4871-a879-9370d35eb52a
+:END:
+#+title: apt
+
+* 概念
+- [[id:d155f1d7-01e9-4893-afc8-967ffa8581c9][ubunte]]的包管理工具，整合了[[id:f3eee6a2-ca67-4f35-a545-7b5fd67e062d][apt-get]]、[[id:0f3d0482-4e44-431a-8a41-b63d7d87a102][apt-cache]]和[[id:4123ec9d-b8e7-480e-9c71-5457eff93485][apt-config]]

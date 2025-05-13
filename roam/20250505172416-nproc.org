@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       cfd6c402-8816-4144-b104-815c574f90e2
+:END:
+#+title: nproc
+
+* 概念
+- 简介 :: [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]命令行工具，获取当前系统可用的cpu核心数
