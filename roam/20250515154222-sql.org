@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       71788677-257c-4952-96c6-aadd1b280c77
+:END:
+#+title: .sql
+
+* 概念
+- 简介 :: SQL命令的集合

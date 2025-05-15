@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       9ca6d1f0-13c2-4be8-bc78-b27cb366fa81
+:END:
+#+title: consult
+
+consult-flycheck
+consult-flymake
+consult-line

@@ -2,63 +2,65 @@
 :ID:       4c1ab286-7f66-46b2-a65a-35c20b6e7251
 :END:
 #+title: mysql
-#+LAST_MODIFIED: 2025-02-10 17:06:14
+
+* 使用
+** [[id:a47cc941-ccc6-4893-9862-d5b245ea912b][docker]]内配置mysql密码
+1. docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=123456 mysql:8.0
+
+
+
+* 查询
+** 命令行
+|           | 命令                                                    | 作用                                                                 |
+|-----------+---------------------------------------------------------+----------------------------------------------------------------------|
+| 登录/退出 | mysql -u <用户名> -p                                    | 登录mysql                                                            |
+|           | exit                                                    | 退出mysql                                                            |
+|-----------+---------------------------------------------------------+----------------------------------------------------------------------|
+| 数据库    | show databases;                                         | 查看所有数据库                                                       |
+|           | select database();                                      | 查看当前数据库                                                       |
+|           | use <数据库名>                                          | 切换数据库                                                           |
+|           | create database <数据库名>                              | 创建数据库                                                           |
+|           | drop database <数据库名>                                | 删除数据库                                                           |
+|-----------+---------------------------------------------------------+----------------------------------------------------------------------|
+| 表结构    | show tables;                                            | 查看当前数据库中所有表                                               |
+|           | create table <表名> (<字段名 类型>, <字段名 类型>...);  | 创建表                                                               |
+|           | drop table <表名>;                                      | 删除表                                                               |
+|           | desc <表名>;                                            | 查看表结构                                                           |
+|           | alter table <表名> <操作[fn:操作命令]>;                 | 修改表结构                                                           |
+|-----------+---------------------------------------------------------+----------------------------------------------------------------------|
+| 数据crud  | insert into <表名> values (<值1>, <值2>...)             | 插入数据                                                             |
+|           | delete from <表名> where <条件>;                        | 删除数据                                                             |
+|           | update <表名> set <字段>=<值> where <条件>;             | 更新数据                                                             |
+|           | select * from <表名>;                                   | 查询所有数据                                                         |
+|-----------+---------------------------------------------------------+----------------------------------------------------------------------|
+| 用户/权限 | create user '<用户名>'@'<主机>' identified by '<密码>'; | 创建用户                                                             |
+|           | select User, Host from mysql.user                       | 查看系统用户表                                                       |
+|           | drop user '<用户名>'@'<主机>';                          | 删除用户                                                             |
+|-----------+---------------------------------------------------------+----------------------------------------------------------------------|
+| 备份/恢复 | mysqldump -u <用户名> -p <库名> > <备份文件>.sql        | 备份数据库(系统终端使用)                                             |
+|           | mysql -u <用户名> -p <库名> < <备份文件>.sql            | 恢复数据库(系统终端使用：数据库中得先新建<库名>)                     |
+|           | source <[[id:71788677-257c-4952-96c6-aadd1b280c77][.sql]]文件路径>                                   | 恢复数据库(mysql命令行中使用：数据库中得先新建<库名>，且use <库名>;) |
+** 常用数据类型
+| 数据类型     | 存储空间            |
+|--------------+---------------------|
+| INT          | 4字节               |
+| VARCHAR(<N>) | 可变，最大65535字节 |
+
+
+
+
 
 * 概念
-** 事务
-一组SQL操作的集合，要么全部执行成功，要么全部回滚 => 保证数据的一致性
-** MySQL Connector/C++
-- 简介 :: 是MySQL 官方提供的一个C++库，用于[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]程序与mysql数据库交互
-** Schema(模式)
-- 简介 :: 等价于database，用于组织和管理数据库中的
-  1. 表(Tables)
-  2. 视图(Views)
-  3. 存储过程(Stored Procedures)
-  4. 索引(Indexes)等对象
-** 存储过程(Stored Procedure)
-- 简介 :: 数据库系统提供的一种预编译SQL代码块 => 类似于函数
-** 主键(Primary Key，PK)
-- 简介 :: 用于唯一标识表中每一行数据
+- 简介 ::
+  1. 开源的关系型数据库管理系统
 
 
-* 命令行
-- 登录mysql :: mysql -u 用户名 -p
-** 数据库命令
-- 列出所有数据库 :: show databases;
-- 查看当前数据库 :: select database();
-- 使用数据库 :: use 数据库名;
-- 创建数据库(模式) :: create database/schema 数据库名;
-- 删除数据库(模式) :: drop database 数据库名;
-** 表命令
-- 查看表中全部数据 :: select * from 表名
 
-
-* 语法
-** 异常处理 - DECLARE HANDLER
-#+begin_src sql
-DECLARE handler_type HANDLER FOR condition_value
-BEGIN
-    -- 处理异常的 SQL 语句
-END;
-#+end_src
-- handler_type ::
-  + CONTINUE :: 发生异常时继续执行后续代码
-  + EXIT :: 发生异常时退出存储过程，并执行处理器中的代码
-- condition_value :: 指定条件类型，用于触发处理器的异常
-  + SQLEXCEPTION :: 所有 SQL 错误(如语法错误、约束冲突等)
-  + SQLWARNING :: SQL 警告
-  + NOT FOUND :: 未查询到结果
-** 存储过程
-*** 创建
-#+begin_src sql
-CREATE PROCEDURE procedure_name (parameters)
-[characteristics]
-routine_body;
-#+end_src
-- procedure_name :: 存储过程名称
-- parameters :: 存储过程输入和输出参数
-- characteristics :: 存储过程的一些特性(可选)
-- routine_body :: 存储过程的 SQL 语句部分，使用 BEGIN ... END 包裹
-* 问题解决
-[[https://blog.csdn.net/vkingnew/article/details/80105323][Authentication plugin 'caching_sha2_password' cannot be loaded]]
-[[https://blog.csdn.net/qq_39545674/article/details/106618299][linux(ubuntu) 下安装mysql connector c++ 来连接mysql]]
+* Footnotes
+[fn:操作命令]
+| 命令                                        | 作用               |
+|---------------------------------------------+--------------------|
+| add column <列名> <数据类型> [after <列名>] | 添加列[指定列后]   |
+| drop column <列名>                          | 删除列             |
+| modify column <列名> <数据类型>             | 修改列数据类型     |
+| change column <旧列名> <新列名> <数据类型>  | 重命令列并修改类型 |

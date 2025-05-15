@@ -4,6 +4,9 @@
 #+title: redis
 
 * 使用
+** [[id:a47cc941-ccc6-4893-9862-d5b245ea912b][docker]]容器中配置redis
+1. docker run --name redis-container -v ~/docker/redis/redis.conf:/etc/redis.conf redis:latest redis-server /etc/redis.conf
+
 
 * 查询
 |--------------------+-------------------------------+--------------------------------+----------------------------|

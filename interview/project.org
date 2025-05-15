@@ -1,3 +1,9 @@
+* 客户端
+- 与服务器的通信端口：
+  1. 网关：8080
+  2. chat1：8090
+  3. chat2：8091
+
 * 服务端
 ** GateServer
 - 核心 ::
@@ -5,7 +11,7 @@
   2. HttpConnection做http的请求和回应(使用LogicSystem来做具体的处理get、post)
   3. LogicSystem注册了相关逻辑的回调函数：登录、注册、重置密码、获取验证码
   4. 获取验证码：通过grpc与 *VarifyServer* 通信
-  5. 登录：通过grpc与 *StatusServer* 通信，获取负载低的 *ChatServer*(ip、host、token)
+  5. 登录：通过grpc与 *StatusServer* 通信，获取负载低的 *ChatServer*(ip、host、token)，返回给客户端
 - 辅助 ::
   1. AsioIOServicePool用于辅助CServer获取io_context，传入HttpConnection
   2. RedisMgr用于辅助LogicSystem中 注册 重置密码

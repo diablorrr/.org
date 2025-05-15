@@ -3,16 +3,24 @@
 :END:
 #+title: set_target_properties
 
-#+begin_src cmake
-set_target_properties(<target> PROPERTIES <prop1> <value1> [<prop2> <value2> ...])
-#+end_src
-* 示例
-** 设置运行时查找库路径
+* 使用
+** 设置运行时查找库路径([[id:9c491709-931d-4c63-ae3c-4f91ffd74a4b][RPATH]])
 #+begin_src cmake
 # 告诉cmake，在运行时去$ORIGIN/../lib找动态库
-set_target_properties(MyApp PROPERTIES
-  BUILD_WITH_INSTALL_RPATH TRUE
-  INSTALL_RPATH "$ORIGIN/../lib"
+list(APPEND RPATH_LIST "${mysql-concpp_DIR}/lib64" "$ORIGIN/../lib")
+
+string(REPLACE ";" ":" RPATH_STRING "${RPATH_LIST}")
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  INSTALL_RPATH ${RPATH_STRING}
 )
+
 #+end_src
 - $ORIGIN :: 表示当前执行的可执行文件的目录
+
+* 语法
+#+begin_src cmake
+set_target_properties(<targets> ...
+                      PROPERTIES <prop1> <value1>
+                      [<prop2> <value2>] ...)
+#+end_src

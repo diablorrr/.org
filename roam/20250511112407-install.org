@@ -3,20 +3,21 @@
 :END:
 #+title: install
 
+* 使用
+- 正确使用 :: 配置阶段使用 => cmake -B build -DCMAKE_INSTALL_PREFIX=xxx
+- 安装路径 :: 使用相对路径时，由CMAKE_INSTALL_PREFIX控制；绝对路径不受其控制
+** 示例
+*** 相对路径
 #+begin_src cmake
-install(TARGETS target1 target2 ...
-        [EXPORT <export-name>]
-        [RUNTIME DESTINATION <dir>] # 可执行文件
-        [LIBRARY DESTINATION <dir>] # 动态库
-        [ARCHIVE DESTINATION <dir>] # 静态库
-        [INCLUDES DESTINATION <dir>]
-        [OPTIONAL])
+install(TARGETS myapp
+  DESTINATION bin
+)
 #+end_src
-- 安装路径 :: CMAKE_INSTALL_PREFIX 控制，默认是 /usr/local
-- 🐂注意 :: install(...)的代码，只有在cmake --install .后才会执行
-**** 示例
+- 安装路径 :: ${CMAKE_INSTALL_PREFIX}/bin/myapp
+*** 绝对路径
 #+begin_src cmake
-add_executable(myapp main.cpp)
-install(TARGETS myapp DESTINATION bin)
+install(TARGETS myapp
+  DESTINATION /bin
+)
 #+end_src
-- 安装到：${CMAKE_INSTALL_PREFIX}/bin/myapp
+- 安装路径 :: /bin/myapp

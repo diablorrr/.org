@@ -4,7 +4,7 @@
 #+STARTUP: show3levels
 
 * Inbox
-** TODO [#A] 重构项目 [7/15]
+** TODO [#A] 重构项目 [7/16]
 *** DONE 编写整个项目的CMakeLists.txt [5/5]
 **** DONE 自动编译grpc文件
 **** DONE 构建静态库和动态库
@@ -16,13 +16,13 @@
 DEADLINE: <2025-04-22 二> SCHEDULED: <2025-04-21 一>
 *** DONE 吃透项目代码:服务器代码运行逻辑
 DEADLINE: <2025-04-25 五> SCHEDULED: <2025-04-23 三>
-*** TODO 迁移到docker环境 [4/6]
+*** TODO 迁移到docker环境 [5/6]
 DEADLINE: <2025-05-05 一> SCHEDULED: <2025-04-28 一>
 **** DONE GeekHour视频:docker使用
 **** DONE 容器内基于alpine基础镜像编译boost环境
 **** DONE 容器内编译grpc
 **** DONE dockerfile编写
-**** TODO 联调测试
+**** DONE 联调测试
 **** TODO docker compose编写
 *** TODO 吃透项目代码:客户端代码运行逻辑
 *** TODO CMakeLists.txt完善 [0/3]
@@ -30,6 +30,8 @@ DEADLINE: <2025-05-05 一> SCHEDULED: <2025-04-28 一>
 DEADLINE: <2025-05-14 三> SCHEDULED: <2025-05-14 三>
 **** TODO 构建release版本和debug版本
 **** TODO 重构项目CMakeLists.txt
+*** TODO 项目bug [0/2]
+**** TODO chat服务器之间通信无效
 *** TODO 一键运行全部服务器脚本
 *** TODO ci/cd工作流
 *** TODO 异步日志系统

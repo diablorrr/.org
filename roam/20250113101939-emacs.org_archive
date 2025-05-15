@@ -1,15 +1,16 @@
-:PROPERTIES:
-:ID:       42689b29-37d3-457a-be3a-be8d83cfaf74
-:END:
-#+title: emacs
+#    -*- mode: org -*-
 
-* 查询
-** 命令
-| 参数                        | 作用           |
-|-----------------------------+----------------|
-| --init-directory <配置路径> | 指定配置，启动 |
-| -nw                         | 终端emacs      |
-** 包
+
+Archived entries from file /home/yoshiki01/.org/roam/20250113101939-emacs.org
+
+
+* 配置
+:PROPERTIES:
+:ARCHIVE_TIME: 2025-05-15 四 00:13
+:ARCHIVE_FILE: ~/.org/roam/20250113101939-emacs.org
+:ARCHIVE_OLPATH: 查询
+:ARCHIVE_CATEGORY: 20250113101939-emacs
+:END:
 |                | 包             | 作用                      |
 |----------------+----------------+---------------------------|
 |                | straight.el    | 包管理器                  |
@@ -19,12 +20,9 @@
 |                | orderless      | 无序补全                  |
 |                | marginalia     | 显示注释                  |
 |----------------+----------------+---------------------------|
-| 搜索、导航增强 | [[id:9ca6d1f0-13c2-4be8-bc78-b27cb366fa81][consult]]        | 弹出搜索窗口              |
+| 搜索、导航增强 | consult        | 弹出搜索窗口              |
 |----------------+----------------+---------------------------|
 | 交互增强       | embark         | 类似于鼠标右键菜单        |
 |                | embark-consult | 增加embark对consult的支持 |
 |----------------+----------------+---------------------------|
-| 代码           | flymake        | 语法检查(emacs内置)       |
-|                | eglot          | lsp前端(emacs内置)        |
-|----------------+----------------+---------------------------|
-| 不使用         | package.el     | 包管理器(emacs内置)       |
+| 不使用         | package.el     | 包管理器(emacs自带)       |

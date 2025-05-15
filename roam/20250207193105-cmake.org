@@ -2,7 +2,7 @@
 :ID:       c651b8b0-bc76-451d-acac-0ea55329f0e8
 :END:
 #+title: cmake
-#+startup: show2levels
+
 
 * 使用
 ** 打印当前系统的 cmake 相关信息
@@ -27,7 +27,7 @@ cmake --system-information | grep <感兴趣的变量>
 * 概念
 - 简介 ::
   1. 是一个 *跨平台的构建系统*
-  2. 写一份[[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]生成不同平台的构建文件(如 Makefile、Ninja 文件、Visual Studio 项目等)
+  2. 写一份[[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]生成适用于不同平台的构建文件(如 Makefile、Ninja 文件、Visual Studio 项目等)
 
 
 

@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       3b92413a-7bc0-447d-bae5-56df43cb15ed
+:END:
+#+title: DBeaver
+
+* 使用
+** DBeaver 连接 MySQL 时 "Public Key Retrieval is not allowed" 错误
+- 原因 :: mysql服务器可能启用了SSL或RSA加密，但DBeaver默认不允许检索公钥
+- 解决 ::
+  1. 编辑连接 => 驱动属性 => allowPublicKeyRetrieval选项，设置为true
+
+
+
+* 概念
+- 简介 :: 跨平台SQL客户端
