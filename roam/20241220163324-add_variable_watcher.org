@@ -2,33 +2,530 @@
 :ID:       42cbcb5f-e832-4245-b59b-21c87f4a9a3d
 :END:
 #+title: elisp
-#+LAST_MODIFIED: 2025-03-16 21:29:03
 
-#+filetags: :emacs:elisp:
-
-
-* 语法
-** 列表和cons cell
-# cons cell其实就是一个键值对
-#+begin_src elisp
-(11 12)   # 列表
-(11 . 12) # cons cell(键值对)
-#+end_src
-** add-variable-watcher
+* 查询
+** 变量和函数
 :PROPERTIES:
-:ID:       85b21b6b-2f6d-492e-9f36-08e0a2323e12
+:VISIBILITY: show2leavel
 :END:
-- 函数签名：(add-variable-watcher SYMBOL WATCH-FUNCTION)
-- SYMBOL被set后，会调用WATCH-FUNCTION
+| 分类      | 变量/函数               |
+|-----------+-------------------------|
+| 常规      | message[fn:3]           |
+|           | set[fn:1]               |
+|           | setq[fn:2]              |
+|           | setq-default            |
+|           | eval-last-sexp          |
+|           | eq                      |
+|           | equal                   |
+|-----------+-------------------------|
+| 缓冲区    | current-buffer          |
+|           | other-buffer            |
+|           | buffer-size             |
+|           | switch-to-buffer        |
+|           | set-buffer              |
+|           | beginning-of-buffer     |
+|           | mark-whole-buffer       |
+|           | append-to-buffer        |
+|           | insert-buffer-substring |
+|           | get-buffer-create       |
+|           | get-buffer              |
+|           | copy-to-buffer          |
+|           | erase-buffer            |
+|           | insert-buffer           |
+|           | generate-new-buffer     |
+|           | buffer-read-only        |
+|           | eobp                    |
+|-----------+-------------------------|
+| 位点      | point                   |
+|           | point-min               |
+|           | point-max               |
+|           | goto-char               |
+|-----------+-------------------------|
+| 标记      | push-mark               |
+|-----------+-------------------------|
+| 变窄      | what-line               |
+|           | narrow-to-region        |
+|-----------+-------------------------|
+|           | prefix-numeric-value    |
+|           | forward-line            |
+|           | count-words             |
+|           | length                  |
+|           | yank                    |
+|           | kill                    |
+|           | zap-to-char             |
+|           | progn                   |
+|           | prog1                   |
+|           | search-forward          |
+|-----------+-------------------------|
+| 域        | kill-region             |
+|           | copy-region-as-kill     |
+|           | delete-region           |
+|-----------+-------------------------|
+| 列表操作  | cons                    |
+|           | car                     |
+|           | cdr                     |
+|           | setcar                  |
+|           | setcdr                  |
+|           | nthcdr                  |
+|           | apend                   |
+|           | sort                    |
+|           | nreverse                |
+|-----------+-------------------------|
+| kill-ring | kill-append             |
+|           | kill-ring-yank-pointer  |
+|-----------+-------------------------|
+| 正则      | regexp-quote            |
+|           | looking-at              |
+|           | match-beginning         |
+|           | occur                   |
+|-----------+-------------------------|
+| 文件      | find-file               |
+|           | find-file-noselect      |
+|           | expand                  |
+|           | directory-files         |
+|-----------+-------------------------|
+| 按键绑定  | global-set-key          |
+|           | global-unset-key        |
+|           | define-key              |
+|-----------+-------------------------|
+| 配置      | add-hook                |
+|           | defalisa                |
+|           | autoload                |
+|           | load                    |
+|           | load-path               |
+** 特殊表和其他
+:PROPERTIES:
+:VISIBILITY: show2leavel
+:END:
+|-------------------|
+| 特殊表            |
+|-------------------|
+| let/let*[fn:5]    |
+| quote(')          |
+| if[fn:6]          |
+| defun[fn:4]       |
+| save-excursion    |
+| save-restriction  |
+| defvar[fn:8]      |
+| while             |
+| cond              |
+| or                |
+|-------------------|
+| 其他              |
+|-------------------|
+| interactive[fn:7] |
 
 
-* 代码片段
-** 创建一个新buffer
-#+begin_src elisp
-(defun open-artist-mode-buffer ()
-  "Create a new buffer and open it in artist-mode."
+
+* 概念
+** cons cell
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 简介 :: 点对
+  1. (car . cdr)形式的数据结构，用于构造列表、树和其他数据结构的基础原子单元
+  2. 点表示法：当cdr不是列表时，lisp会使用点表示法，否则简化为列表形式
+#+begin_src emacs-lisp
+; cons：创建一个新的cons cell -> 将两个值组合成(car . cdr)结构的单元
+(setq bouquet '(rose violet buttercup))
+(cons 'hello 'bouquet) -> (hello . bouquet) ; cdr不是列表，因此使用点表示法
+(cons 'hello bouquet)  -> (hello rose violet buttercup) ; 实际结构：(hello . (rose . (violet . (buttercup . nil))))，cdr是列表，打印时会简化为列表形式
+#+end_src
+** 符号、符号表达式
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 符号 :: 用于表示变量、函数名等；可以理解成c语言中的指针
+  + 求值规则 :: 结果是符号的值
+    1. 作为变量：返回其绑定的值
+    2. 作为函数名：调用
+    3. 被引用的符号：返回符号本身，不会求值
+- s-表达式(sexp) ::
+  1. 基本语法单元
+  2. 表示：原子、复合结构(列表、点对、特殊表)
+- 可以对s-表达式中的任意部分求值 :: 光标移动到希望求值的地方就行
+#+begin_src emacs-lisp
+(+ 2 (+ 3 3)) ; 以此s-表达式为例
+; 我们可以求其中各个部分
+(+ 2 (+ 3 3))
+(+ 3 3)
+2
+3
+#+end_src
+** 原子、列表
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+*** 原子
+- 简介 ::
+  1. 不可拆分的最小数据单元
+  2. 如：数字、字符串、符号等
+  + 求值规则 :: 自求值
+    1. 数字：本身
+    2. 字符串：本身
+    3. 特殊符号：t和nil
+#+begin_src emacs-lisp
+8 ; 对数字求值是它本身
+"hello" ; 对双引号之间的字符串求值是它本身
+fill-column ; 对符号求值，返回它的值
+'(hello world 12) ; 列表(引号保护)
+#+end_src
+*** 列表
+- 简介 ::
+  1. 用()包裹、内部元素用空格分隔的多个元素(原子或其他列表)组成的复合数据结构
+  2. 底层：列表是cons cell链接起来的数据结构
+  3. 引用的列表，是符号'()
+  + 求值规则 ::
+    1. 函数调用：列表中第1个元素的后续元素视为参数并求值，将求值结果作为真正的参数
+    2. 宏调用：列表中的其他元素不立刻求值，而是根据宏定义展开，再求值
+    3. 特殊表：第1个元素若是特殊表，按特殊规则处理参数
+#+begin_src emacs-lisp
+; 有'保护的列表
+'(2 2)
+; 无'保护的列表
+(+ 2 2)         ; 普通函数
+(defun func ()  ; 特殊表
+  ; 函数体
+)
+#+end_src
+** 引用、真假
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 引用 :: 用'表示，返回引用的符号，不计算值
+#+begin_src emacs-lisp
+'(hello world)
+#+end_src
+- t :: 逻辑真
+- nil :: 逻辑假，等价于空列表
+- non-nil :: 任何非nil的值(如：t，数字，字符串)
+#+begin_src emacs-lisp
+nil -> nil
+()  -> nil
+#+end_src
+** 符号、列表底层结构
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 列表 :: 链表
+#+begin_src emacs-lisp
+(rose violet buttercup)                             [rose][ptr] -> [violet][ptr] -> [buttercup][ptr] -> nil
+(setq bouquet '(rose violet buttercup))  bouquet -> [rose][ptr] -> [violet][ptr] -> [buttercup][ptr] -> nil
+#+end_src
+- 符号 :: 抽象为抽屉
+#+begin_src emacs-lisp
+抽屉箱子：[符号名称][符号定义(函数定义)][符号值(变量)][属性列表]
+              |           |                   |             |
+              V           V                   V             V
+抽屉内容： bouquet     [none]     (rose violet buttercup) [not described here]
+
+; cdr这个符号，不过是将符号值变成了地址
+(cdr bouquet)   bouquet -> [rose][ptr] -> [violet][ptr] -> [buttercup][ptr] -> nil
+                                   ^
+                                   |
+                                  cdr
+#+end_src
+** 变量
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 变量 :: 有值的符号
+  + 局部变量 :: let、let*
+  + 全局变量 :: defvar
+  + buffer-local的变量 ::
+*** 变量名习惯
+- hook :: 一个在特定情况下调用的函数列表，比如关闭缓冲区时，进入某个模式时。
+- function :: 值为一个函数
+- functions :: 值为一个函数列表
+- flag :: 值为 nil 或 non-nil
+- predicate :: 值是一个作判断的函数，返回 nil 或 non-nil
+- program 或 -command :: 一个程序或 shell 命令名
+- form :: 一个表达式
+- forms :: 一个表达式列表。
+- map :: 一个按键映射（keymap）
+** 函数、宏、附带效果、谓词、参数
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 函数 :: 不被'(引用)的列表，defun特殊表来定义，求值规则见列表
+- 宏 :: defmacro来定义，求值规则见列表
+- 附带效果 :: 函数返回值时，做了其他事(移动光标、拷贝文件等)，这些事就是附带效果
+- 谓词 :: 返回值为真假的函数，形如xxx-p(后头有个p)
+*** 普通函数
+- 简介 :: 第一个符号是函数名，后续的被视为参数；所有参数先求值，再传入函数
+#+begin_src emacs-lisp
+(+ 2 2)
+(concat "hello" "world")
+(substring "The quick brown fox jumped." 16 19)
+(+ 2 fill-column)
+(concat "The" (number-to-string (+ 2 fill-column)) "red foxex.")
+#+end_src
+- 编写函数流程 :: 编写、安装(在函数定义后C-x C-e)、测试
+*** 特殊表
+- 简介 :: 独特的求值规则；用于控制结构、变量绑定、宏等
+*** 参数
+- 简介 :: 若列表中第一个符号是函数名，则后续的符号就是参数
+- 可变参数 :: &rest，表示可以传入任意多个参数
+- 可选参数 :: &optional，告诉lisp解释器某个参数是可选的；函数定义中，若参数在&optional之后，代表参数是可选的
+- 前缀参数 :: C-u [<数字>]；可以传入interactive的p或P参数描述符
+#+begin_src emacs-lisp
+(+) => 0
+(*) => 1
+(+ 3) => 3
+(* 3) => 3
+(+ 3 4 5) => 12
+(* 3 4 5) => 60
+#+end_src
+** 位点、标记、域
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 位点 :: 光标所在位置，是一个整数
+#+begin_src emacs-lisp
+(point)3409       ;; 返回光标所在位置：缓冲区首字符到光标所在位置之间的字符数
+(point-min)1   ;; 返回当前缓冲区位点的最小可能值；除非设置变窄
+(point-max)3530   ;; 返回当前缓冲区位点的最大可能值
+#+end_src
+- 标记 :: 缓冲区中的位置，是一个整数
+  1. C-SPC设置标记
+  2. 光标跳转到标记处：C-x C-x (exchange-point-and-mark)
+  3. 基于标记环的光标跳转：C-u C-SPC (x N)
+- 域(region) :: 位点和标记之间的缓冲区
+** 文件、缓冲区、变窄
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 文件 :: 永久记录在计算机中的信息
+- 缓冲区 ::
+  1. 从文件中拷贝来的信息，缓冲区的变动不会改变文件，除非保存
+  2. 缓冲区不一定都和文件相联系，比如：*scracth* *help*等
+#+begin_src emacs-lisp
+(buffer-file-name) ; 文件名(绝对路径)
+(buffer-name)      ; 缓冲区名
+#+end_src
+- 变窄 :: 让emacs关注缓冲区的特定部分；默认不开启。开启后，widen命令使其余部分重新可见
+** kill-ring
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 简介 :: 一个变量，存的是字符串列表
+- 名称的由来 :: 使用C-y (M-y)xN 可以将kill环中第N个元素插入当前缓冲区，到达最后一个元素就循环到第一个元素；故称kill环
+- kill-ring-yank-pointer :: 一个变量，指向kill-ring任意位置
+- rotate-yank-pointer ::
+  1. 改变kill-ring-yank-pointer指向kill-ring中的元素，若超过kill-ring末尾，则自动指向kill-ring第一个元素
+  2. 是yank(C-y)、yank-pop(M-y)的底层
+** 注意事项
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+*** save-excursion和save-restriction
+- 最佳实践 :: 同时使用时(一个紧接着另一个)；外层exc，内层res
+- 内层res，外层exc合法的情况 :: 因为没有紧挨着使用
+#+begin_src emacs-lisp
+(defun y/what-line ()
   (interactive)
-  (let ((buffer (generate-new-buffer "*Artist*"))) ; 创建一个新的 buffer
-    (switch-to-buffer buffer)                     ; 切换到新 buffer
-    (artist-mode)))                               ; 启用 artist-mode
+  (widen)
+  (save-restriction
+    (widen)
+    (save-excursion
+      (beginning-of-line)
+      (message "Line %d"
+               (1+ (count-lines 1 (point)))))))
+#+end_src
+** TAGS文件
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 简介 ::
+  1. 代码索引文件，用于快速导航和查找源代码中的符号
+  2. 用etags命令行生成
+
+** 配置emacs(hook、aliases、load、autoload、keymap)
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+*** 配置文件管理
+- 配置加载顺序 ::
+  1. (.emacs.d/early-init.el)
+  2. (site-start.el)          系统级配置，对所有用户生效
+  3. (.emacs.d/init.el)       用户级配置
+  4. (default.el)
+- 配置最佳实践 ::
+  1. 系统级配置：将配置放到site-init.el中(如：共享插件路径)
+  2. 用户级配置：将配置放入.emacs.d/init.el中
+  3. 模块化管理：将配置拆分到.el文件中，在init.el中load/require加载
+*** hook
+- 简介 :: 某个事件发生时(如：打开文件、切换模式)，自动调用的函数列表(类似回调函数)
+#+begin_src emacs-lisp
+(setq default-major-mode 'text-mode)          ; 当打开一个新文件时，如果它不需要进入其他模式，默认进入文本模式；default-major-mode api似乎已失效
+(add-hook 'text-mode-hook 'turn-on-auto-fill) ; auto-fill-mode：打开自动换行模式，超出屏幕的部分自动换行(doom无效，原生emacs生效)
+#+end_src
+*** aliases
+- 简介 ::
+  1. 为函数或命令起别名，允许不同名字调用同一功能
+  2. 通常通过defalisa实现
+#+begin_src emacs-lisp
+(setq mail-aliases t) ;; 使用邮件别名
+#+end_src
+*** load、load-path
+- load :: 动态加载.el和.elc文件的函数
+- load-path :: 存储搜索.el、.elc这些文件的目录路径的变量
+#+begin_src emacs-lisp
+; load：加载kfill.el文件，当然如果存在kfill.elc速度会更快
+(load "~/emacs/kfill")
+; load-path
+(setq load-path (cons "~/emacs" load-path))
+#+end_src
+*** autoload
+- 简介 ::
+  1. 延迟加载机制，声明函数和文件的映射关系
+  2. 在函数首次调用时，才会加载对应的代码文件
+#+begin_src emacs-lisp
+(autoload 'html-helper-mode ; 从html-helper-mode.el(或.elc)文件延迟加载html-helper-mode函数。该文件必须在load-path中
+  "html-helper-mode" "Edit HtML documents" t) ; 因为函数还没被加载，我们希望在M-x的时候看到相关信息，因此写入注释
+#+end_src
+*** keymap
+- 简介 ::
+  1. (键映射) 快捷键对应函数的键值对列表
+  2. 优先级：模式相关keymap > 全局keymap
+  3. define-key：函数绑定与模式相关的键映射
+#+begin_src emacs-lisp
+(define-key texinfo-mode-map (kbd "C-c C-l") 'texinfo-insert-@group)
+#+end_src
+*** 配置实践:覆盖原始代码
+- 修改模式行(modeline) :: 应该是mode-line-format变量，我们写一个新的变量A，然后(setq mode-line-format A)来覆盖它
+*** el、elc、eln文件
+- 速度 :: .eln(机器码，平台相关) > .elc(字节码，跨平台) > .el(源代码，跨平台)
+- 生成方式 ::
+  1. elc生成：byte-compile-file
+  2. eln生成：native-compile
+** debug
+:PROPERTIES:
+:VISIBILITY: show3leavel
+:END:
+- 2种debug方式 ::
+  + debug :: 旧的内置debug器
+  + edebug :: 新的内置debug器，源码级调试器
+- debug测试用代码 :: [fn:9]
+*** 报错信息
+#+begin_src emacs-lisp
+(+ 2 'hello)
+
+;; 第一行报错信息：(wrong-type-argument number-or-marker-p hello)
+; wrong-type-argument：错误的参数类型，参数需要(数字或者标记)
+; number-or-marker-p：错误的参数类型，参数需要(数字或者标记)
+;; 后续报错信息：从下至上，为lisp解释器求值过程
+#+end_src
+*** debug
+- 使用方式 ::
+  + 方式1 :: 变量debug-on-error => t ： 遇到错误自动进入调试器
+  + 方式2 :: M-x debug-on-entry将要调试的函数名输入，在函数调用处C-x C-e：在*Backtrace*缓冲区中每次按d，依次对表达式求值
+  + 方式3 :: 变量debug-on-quit => t ：输入C-g，就启动debug，适用于调试无限循环
+  + 方式4 :: 在需要调试代码的地方写入(debug)
+*** edebug
+- 使用方式 ::
+  1. 在函数定义处 M-x edebug-defun；对使用该函数的表达式进行C-x C-e
+  2. 特性：在源码位置有箭头提示、按SPC进入下一个表达式，每个表达式的计算结果显示在回显区
+
+
+
+
+
+
+* Footnotes
+:PROPERTIES:
+:VISIBILITY: show2leavel
+:END:
+[fn:9]
+#+begin_src emacs-lisp
+(defun triangle-bugged (number)
+  "Return sum of numbers 1 through NUMBER inclusive."
+  (let ((total 0))
+    (while (> number 0)
+      (setq total (+ total number))
+      (setq number (1= number)))      ; Error here.
+    total))
+(triangle-bugged 4)
+#+end_src
+[fn:8]
+#+begin_src emacs-lisp
+(defvar var 42 "heloo")
+var ;; 42
+(setq var 100)
+var ;; 100
+(defvar var 200)
+var ;; 200
+#+end_src
+[fn:7]
+#+begin_src emacs-lisp
+;; p：将前缀参数传入，并将它的值(整数)作为函数参数传入函数；
+; 使用场景：简单的数值操作；无参数时返回nil
+;; P：同上，但是是原始格式(列表)；
+; 使用场景：用作条件判断中的布尔开关；无参数时返回1
+p -> 4
+P -> (4) 使用prefix-numeric-value将原始前缀参数转换为数字：转换为4
+
+;; interactive中的控制符可以填入多个，两部分用\n隔开(因为是在字符串中)
+;; B：用缓冲区的名字作为函数参量；可以在B后加上文字信息：B<信息>
+(defun name (buffer start end)
+  "docs"
+  (interactve "BAppend to buffer: \nr") ;; 这里用\n将B和r隔开
+   ;;body-of-function...
+  )
+#+end_src
+[fn:6]
+#+begin_src emacs-lisp
+(defun type-of-animal (characteristic) ;; 一个if-else结构
+  (if (equal characteristic 'fierce)
+      (message "It's a tiger!")
+    (message "It's not fierce!")))
+(type-of-animal 'fierce)
+(type-of-animal 'zebra)
+#+end_src
+[fn:5]
+#+begin_src emacs-lisp
+; let的使用
+(let ((birch 3)
+      pine
+      fir
+      (oak 'some))
+  (message
+   "Here are %d variables with %s, %s, and %s value."
+   birch pine fir oak))
+; let*的使用
+
+#+end_src
+[fn:4]
+#+begin_src emacs-lisp
+(defun multiply-by-seven (number1 number2)  ; defun 函数名 参量列表
+  "Multiply NUMBER."                        ; (可选)函数描述的文档字符串
+  ; (interactive <参数传入信息>)               (可选)成为交互函数
+    (* number1 number2))                    ; 函数体
+; 安装完后就能求值了
+(multiply-by-seven 3 4)
+#+end_src
+[fn:3]
+#+begin_src emacs-lisp
+(message "The value of fill-column is %d." fill-column)
+(message "There are %d %s in the office!"
+         (- fill-column 14) "pick elephants")
+#+end_src
+[fn:2]
+#+begin_src emacs-lisp
+; 同时设置多个参数
+(setq trees '(pine fir oak maple)
+      herbivores '(gazelle antelope zebra))
+trees
+herbivores
+
+; 计数
+(setq counter 0)
+(setq counter (+ counter 1))
+counter
+#+end_src
+[fn:1]
+#+begin_src emacs-lisp
+(set 'flowers '(rose violet daisy buttercup))
+flowers
+'flowers
 #+end_src

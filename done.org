@@ -1,7 +1,6 @@
 #+title: Done
 #+STARTUP: show2levels
 
-
 * archive
 ** 2024年
 *** old

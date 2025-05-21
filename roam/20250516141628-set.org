@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       0bab8710-69ef-493f-8bc7-cc6817b95959
+:END:
+#+title: set
+
+* 查询
+| 语法                                                        | 说明     |
+|-------------------------------------------------------------+----------|
+| set(<variable> <value>... [PARENT_SCOPE])                   | 普通变量 |
+| set(<variable> <value>... CACHE <type> <docstring> [FORCE]) | 缓存变量 |
+
+
+
+* 概念
+- 简介 :: 用于设置[[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]中的普通变量、缓存变量、环境变量
+- 官方文档 :: [[https://cmake.org/cmake/help/latest/command/set.html#set][set]]

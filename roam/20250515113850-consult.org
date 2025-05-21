@@ -6,3 +6,7 @@
 consult-flycheck
 consult-flymake
 consult-line
+consult-bookmark
+
+* 概念
+- 简介 :: 增强搜索功能(弹出交互式窗口)

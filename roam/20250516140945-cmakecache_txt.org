@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       045024e9-f2c8-4be5-81e0-b70661b70921
+:END:
+#+title: CMakeCache.txt
+
+* 概念
+- 简介 :: [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]的缓存文件
+- 包含内容 ::
+  1. 环境信息(编译器、操作系统等)
+  2. [[id:2e20f81d-56f0-4af5-a00c-b77fce675287][find_package]]找到的库文件信息
+  3. [[id:0bab8710-69ef-493f-8bc7-cc6817b95959][set]]设置的缓存变量

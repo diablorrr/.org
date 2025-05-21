@@ -3,6 +3,18 @@
 :END:
 #+title: Dockerfile
 
+* 使用
+** 基于[[id:a47cc941-ccc6-4893-9862-d5b245ea912b][docker]] mysql官方镜像，构建镜像，期望运行时自动执行.sql文件
+- 因为 :: 第一次启动时，会自动执行/docker-entrypoint-initdb.d目录下的[[id:71788677-257c-4952-96c6-aadd1b280c77][.sql]]
+#+begin_src Dockerfile
+FROM mysql:8.0
+COPY llfc.sql /docker-entrypoint-initdb.d/
+ENV MYSQL_ROOT_PASSWORD=123456
+ENV MYSQL_DATABASE=llfc
+#+end_src
+
+
+
 * 查询
 | 命令                         | 作用                                              |
 |------------------------------+---------------------------------------------------|
@@ -10,6 +22,7 @@
 | WORKDIR                      | 设置工作目录(若不存在自动创建)                    |
 | RUN                          | 执行命令，并创建新的镜像层                        |
 | COPY <宿主机路径> <容器路径> | 复制文件                                          |
+| ENV                          | 设置环境变量                                      |
 | CMD                          | 指定容器创建时的默认命令(可以覆盖)                |
 | SHELL                        | 覆盖Docker中默认的shell，用于RUN、CMD、ENTRYPOINT |
 

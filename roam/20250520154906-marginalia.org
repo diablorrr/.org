@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       fb2d96e6-683f-4ead-9900-ec3eb33cb820
+:END:
+#+title: marginalia
+
+* 概念
+- 简介 :: minibuffer增强，显示注释

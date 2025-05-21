@@ -5,33 +5,41 @@
 
 
 * 使用
+** 使用流程
+- 配置 :: cmake -B build -DCMAKE_BUILD_TYPE=XXX -DCMAKE_INSTALL_PREFIX=XXX
+- 构建 :: cmake --build build -j8
+- 安装 :: cmake --build build --target install
 ** 打印当前系统的 cmake 相关信息
-系统配置、编译器、环境变量、cmake 变量 等
-#+begin_src cmake
-cmake --system-information | grep <感兴趣的变量>
-#+end_src
+1. cmake --system-information | grep <感兴趣的变量>
+
 
 
 * 查询
-| 参数                  | 作用                                                  |
-|-----------------------+-------------------------------------------------------|
-| -B <构建目录>         | (配置阶段)创建<构建目录>并生成构建系统[fn:1]          |
-| -D<变量名>=<值>[fn:3] | (配置阶段)设置变量值(普通变量、缓存变量；D代表Define) |
-| --build <构建目录>    | (构建阶段)在<构建目录>构建项目[fn:2]                  |
-| --parallel <核心数>   | (构建阶段)并行编译                                    |
-| --install <构建目录>  | 安装到默认路径(通常为/usr/local)                      |
-| -P <[[id:c4819291-b93f-4864-b210-aa436634ac22][.cmake]]脚本文件>   | 运行脚本                                              |
-
+| 参数                  | 作用                                                                                         |
+|-----------------------+----------------------------------------------------------------------------------------------|
+| -B <构建目录>         | (配置阶段)创建<构建目录>并生成构建系统[fn:1]，并将环境信息、缓存变量存入CMakeCache.txt[fn:4] |
+| -D<变量名>=<值>[fn:3] | (配置阶段)设置变量值(普通变量、缓存变量；D代表Define)                                        |
+| -G[<生成器名>]        | (配置阶段)查看系统支持哪些生成器[使用生成器]                                                 |
+| --build <构建目录>    | (构建阶段)在<构建目录>构建项目[fn:2]                                                         |
+| --parallel <核心数>   | (构建阶段)并行编译                                                                           |
+| --target <构建目录>   | 安装到默认路径(通常为/usr/local)                                                             |
+| -P <[[id:c4819291-b93f-4864-b210-aa436634ac22][.cmake]]脚本文件>   | 运行脚本                                                                                     |
 
 
 * 概念
 - 简介 ::
   1. 是一个 *跨平台的构建系统*
-  2. 写一份[[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]生成适用于不同平台的构建文件(如 Makefile、Ninja 文件、Visual Studio 项目等)
+- cmake模块化 :: [[id:795979cd-5b2f-428f-82eb-e3f253ef09d6][cmake模块化项目结构]]
+** 工作流程
+1. 配置阶段：获取环境信息[fn:5]、项目信息(根据[[id:183c9f25-d3a3-4a95-baa1-5e1a3b201a11][CMakeLists.txt]]获取)
+2. 生成阶段：获取配置后，生成构建系统
+3. 构建阶段：运行构建工具
 
 
 
 * Footnotes
+[fn:5] 系统架构、编译器、链接器、存档打包器
+[fn:4] 更改CMakeLists.txt后，只需要删除CMakeCache.txt，在重新cmake -B build就行
 [fn:3] 常用：CMAKE_INSTALL_PREFIX、CMAKE_BUILD_TYPE
 [fn:2] 示例：cmake --build build -j8
 [fn:1] 读取<源码路径>下的CMakeLists.txt文件，配置项目、生成构建系统文件(如：Makefile)

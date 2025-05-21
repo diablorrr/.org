@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       19c0ca7d-1a9b-4f36-8912-0111f14de8e7
+:END:
+#+title: embark
+
+* 概念
+- 简介 :: 交互增强，类似鼠标右键菜单

@@ -1,4 +1,9 @@
 :PROPERTIES:
 :ID:       46bd9142-5fc5-4d89-87c3-5df4b151bd8f
 :END:
-#+title: docker compose
+#+title: Docker Compose
+
+* 概念
+- 简介 :: 用于定义和运行多容器的应用程序的工具
+- CLI :: [[id:6300c8cd-49c0-4c55-b5d5-32c69818f724][docker-compose]]
+- 配置文件 :: [[id:3bf3a0b0-e3fc-4add-a3fe-f8556dde8a1b][docker-compose.yml]]

@@ -1,10 +1,9 @@
 :PROPERTIES:
 :ID:       08cef6cf-a442-48f3-8fc1-e07ffdf365fe
 :END:
-#+title: company-mode
+#+title: company
 
 
 * 概念
 - 简介 ::
-  1. 较重量级[[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中的补全框架(前端)
-  2. 接收来自[[id:ef5b7883-d43b-4765-bdc9-daf62b50a036][lsp]]服务器(后端)的数据
+  1. [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中的较重量级补全前端

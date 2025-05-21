@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       53e355c8-f675-46e2-bf68-0abd34f2ec95
+:END:
+#+title: vertico
+
+* 概念
+- 简介 :: minibuffer增强，弹出补全窗口

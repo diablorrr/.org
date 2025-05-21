@@ -3,22 +3,37 @@
 :END:
 #+title: find_package
 
+* 查询
+** 语法
+#+begin_src cmake
+find_package(<PackageName> [<version>] [REQUIRED] [COMPONENTS <components>...])
+#+end_src
+** CONFIG模式相关变量
+| 变量/缓存变量  | 作用                           | 其他作用                                         |
+|----------------+--------------------------------+--------------------------------------------------|
+| <包名>_DIR     | 找到包时，自动设置；包所在目录 | 指定find_package找包路径，推荐在命令行使用-D设置 |
+| <包名>_FOUND   | 找到包时，自动设置；包是否找到 |                                                  |
+| <包名>_VERSION | 找到包时，自动设置；包版本     |                                                  |
+** CONFIG模式的搜索路径
+[[https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure][Config Mode Search Procedure]]
+
+
+
 * 概念
 - 简介 :: 用于查找并加载外部依赖包
-** 查找包配置
-- 官方参考 :: [[https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html][cmake-packages(7)]] [[https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure][find_package]]
+** 查找包的模式[fn:2]
 *** Config-file Packages
-- 设置查找 :: 设置CONFIG模式或什么都不设置
-- 包搜索路径 :: [[https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure][Config Mode Search Procedure]]
+- 设置查找 :: 设置CONFIG模式[fn:1]
 - 对应文件 ::
   + 包配置文件 :: <Package>Config.cmake / <Package>-config.cmake；
   + 包版本文件 :: <Package>ConfigVersion.cmake / <Package>-config-version.cmake；
-| 变量/缓存变量         | 作用                                                                           |
-|-----------------------+--------------------------------------------------------------------------------|
-| <PackageName>_FOUND   | 找到包时，自动设置；包是否找到                                                 |
-| <PackageName>_DIR     | 找到包时，自动设置；包所在目录，也可用于指定包所在目录，在使用find_package找包 |
-| <PackageName>_VERSION | 找到包时，自动设置；包版本                                                     |
 *** Find-module Packages
-- 设置查找 :: 设置MODULE模式或什么都不设置
+- 设置查找 :: 设置MODULE模式
 - 对应文件 :: Find<Package>.cmake
-- 官方支持 :: [[https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html][cmake-modules(7)]]
+- 官方支持模块 :: [[https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html][cmake-modules(7)]]
+
+
+
+* Footnotes
+[fn:2] 官方参考: [[https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html][cmake-packages(7)]] [[https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure][find_package]]
+[fn:1] find_package若什么也不设置，则先以MODULE模式查找，再以CONFIG模式查找

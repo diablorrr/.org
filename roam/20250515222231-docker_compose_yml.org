@@ -1,0 +1,73 @@
+:PROPERTIES:
+:ID:       3bf3a0b0-e3fc-4add-a3fe-f8556dde8a1b
+:END:
+#+title: docker-compose.yml
+
+* 查询
+- 注意 :: 配置项所跟内容要求的类型，查阅。yml中
+  1. -或[]代表列表
+  2. :代表键值对
+  3. ""代表字符串
+| 配置项         | 参数                       | 作用                                                     |
+|----------------+----------------------------+----------------------------------------------------------|
+| services       |                            | 定义服务                                                 |
+| image          |                            | 设置镜像                                                 |
+| ports          |                            | 端口映射                                                 |
+| environment    |                            | 环境变量                                                 |
+| volumes        |                            | 数据卷                                                   |
+| depends_on     |                            | 简单依赖(仅控制启动顺序，不检查状态)                     |
+|                | condition: service_healthy | 带条件状态的依赖(检查健康检查是否通过)                   |
+|                | condition: service_started | 带条件状态的依赖(只检查依赖服务是否启动，不检查健康状态) |
+| networks       |                            | 网络                                                     |
+| container_name |                            | 容器名字                                                 |
+| pull_policy    |                            | 拉取策略(默认从远程仓库拉取，设置never优先从本地获取)    |
+| command        |                            | 覆盖默认命令                                             |
+| healthcheck    |                            | 确保容器正常运行后再进行再后续操作(如：依赖启动)         |
+|                | test                       | (必须)检查命令或脚本                                     |
+|                | interval                   | 检查间隔                                                 |
+|                | timeout                    | 单次检查超时时间                                         |
+|                |                            |                                                          |
+** 示例
+#+begin_example
+redis:
+    image: redis:latest
+    container_name: redis-container
+    pull_policy: never
+    volumes:
+      - "/home/yoshiki01/docker/redis/redis.conf:/usr/local/etc/redis/redis.conf"
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - server
+  mysql:
+    image: mysql_new:latest
+    container_name: mysql-container
+    pull_policy: never
+    ports:
+      - "3303:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    networks:
+      - server
+    healthcheck:
+      test: >
+        mysql -uroot -p123456 -e "SELECT 1 FROM llfc.user LIMIT 1"
+        && mysqladmin ping -uroot -p123456
+      interval: 5s
+      timeout: 3s
+               retries: 20
+  gate:
+    image: gateserver_new:latest
+    container_name: gateserver-container
+    pull_policy: never
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/home/yoshiki01/docker/GateServer/config.ini:/config.ini"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - server
+#+end_example

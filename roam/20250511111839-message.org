@@ -3,8 +3,13 @@
 :END:
 #+title: message
 
+* 查询
+** 语法
   #+begin_src cmake
   message([<mode>] "message" ...)
   #+end_src
  - <mode> :: 指定消息的类型
-   + STATUS :: 输出正常状态消息
+   + 空 :: message
+   + STATUS :: --message
+   + WARNING :: (黄色字体带警告) message
+   + FATAL_ERROR :: (红色字体终止运行) message

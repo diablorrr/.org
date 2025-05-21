@@ -2,25 +2,21 @@
 :ID:       13d1007d-c805-482c-bf95-5e53ba86bf4c
 :END:
 #+title: doom emacs
-#+FILETAGS: emacs
 
 * 使用
 ** 设置缩进(回车、tab)
 1. M-x doom/set-indent-width
 
-
-
 * 概念
 
-
-
 * 查看帮助
-- 查看所有帮助选项：C-h ...
 - 查看某关键字的文档：C-h A
+- 查看所有的帮助信息：C-h ?
 - 查看变量：C-h v 选择变量后 可以看到相应的文档
 - 查看函数：C-h f 选择函数后 可以看到相应的文档
 - 查看快捷键：C-h k
 - 查看符号：C-h o
+- info：文档浏览器
 - 查看当前主模式：C-h m
 - 查看包：doom/help-packages
   其他相关doom/help*
@@ -30,7 +26,6 @@
 - elisp api查找技巧：关键字 emacs lisp
 - shortdoc-display-group命令：对常用函数进行分类
 - customize：用户设置查看自定义的变量
-- info：文档浏览器
 - describe：查看各类描述
 
 * describe系列
@@ -88,11 +83,6 @@ M-x(*Minibuf-0*)中调用find-file(*Minibuf-1*)，emacs创建*Minibuf-1*来处�
 *** 示例
 config.el中设置了org-agenda-files的值为a，customize中设置为b
 config.el只加载一次，因此值会被customize改成b
-** debug方式
-- 查看*Message*信息
-- 开启debug模式：toggle-debug-on-error
-- debug函数：debug
-- debug函数：add-variable-watcher
 ** 常用函数
 | 函数        | 作用               |
 |-------------+--------------------|
@@ -102,7 +92,6 @@ config.el只加载一次，因此值会被customize改成b
 - 作用 :: 用于充当​*转义字符*
 
 * org
-
 ** 配置
 - org-log-done :: 设置TODO的状态变成DONE后的行为，例如：加入完成时间时间戳；或完成时加入笔记
 ** TODO 属性和列视图
@@ -136,169 +125,17 @@ config.el只加载一次，因此值会被customize改成b
 
 
 
-* elisp
-** S-表达式（符号表达式）
-定义：代码和数据的基本表示形式
-*** S-表达式的类型
-| 类型            | 示例                     | 备注 |
-|-----------------+--------------------------+------|
-| 符号            | 'symbol, :keyword        | atom |
-| 数字            | 42, 3.14                 | atom |
-| 字符串          | "hello"                  | atom |
-| 布尔值          | t, nil                   | atom |
-| 字符            | ?a, ?\n                  | atom |
-| 列表            | (1 2 3), (a (b c) d)     | 链表 |
-| 向量            | [1 2 3], [1 [2 3] 4]     | 数组 |
-| 点对(cons cell) | (1 . 2), (1 . (2 . nil)) |      |
-| 哈希表          | (make-hash-table)        |      |
-| 函数            | (lambda (x) (* x x))     |      |
-**** 列表
-- 特点：对列表求值时。默认第一个元素解释为操作符，其他元素被视为参数。
-#+begin_src elisp :results output
-(setq my-list '(1 2 3))
-(print my-list)
-(setq my-list (1 2 3)) #错误：(1 2 3)被当作表达式求值，1被当作操作符，2和3被当作操作数
-#+end_src
-
-#+RESULTS:
-: (1 2 3)
-**** 点对(cons cell)
-- 作用：构造 对。cons表达式返回 两个元素组成的二元组。
-- 构成：car + cdr
-# cons cell可以理解成一个链表的节点。car和cdr是两个指针。car指向数据，cdr指向其他数据结构的引用
-*** 顺序类型
-:PROPERTIES:
-:ID:       84fade6a-3489-41f4-b1c2-9c6597ff586d
-:org-image-actual-width: 500
-:END:
-[[attachment:_20241205_191309screenshot.png]]
-** t、nil和non-nil
-- t：逻辑真。启动某功能
-- nil：逻辑假，等价于空列表。禁用某功能 # 空列表：'()
-- non-nil：任何非nil的值（如：t，数字，字符串）
-** 引用：quote(')
-- 作用：防止表达式被求值，原样返回。
-- 使用场景：用于表达数据，而不是执行这段代码。
-#+begin_src elisp :results output
-(setq x (list 1 2 3 4 5)) #计算了(list 1 2 3 4 5)
-(print x)
-(setq x '(list 1 2 3 4 5)) #没有计算(list 1 2 3 4 5)
-(print x)
-(setq x '(1 2 3 4 5))
-(print x)
-#+end_src
-
-#+RESULTS:
-: (1 2 3 4 5)
-: (list 1 2 3 4 5)
-: (1 2 3 4 5)
-** 符号
-可以看成是C语言中的指针
-*** 命名规则
-构成：字母、数字、标点-+=*/
-** 求值规则
-*** 三种表达式
-1. 自求值表达式
-   - 结果是nn自己。如：数字、字符串、向量、特殊符号t和nil
-2. 符号
-   - 结果是符号的值
-3. 列表表达式
-   根据第一个元素分为
-   1) 函数调用
-      - 对列表中的其他元素求值，求值结果作为函数调用的真正参数
-   2) 宏调用
-      - 列表中的其他元素不立刻求值，而是根据宏定义展开
-   3) 特殊表达式
-** 变量
-*** 种类
-1. 全局变量
-2. let绑定的局部变量
-3. buffer-local变量
-*** 变量名习惯
-1. hook 一个在特定情况下调用的函数列表，比如关闭缓冲区时，进入某个模式时。
-2. function 值为一个函数
-3. functions 值为一个函数列表
-4. flag 值为 nil 或 non-nil
-5. predicate 值是一个作判断的函数，返回 nil 或 non-nil
-6. program 或 -command 一个程序或 shell 命令名
-7. form 一个表达式
-8. forms 一个表达式列表。
-9. map 一个按键映射（keymap）
-** 函数
-*** 参数列表的语法
-#+begin_src elisp
-(REQUIRED-VARS...
- [&optional OPTIONAL-VARS...]
- [&rest REST-VAR])
-#+end_src
-** 宏
-*** 宏的工作原理
-我们需要宏体必须返回一段代码，而不是执行这段代码，因此
-(list 'message "%d %d" arg arg))是正确的
-宏展开时执行，得到一个表示代码的列表(message "%d %d" arg arg)
-**** 为什么不能是(message "%d %d" arg arg)
-这样写的话就会在宏展开时，执行message函数，违背本意
-*** 宏和函数的区别
-- 宏是先展开后，再求参数的值
-- 函数参数是求值后才传入这个函数
-#+begin_src elisp
-(defmacro foo (arg)
-  (list 'message "%d %d" arg arg))
-(defun bar (arg)
-  (message "%d %d" arg arg))
-(let ((i 1))
-  (bar (cl-incf i)))                       ; => "2 2"
-(let ((i 1))
-  (foo (cl-incf i)))                       ; => "2 3"
-#+end_src
-** frame、window、buffer的关系
-- 一个frame可以含有多个window
-- 每个window显示一个buffer内容
-- 一个buffer可以在多个window中显示
-** autoloaded
-是一个用于延迟加载功能的机制。
-** hook
-类似于事件机制，当某个事件(如：打开文件、切换模式等)发生时，与之相关的hook就会触发
-- 定义：hook是一个变量，值为函数列表；hook被触发时，这些函数会依次执行
-
 * package
-** 延迟加载
-- 包存在延迟加载的特性，因此与包关联的符号、函数、变量都需要在加载完包后才会在C-h...显示
-** eglot
-- 是一个轻量级的LSP客户端，会自动检测 语言服务器 并尝试启动
-- 用于与LSP（语言服务器）通信
-- 提供 代码补全、语法检查、跳转到定义、文档提示 等功能
-# 可以与emacs内部API（xref、eldoc等）无缝结合
-*** eglot与lsp-mode
-emacs中的lsp-mode也是LSP客户端
-| 特性     | eglot              | lsp-mode               |
-|----------+--------------------+------------------------|
-| 复杂度   | 简单轻量           | 功能全面，配置选项丰富 |
-| 默认支持 | emacs 29+ 原生支持 | 需单独安装             |
-| 性能     | 资源消耗较低       | 功能多，有时资源消耗高 |
-** corfu
-- 是一个轻量级的补全插件
-- 不生成补全选项，而是从其他来源（如：dabbrev、文件路径、文件名等）获取补全数据
-*** corfu与company
-| 特性   | corfu                   | company                  |
-|--------+-------------------------+--------------------------|
-| 复杂度 | 简单轻量                | 较重，需要依赖额外的后端 |
-| 性能   | 更快                    | 功能全面，但可能稍慢     |
-| 易用性 | 开箱即用                | 功能强大，配置较复杂     |
-| 兼容性 | 基于completion-at-point | 需要特定的后端支持       |
 ** dabbrev
 - emacs的内置功能，用于动态补全
 *** 基于字符串匹配
 通过扫描当前缓冲区（或其他缓冲区）的文本内容，找到与用户输入部分匹配的单词或短语，以此提供补全候选项
 *** 适用场景
 适合在 不需要LSP 的场景下快速补全常见单词和短语
-** [[id:b5aad42c-2616-4f11-a2de-b3a0bebb82b0][lsp-mode]]
 ** tree-sitter
 *** treesit和tree-sitter
 - 前者是emacs内置（对tree-sitter封装）
 - 后者是第三方包
-** dired
-- 作用：文件管理系统
 ** winner
 - 作用：窗口恢复
 ** whitespace
@@ -399,12 +236,3 @@ emacs中的lsp-mode也是LSP客户端
 |-------------------------------+------------------|
 | +default/search-project       | 搜索默认项目目录 |
 | +default/search-other-project | 搜索其他项目目录 |
-** embark
-- 作用 :: 类似于鼠标右键
-** vertico
-- 作用 :: minibuffer增强：显示一个垂直列表
-** orderless
-- 作用 :: 模糊搜索
-** marginalia
-- 作用 :: 将变量注释/函数注释/文件信息/buffer信息 直接显示在minibuffer中
-** [[https://jixiuf.github.io/blog/artist-mode.html/][artist-mode]]

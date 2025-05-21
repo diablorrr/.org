@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       795979cd-5b2f-428f-82eb-e3f253ef09d6
+:END:
+#+title: cmake模块化项目结构
+
+* 使用
+** 目录组织
+#+begin_src bash
+├── biology                     => 每新增一个功能模块，都和biology一样的目录结构
+│   ├── CMakeLists.txt          => 创建库
+│   ├── include
+│   │   └── biology
+│   │       ├── Animal.h
+│   │       └── Carer.h
+│   └── src
+│       ├── Animal.cpp
+│       └── Carer.cpp
+├── cmake
+│   └── MyUsefulFuncs.cmake
+├── CMakeLists.txt              => 设置全局设定；通过add_subdirectory将两个子项目biology和pybmain添加进来
+└── pybmain
+    ├── CMakeLists.txt          => 可执行文件
+    ├── include
+    │   └── pybmain
+    │       └── myutils.h
+    └── src
+        └── main.cpp
+#+end_src
+** 头文件(项目名/include/项目名/模块名.h)
+#+begin_src cpp
+#pragma once
+namespace 项目名 {      // 避免符号冲突
+    void 函数名();
+}
+#+end_src
+** 实现文件(项目名/src/模块名.cpp)
+#+begin_src cpp
+#include <项目名/模块名.h>
+namespace 项目名 {
+    void 函数名() {
+      // 函数实现
+    }
+}
+#+end_src
+** 示例
+[[file:~/.org/example/cmake模块化项目/][example::cmake模块化项目]]
