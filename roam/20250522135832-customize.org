@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       17086149-93fc-4eb2-88b8-0e8a29c3c1d1
+:END:
+#+title: customize
+
+* 概念
+- 简介 ::
+  1. 用户设置
+  2. 在运行时动态设置变量 => 每隔一会儿就将变量值改成customize中的值[fn:示例]
+- 存储位置 :: .doom.d/custom.el
+
+
+
+* Footnotes
+[fn:示例]
+config.el中设置了org-agenda-files的值为a，customize中设置为b
+config.el只加载一次，因此值会被customize改成b

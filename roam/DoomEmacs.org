@@ -7,58 +7,39 @@
 ** 设置缩进(回车、tab)
 1. M-x doom/set-indent-width
 
+* 查询
+** 帮助
+| 命令                     | 说明                           |
+|--------------------------+--------------------------------|
+| [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中的帮助            |                                |
+| doom/help-packages       | 显示安装的包(包安装位置等信息) |
+| doom/help-package-config | 查看包配置的文件               |
+| doom/help-modules        | 打开doom模块的文档             |
+| doom/help-xxx            | 各类帮助                       |
+| doom/describe-xxx        | 各类描述                       |
+** 配置
+| .doom.d中的文件 | 作用                                      |
+|-----------------+-------------------------------------------|
+| init.el         | 开启/关闭模块                             |
+| config.el       | 配置(doom启动时加载，也能C-h r r重新加载) |
+| custom.el       | 用户配置(customize中设置的内容)           |
+| packages.el     | 一些额外的包                              |
+** doom常用函数
+| 函数           | 作用           |
+|----------------+----------------|
+| +lookup/xxx    | 查找扩展功能   |
+| +workspace/xxx | 工作区扩展功能 |
+| +org/xxx       | org扩展功能    |
+
+
 * 概念
+- 简介 :: [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]的一个配置框架
+- 函数命名规范 ::
+  * doom/ :: 表示doom核心功能
+  * + :: 模块扩展功能
 
-* 查看帮助
-- 查看某关键字的文档：C-h A
-- 查看所有的帮助信息：C-h ?
-- 查看变量：C-h v 选择变量后 可以看到相应的文档
-- 查看函数：C-h f 选择函数后 可以看到相应的文档
-- 查看快捷键：C-h k
-- 查看符号：C-h o
-- info：文档浏览器
-- 查看当前主模式：C-h m
-- 查看包：doom/help-packages
-  其他相关doom/help*
-- 显示当前按键映射的详细信息：which-key-show-keymap
-- 下方显示*Message*用于debug：view-echo-area-messages
-- 使用搜索引擎去搜索高亮的符号：C-c c k
-- elisp api查找技巧：关键字 emacs lisp
-- shortdoc-display-group命令：对常用函数进行分类
-- customize：用户设置查看自定义的变量
-- describe：查看各类描述
-
-* describe系列
-- describe-char :: 描述光标所在字符的所有信息，包括应用的face
-- describe-key :: 查看快捷键
-- describe-function :: 查看函数
-- describe-symbol :: 查看符号
-- describe-variable :: 查看变量
-- describe-mode :: 查看buffer中的模式
-
-* theme
-** face及对应区域
-| face                      | 区域                                       |
-|---------------------------+--------------------------------------------|
-| hl-line                   | 光标对应行的高亮                           |
-| bold                      | **(org加粗)                                |
-| org-list-dt               | 列表中的1.2.1)2)-+等                       |
-| shadow                    | 较淡的文字，例如minibuffer中函数右边的注释 |
-| cursor                    | 光标                                       |
-| mode-line                 | 状态栏                                     |
-| doom-modeline-buffer-file | 状态栏的文件字体颜色                       |
-** 实用函数
-| 函数                   | 作用               |
-|------------------------+--------------------|
-| customize-create-theme | 保存主题           |
-| describe-face          | 自定义主题各个部件 |
 
 * doom emacs
-** .doom.d
-- init.el：开启/关闭模块
-- config.el：用户的主要配置(doom启动中加载，当然也能C-h r r重加载)
-- custom.el：用户自定义变量的设置(M-x customize中设置的内容)(doom启动后加载)
-- packages.el：一些额外的包
 ** Minibuffer
 - 作用：是emacs的临时输入区。用于
   + 接收命令
@@ -77,12 +58,7 @@ M-x(*Minibuf-0*)中调用find-file(*Minibuf-1*)，emacs创建*Minibuf-1*来处�
 #+end_example
 ** 配置
 变量tab-width：设置tab键的宽度
-** customize
-- 定义：用户设置。在运行时动态设置变量 # 每隔一会儿就将变量值改成customize中的值
-- 存储位置：.doom.d的custom.el中
-*** 示例
-config.el中设置了org-agenda-files的值为a，customize中设置为b
-config.el只加载一次，因此值会被customize改成b
+
 ** 常用函数
 | 函数        | 作用               |
 |-------------+--------------------|

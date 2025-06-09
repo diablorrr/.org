@@ -8,91 +8,92 @@
 :PROPERTIES:
 :VISIBILITY: show2leavel
 :END:
-| 分类      | 变量/函数               |
-|-----------+-------------------------|
-| 常规      | message[fn:3]           |
-|           | set[fn:1]               |
-|           | setq[fn:2]              |
-|           | setq-default            |
-|           | eval-last-sexp          |
-|           | eq                      |
-|           | equal                   |
-|-----------+-------------------------|
-| 缓冲区    | current-buffer          |
-|           | other-buffer            |
-|           | buffer-size             |
-|           | switch-to-buffer        |
-|           | set-buffer              |
-|           | beginning-of-buffer     |
-|           | mark-whole-buffer       |
-|           | append-to-buffer        |
-|           | insert-buffer-substring |
-|           | get-buffer-create       |
-|           | get-buffer              |
-|           | copy-to-buffer          |
-|           | erase-buffer            |
-|           | insert-buffer           |
-|           | generate-new-buffer     |
-|           | buffer-read-only        |
-|           | eobp                    |
-|-----------+-------------------------|
-| 位点      | point                   |
-|           | point-min               |
-|           | point-max               |
-|           | goto-char               |
-|-----------+-------------------------|
-| 标记      | push-mark               |
-|-----------+-------------------------|
-| 变窄      | what-line               |
-|           | narrow-to-region        |
-|-----------+-------------------------|
-|           | prefix-numeric-value    |
-|           | forward-line            |
-|           | count-words             |
-|           | length                  |
-|           | yank                    |
-|           | kill                    |
-|           | zap-to-char             |
-|           | progn                   |
-|           | prog1                   |
-|           | search-forward          |
-|-----------+-------------------------|
-| 域        | kill-region             |
-|           | copy-region-as-kill     |
-|           | delete-region           |
-|-----------+-------------------------|
-| 列表操作  | cons                    |
-|           | car                     |
-|           | cdr                     |
-|           | setcar                  |
-|           | setcdr                  |
-|           | nthcdr                  |
-|           | apend                   |
-|           | sort                    |
-|           | nreverse                |
-|-----------+-------------------------|
-| kill-ring | kill-append             |
-|           | kill-ring-yank-pointer  |
-|-----------+-------------------------|
-| 正则      | regexp-quote            |
-|           | looking-at              |
-|           | match-beginning         |
-|           | occur                   |
-|-----------+-------------------------|
-| 文件      | find-file               |
-|           | find-file-noselect      |
-|           | expand                  |
-|           | directory-files         |
-|-----------+-------------------------|
-| 按键绑定  | global-set-key          |
-|           | global-unset-key        |
-|           | define-key              |
-|-----------+-------------------------|
-| 配置      | add-hook                |
-|           | defalisa                |
-|           | autoload                |
-|           | load                    |
-|           | load-path               |
+| 分类      | 变量/函数                  |
+|-----------+----------------------------|
+| 常规      | message[fn:3]              |
+|           | set[fn:1]                  |
+|           | setq[fn:2]                 |
+|           | setq-default               |
+|           | eval-last-sexp             |
+|           | eq                         |
+|           | equal                      |
+|-----------+----------------------------|
+| 缓冲区    | generate-new-buffer        |
+|           | current-buffer             |
+|           | switch-to-buffer           |
+|           | with-output-to-temp-buffer |
+|           | other-buffer               |
+|           | buffer-size                |
+|           | set-buffer                 |
+|           | beginning-of-buffer        |
+|           | mark-whole-buffer          |
+|           | append-to-buffer           |
+|           | insert-buffer-substring    |
+|           | get-buffer-create          |
+|           | get-buffer                 |
+|           | copy-to-buffer             |
+|           | erase-buffer               |
+|           | insert-buffer              |
+|           | buffer-read-only           |
+|           | eobp                       |
+|-----------+----------------------------|
+| 位点      | point                      |
+|           | point-min                  |
+|           | point-max                  |
+|           | goto-char                  |
+|-----------+----------------------------|
+| 标记      | push-mark                  |
+|-----------+----------------------------|
+| 变窄      | what-line                  |
+|           | narrow-to-region           |
+|-----------+----------------------------|
+|           | prefix-numeric-value       |
+|           | forward-line               |
+|           | count-words                |
+|           | length                     |
+|           | yank                       |
+|           | kill                       |
+|           | zap-to-char                |
+|           | progn                      |
+|           | prog1                      |
+|           | search-forward             |
+|-----------+----------------------------|
+| 域        | kill-region                |
+|           | copy-region-as-kill        |
+|           | delete-region              |
+|-----------+----------------------------|
+| 列表操作  | cons                       |
+|           | car                        |
+|           | cdr                        |
+|           | setcar                     |
+|           | setcdr                     |
+|           | nthcdr                     |
+|           | apend                      |
+|           | sort                       |
+|           | nreverse                   |
+|-----------+----------------------------|
+| kill-ring | kill-append                |
+|           | kill-ring-yank-pointer     |
+|-----------+----------------------------|
+| 正则      | regexp-quote               |
+|           | looking-at                 |
+|           | match-beginning            |
+|           | occur                      |
+|-----------+----------------------------|
+| 文件      | find-file                  |
+|           | find-file-noselect         |
+|           | expand                     |
+|           | directory-files            |
+|-----------+----------------------------|
+| 按键绑定  | global-set-key             |
+|           | global-unset-key           |
+|           | define-key                 |
+|-----------+----------------------------|
+| 配置      | add-hook                   |
+|           | defalisa                   |
+|           | autoload                   |
+|           | load                       |
+|           | load-path                  |
 ** 特殊表和其他
 :PROPERTIES:
 :VISIBILITY: show2leavel

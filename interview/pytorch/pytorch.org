@@ -1,0 +1,49 @@
+* 张量和NumPy数组之间有什么区别和联系？[[https://docs.pytorch.org/tutorials/beginner/basics/tensorqs_tutorial.html][参考]]
+- 当张量在CPU中时，和NumPy数组共享底层的内存(意味着改变其中一个，另一个也会改变)；但是张量可以使用GPU计算
+* 什么是神经网络？训练神经网络时，前向传播和反向传播做了什么？[[https://docs.pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html][参考]]
+- 神经网络是嵌套函数的集合，由参数组成(权重+偏置)
+- 前向传播中神经网络对输入进行预测；在反向传播中将预测值与标签对比，计算损失，根据损失计算梯度(误差相对于参数的导数)，更新参数[fn:1]
+* 什么是计算图？
+- 有向无环图(DAG)：根节点为输出张量，叶子节点为输入张量，其余节点为操作符或中间张量；从根节点到叶子节点，自动使用链式规则计算梯度(.grad_fn)，更新到叶子节点的.grad属性；每次反向传播时，自动生成新的计算图
+* 什么是autograd？[[https://docs.pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html][参考]] autograd在前向传播中做了什么？autograd在反向传播中做了什么？[[https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html][参考]]
+- pytorch中的自动微分引擎
+- 通过操作符(如：z = x + y)计算获得结果张量z；将该操作的梯度计算函数(.grad_fn)附加到z上(记录生成z的操作)
+- 根据z.grad_fn计算梯度，通过链式法则将梯度累加到叶子节点的grad中：x.grad、y.grad(requires_grad=True的叶子张量)
+  + 综合示例 :: [fn:2]
+* 优化器的作用是什么？
+- 使用反向传播中叶子节点的.grad中的梯度更新参数(requires_grad=True的叶子张量)
+* pytorch中的dim？[[https://www.cnblogs.com/lipu123/p/17782804.html][参考]] [[https://blog.csdn.net/xinjieyuan/article/details/105205326][参考2]]
+- dim就是张量形状从左到右的维度[fn:3]，指定dim就是指定在那个维度上进行操作
+* 什么是Seq2Seq模型？有什么特点？应用场景？[[https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html][参考]]
+- 包含了两个RNN的模型，分别称为编码器和解码器；当输入序列进入编码器，得到向量，向量进入解码器，得到输出序列
+- 单RNN每个输出都要对应一个输入，Seq2Seq模型则摆脱了序列长度[fn:4]、顺序的问题
+- 适用于单词翻译
+
+* Footnotes
+
+[fn:1]
+weight = weight - learning_rate * gradient
+
+[fn:2]
+#+begin_src python
+import torch
+
+a = torch.tensor([2., 3.], requires_grad=True)
+b = torch.tensor([6., 4.], requires_grad=True)
+Q = 3*a**3 - b**2
+external_grad = torch.tensor([1., 1.])
+Q.backward(gradient=external_grad)
+
+print(a)            # tensor([2., 3.], requires_grad=True)
+print(b)            # tensor([6., 4.], requires_grad=True)
+print(Q)            # tensor([-12.,  65.], grad_fn=<SubBackward0>)
+print(a.grad)       # tensor([36., 81.])
+print(b.grad)       # tensor([-12.,  -8.])
+print(Q.grad_fn)    # <SubBackward0 object at 0x7d0b9da3b010> => 梯度计算函数对象：表示减法操作的反向传播规则
+#+end_src
+
+[fn:3]
+shape(2,3,4,5,6) 从左到右就是dim=0、1、2、3、4；shape(1,2,3) 从左到右dim=0、1、2
+
+[fn:4]
+输入长度和输出长度可以不一致；输入与输出的对应不一定是顺序的

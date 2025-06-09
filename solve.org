@@ -1,5 +1,9 @@
 #+title: Solve
 
+* good
+Yakuake
+zeal
+
 * emacs
 [[http://xahlee.info/emacs/index.html][Xah Emacs Tutorial]]
 [[https://emacs-china.org/t/tip-kde-emacs/19993][KDE设置Emacs忽略系统的全局快捷键]]

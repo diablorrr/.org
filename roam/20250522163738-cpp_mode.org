@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       a3078e0e-411f-427c-8fe9-a09adacbcab5
+:END:
+#+title: cpp-mode
+
+* 概念
+- 简介 :: [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中 c++-mode 的别名，而 c++-mode 是 cc-mode.el 中定义的函数

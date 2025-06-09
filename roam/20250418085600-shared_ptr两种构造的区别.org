@@ -1,7 +1,6 @@
 :PROPERTIES:
 :ID:       605fd9e8-9bc3-45ad-ab76-b5e3205222a0
 :END:
-#+title: make_shared<T>(args...)和shared_ptr<T>(new T(args...))
 
 * make_shared和shared_ptr构造函数
 | 方式                   | 语法          | 内存分配次数 | 访问A私有函数 | 异常安全性 | 备注                                      |

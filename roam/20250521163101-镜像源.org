@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       b9eced79-f636-48ee-ac41-3efa1c8a1c8f
+:END:
+#+title: 镜像源
+
+* 使用
+** 清华大学开源软件镜像站使用方法
+1. 镜像列表中，有?的图标可以点进去，查看该源相关文档
+
+
+
+* 查询
+[[https://mirrors.tuna.tsinghua.edu.cn/][清华大学开源软件镜像站]]

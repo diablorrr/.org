@@ -1,9 +1,10 @@
 :PROPERTIES:
 :ID:       08cef6cf-a442-48f3-8fc1-e07ffdf365fe
 :END:
-#+title: company
+#+title: company-mode
 
 
 * 概念
 - 简介 ::
   1. [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中的较重量级补全前端
+  2. 有多种补全后端可用

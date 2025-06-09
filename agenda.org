@@ -4,7 +4,24 @@
 #+STARTUP: show3levels
 
 * Inbox
-** TODO [#A] 重构项目 [9/16]
+** TODO [#A] 小论文 [3/5]
+DEADLINE: <2025-06-30 一> SCHEDULED: <2025-06-03 二>
+*** DONE pytorch框架学习: Introduction to PyTorch
+SCHEDULED: <2025-06-04 三>
+*** DONE pytorch框架学习: Learning PyTorch
+SCHEDULED: <2025-06-05 四>
+*** DONE python官方教程
+DEADLINE: <2025-06-09 一>
+*** TODO 30篇论文
+*** TODO 关注 nlp岗位&大模型应用开发
+** TODO [#B] hot100
+*** TODO 灵茶山艾府：基础视频：动态规划
+** TODO [#B] 面经
+** -----------------------------------
+** TODO 写简历 [1/2]
+*** DONE 初版
+*** TODO 终版
+** TODO 重构项目 [10/15]
 *** DONE 编写整个项目的CMakeLists.txt [4/4]
 **** DONE 自动编译grpc文件
 **** DONE 构建静态库和动态库
@@ -28,49 +45,43 @@ DEADLINE: <2025-05-05 一> SCHEDULED: <2025-04-28 一>
 **** DONE 重构项目CMakeLists.txt
 **** DONE 双笙子:CMake教程(3)+笔记
 DEADLINE: <2025-05-14 三> SCHEDULED: <2025-05-14 三>
-*** TODO 吃透项目代码:客户端代码运行逻辑 [0/3]
-**** TODO 双笙子:QT视频(4)+笔记
-DEADLINE: <2025-05-18 日> SCHEDULED: <2025-05-17 六>
-**** TODO 重构客户端代码
-*** TODO 一键运行全部服务器脚本
+*** TODO 吃透项目代码:客户端代码运行逻辑 [3/4]
+**** DONE 重构客户端代码 [3/3]
+***** KILL 重构qmake项目为cmake
+***** KILL cmake模块化项目
+***** KILL 纯代码ui(MVC)
+**** TODO 理解客户端代码 + 相关八股笔记
+**** KILL 大丙QT+笔记
+**** KILL 双笙子:QT视频(4)+笔记
+*** TODO 项目bug [0/2]
+**** TODO chat服务器之间通信无效
+**** TODO 聊天气泡显示问题
 *** TODO ci/cd工作流
 *** TODO mysql使用与优化
 *** TODO redis使用与优化
-*** TODO 异步日志系统
-*** TODO 项目bug [0/2]
-**** TODO chat服务器之间通信无效
-*** KILL 开发插件系统
 *** KILL gtest或ctest
+*** KILL 异步日志系统
+*** KILL 开发插件系统
 *** KILL 性能监控系统
-** TODO [#B] 面经&八股 [1/3]
-*** DONE 代码随想录cpp八股 [2/2]
-**** [X] 一刷
-**** [X] 二刷
-*** TODO 金山客户端面经
-*** TODO 大丙QT+笔记
-** TODO [#A] 写简历 [1/2]
-*** DONE 初版
-*** TODO 终版
-** TODO 算法岗 [0/2]
-*** TODO 了解岗位需求
-*** TODO 项目
 ** TODO 有余力再做 [0/2]
 *** TODO 尝试add_custom_command和add_custom_target生成grpc和pb文件
 *** TODO 造[[file:~/wheel/plan.org][wheel]]
-** -----------------------------------
-** TODO emacs [1/9]
+** TODO emacs [4/12]
 # 一周学习一个插件的使用
 *** DONE An Introduction to Programming in Emacs Lisp + 笔记
 DEADLINE: <2025-05-19 一> SCHEDULED: <2025-05-17 六>
-*** TODO info:eglot
-*** TODO 安装翻译插件
+*** DONE Emacs高手修炼手册
+*** DONE Emacs轻奢之路
+*** DONE 安装翻译插件
+*** TODO lsp-mode:函数文档显示
+*** TODO company文档
+*** TODO info:flymake
 *** TODO info:use-package
+*** TODO info:eglot
 *** TODO info:cc-mode
 *** TODO info:embark
-*** TODO lsp-mode:函数文档显示
 *** TODO GNU Emacs Lisp Reference Manual
-** TODO [#C] hot100
-** TODO [#B] proactor和reactor [0/0]
+** TODO proactor和reactor [0/0]
 ** TODO reactor服务器 [0/2]
 *** TODO 码农论坛epoll实现
 *** TODO 码农论坛reactor服务器实现

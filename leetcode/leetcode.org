@@ -7,9 +7,6 @@ SCHEDULED: <2025-03-20 四>
 
 
 * [[https://leetcode.cn/problems/two-sum/description/?envType=study-plan-v2&envId=top-100-liked][1.两数之和]] [0/3]
-- [ ] 一刷
-- [ ] 二刷
-- [ ] 三刷
 ** 解法1:暴力枚举
 #+begin_src cpp :results output :includes '(<vector> <iostream>) :main no :namespaces std
 vector<int> twoSum(vector<int>& nums, int target){

@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       4a454bad-d33c-475f-bafb-805251aab638
+:END:
+#+title: .gdbinit
+
+* 使用
+** 快速开始
+- 设置不要下载debug信息 :: set debuginfod enabled off

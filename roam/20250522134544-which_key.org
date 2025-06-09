@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       349304a0-0af5-4d41-be86-92c8318dc366
+:END:
+#+title: which-key
+
+- which key显示当前按键映射的详细信息：which-key-show-keymap

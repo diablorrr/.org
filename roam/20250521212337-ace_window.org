@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       e5076725-11f2-461b-9905-9af57380db73
+:END:
+#+title: ace-window
+
+
+* 使用
+多窗口切换使用ace-window，变量aw-keys设置切换方式(数字 => 字母)
+若C-u ace-window，则交换窗口；C-u C-u ace-window，则关闭窗口
+使用ace-window后，再使用以下按键，实现多窗口管理
+| x | delete window                                          |
+| m | swap windows                                           |
+| M | move window                                            |
+| c | copy window                                            |
+| j | select buffer                                          |
+| n | select the previous window                             |
+| u | select buffer in the other window                      |
+| c | split window fairly, either vertically or horizontally |
+| v | split window vertically                                |
+| b | split window horizontally                              |
+| o | maximize current window                                |
+| ? | show these command bindings                            |

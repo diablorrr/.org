@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       705c620c-8ab8-439d-a9a7-8651b6ab3476
+:END:
+#+title: persp-mode
+
+* 概念
+- 简介 :: [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中工作区(workspace)插件

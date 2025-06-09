@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       cc70f111-9ecd-4c38-80d5-13b07fa042db
+:END:
+#+title: multiple-cursors
+
+* 概念
+- 简介 :: [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中多光标编辑插件
+- 基础使用 :: C-c m <字母>
