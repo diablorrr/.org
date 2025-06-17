@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       f678366d-60e6-4a1e-937d-4aba72608499
+:END:
+#+title: LightGCN
+
+* 提出LightGCN的动机是什么？
+- 先前的问题 :: 在推荐任务中，GNN中的特征转换、非线性激活是不必要的 => 增加了训练难度
+- 解决方式 :: 保留邻域聚合、多层传播；去除特征转换、非线性激活
+* LightGCN模型长什么样？ :ATTACH:
+:PROPERTIES:
+:ID:       df156eb6-c2c8-45bb-97a1-f52fb5376b60
+:END:
+[[attachment:_20250612_161835screenshot.png]]
+* 参考
+[[https://zhuanlan.zhihu.com/p/19628840323][知乎]]
+[[https://blog.csdn.net/qq_46006468/article/details/126060701][csdn]]

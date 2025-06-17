@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       cebac708-b4a7-4f9e-9fb4-0ca73a9602bd
+:END:
+#+title: BERT
+
+* 什么是Pre-training？什么是training？
+- 预训练任务 :: 在一个大的数据集上训练一个模型[fn:1]，给其他任务使用[fn:2]
+- 将Pre-training模型用于某种任务，进行训练
+* bert和transformer之间的区别是什么？
+- bert只用到transformer的encoder结构，而且bert是双向的，transformer是单向的
+
+
+
+* Footnotes
+[fn:2]
+就是让其他任务用这个模型(模型带有训练好的权重)
+
+[fn:1]
+称为预训练模型

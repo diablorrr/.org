@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       732f117f-202e-4c69-a84f-c20b07866383
+:END:
+#+title: 协同过滤算法
+#+filetags: nlp
+
+* 算法
+- 基本假设是相似的用户会对物品表现出相似的爱好
+** 原理图 :ATTACH:
+:PROPERTIES:
+:ID:       d2581377-9d77-4fa0-bcd9-b6c94424bfc6
+:END:
+[[attachment:_20250610_201417screenshot.png]]
+- 对于Joe喜欢的电影，右边的a、b、c也喜欢，则通过a、b、c喜欢的电影，我们可以预测Joe喜欢的电影
+- 但存在问题 :: 稀疏数据难以处理(Joe本身交互数据很少，则难以找到和他相似度高的人)
+- 改进方法 :: [[id:40569874-79d1-40ae-b3f3-ee5b8ce47bb3][矩阵分解]]

@@ -1,7 +1,6 @@
 * c和cpp的区别？ [[https://www.cnblogs.com/binarch/p/17449410.html][参考]]
 - c是面向过程的语言，cpp既可以面向过程也能面向对象
 
-
 * static关键字的用法？ [[https://www.cnblogs.com/binarch/p/17462001.html][参考]]
 1. 全局作用域中，修饰变量[fn:1]、函数为静态，限制本文件内使用
 2. 方法中，修饰局部变量；第一次访问时初始化，程序结束时销毁
@@ -14,18 +13,15 @@
 - 底层使用红黑树，红黑树是一种自平衡的二叉树，确保插入、删除、查找的时间复杂度为 O(logn)
 - 设置第3个模板参数来自定义排序规则，替换std::less<key>为std::greater<key>；也能通过仿函数、lambda表达式实现
 
-
 * 介绍下std::unordered_map？使用场景？底层实现？自定义类型作为key？[[https://cppreference.com/w/cpp/container/unordered_map/unordered_map.html][参考]]
 - C++11添加的无序的关联容器，存储key-value对，key唯一
 - 高效查询
 - 底层是使用哈希表实现的，插入、删除、查找的平均时间复杂度为O(1)
 - 需要实现计算key的hash函数、比较key的函数
 
-
 * 介绍下static_cast和dynamic_cast？为什么不建议使用static_cast对类进行向下转型？
 - dynamic_cast提供运行时检查，用于向下转型(在继承体系中，将基类指针/引用安全的转换为派生类指针/引用)；static_cast提供编译时检查，非向下转型的情况使用；
 - static_cast不会提供运行时检查，因此对类进行向下转型总是成功，可能产生未定义行为(eg：[fn:3])；不同于dynamic_cast向下转型失败会返回空指针(指针)/抛出bad_cast异常(引用)，以此保证安全
-
 
 * 向下转型和虚函数如何选择？
 - 只在以下情况使用向下转型
@@ -39,14 +35,12 @@
   3. 成员函数         => 代码段
 - 编译器在编译阶段，将成员函数非成员化：将this指针作为函数的第1个参数，通过this指针识别对象，也能找到对象的成员变量[fn:4]
 
-
 * 虚函数的定义？override关键字？final关键字？什么是多态？多态是如何实现的？ [[https://www.cnblogs.com/binarch/p/17498594.html][参考]]
 - 基类中用virtual标识的函数，可以被派生类override，实现运行时多态
 - 提供编译时期检查(eg：参数类型、顺序错误等)，明确语义(eg：这是指重写)
 - 此虚函数的实现到此为止，后续的派生类不能override
 - 同一个函数，在基类和派生类中实现不同
 - 使用 虚函数表、虚函数表指针 实现；对于有 虚函数 的对象，在其内存开始位置 存在vptr，vptr指向虚函数表，虚函数表中存放多个指针，指向虚函数的真实地址；初始化虚函数表时，会将override的函数覆盖虚函数表中的基类实现，否则保留基类实现；调用函数时，通过vptr找到虚函数表，得到真实函数地址，从而实现多态。多继承情况下类似，只是会多几个vptr和虚函数表
-
 
 * 什么是菱形继承？存在的问题？如何解决(虚继承)？ [[https://www.cnblogs.com/binarch/p/17498594.html][参考]]
 - 继承体系中，B、C继承A，D继承B、C
@@ -55,12 +49,10 @@
   + 加上父类限定符 :: 没解决数据冗余问题(B、C中都有A，导致D中有两个A)
   + 虚继承(C++11) :: D中只会有一个A
 
-
 * TODO 内存泄漏有哪几种方式？
 - 用裸指针指向堆中动态分配的内存，没有即时释放指针：创建/释放指针之间的代码出现
   1. 返回
   2. 抛出异常
-
 
 * 介绍下RAII？什么是智能指针？
 - 用类管理资源(动态分配的内存)，利用类的生命周期控制资源的创建和销毁(构造时分配资源，析构时释放资源)，避免内存泄漏
@@ -75,7 +67,6 @@
 - 作为函数参数 => 实现函数重载
 
 
-
 * 什么时候触发移动构造和移动赋值函数？什么情况下编译器会合成移动构造和移动赋值函数？介绍下std::move？
 - 用于构造或赋值的参数是右值(字面值或临时值)
 - 以下2点满足：
@@ -84,11 +75,9 @@
 - 将左值转换为右值 => 用于invoke移动语义(call移动构造或移动赋值)
 
 
-
 * 介绍下std::unique_ptr？传入std::unique_ptr到函数？[[https://www.learncpp.com/cpp-tutorial/stdunique_ptr/][参考]]
 - 独占资源的智能指针；没有拷贝构造和拷贝赋值函数，只能转移资源的所有权(使用移动语义)[fn:7]
 - 应该传入裸指针(代表着资源)而不是std::unique_ptr，因为我们并不想转移资源所有权
-
 
 * 什么是异常安全？介绍下std::shared_ptr？最佳实践？什么是循环引用？如何解决？什么是std::weak_ptr？[[https://www.learncpp.com/cpp-tutorial/circular-dependency-issues-with-stdshared_ptr-and-stdweak_ptr/][参考]]
 - 异常抛出时，代码能保证避免资源泄漏、确保数据处于一致性状态
@@ -97,7 +86,6 @@
 - 两个或多个对象通过内部的智能指针互相指向对方 => 导致引用计数无法归0，引发内存泄漏
 - 使用std::weak_ptr作为内部的智能指针
 - 只用于观察和访问std::shared_ptr但不持有资源的指针[fn:9]
-
 
 
 * std::auto_ptr的缺陷？[[https://www.learncpp.com/cpp-tutorial/introduction-to-smart-pointers-move-semantics/][参考]]

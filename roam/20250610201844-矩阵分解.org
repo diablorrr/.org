@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       40569874-79d1-40ae-b3f3-ee5b8ce47bb3
+:END:
+#+title: 矩阵分解
+#+filetags: nlp
+
+* 算法
+- 解决了[[id:732f117f-202e-4c69-a84f-c20b07866383][协同过滤算法]]难以处理稀疏矩阵的问题
+** 原理图 :ATTACH:
+:PROPERTIES:
+:ID:       1b294709-a43b-4bf4-b260-c1aafe55e217
+:END:
+[[attachment:_20250610_201928screenshot.png]]
+- 将用户、物品转换到向量空间，根据向量之间的相似度进行推荐(eg：推荐给GusIndependence Day和Dumb...)
+[[attachment:_20250610_202620screenshot.png]]
+- 矩阵分解流程 :: 将用户、物品交互矩阵R分解为用户矩阵Q、物品矩阵P；k代表用户、物品的特征；预测如图中橙色方块部分

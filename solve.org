@@ -37,3 +37,5 @@ zeal
 [[https://archlinuxstudio.github.io/ShellTutorial/#/][Linux命令行与Shell脚本编程(精简版)]]
 [[https://linuxtools-rst.readthedocs.io/zh-cn/latest/index.html][Linux工具快速教程]]
 [[https://blog.csdn.net/qq_38892528/article/details/103870163][Linux程序运行出现Segmentation fault(core dumped)的通用解决方法]]
+
+

@@ -1,0 +1,4 @@
+:PROPERTIES:
+:ID:       404ffd5f-e22c-4c6b-8e34-0d88174ae8e3
+:END:
+#+title: NGCF

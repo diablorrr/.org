@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       d7d58550-04b2-4903-a43d-55e5b66addb0
+:END:
+#+title: dape
+
+* 快速开始
+1. C-c o d => 打开dape
+2. gdb command-cwd default-directory :program "/home/yoshiki01/test/app" compile "g++ -g -o app app.cpp"
+   - command-cwd :: 设置二进制文件所在位置
+   - :program :: 设置二进制文件
+   - compile :: 设置每次重新运行时，执行的编译命令
