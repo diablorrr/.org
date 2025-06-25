@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       ccaa67c2-b762-4082-bc9a-2b5add79b8be
-:END:
-#+title: GAT

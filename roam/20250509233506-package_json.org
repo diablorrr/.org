@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       b3b060b0-41d3-4269-b0f9-eb996e5c7da4
-:END:
-#+title: package.json

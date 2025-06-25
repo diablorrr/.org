@@ -2,8 +2,9 @@
 :ID:       795979cd-5b2f-428f-82eb-e3f253ef09d6
 :END:
 #+title: cmake模块化项目结构
+#+filetags: cmake
 
-* 使用
+* cmake模块化项目结构
 ** 目录组织
 #+begin_src bash
 ├── biology                     => 每新增一个功能模块，都和biology一样的目录结构
@@ -42,5 +43,8 @@ namespace 项目名 {
     }
 }
 #+end_src
-** 示例
+
+
+
+* 示例
 [[file:~/.org/example/cmake模块化项目/][example::cmake模块化项目]]

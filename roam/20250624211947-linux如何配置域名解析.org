@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       0d81ea57-8d67-4607-b331-85ed03d747fd
+:END:
+#+title: linux如何配置域名解析
+#+filetags: linux
+
+* linux如何配置域名解析 [[https://wiki.archlinux.org/title/Domain_name_resolution][参考]]

@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       6dc1e54b-4aaa-43a2-b5fb-15f92d19c43d
+:END:
+#+title: NetworkManager
+#+filetags: linux
+
+* NetworkManager [[https://wiki.archlinux.org/title/NetworkManager][参考]]

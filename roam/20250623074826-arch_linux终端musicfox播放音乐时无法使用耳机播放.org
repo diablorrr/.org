@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       36f5fbdc-cac0-4726-bc05-4dc6aa0e5d36
+:END:
+#+title: archlinux终端musicfox播放音乐时无法使用耳机播放
+#+filetags: arch linux
+
+* arch linux终端musicfox播放音乐时无法使用耳机播放 [[https://github.com/go-musicfox/go-musicfox/issues/348][参考]]
+- 安装 pipewire-alsa

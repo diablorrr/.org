@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       4a9e75dd-d3fc-4996-89ba-dfc2c51f67a8
+:END:
+#+title: docker container使用宿主机的网络
+#+filetags: docker
+
+* 步骤
+1. docker run -it --network host <镜像名> bash

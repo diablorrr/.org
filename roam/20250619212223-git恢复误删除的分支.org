@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       9f6c2633-9c36-41ab-98eb-12ebf9ca1757
+:END:
+#+title: git恢复误删除的分支
+#+filetags: git
+
+* 恢复误删除的分支
+1. git reflog
+2. git checkout -b <lost-branch> <commit-id>

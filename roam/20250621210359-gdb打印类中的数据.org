@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       1a25cca4-f247-4c4e-a1e3-a2fc9289bc98
+:END:
+#+title: gdb打印类中的数据
+#+filetags: gdb
+
+* gdb打印类中的数据
+1. 在类中写一个print()函数
+2. gdb中使用call print() #注意:[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]需要强制刷新缓冲区才能看到结果
+3. 强制刷新缓冲区
+   1) gdb调用命令 call (void)fflush(stdout)
+   2) 在print()函数中使用 cout << std::flush

@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       e2263948-1766-4e71-b9b8-26bbaa6512b3
+:END:
+#+title: gdb给某文件中某类的某函数打断点
+#+filetags: gdb
+
+* 给某个文件中某个类的某个函数打断点
+1. break file.cpp:className::function

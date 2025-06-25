@@ -1,5 +1,0 @@
-:PROPERTIES:
-:ID:       d84f6ea4-d5c2-4ab6-a80f-20e357a183d0
-:END:
-#+title: github
-#+LAST_MODIFIED: 2025-03-17 20:48:06

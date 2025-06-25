@@ -1,5 +1,0 @@
-:PROPERTIES:
-:ID:       19518163-c915-48da-9083-fe58e8b3afcf
-:END:
-#+title: java
-#+LAST_MODIFIED: 2025-03-08 18:52:44

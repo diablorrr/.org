@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       dfc913b2-9ab8-4f13-84ad-1824ac42a68e
+:END:
+#+title: docker build走代理
+#+filetags: docker
+
+* docker build走代理
+#+begin_example
+docker build --network host \
+  --build-arg http_proxy=http://127.0.0.1:7890 \
+  --build-arg https_proxy=http://127.0.0.1:7890 \
+  -t <镜像名> .
+#+end_example

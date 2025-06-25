@@ -2,10 +2,8 @@
 :ID:       6a95d71e-f7ea-4258-bf08-62ce584d3842
 :END:
 #+title: jupyter
-#+LAST_MODIFIED: 2025-03-16 17:08:34
 
 * 使用
-
 ** 远程服务器中使用jupyter notebook
 1. [[id:eb955da4-d9f2-4122-bf2c-cd2900c71a53][ssh]]连接上远程服务器
 2. 远程服务器上安装jupyter插件

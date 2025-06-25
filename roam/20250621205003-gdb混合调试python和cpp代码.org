@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       b60dda93-5528-4bed-a090-e365d54e12d3
+:END:
+#+title: gdb混合调试python和cpp代码
+#+filetags: gdb
+
+* gdb调试python和cpp混合
+1. gdb python -ex 'run xxx.py'

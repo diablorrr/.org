@@ -1,22 +1,10 @@
 :PROPERTIES:
 :ID:       56824225-cc55-48c5-80f7-f1ad0e482bc1
 :END:
-#+title: git rebase
+#+title: git rebase修改任意commit的提交信息
+#+filetags: git
 
-* 使用
-** git rebase修改任意commit的提交信息
+* 步骤
 1. git rebase -i --root
 2. 选择commit，将pick改为reword，保存退出
 3. 修改commit提交信息，保存退出
-
-
-* 查询
-| 命令       | 参数   | 作用                                         |
-|------------+--------+----------------------------------------------|
-| git rebase |        | 将当前分支的更改移到一个分支，保持历史线性   |
-|            | -i     | 交互式修改提交历史                           |
-|            | --root | rebase范围扩展到整个提交历史，包括第一个提交 |
-
-
-* 概念
-- 简介 :: 修改提交历史

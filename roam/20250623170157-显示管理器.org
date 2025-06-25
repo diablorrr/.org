@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       fe1e69ca-b441-4dd2-95c1-91ba4a0379cb
+:END:
+#+title: 显示管理器
+#+filetags: linux
+
+* 显示管理器（display manager）[[https://wiki.archlinux.org/title/Display_manager][参考]]
+display manager 或称 login manager 用于 *图形化登录、用户会话管理* ，常见的有 SDDM（推荐用于 Plasma）

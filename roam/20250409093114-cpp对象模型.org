@@ -1,8 +1,0 @@
-:PROPERTIES:
-:ID:       0ffb4ce6-4913-4d3f-a32d-bcce26907d1d
-:END:
-#+title: cpp对象内存布局
-
-
-* 参考 [0/1]
-- [ ] [[https://www.cnblogs.com/QG-whz/p/4909359.html#!comments][图说C++对象模型：对象内存布局详解]]

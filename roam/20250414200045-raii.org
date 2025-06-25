@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       80bc3e2a-ba66-4828-8883-7cf5d7f455f2
-:END:
-#+title: RAII

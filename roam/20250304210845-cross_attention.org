@@ -1,5 +1,0 @@
-:PROPERTIES:
-:ID:       936da8b9-360e-447d-87db-6debc37c9314
-:END:
-#+title: cross-attention
-#+LAST_MODIFIED: 2025-03-04 21:08:46

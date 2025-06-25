@@ -1,8 +1,9 @@
 :PROPERTIES:
 :ID:       4a454bad-d33c-475f-bafb-805251aab638
 :END:
-#+title: .gdbinit
+#+title: 让gdb不要下载调试信息
+#+filetags: gdb
 
-* 使用
-** 快速开始
-- 设置不要下载debug信息 :: set debuginfod enabled off
+* 让gdb不要下载调试信息 [[https://sourceware.org/gdb/download/onlinedocs/gdb.html/Debuginfod.html#Debuginfod][参考]]
+- debuginfod 是一个HTTP客户端，用于下载丢失的调试信息
+- 在 .gdbinit文件 中写入 set debuginfod enabled off

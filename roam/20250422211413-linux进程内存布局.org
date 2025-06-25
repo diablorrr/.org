@@ -1,8 +1,0 @@
-:PROPERTIES:
-:ID:       8ae30096-c273-4485-83bb-7aecb315c727
-:END:
-#+title: linux进程内存布局
-
-* 使用
-** 查看内存布局
-1. cat /proc/<pid>/maps

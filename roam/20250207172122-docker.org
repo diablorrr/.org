@@ -2,22 +2,7 @@
 :ID:       a47cc941-ccc6-4893-9862-d5b245ea912b
 :END:
 #+title: docker
-
-* 使用
-** docker容器使用宿主机的网络
-:PROPERTIES:
-:ID:       701e41cb-af1b-44de-abc6-d83a0aadd738
-:END:
-1. docker run -it --network host <镜像名> bash
-** docker image build走代理
-#+begin_example
-docker build --network host \
-  --build-arg http_proxy=http://127.0.0.1:7890 \
-  --build-arg https_proxy=http://127.0.0.1:7890 \
-  -t <镜像名> .
-#+end_example
-
-
+#+filetags: docker
 
 * 查询
 ** 命令

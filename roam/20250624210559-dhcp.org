@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       f1548a56-2786-4375-b90f-022bfa56259c
+:END:
+#+title: DHCP
+#+filetags: network
+
+* DHCP
+1. 动态主机设置协议（Dynamic Host Configuration Protocol）是使用 [[id:b68205eb-d69e-4fa4-98a5-54532b1a1159][UDP]] 的 *应用层协议* ；用于自动网络配置，根据 DHCP客户端 的请求，DHCP服务端 返回 *IP、网关、DNS（可选）*
+2. 在 [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]] 中，网络管理器（network manager）作为 DHCP客户端，路由器作为 DHCP服务端

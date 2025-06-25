@@ -2,8 +2,8 @@
 :ID:       669a06c1-5af2-40bd-a102-51b0b5eeb23b
 :END:
 #+title: systemd
+#+filetags: index linux
 
-* 概念
-- 简介 ::
-  1. 是[[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]系统的[[id:94048311-ccce-44f8-8344-07889dd1a70d][初始化系统]](init system)和服务管理器
-  2. 负责系统启动、进程管理、日志记录、系统服务依赖关系
+* systemd
+1. 是 [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]] 的系统与服务管理器
+2. 负责系统启动、进程管理、日志记录、系统服务依赖关系

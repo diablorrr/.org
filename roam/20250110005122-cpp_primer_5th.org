@@ -5,53 +5,6 @@
 :END:
 #+FILETAGS: book
 #+title: cpp primer 5th
-#+LAST_MODIFIED: 2025-01-28 23:49:21
-构造函数和默认构造函数不同，后者无参数
-
-
-
-* 2.变量和基本类型
-:PROPERTIES:
-:NOTER_PAGE: 56
-:END:
-** 内置类型
-:PROPERTIES:
-:NOTER_PAGE: 56
-:END:
-- 分类 ::
-  1. 算数类型
-     1) 整型(包含：字符、布尔)
-     2) 浮点型
-  2. 空类型
-** 复合类型
-:PROPERTIES:
-:NOTER_PAGE: 71
-:END:
-- 简介 :: 基于其他类型定义的类型
-- 分类 ::
-  1. 引用
-  2. 指针
-*** 引用
-*** 指针
-:PROPERTIES:
-:NOTER_PAGE: 73
-:END:
-- 简介 ::
-- 特点 ::
-  1. 指针是对象
-  2. 块作用域内定义的指针未被初始化，拥有未定义的值
-** 变量
-:PROPERTIES:
-:NOTER_PAGE: 64
-:END:
-- 简介 ::
-  1. 某种数据类型的内存空间
-  2. 变量 和 对象 可以互换使用
-*** [[id:cbf04b45-0bd7-4bb8-91e8-62788c109fd5][初始化]]
-** const限定符
-:PROPERTIES:
-:NOTER_PAGE: 79
-:END:
 
 * 7.类
 ** 类数据成员初始化
@@ -83,39 +36,6 @@
 | 初始值列表         | 效率高：直接初始化数据成员                               |
 | 函数体内赋值初始化 | 效率低：数据成员在函数体前默认初始化，再函数体内进行赋值 |
 ✨对于类成员为const、引用、某种未提供默认构造函数的类类型 => 必须构造函数初始值列表初始化
-*** 委托构造函数
-:PROPERTIES:
-:NOTER_PAGE: 287
-:END:
-*** 隐式的类类型转换
-:PROPERTIES:
-:NOTER_PAGE: 289
-:END:
-*** 聚合类
-:PROPERTIES:
-:NOTER_PAGE: 292
-:END:
-**** 特点
-1. 用户可以直接访问其成员
-2. 有特殊的初始化语法形式：花括号列表
-**** 判定
-- 所有成员都是public的
-- 没有定义任何构造函数
-- 没有类内初始值
-- 没有基类，也没有virtual函数
-**** 示例
-1) 一个聚合类
-  #+begin_src c++
-  struct Data{
-      int ival;
-      string s;
-  };
-  #+end_src
-2) 特殊初始化语法
-  #+begin_src c++
-  // val1.ival = 0; val1.s = string("Anna")
-  Data val1 = {0, "Anna"};
-  #+end_src
 * 16.模板与泛型编程
 :PROPERTIES:
 :NOTER_PAGE: 603

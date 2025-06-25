@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       19d48c4a-8808-46b9-b636-bf6c0155a1f7
+:END:
+#+title: 查看gdb配置文件
+#+filetags: gdb
+
+* gdb配置文件
+- 配置文件是 .gdbinit ，可以通过 gdb --help 的方式查看到配置文件的位置

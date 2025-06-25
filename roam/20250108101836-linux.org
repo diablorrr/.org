@@ -2,63 +2,9 @@
 :ID:       ec7aef91-2628-4ba9-b300-16652314877f
 :END:
 #+title: linux
-#+startup: show3levels
+#+filetags: index
 
-
-* 使用
-** 运行时找不到动态链接库
-*** 方法1:在.zshrc中改环境变量LD_LIBRARY_PATH(推荐)
-1. 将在.zshrc中，将库文件目录export
-   #+begin_example
-   export LD_LIBRARY_PATH=/usr/local/mysql/lib/:$LD_LIBRARY_PATH
-   #+end_example
-*** 方法2:将库放入系统库路径(不推荐)
-** 查看当前系统版本
-1. cat /etc/os-release
-** linux终端走代理
-:PROPERTIES:
-:ID:       0dfef1fe-1193-4343-9e16-3f95e5edf4dd
-:END:
-1. 设置http代理： export http_proxy="http://127.0.0.1:7890"
-2. 设置https代理：export https_proxy="http://127.0.0.1:7890"
-
-
-
-
-* 查询
-| 一级路径   | 二级路径 | 三级路径 | 作用                        |
-|------------+----------+----------+-----------------------------|
-| /usr[fn:1] |          |          | 存放用户级的命令、库文件    |
-|            | /bin     |          | (包管理器)二进制文件        |
-|            | /include |          | (包管理器)头文件            |
-|            | /lib     |          | (包管理器)库文件            |
-|            | /local   | /bin     | (手动编译)二进制文件        |
-|            |          | /include | (手动编译)头文件            |
-|            |          | /lib     | (手动编译)库文件            |
-|            |          | /etc     | (手动编译)配置文件          |
-|------------+----------+----------+-----------------------------|
-| /bin       |          |          | (系统)二进制文件            |
-| /lib       |          |          | (系统)库文件                |
-|------------+----------+----------+-----------------------------|
-| /var       |          |          | 存储动态数据                |
-|            | /cache   |          | 缓存。如包管理器            |
-|            | /log     |          | 日志                        |
-|------------+----------+----------+-----------------------------|
-| /proc      |          |          | linux内核提供的虚拟文件系统 |
-|            | /<pid>   |          | 进程信息                    |
-|            |          | /fd      | 进程打开的文件描述符        |
-** 环境变量
-- PATH :: 可执行程序的搜索目录
-- LD_LIBRARY_PATH :: c/[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]语言 动态链接库 文件搜索的目录，不是linux缺省的环境变量
-- CLASSPATH :: [[id:19518163-c915-48da-9083-fe58e8b3afcf][java]]语言库文件搜索的目录，不是linux缺省的环境变量
-
-** linux库搜索路径
-- 环境变量 :: $LD_LIBRARY_PATH
-
-* 概念
-
-
-
-
-* Footnotes
-[fn:1] 全称：Unix System Resources
+* linux
+linux有很多发行版，比如 [[id:29a2fc5a-1db6-4a13-a5cd-397e587c21ec][arch]]
+还有很多重要的目录用于：配置系统、查看系统信息（进程）、存放文件（二进制文件、头文件、库文件、缓存、日志）等，见 [[id:7572251f-95e5-4c51-a7cd-93968faa6e39][linux重要的目录]]
+当我们按下电源时，[[id:0dbba04f-6cfd-4a4b-9ce9-a70c90ec53a9][linux启动流程]] 便开始了

@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       9e045899-d972-41b0-b70e-40cc70dec235
+:END:
+#+title: 键盘映射
+#+filetags: linux
+
+物理键盘按键和输出字符的对应关系

@@ -1,5 +1,0 @@
-:PROPERTIES:
-:ID:       b3e42855-2962-4c4b-b53f-a034e23ed128
-:END:
-#+title: vcpkg
-#+LAST_MODIFIED: 2025-03-18 20:49:25

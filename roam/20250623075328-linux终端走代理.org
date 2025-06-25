@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       49d53854-7e0a-462b-9397-d54f3a08f559
+:END:
+#+title: linux终端走代理
+#+filetags: linux
+
+* linux终端走代理
+1. 设置http代理： export http_proxy="http://127.0.0.1:7890"
+2. 设置https代理：export https_proxy="http://127.0.0.1:7890"

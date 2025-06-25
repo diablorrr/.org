@@ -1,5 +1,0 @@
-:PROPERTIES:
-:ID:       96ca4e3b-31e8-4e28-989e-c66aa6b67bc3
-:END:
-#+title: 智能感知
-#+LAST_MODIFIED: 2025-03-08 15:21:50

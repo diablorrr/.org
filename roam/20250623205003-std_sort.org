@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       518c15dd-5c1e-4e28-b16a-0281ec752369
+:END:
+#+title: std::sort
+#+filetags: cpp stl
+
+* std::sort
+排序 [first, last) 范围内的元素，原地排序，void sort(xxx.begin(), xxx.end())

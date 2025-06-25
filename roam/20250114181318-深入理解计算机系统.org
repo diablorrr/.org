@@ -1,8 +1,0 @@
-:PROPERTIES:
-:ID:       a7c56d5c-cba6-4cde-a3dc-88a2e08ac015
-:NOTER_DOCUMENT: /home/yoshiki01/Documents/深入理解计算机系统 (Randal E. Bryant, David R. O’Hallaron) (Z-Library).pdf
-:NOTER_PAGE: 37
-:END:
-#+FILETAGS: book
-#+title: 深入理解计算机系统
-#+LAST_MODIFIED: 2025-01-14 21:00:36

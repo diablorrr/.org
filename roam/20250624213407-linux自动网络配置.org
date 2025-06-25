@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       4a75a070-15de-4e0b-a797-466bea7ff556
+:END:
+#+title: linux自动网络配置
+#+filetags: linux
+
+* linux自动网络配置 [[https://wiki.archlinux.org/title/Network_configuration#Automatic][参考]]
+在 [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]] 中可以通过管理 网络管理器（network manager）的网络配置文件 来切换网络（本质上是通过 [[id:f1548a56-2786-4375-b90f-022bfa56259c][DHCP]] 进行自动网络配置）；常用的网络管理器有 [[id:6dc1e54b-4aaa-43a2-b5fb-15f92d19c43d][NetworkManager]]

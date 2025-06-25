@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       9430226d-fc11-43a5-a5d7-982b0691fabe
+:END:
+#+title: std::unordered_set
+#+filetags: cpp stl
+
+* std::unordered_set
+1. 构造 unordered_set 可以传入两个迭代器
+2. 查看key是否在哈希表中 contains，传入 key，返回 bool

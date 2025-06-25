@@ -2,18 +2,17 @@
 :ID:       e1612707-2c52-4b83-b0d7-25fb5361b12a
 :END:
 #+title: 路由表
+#+filetags: linux
 
-
-* 概念 :ATTACH:
-:PROPERTIES:
-:ID:       253d14dd-3e69-400a-9823-9506a2fe7fef
-:END:
-[[attachment:_20250402_164459screenshot.png]]
-- 简介 ::
-  1.
-
-** 工作流程
-1. 发送设备 发送包 到路由器
-2. 路由器 将 包中的接收方IP地址 进行 按位与运算
-3. 根据运算的结果查询路由表
-4. 存在?进行转发:发送到默认路由(子网掩码为0.0.0.0)
+* 路由表（routing table）
+查看本机的网络是怎么走的，通过 =ip route= 或 =route= 查看路由表
+#+begin_example
+❯ ip route
+# 本机（192.168.110.186） 到外网，默认通过 无线网卡（wlp61s0）走 路由器（192.168.110.1）
+default via 192.168.110.1 dev wlp61s0 proto dhcp src 192.168.110.186 metric 600
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown
+172.18.0.0/16 dev br-bd24e259aea9 proto kernel scope link src 172.18.0.1 linkdown
+172.19.0.0/16 dev br-16cb8c3ef549 proto kernel scope link src 172.19.0.1 linkdown
+# 本机（192.168.110.186） 到 路由器管理的子网（192.168.110.0/24），通过 无线网卡（wlp61s0）不走 路由器（192.168.110.1）
+192.168.110.0/24 dev wlp61s0 proto kernel scope link src 192.168.110.186 metric 600
+#+end_example

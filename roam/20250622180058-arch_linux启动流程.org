@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       0dbba04f-6cfd-4a4b-9ce9-a70c90ec53a9
+:END:
+#+title: linux启动流程
+#+filetags: linux
+
+* linux启动流程 [[https://wiki.archlinux.org/title/Arch_boot_process][参考]]
+1. 按下电源键后，最先运行主板上的 *固件代码（firmware：BIOS、UEFI）* ；然后进行 *加电自检(POST)* ，检测硬件是否正常；若正常，查找 可启动（bootable）设备（硬盘、USB、网络）
+2. firmware 从 可启动设备 加载 *引导加载器（Boot Loader：GRUB、systemd-boot等）* ；Boot Loader 加载 *linux内核（kernel）、初始内存文件系统（initramfs）镜像*
+3. kernel 会初始化硬件，在内存中创建 *临时的空的根文件系统（rootfs）* ，并将 initramfs镜像 解压到 rootfs，并执行 [[id:da379b6b-2b4d-4a7f-abe2-9e70eb0a870f][init]]，此时进入 *早期用户空间（early userspace）* ，主要目的是引导系统找到真实根文件系统，然后切换过去（对于基于systemd-based的initramfs，真实根文件系统在/sysroot/中，通过systemctl switch-root切换）
+4. 在真实根文件系统并执行 init（arch使用systemd），进入 *晚期用户空间（late userspace）* ， *init* 对每一个虚拟终端（virtual terminal）调用一次 *getty* ，[[id:1a7b882d-4604-481f-8c18-760c9014d086][getty]] 进程 会初始化终端以及防止未授权的访问（通过检查/etc/passwd和/etc/shadow用户名和密码），如果用户名和密码正确，调用 *login程序*  ，初始化环境变量、启动 *用户shell* ，启动后加载shell的配置文件（eg：bashrc），进入 终端会话
+5. init 也能设置为调用 *[[id:fe1e69ca-b441-4dd2-95c1-91ba4a0379cb][显示管理器]]（display manager）* 替代 虚拟终端上的getty，然后进入 图形化会话

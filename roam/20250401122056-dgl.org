@@ -4,13 +4,9 @@
 #+title: dgl
 
 * 使用
-** dgl新版本和历史版本
-[[https://www.dgl.ai/pages/start.html][新版本]] [[https://conda.anaconda.org/dglteam/linux-64][历史版本]]
-
-** .tar.bz2方式安装dgl历史版本[fn:1]
-1. [[https://conda.anaconda.org/dglteam/linux-64][历史版本]] 下载对应的.tar.bz2包
-2. 解压到：/.../anaconda/envs/虚拟环境名/lib/python版本/site-packages
-
-* Footnotes
-
-[fn:1] 参考链接：[[https://blog.csdn.net/qq_44583635/article/details/127341198][DGL历史版本的使用]]
+** .tar.bz2方式安装dgl历史版本[[https://blog.csdn.net/qq_44583635/article/details/127341198][参考]]
+1. [[https://www.dgl.ai/pages/start.html][新版本]] [[https://conda.anaconda.org/dglteam/linux-64][历史版本]] 下载对应的.tar.bz2包
+2. 解压到目标路径：可以通过以下方式查看
+   1) python
+   2) import site
+   3) print(site.getsitepackages())

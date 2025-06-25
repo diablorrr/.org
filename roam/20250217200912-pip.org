@@ -2,20 +2,12 @@
 :ID:       1f8e3fa6-ad53-4b9c-8d06-43ffa046fb1c
 :END:
 #+title: pip
-#+LAST_MODIFIED: 2025-03-09 13:49:59
+
 
 * 使用
 ** 查看pip使用的配置文件
 #+begin_src bash
 pip config list --verbose
-#+end_src
-
-** 解决timm安装失败问题
-#+begin_src bash
-pip install timm          # 失败
-conda install timm        # 失败
-pip install timm          # 加镜像源 失败
-pip install timm==0.4.12  # 成功 速度很快
 #+end_src
 
 ** pip install错误:OSError: [Errno 28] No space left on device[fn:1]

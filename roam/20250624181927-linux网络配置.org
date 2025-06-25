@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       f03c9a38-82aa-4829-ab47-47d485da8c4b
+:END:
+#+title: linux解决网络连接问题
+#+filetags: linux
+
+* linux解决网络连接问题 [[https://wiki.archlinux.org/title/Network_configuration#Check_the_connection][参考]]
+1. 查看 [[id:1854d716-f9b0-4c96-bfa5-1bd4c4a15245][网络接口]]（network interface）是否为 UP 状态： =ip link= 中 en（有线）或 wl（无线） 为<..UP..>
+2. 查看 网卡驱动 是否正常
+3. 查看 network interface 是否有 IP地址： =ip address=
+4. 查看 [[id:e1612707-2c52-4b83-b0d7-25fb5361b12a][路由表]]（routing table）是否正确设置： =ip route=
+5. [[id:08dc4a68-2a75-42e0-9321-4908207481ad][ping]] 网关IP（路由器IP：意味着网络到路由器是否可达）： =ping <网关IP>=
+6. ping 公共IP地址： =ping 9.9.9.9=
+7. 查看 域名解析（domain name resolution） 是否成功： =nslookup baidu.com=

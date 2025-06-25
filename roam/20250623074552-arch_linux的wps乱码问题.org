@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       ededea43-39e9-4673-8f95-9f8d61831cf6
+:END:
+#+title: archlinux的wps乱码问题
+#+filetags: arch linux
+
+* arch linux的wps乱码问题 [[https://bbs.archlinux.org/viewtopic.php?id=288562][参考]]
+- 给freetype降级：pacman -U /var/cache/pacman/pkg/freetype2-2.13.0-1-x86_64.pkg.tar.zst

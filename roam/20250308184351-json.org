@@ -1,5 +1,0 @@
-:PROPERTIES:
-:ID:       f59f9f1b-d0ff-4a70-b6d1-99bc6a0024db
-:END:
-#+title: json
-#+LAST_MODIFIED: 2025-03-08 18:43:52

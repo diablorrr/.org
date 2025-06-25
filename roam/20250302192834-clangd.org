@@ -1,9 +1,0 @@
-:PROPERTIES:
-:ID:       db21c347-0dd3-49ee-a698-455d3e88aa7e
-:END:
-#+title: clangd
-#+LAST_MODIFIED: 2025-03-02 19:36:43
-
-* 概念
-** 简介 :: 基于clang的语言服务器，用于解析c、[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]、Objective-C代码。实现
--

@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       31b66216-acd0-4aea-95c2-7b240d4b2d86
+:END:
+#+title: linux修改主机名
+#+filetags: linux
+
+* linux修改主机名（hostname） [[https://wiki.archlinux.org/title/Network_configuration#Set_the_hostname][参考]]
+在 /etc/hostname 中修改，如果使用 [[id:669a06c1-5af2-40bd-a102-51b0b5eeb23b][systemd]] 可以使用 hostnamectl 修改

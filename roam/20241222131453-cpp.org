@@ -329,5 +329,3 @@ func DeferReturn() (res int){
           std::placeholders::_1, std::placeholders::_2, shared_from_this()));
   }
   #+end_src
-
-* [[id:67e993f9-2f74-4d60-886b-34085f7ecc17][命名空间]]

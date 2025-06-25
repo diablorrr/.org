@@ -4,8 +4,8 @@
 #+STARTUP: show3levels
 
 * Inbox
-** TODO [#A] 小论文 [4/6]
-DEADLINE: <2025-06-12 四> SCHEDULED: <2025-06-03 二>
+** TODO [#A] 小论文 [4/7]
+DEADLINE: <2025-07-15 四>
 *** DONE pytorch框架学习: Introduction to PyTorch
 SCHEDULED: <2025-06-04 三>
 *** DONE pytorch框架学习: Learning PyTorch
@@ -19,29 +19,16 @@ DEADLINE: <2025-06-09 一>
 **** DONE LightGCN
 **** KILL bert：李沫
 **** KILL transformer：李沫
-*** TODO 最新论文 [0/5]
-- Note taken on [2025-06-13 五 20:37] \\
-  独立同分布：数据点之间不会相互影响(社交网络数据：用户行为受朋友影响)，而且是来自同一分布(农村和城市图片就不是同分布)
-- Note taken on [2025-06-13 五 20:32] \\
-  GCN问题：过渡平滑问题(推荐不连续，比如：咖啡->咖啡机->咖啡豆却推荐成茶杯)
-- Note taken on [2025-06-13 五 14:36] \\
-  思路：对比学习 多任务学习 多模态融合
-**** TODO 论文怎么找(对比学习最新进展)？
-**** TODO [[https://paperswithcode.com/paper/beyond-graph-convolution-multimodal][Beyond Graph Convolution: Multimodal Recommendation with Topology-aware MLPs]]
-**** TODO [[https://zhuanlan.zhihu.com/p/622138350][对比学习推荐系统最新进展]]
-**** TODO [[https://github.com/enoche/MMRec][MMRec]]
-**** TODO nlp有哪些地方可以缝合？
-*** TODO 关注 nlp岗位&大模型应用开发
-- Note taken on [2025-06-10 二 19:29] \\
-  技术栈：pytorch、RAG、Transformer、GPT、T5
+*** TODO MIG-GT项目注释、文档
+DEADLINE: <2025-06-25 三>
+*** TODO 训练loss代码
+DEADLINE: <2025-06-25 三>
+*** TODO MGDCF论文
+DEADLINE: <2025-06-26 四>
 ** TODO [#B] hot100
-*** TODO 灵茶山艾府：基础视频
 ** TODO [#B] 面经
 ** -----------------------------------
-** TODO 写简历 [1/2]
-*** DONE 初版
-*** TODO 终版
-** TODO 重构项目 [10/15]
+** TODO 项目 [10/16]
 *** DONE 编写整个项目的CMakeLists.txt [4/4]
 **** DONE 自动编译grpc文件
 **** DONE 构建静态库和动态库
@@ -79,29 +66,8 @@ DEADLINE: <2025-05-14 三> SCHEDULED: <2025-05-14 三>
 *** TODO ci/cd工作流
 *** TODO mysql使用与优化
 *** TODO redis使用与优化
+*** TODO 百万并发reactor服务器
 *** KILL gtest或ctest
 *** KILL 异步日志系统
 *** KILL 开发插件系统
 *** KILL 性能监控系统
-** TODO 有余力再做 [0/2]
-*** TODO 尝试add_custom_command和add_custom_target生成grpc和pb文件
-*** TODO 造[[file:~/wheel/plan.org][wheel]]
-** TODO emacs [5/12]
-# 一周学习一个插件的使用
-*** DONE An Introduction to Programming in Emacs Lisp + 笔记
-DEADLINE: <2025-05-19 一> SCHEDULED: <2025-05-17 六>
-*** DONE Emacs高手修炼手册
-*** DONE Emacs轻奢之路
-*** DONE 安装翻译插件
-*** DONE info:use-package
-*** TODO lsp-mode:函数文档显示
-*** TODO company文档
-*** TODO info:flymake
-*** TODO info:eglot
-*** TODO info:cc-mode
-*** TODO info:embark
-*** TODO GNU Emacs Lisp Reference Manual
-** TODO proactor和reactor [0/0]
-** TODO reactor服务器 [0/2]
-*** TODO 码农论坛epoll实现
-*** TODO 码农论坛reactor服务器实现

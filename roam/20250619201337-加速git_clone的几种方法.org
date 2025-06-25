@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       8158c722-f1e3-4838-adfa-dfacfdcd6af4
+:END:
+#+title: 加速git clone的几种方法
+#+filetags: git
+
+* 方法1:[[id:54642b64-644b-4f5a-977f-572f75973445][git走代理]]
+* 方法2:使用gitee镜像
+1. (可选)可以在Gitee极速下载查看是否有自己需要的库
+2. git clone https://gitee.com/mirrors/仓库名.git
+* 方法3:gitee中转
+1. gitee右上角 => 从GitHub/GitLab导入仓库
+2. 将github的地址复制进去
+* 方法4:嵌入gitclone.com
+#+begin_example
+原：git clone https://github.com/pzl/oa1.git
+后：git clone https://gitclone.com/github.com/pzl/oa1.git
+#+end_example

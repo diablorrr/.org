@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       e1c80ba3-a941-4747-83a0-dafae3b4961c
+:END:
+#+title: 随机数种子
+#+filetags: deep_learning
+
+* 随机数种子（Random Seed）
+用于固定模型训练过程中产生的随机数，确保实验结果可复现（多次运行：相同代码 + 环境 = 相同结果）；比如：模型权重、数据采样、droupout、噪声注入都是随机的

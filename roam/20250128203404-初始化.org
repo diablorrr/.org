@@ -2,8 +2,8 @@
 :ID:       819c9ef5-5220-4678-994a-3122d7d17ab7
 :END:
 #+title: 初始化
-#+LAST_MODIFIED: 2025-01-28 20:34:52
 #+filetags: cpp
+
 * 初始化
 :PROPERTIES:
 :NOTER_PAGE: 65

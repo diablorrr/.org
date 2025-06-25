@@ -2,15 +2,7 @@
 :ID:       08dc4a68-2a75-42e0-9321-4908207481ad
 :END:
 #+title: ping
-#+LAST_MODIFIED: 2025-03-08 18:21:28
+#+filetags: linux
 
-* 使用
-#+begin_src bash
-ping 网站
-#+end_src
-
-
-* 概念
-- 简介 ::
-  1. 测试网络连通性
-  2. 通过[[id:e52079f7-7da1-4924-9e96-21dadfd88fbb][icmp]]回显请求来检查主机是否可达
+* ping
+用于测试网络连通性，底层是 ICMP协议（网络层的协议），使用方法为 =ping <IP/域名>=

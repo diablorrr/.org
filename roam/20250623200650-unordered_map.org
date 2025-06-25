@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       30138706-94e8-4f59-a3ab-b5b0d8850880
+:END:
+#+title: std::unordered_map
+#+filetags: cpp stl
+
+* std::unordered_map
+1. 无序的 key-value 容器，且 key 唯一，底层是哈希表
+2. 插入 key-value 数据用 insert，如果 key 相同则无法插入，插入 value 用 []
+3. 查找数据用 find ，返回迭代器，若没找到，返回 end迭代器
+4. 遍历用迭代器 begin end

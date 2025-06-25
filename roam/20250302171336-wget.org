@@ -2,7 +2,6 @@
 :ID:       7d9efa4c-4ab0-46b9-a8cb-22926ec11e59
 :END:
 #+title: wget
-#+LAST_MODIFIED: 2025-03-02 17:25:25
 #+startup: show2levels
 
 * 使用

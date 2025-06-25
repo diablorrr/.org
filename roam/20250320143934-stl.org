@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       1ec315ca-630e-46ab-9567-45e0520b9ca2
-:END:
-#+title: stl

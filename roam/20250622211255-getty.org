@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       1a7b882d-4604-481f-8c18-760c9014d086
+:END:
+#+title: getty
+#+filetags: linux
+
+* getty [[https://wiki.archlinux.org/title/Getty][参考]]
+是一个管理 *终端线路及其所连终端* 的程序，用于保护系统防止未授权的访问，通常由 init process（eg：systemd） 启动

@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       ba51b0c6-3efd-4306-97cc-49420249b5d0
+:END:
+#+title: archlinux管理java jdk
+#+filetags: arch linux
+
+* arch linux管理java jdk
+| 命令                                       | 作用                             |
+|--------------------------------------------+----------------------------------|
+| archlinux-java                             | 管理和切换系统中已安装的java版本 |
+| archlinux-java status                      | 查看所有jdk版本                  |
+| sudo archlinux-java set <java-environment> | 设置java的jdk版本                |

@@ -1,5 +1,0 @@
-:PROPERTIES:
-:ID:       e52079f7-7da1-4924-9e96-21dadfd88fbb
-:END:
-#+title: icmp
-#+LAST_MODIFIED: 2025-03-08 18:21:06

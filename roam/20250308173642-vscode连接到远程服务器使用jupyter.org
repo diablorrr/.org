@@ -1,5 +1,0 @@
-:PROPERTIES:
-:ID:       4156c3ac-5cc8-4e88-9d9d-5b858c7a2cb3
-:END:
-#+title: vscode连接到远程服务器使用jupyter
-#+LAST_MODIFIED: 2025-03-08 17:36:45

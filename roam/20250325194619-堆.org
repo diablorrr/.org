@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       c647594a-109c-4c48-bab5-778f72f0dbbf
-:END:
-#+title: 堆

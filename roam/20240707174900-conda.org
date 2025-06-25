@@ -2,7 +2,6 @@
 :ID:       f3c23bfd-80db-4d03-a687-3e520c4a7901
 :END:
 #+title: conda
-#+filetags: :python:
 
 
 * 使用

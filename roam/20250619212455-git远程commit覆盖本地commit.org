@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       debf2c17-65b9-4c91-b1a6-aba928b39e34
+:END:
+#+title: git远程commit覆盖本地commit
+#+filetags: git
+
+* 远程仓库commit覆盖本地commit
+1. git fetch
+2. git reset --hard origin/main

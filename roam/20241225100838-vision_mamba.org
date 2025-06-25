@@ -1,6 +1,0 @@
-:PROPERTIES:
-:ID:       2334a802-5d63-4f90-9d4d-28e2f2b02c63
-:NOTER_DOCUMENT: /home/yoshiki01/Documents/Vision Mamba.pdf
-:NOTER_PAGE: 4
-:END:
-#+title: Vision Mamba

@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       df8aec46-3a0b-4266-b511-aca8c3b78c6b
+:END:
+#+title: linux找不到动态链接库
+#+filetags: linux
+
+* linux找不到动态链接库
+** 方法1:在.zshrc中改环境变量 LD_LIBRARY_PATH
+1. 将在.zshrc中，将库文件目录export
+   #+begin_example
+   export LD_LIBRARY_PATH=/usr/local/mysql/lib/:$LD_LIBRARY_PATH
+   #+end_example
+** 方法2:将库放入系统库路径

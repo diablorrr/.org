@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       ad62acc0-f0cc-4b1f-802f-61b4b9cf5dd7
-:END:
-#+title: 余弦相似度

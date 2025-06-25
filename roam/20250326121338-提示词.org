@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       c319bce2-daef-49cf-8eda-85eb0a0fafec
-:END:
-#+title: 提示词

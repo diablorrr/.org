@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       32d6bb4b-dac6-4724-888e-a45c8e769279
+:END:
+#+title: gdb给头文件打断点
+#+filetags: gdb
+
+* 给头文件打断点
+1. 禁用内联优化
+2. break file.cpp:行号

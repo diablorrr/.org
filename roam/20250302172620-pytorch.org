@@ -2,7 +2,6 @@
 :ID:       85ad8c21-0236-428e-bfe7-c71b0585cdf2
 :END:
 #+title: pytorch
-#+LAST_MODIFIED: 2025-03-15 19:53:18
 
 * 使用
 ** pytorch(带cuda)安装

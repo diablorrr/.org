@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       b5baef5f-1ff7-49c3-a49b-ce7ca2c57b06
-:END:
-#+title: redis.conf

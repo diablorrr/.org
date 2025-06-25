@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       54642b64-644b-4f5a-977f-572f75973445
+:END:
+#+title: git走代理
+#+filetags: git
+
+* git走代理
+- 注意 :: git不会自动继承系统环境变量([[id:0dfef1fe-1193-4343-9e16-3f95e5edf4dd][linux终端走代理]])，需要单独设置git代理
+1. 设置http代理  => git config --global http.proxy "http://127.0.0.1:7890"
+2. 设置https代理 => git config --global https.proxy "http://127.0.0.1:7890"
+3. 查看是否设置  => git config --global --list
+4. 测试http代理  => curl -I http://www.google.com
+5. 测试https代理 => curl -I https://www.google.com

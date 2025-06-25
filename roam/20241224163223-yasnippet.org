@@ -2,66 +2,43 @@
 :ID:       6032153f-0bfe-4415-ab7c-2ca17cdf3b70
 :END:
 #+title: yasnippet
+#+filetags: emacs
 
-* file content
-# 一个模板文件中的内容解释
-** 示例
-# -*- mode: snippet -*-
-# name:
-# key:
-# --
-- 解释：
-  - *# --* 上面的内容为注释
-  - *# property: value* 为snippet directives(片段指令)
-    + *# name：* (片段名称)
-    + *# key：* (片段缩写)
-    + *# binding:* (片段按键绑定)
-      ...
-
-* template syntax
-# 模板语法
-** 纯文本
-除了$和`之外的都是纯文本，前两者可以使用\转义
-** 制表位
-# 就是按下TAB所跳转的地方
-- 语法： *$数字*
-- $0有特殊意义：snippet的退出点
-*** 示例
-<div$1>
-    $0
-</div$2>
-- 解释：光标位置：$1 -TAB-> $2 -TAB-> $0
-** 占位符字段
-# 制表位的默认值
-- 语法： *${数字:默认值}*
-** 镜像
-# 一个制表位的值改变，同数字标识的制表位的值同样改变
-*** 示例
-\begin{${1:enumerate}}
-    $0
-\end{$1}
-- 解释：begin处制表位1处的内容改变，end处的值同样改变
-** 带有转换的镜像
-# 一个制表位的变化，会引起相应镜像位的变化。我们可以在镜像位变化前，先对他进行处理(转换)，然后再显示值
-- 语法： *${数字:$(需要转换的语句)}*
-*** 示例
-- (${1:id})${2:foo}
-{
-    return $2;
-}
-
-- (void)set${2:$(capitalize yas-text)}:($1)aValue
-{
-    [$2 autorelease];
-    $2 = [aValue retain];
-}
-$0
-- 解释：第一行2的制表位假设输入hello world，则set这行2的镜像位会被capitalize处理后输出Hello world
-  # yas-text会绑定到制表位的文本，以便我们进行处理；capitalize是elisp中的函数，将文本的第一个字母变大写
+* 目标 [[https://joaotavora.github.io/yasnippet/index.html][官方参考]]
+1. 学会模板的基本使用
+2. 了解模板语法，学会创建模板
 
 
-* 概念
-- 简介 :: [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]的插件，用于生成片段模板
+* 模板使用
+1. 在一个key后使用TAB触发模板扩展；也可以选中一个区域后，按下TAB触发模板扩展； *最佳实践 consult-yasnippet*
+2. yas-describe-tables 可以查看有哪些模板可以使用
 
-* 参考链接
-[[https://joaotavora.github.io/yasnippet/snippet-development.html#org5e87ae3][Writing snippets]]
+
+* 模板创建
+1. 使用yas-new-snippet新建模板，可以看到以下内容
+   #+begin_example
+   # -*- mode: snippet -*-
+   # name:  <模板名称>
+   # key:   <缩写，用于扩展成模板>
+   # --
+   <模板>
+   #+end_example
+2. 接下来我们介绍<模板>部分的语法
+3. *制表位，用 $<数字> 表示* 即按下TAB键时跳转的位置，，每次按下TAB，依次从$1 $2 ...跳转，其中 $0 比较特殊，是最终退出的位置； *制表位的默认值，用 ${<数字>:<默认值>} 表示*
+   #+begin_example
+   <div$1>
+       $0
+   </div$2>
+   #+end_example
+   连续按下TAB，光标依次跳转 $1 -> $2 -> $0
+4. *镜像* 即相同数字标识的制表位的值改变是同时发生的
+   #+begin_example
+   \begin$1
+      $0
+   \end$1
+   #+end_example
+   任何一个 $1 的值改变，另一个也跟着改变
+
+
+
+

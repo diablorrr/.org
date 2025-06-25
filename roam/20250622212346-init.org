@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       da379b6b-2b4d-4a7f-abe2-9e70eb0a870f
+:END:
+#+title: init
+#+filetags: linux
+
+* init [[https://wiki.archlinux.org/title/Init][参考]]
+系统启动（system boot）中运行的第一个进程，PID为1；常见的有 [[id:29a2fc5a-1db6-4a13-a5cd-397e587c21ec][arch]]中的systemd
