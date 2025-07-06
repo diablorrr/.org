@@ -2,9 +2,7 @@
 :ID:       b5960e71-4c4e-4682-99b3-3d10935c759f
 :END:
 #+title: Mamba
-#+author:    yoshiki
-#+email:     1299331829@qq.com
-#+update:    [2024-12-23 一 20:40]
+#+filetags: paper
 
 * 现有架构的问题
 ** Transformer

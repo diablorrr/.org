@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       237f39df-a83c-4e3d-a979-9767b14d4d1b
+:END:
+#+title: org-noter设置笔记对应的PDF以及PDF页数
+#+filetags: org-noter
+
+* org-noter设置笔记对应的PDF以及PDF页数
+1. M-x org-noter => 选择 PDF文件
+2. 生成 drawer，相应属性如下：
+   #+begin_example
+   设计模式.org中
+   1 :PROPERTIES:
+   2 :NOTER_DOCUMENT: /home/yoshiki01/Documents/(软件工程)设计模式v1.31（全部）.pdf      # 记录org文件对应的pdf文件的位置
+   3 :NOTER_PAGE: 202                                                                    # 下次打开pdf时，所在的页数
+   4 :END:
+   5 #+title: 设计模式
+   #+end_example

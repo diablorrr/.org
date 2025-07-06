@@ -2,24 +2,13 @@
 :ID:       4501892f-ce3c-4e7c-989a-49a828d1294a
 :END:
 #+title: org-roam
-#+LAST_MODIFIED: 2025-03-16 21:18:14
+#+filetags: org
 
-
-* 使用
-** 设置node别名
-1. :PROPERTIES:和:END:之间 写入 :ROAM_ALIASES:
-** 设置标签
-- 条目级别 :: 在有ID的entry中使用:标签1:标签2:
-- 文件级别 :: 在有ID的node文件中使用#+FILETAGS: 标签1 标签2
-
-
-* 查询
-| 函数                   | 作用                 |
-|------------------------+----------------------|
-| org-roam-node-find     | 查找/新建节点        |
-| org-roam-node-insert   | 在选中的区域创建链接 |
-| org-roam-buffer-toggle | 查看正/反向链接      |
-
-
-* 概念
-- 简介 :: [[id:2d50336c-dabb-4c57-8cb5-b7853cabd245][org-mode]]插件，用作双链笔记
+* org-roam
+1. [[id:2d50336c-dabb-4c57-8cb5-b7853cabd245][org]] 的双链笔记，笔记是以 node 形式存在、相互关联的； *常用函数* 见下
+   | 函数                   | 作用           |
+   |------------------------+----------------|
+   | org-roam-node-find     | 查找/新建节点  |
+   | org-roam-node-insert   | 关联节点       |
+   | org-roam-buffer-toggle | 反向链接的节点 |
+2. 为 node 设置别名；见 [[id:eee36e22-f7fb-48c0-9b3a-0c2960868d37][org-roam为node设置别名]]

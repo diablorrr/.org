@@ -2,10 +2,11 @@
 :ID:       f191f71f-94cc-42b8-826a-4547e4924267
 :END:
 #+title: archlinux安装
-#+filetags: arch linux
+#+filetags: arch
 
 * 安装arch linux
-1. 下载官方镜像，将官方镜像烧录到 U盘 中（推荐使用Rufus），此时 U盘 中就有一个完整的 arch linux live系统
+1. 下载官方镜像，将官方镜像烧录到 U盘 中（win中推荐使用Rufus），此时 U盘 中就有一个完整的 arch linux live系统
 2. live系统可以理解为实时、临场的系统，因为当我们将 U盘 插入主机中的时候，在 固件（BIOS、UEFI）中选择从 usb启动 就会将 U盘 中的完整 arch linux live系统 加载到内存中运行
 3. 然后使用 chroot 切换根目录到主机的硬盘中，就能在主机的硬盘中进行各种操作了
-4. arch linux 不支持 Secure Boot，UEFI 默认启动 Secure Boot，因此我们需要将其关闭
+4. arch linux 不支持 Secure Boot，UEFI 默认启动 Secure Boot，因此我们需要在主板中将其关闭
+5. 关闭 windows 的快速启动和休眠；方法见： [[id:73f9ea05-2107-4089-9d93-49a4afa9b8ae][windows关闭快速启动和休眠]]

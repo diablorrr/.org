@@ -2,8 +2,7 @@
 :ID:       e2bbbc0c-2d33-4704-a45a-519fc49393f0
 :END:
 #+title: ConvNeXt
-# 2022.1
-# 标题：A ConvNet for the 2020s
+#+filetags: paper
 
 * 核心思想
 基于ResNet-50结构，参考swin transforer结构进行现代化改造

@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       e4f3deb0-fe49-45d2-85e7-2cc715ad6b1f
+:END:
+#+title: 自注意力机制
+#+filetags: deep_learning pytorch
+
+[[https://blog.csdn.net/beilizhang/article/details/115282604][参考]]

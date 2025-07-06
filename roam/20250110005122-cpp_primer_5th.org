@@ -3,8 +3,8 @@
 :NOTER_DOCUMENT: /home/yoshiki01/Documents/C++ Primer 5th.pdf
 :NOTER_PAGE: 88
 :END:
-#+FILETAGS: book
 #+title: cpp primer 5th
+#+filetags: book
 
 * 7.类
 ** 类数据成员初始化

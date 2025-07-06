@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       09677811-8969-4225-954c-a73143c3e872
+:END:
+#+title: i3wm中使用feh设置壁纸
+#+filetags: i3wm feh
+
+* i3wm中使用feh设置壁纸
+1. 在 i3wm 配置文件中写入： =exec --no-startup-id feh --bg-fill <壁纸路径>=

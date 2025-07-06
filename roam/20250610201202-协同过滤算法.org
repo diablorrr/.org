@@ -2,7 +2,7 @@
 :ID:       732f117f-202e-4c69-a84f-c20b07866383
 :END:
 #+title: 协同过滤算法
-#+filetags: nlp
+#+filetags: paper
 
 * 算法
 - 基本假设是相似的用户会对物品表现出相似的爱好

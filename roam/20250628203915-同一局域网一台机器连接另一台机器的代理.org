@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       b2299062-b568-4efd-8288-9ba461a40031
+:END:
+#+title: 同一局域网一台机器连另一台机器的代理
+#+filetags: network
+
+* 同一局域网一台机器连另一台机器的代理
+1. 机器A 和 机器B 在 *同一局域网*
+2. 在 机器A 中的 代理 clash verge 中 *打开局域网连接*
+3. 机器B 以 [[id:49d53854-7e0a-462b-9397-d54f3a08f559][linux终端走代理]] 的方式连接（IP：机器A的IP；PORT：clash verge 的端口）

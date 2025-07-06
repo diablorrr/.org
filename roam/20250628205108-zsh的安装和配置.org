@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       bd5de86c-f1f3-41db-a058-cb5a2646f467
+:END:
+#+title: zsh的安装和配置
+#+filetags: shell
+
+* zsh的安装和配置 [[https://www.haoyep.com/posts/zsh-config-oh-my-zsh/][参考]]
+1. 安装 zsh
+2. 设置默认终端为 zsh： =chsh -s /path/to/zsh=
+3. 安装 oh-my-zsh： =sh -c "$(curl -fsSL https://install.ohmyz.sh/)"=
+4. *配置主题* .zshrc 中写入 ZSH_THEME="主题" ；主题目录： =~/.oh-my-zsh/themes= ；
+5. *插件安装* 安装在 =~/.oh-my-zsh/custom/plugins=
+   | 插件                    | 作用                        | 安装在上述目录                                                     |
+   |-------------------------+-----------------------------+--------------------------------------------------------------------|
+   | zsh-autosuggestions     | 命令提示插件                | git clone https://github.com/zsh-users/zsh-autosuggestions         |
+   | zsh-syntax-highlighting | 命令语法校验                | git clone https://github.com/zsh-users/zsh-syntax-highlighting.git |
+   | z                       | 快捷跳转历史文件夹          | 内置                                                               |
+   | extract                 | 用 x 解压任何文件           | 内置                                                               |
+   | web-search              | 终端搜索：google <搜索内容> | 内置                                                               |
+6. *启用插件* 修改 =~/.zshrc= 为 =plugins=(git zsh-autosuggestions zsh-syntax-highlighting z extract web-search)=

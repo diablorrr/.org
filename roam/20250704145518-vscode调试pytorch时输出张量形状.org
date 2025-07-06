@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       e6a4bb44-91ba-463d-83db-9a375ad9cbd8
+:END:
+#+title: vscode调试pytorch时输出张量形状
+#+filetags: pytorch vscode
+
+* vscode调试pytorch时输出张量形状
+1. 启动 python 调试：[[id:0b7442a8-12cf-4091-a54e-a905e2647991][vscode调试python]]
+2. 在 *调试控制台* 输入： =tensor.shape=

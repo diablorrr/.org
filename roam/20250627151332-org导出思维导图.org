@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       4198a187-5a0f-4fa3-bae4-c914e22e0b3c
+:END:
+#+title: org导出思维导图
+#+filetags: org-export
+
+* org导出思维导图
+1. M-x org-freemind-export-to-freemind => 生成.mm文件
+2. 用 freeplane 打开.mm文件

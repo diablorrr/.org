@@ -2,9 +2,7 @@
 :ID:       80c27465-018f-4b97-b7b3-461a6a3283e4
 :END:
 #+title: Fast R-CNN
-# 2015.4
-# 标题：Fast R-CNN
-# 任务：目标检测
+#+filetags: paper
 
 * 先前工作的问题
 R-CNN具有速度瓶颈，因为它是对每个 候选区域 进行特征提取

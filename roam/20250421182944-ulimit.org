@@ -5,4 +5,4 @@
 #+filetags: linux
 
 * ulimit
-ulimit 用于查看、设置 *文件大小限制* ，查看所有文件大小限制：ulimit -a，设置文件大小限制：ulimit -<选项> <值>
+1. ulimit 用于查看、设置 *文件大小限制* ，查看所有文件大小限制： =ulimit -a= ，设置文件大小限制： =ulimit -<选项> <值>=

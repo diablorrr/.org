@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       a730ea97-35fa-4a65-930f-bf2285457550
+:END:
+#+title: 数据类型
+#+filetags: cpp
+
+* 数据类型 [[https://www.learncpp.com/cpp-tutorial/introduction-to-fundamental-data-types/][参考]]
+1. *数据类型* ：就是告诉 编译器 如何 *解释内存中的数据*
+   - 位   :: *内存组成的单位* ；每个位存 0或1
+   - 字节 :: *内存访问的单位* ；每个字节有唯一地址；1字节 = 8位
+
+2. 三类数据类型
+   1) 基本数据类型
+   2) 复合数据类型
+   3) 标准库提供的数据类型
+
+3. 一些 *数据类型的命名规范* ：xxx_t 代表是一个类型，比如：size_t

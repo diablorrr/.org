@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       5aefa705-77e1-4212-801b-b1a15c298fe1
+:END:
+#+title: yay解决proxyconnect tcp:EOF
+#+filetags: yay
+
+* yay解决proxyconnect tcp:EOF
+1. 问题在于yay 底层是通过 [[id:47eb3326-7aac-4300-904e-33f7539709c8][curl]] 访问走代理（proxyconnect）连接 AUR服务器（https://aur.archlinux.org ，可以通过 *curl -v https://aur.archlinux.org* 看详细连接过程） ，而我在终端输入：export https_proxy="https://127.0.0.1:7890" 希望 curl 走HTTPS的代理，  但 clash 是 *HTTP代理软件* ，只能通过 *http://127.0.0.1:7890* 访问
+2. 因此终端设置：export https_proxy="http://127.0.0.1:7890" （ *再次注意* ：这里是 http:// ！）； 参考 [[id:49d53854-7e0a-462b-9397-d54f3a08f559][linux终端走代理]]

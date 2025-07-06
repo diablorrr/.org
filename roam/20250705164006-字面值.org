@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       27733720-d27e-4852-bb07-b50130457fc9
+:END:
+#+title: 字面值
+#+filetags: cpp
+
+* 字面值
+是直接写死的常量值，比如：12、'a'、"hello"

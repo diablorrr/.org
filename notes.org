@@ -2,11 +2,9 @@
 #+title: Notes
 
 * Inbox
-** [2025-06-21 六]
-live usb就是一个装有完整操作系统的u盘
-
-
-** lsp
-变量lsp-completion-provider
-用于选择lsp补全的后端
-capf是一组函数，completion-at-point会依次调用capf里的函数
+** [2025-07-05 六]
+BP
+当函数参数存在但在函数体中未使用时，不要给它命名。你可以选择在注释中给出名称。
+void doSomething(int /*count*/)
+{
+}

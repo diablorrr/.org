@@ -2,9 +2,6 @@
 :ID:       1ad28819-7ca5-4497-a875-053abe7c08a6
 :END:
 #+title: cuda
-#+author:    yoshiki
-#+email:     1299331829@qq.com
-#+update:    [2024-12-23 一 15:50]
 
 * 简介
 - CUDA :: 专门为GPU提供通用计算能力；允许开发者 *利用GPU来加速各种计算密集型任务*

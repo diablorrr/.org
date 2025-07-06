@@ -2,8 +2,7 @@
 :ID:       5c7302f6-54b1-448f-8789-8a2f5425cc34
 :END:
 #+title: CNN
-# 年份：1989
-# 标题：Convolution Neural Network
+#+filetags: paper
 
 * 模型 :ATTACH:
 :PROPERTIES:

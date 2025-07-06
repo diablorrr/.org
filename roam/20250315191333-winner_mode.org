@@ -1,11 +1,8 @@
 :PROPERTIES:
 :ID:       11977166-7689-4c97-ae82-d294ea1657c1
 :END:
-#+title: winner mode
-#+LAST_MODIFIED: 2025-03-15 19:14:51
+#+title: winner
+#+filetags: emacs
 
-
-* 概念
-- 简介 ::
-  1. [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]的副mode
-  2. 用于还原窗口布局
+* winner使用
+用于 undo 和 redo 窗口布局； =winner-undo= 恢复到上一次的窗口布局， =winner-redo= 从 undo 状态下还原

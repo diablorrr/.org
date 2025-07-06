@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       bfbfc055-a534-4a7f-a46e-6305f75c0fa7
+:END:
+#+title: i3wm
+#+filetags: linux

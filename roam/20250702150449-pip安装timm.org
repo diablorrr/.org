@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       58345174-9871-418d-b753-828271b9b5c1
+:END:
+#+title: pip安装timm
+#+filetags: pip
+
+* pip安装timm
+#+begin_src bash
+pip install timm          # 失败
+conda install timm        # 失败
+pip install timm          # 加镜像源 失败
+pip install timm==0.4.12  # 成功 速度很快
+#+end_src

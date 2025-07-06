@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       2a25f7c4-3e56-4d89-8397-0db0ee14f59c
+:END:
+#+title: vscode连接远程服务器
+#+filetags: vscode ssh
+
+* vscode连接远程服务器
+1. 下载 Remote - SSH 插件
+2. =命令面板 -> Remote-SSH：添加新的 SSH 主机= 添加主机后 =活动栏 -> 远程资源管理器 -> 连接=
+3. 遇到问题，打开 =命令面板 -> Remote-SSH：打开 SSH 配置文件= 查看

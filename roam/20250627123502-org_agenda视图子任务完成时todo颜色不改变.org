@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       262f198c-e664-47b8-b9e8-263b5c911cb0
+:END:
+#+title: org-agenda视图子任务完成时todo颜色不改变
+#+filetags: org
+
+* org-agenda视图子任务完成时todo颜色不改变
+1. M-x customize
+2. Org Agenda Dim Blocked Tasks => 设置Do not dim

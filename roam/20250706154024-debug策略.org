@@ -1,0 +1,81 @@
+:PROPERTIES:
+:ID:       514da3f2-517e-4419-a6ca-77753fb1d280
+:END:
+#+title: 调试策略
+#+filetags: cpp
+
+* 调试策略 [[https://www.learncpp.com/cpp-tutorial/basic-debugging-tactics/][参考]] [[https://www.learncpp.com/cpp-tutorial/more-debugging-tactics/][参考2]]
+以下介绍了 5种 调试策略及优缺点：
+1. *注释代码* ：只能简单判断问题位置，且 不好还原代码
+
+2. *打印日志* ：使得 /程序输出/ 变得杂乱
+
+3. *预处理指令-条件判断* 通过注释控制打印日志，程序输出 不会杂乱，但 代码 会变得杂乱；预处理指令相关内容见：[[id:a48d200f-d7ad-41ad-8592-a7ff528378ea][预处理器]]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+
+   #include <iostream>
+
+   #define ENABLE_DEBUG                   // 写入一个 头文件，在其他地方包含，通过注释的方式，就能一键启用/关闭
+
+   int getUserInput()
+   {
+   #ifdef ENABLE_DEBUG
+   std::cerr << "getUserInput() called\n";
+   #endif
+      std::cout << "Enter a number: ";
+      int x{};
+      std::cin >> x;
+      return x;
+   }
+
+   int main()
+   {
+   #ifdef ENABLE_DEBUG
+   std::cerr << "main() called\n";
+   #endif
+       int x{ getUserInput() };
+       std::cout << "You entered: " << x << '\n';
+
+       return 0;
+   }
+
+   #+end_src
+
+4. *日志记录器* ：会将日志记录到文件中，使得 程序输出、代码 不会杂乱
+   - 日志 :: 顺序记录发生的事情，且带有时间戳
+   以第三方日志库：plog 为例
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   #include <plog/Log.h> // Step 1: include the logger headers
+   #include <plog/Initializers/RollingFileInitializer.h>
+   #include <iostream>
+
+   int getUserInput()
+   {
+     PLOGD << "getUserInput() called"; // PLOGD is defined by the plog library
+
+     std::cout << "Enter a number: ";
+     int x{};
+     std::cin >> x;
+     return x;
+   }
+
+   int main()
+   {
+     plog::init(plog::debug, "Logfile.txt"); // Step 2: initialize the logger
+
+     PLOGD << "main() called"; // Step 3: Output to the log as if you were writing to the console
+
+     int x{ getUserInput() };
+     std::cout << "You entered: " << x << '\n';
+
+     return 0;
+   }
+   #+end_src
+   在 Logfile.txt 文加中
+   #+begin_example
+   2018-12-26 20:03:33.295 DEBUG [4752] [main@19] main() called
+   2018-12-26 20:03:33.296 DEBUG [4752] [getUserInput@7] getUserInput() called
+   #+end_example
+
+5. *调试器* ：用于 控制程序的执行、查看程序状态 [[https://www.learncpp.com/cpp-tutorial/using-an-integrated-debugger-stepping/][参考]]；常用调试器见：[[id:8a46ff3c-7b8e-42e8-a6c9-bdaf55195c4a][gdb]]
+   - 程序状态 :: 正在使用的 *变量* 的值、被调用的 *函数* 、当前执行的 *语句*

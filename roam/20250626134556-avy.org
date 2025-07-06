@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       41cd1b93-96ae-47f2-972b-0fef43eddc35
+:END:
+#+title: avy
+#+filetags: emacs
+
+* avy使用
+avy 实现基于字母实现跳转； =avy-goto-word-0= 可以跳转到单词的开头， =avy-goto-line= 实现行跳转

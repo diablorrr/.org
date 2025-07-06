@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       ee695cd6-0eb2-4dd1-bb54-a53a108931f9
+:END:
+#+title: emacs加载不同配置启动
+#+filetags: emacs
+
+* emacs加载不同配置启动
+可以随意设置配置文件夹，比如 ~/.emacs.d.learn，然后在命令行中 =emacs --init-directory ~/.emacs.d.learn=

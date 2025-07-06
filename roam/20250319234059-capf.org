@@ -1,7 +1,0 @@
-:PROPERTIES:
-:ID:       83399e20-46a0-4311-acc1-3ee9ba2e8fad
-:END:
-#+title: capf
-
-* 概念
-- 简介 :: [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]内置的补全机制

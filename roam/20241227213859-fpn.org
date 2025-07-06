@@ -2,9 +2,7 @@
 :ID:       5c464df3-b82e-4f57-a3b7-5b11813aea1e
 :END:
 #+title: FPN
-# 2016.12
-# 标题：Feature Pyramid Networks for Object Detection
-# 任务：小目标检测
+#+filetags: paper
 
 * 先前工作的问题
 一般的网络都直接使用最后一层的feature map，最后一层的feature map的语义强，但位置和分辨率较低，容易检测不到较小的物体。

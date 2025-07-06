@@ -1,46 +1,52 @@
 :PROPERTIES:
 :ID:       bee683d2-eec4-45a8-af02-be369d182e8d
-:NOTER_DOCUMENT: /home/yoshiki01/Documents/C++ Primer 5th.pdf
-:NOTER_PAGE: 88
 :END:
 #+title: auto
-#+LAST_MODIFIED: 2025-01-28 23:44:54
 #+filetags: cpp
 
-* auto
-:PROPERTIES:
-:NOTER_PAGE: 87
-:END:
-- 简介 :: 用于推断变量类型，会用表达式初始化变量(会执行表达式)
-** 修饰复合类型
-引用对象的类型作为auto推导的类型
-#+begin_src cpp :results output :includes <iostream> <typeinfo>
-int i = 0, &r = i;
-auto a = r;
-std::cout << typeid(a).name();
-#+end_src
+* auto [[https://www.learncpp.com/cpp-tutorial/type-deduction-for-objects-using-the-auto-keyword/][参考]] [[https://www.learncpp.com/cpp-tutorial/type-deduction-with-pointers-references-and-const/][参考2]]
+1. 根据 value 来推断 type；推断 表达式类型 时， *会执行表达式*
+2. *[[id:1f3d6196-77e0-47a7-95e3-fb61a399ee2b][顶层const]]、引用* 会被丢弃 ；若要保留，重新用 const 和 引用 修饰
+3. *[[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]]变量* 含有隐式的 const ，const 会被丢弃 ；若要保留，重新用 constexpr 修饰
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   constexpr double a { 3.4 };  // a has type const double (constexpr not part of type, const is implicit)
 
-#+RESULTS:
-: i
+   auto b { a };                // b has type double (const dropped)
+   const auto c { a };          // c has type const double (const dropped but reapplied)
+   constexpr auto d { a };      // d has type const double (const dropped but implicitly reapplied by constexpr)
+   #+end_src
+4. ✨ *const引用* 会先丢弃 引用，此时 底层const 变 顶层const，再丢弃 顶层const；若用 auto& 推导，则 推导类型为 const auto&，因为 底层const 没有变成 顶层const
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   const std::string& getConstRef(); // some function that returns a reference to const
 
-** 修饰常量
-忽略顶层const，保留底层const
-#+begin_src cpp :results output :includes <iostream> <typeinfo>
-using namespace std;
-int i = 0;
-const int ci = i, &cr = ci;
-auto b = ci;
-auto c = cr;
-auto d = &i;
-auto e = &ci;
-cout << typeid(b).name() << endl;
-cout << typeid(c).name() << endl;
-cout << typeid(d).name() << endl;
-cout << typeid(e).name() << endl;
-#+end_src
+   int main()
+   {
+       auto ref1{ getConstRef() }; // std::string (reference dropped, then top-level const dropped from result)
+       auto& ref2{ getConstRef() }; // const std::string& (reference reapplied, low-level const not dropped)
+   }
+   #+end_src
+5. *constexpr引用*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   constexpr std::string_view hello { "Hello" };   // implicitly const
+   constexpr const std::string_view& getConstRef() // function is constexpr, returns a const std::string_view&
+   {
+       return hello;
+   }
 
-#+RESULTS:
-: i
-: i
-: Pi
-: PKi
+   int main()
+   {
+       constexpr auto ref2{ getConstRef() };        // constexpr const std::string_view (reference dropped and top-level const dropped, constexpr applied, implicitly const)
+       constexpr const auto& ref4{ getConstRef() }; // constexpr const std::string_view& (reference reapplied, low-level const not dropped, constexpr applied)
+   }
+   #+end_src
+6. *指针* 不会被丢弃，但可以显示表达推导的类型是指针
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   std::string* getPtr(); // some function that returns a pointer
+
+   int main()
+   {
+       auto ptr1{ getPtr() };  // std::string*
+       auto* ptr2{ getPtr() }; // std::string*
+   }
+   #+end_src
+

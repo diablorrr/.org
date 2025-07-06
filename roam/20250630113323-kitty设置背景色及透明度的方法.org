@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       2f162575-48d6-45ee-a9bf-69fe521cbc1a
+:END:
+#+title: kitty设置背景色及透明度的方法
+#+filetags: kitty
+
+* kitty设置背景色及透明度的方法
+1. =Ctrl+Shift+F2= 打开 kitty配置（位置： =~/.config/kitty/kitty.conf= ）
+2. 在 kitty.conf 中写入
+   #+begin_example
+   background #2e2e2e
+   background_opacity 0.5
+   #+end_example
+3. =Ctrl+Shift+F5= 重新加载 kitty配置

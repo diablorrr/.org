@@ -1,8 +1,0 @@
-:PROPERTIES:
-:ID:       33a30e46-3c2d-4e24-b4c7-4b97f3831a2a
-:END:
-#+title: 知识蒸馏
-#+LAST_MODIFIED: 2025-03-07 19:40:20
-
-* 概念
-- 简介 :: 小模型学习大模型

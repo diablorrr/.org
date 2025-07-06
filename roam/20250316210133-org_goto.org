@@ -2,9 +2,8 @@
 :ID:       42ec6ff8-b4c2-40cc-a533-bb55d2b20204
 :END:
 #+title: org-goto
-#+LAST_MODIFIED: 2025-03-16 21:02:35
+#+filetags: org
 
-* 概念
-- 简介 ::
-  1. 实现快速跳转
-  2. 不改动原org的情况下，打开一个虚拟视图
+* org-goto
+1. 用于实现快速跳转
+2. =M-x org-goto= 进入 **org-goto*视图* ，在此视图的操作不会修改 原org文件

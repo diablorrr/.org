@@ -2,6 +2,7 @@
 :ID:       cebac708-b4a7-4f9e-9fb4-0ca73a9602bd
 :END:
 #+title: BERT
+#+filetags: paper
 
 * 什么是Pre-training？什么是training？
 - 预训练任务 :: 在一个大的数据集上训练一个模型[fn:1]，给其他任务使用[fn:2]

@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       b61b17e1-7936-4c4f-a7ae-e5ac5fe5692a
+:END:
+#+title: rofi启动chrome使用系统代理
+#+filetags: rofi
+
+* rofi启动chrome使用系统代理
+1. chrome 不会自动使用系统代理（firefox可以），因此需要通过命令行的形式设置代理，例如： *google-chrome-stable --proxy-server="http://127.0.0.1:7890"*
+2. rofi 使用 drun模式 时，会读取 .desktop文件；因此，先拷贝一份 chrome的.desktop文件（避免系统级的修改）： =cp /usr/share/applications/google-chrome.desktop ~//.local/share/applications= ；在 用户级的.desktop文件 中在每一个 Exec行 写入：--proxy-server="http://127.0.0.1:7890"

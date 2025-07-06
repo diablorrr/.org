@@ -2,8 +2,7 @@
 :ID:       9b19126f-71f1-46a2-99b0-844096b09bb4
 :END:
 #+title: Vision Transformer
-# 2020.10
-# 标题：An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale
+#+filetags: paper
 
 * 模型 :ATTACH:
 :PROPERTIES:

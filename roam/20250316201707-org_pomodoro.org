@@ -2,43 +2,32 @@
 :ID:       1fd43cc3-35ac-4867-ac16-ec14c50e8afc
 :END:
 #+title: org-pomodoro
-#+LAST_MODIFIED: 2025-03-16 20:24:15
+#+filetags: org
 
-* 使用
-** 基础使用
-1. headline上启动Pomodoro => 会有CLOCK:[开始时间]
-2. 关闭Pomodoro           => 会有[结束时间]以及 =>[持续时间]
-3. 调用org-clock-report   => 生成任务耗时报告
-   - 示例 ::
-     #+begin_example
-     :LOGBOOK:
-     #+BEGIN: clocktable :scope subtree :maxlevel 2
-     #+CAPTION: Clock summary at [2024-12-22 日 12:32]
-     | Headline   | Time |
-     |------------+------|
-     | *Total time* | *0:06* |
-     |------------+------|
-     | tets       | 0:06 |
-     #+END:
-     CLOCK: [2024-12-22 日 12:21]--[2024-12-22 日 12:26] =>  0:05
-     CLOCK: [2024-12-22 日 12:18]--[2024-12-22 日 12:19] =>  0:01
-     :END:
-     #+end_example
-
-** 手动取消番茄钟，也能记录时间
-1. M-x customize
-2. Org Pomodoro Keep Killed Pomodoro Time => on
-
-
-* 查询
-| 函数                           | 作用                             |
-|--------------------------------+----------------------------------|
-| org-pomodoro                   | 开启/关闭番茄钟                  |
-| (org文件外)org-pomodoro        | 查看当前的番茄钟，以及历史番茄钟 |
-| org-pomodoro-extend-last-clock | 延长上一个番茄钟的时长           |
-
-
-* 概念
-- 简介 ::
-  1. 番茄钟，在任意headline上使用
-  2. 内部实现用到了[[id:54b77c23-d971-4522-b36a-5c620e6db2ff][org-clock]]的org-clock-in和org-clock-out函数
+* org-pomodoro
+1. *番茄钟* ，在 headline 上使用；内部实现基于 [[id:54b77c23-d971-4522-b36a-5c620e6db2ff][org-clock]] 的 org-clock-in 和 org-clock-out 函数
+2. *常用函数* 如下
+   | 函数                           | 作用                             |
+   |--------------------------------+----------------------------------|
+   | org-pomodoro                   | 开启/关闭番茄钟                  |
+   | （org文件外）org-pomodoro      | 查看当前的番茄钟，以及历史番茄钟 |
+   | org-pomodoro-extend-last-clock | 延长上一个番茄钟的时长           |
+3. *使用方式* 以及 *任务耗时报告*
+   1) headline 上启动 org-pomodoro => 会有CLOCK:[开始时间]
+   2) 关闭 org-pomodoro            => 会有[结束时间]以及 =>[持续时间]
+   3) 调用 org-clock-report        => 生成任务耗时报告，见下
+      #+begin_example
+      :LOGBOOK:
+      #+BEGIN: clocktable :scope subtree :maxlevel 2
+      #+CAPTION: Clock summary at [2024-12-22 日 12:32]
+      | Headline   | Time |
+      |------------+------|
+      | *Total time* | *0:06* |
+      |------------+------|
+      | tets       | 0:06 |
+      #+END:
+      CLOCK: [2024-12-22 日 12:21]--[2024-12-22 日 12:26] =>  0:05
+      CLOCK: [2024-12-22 日 12:18]--[2024-12-22 日 12:19] =>  0:01
+      :END:
+      #+end_example
+4. org-pomodoro 只有在计时结束才会记录任务时间，若我们希望手动取消 org-pomodoro 也能记录时间，见 [[id:1faf0010-54a5-4c8b-88a6-62e1db4a588e][org-pomodoro手动取消番茄钟也能记录时间]]

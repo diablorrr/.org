@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       0b7442a8-12cf-4091-a54e-a905e2647991
+:END:
+#+title: vscode调试python
+#+filetags: python vscode
+
+* vscode调试python [[https://vscode.js.cn/docs/python/debugging#_set-configuration-options][参考]]
+1. 安装扩展： =Python Debugger=
+2. 初始化配置： =活动栏 -> 运行和调试 -> 创建 launch.json 文件=
+3. =launch.json= 配置：
+   | 参数        | 作用                                                             |
+   |-------------+------------------------------------------------------------------|
+   | name        | 调试配置名称                                                     |
+   | type        | 调试器类型，调试python设置为debugpy                              |
+   | request     | 调试模式：launch-文件上启动，attach-附加到已运行进程             |
+   | program     | 启动文件路径                                                     |
+   | python      | 解释器位置，要在虚拟环境中运行，就在使用虚拟环境中的python解释器 |
+   | args        | 传递给程序的参数                                                 |
+   | stopOnEntry | 是否在调试程序的第一行中断                                       |
+   | console     | 程序输出显示方式                                                 |
+   示例：
+   - 虚拟环境：MIG
+   - 命令行：python main.py --gpu 0 --seed 1 --dataset baby --result_dir results --method mig_gt
+   #+begin_src json
+   {
+       "version": "0.2.0",
+       "configurations": [
+           {
+               "name": "Python 调试程序: 当前文件",
+               "type": "debugpy",
+               "request": "launch",
+               "program": "${workspaceFolder}/main.py",
+               "args": [
+                   "--gpu","0",
+                   "--seed","1",
+                   "--dataset","baby",
+                   "--result_dir","results",
+                   "--method","mig_gt"
+               ],
+               "stopOnEntry": true,
+               "python": "/medias/software/anaconda3/envs/MIG/bin/python",
+               "console": "integratedTerminal"
+           }
+       ]
+   }
+   #+end_src

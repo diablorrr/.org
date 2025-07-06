@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       97953b75-51e4-4bdd-b34c-5be20d4f3222
+:END:
+#+title: github密码认证失效问题
+#+filetags: github https ssh
+
+* github密码认证失效问题
+- 原因 :: github 在 2021.8.13 移除了对账号密码认证的支持；因此无法使用帐号密码通过 HTTPS 推送代码
+- 问题复现 ::
+  出现了要求输入 账号密码 的提示
+  #+begin_src bash
+  root@autodl-container-92714881b1-6850edac:~/autodl-tmp/MIG-GT# git push --set-upstream origin matplotlib
+  Username for 'https://github.com': diablorrr
+  Password for 'https://diablorrr@github.com':
+  remote: Support for password authentication was removed on August 13, 2021.
+  remote: Please see https://docs.github.com/get-started/getting-started-with-git/about-remote-repositories#cloning-with-https-urls for information on currently recommended modes of authentication.
+  fatal: Authentication failed for 'https://github.com/diablorrr/MIG-GT.git/'
+  #+end_src
+  查看发现 推拉 走的 HTTPS方式
+  #+begin_src bash
+  root@autodl-container-92714881b1-6850edac:~/autodl-tmp/MIG-GT# git remote -v
+  origin  https://github.com/diablorrr/MIG-GT.git (fetch)
+  origin  https://github.com/diablorrr/MIG-GT.git (push)
+  #+end_src
+- 解决 :: 使用 [[id:eb955da4-d9f2-4122-bf2c-cd2900c71a53][SSH]]
+  1. 生成 公钥密钥：见 [[id:e69486e3-9fd5-4b66-8cec-04ba50709e83][github配置SSH key]]
+  2. 设置推拉方式为 SSH： =git remote set-url  origin git@github.com:diablorrr/MIG-GT.git=

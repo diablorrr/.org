@@ -2,7 +2,7 @@
 :ID:       f8cfbc09-a2f8-401f-ad14-f3c00e761d34
 :END:
 #+title: 贝叶斯个性化排序
-#+filetags: nlp
+#+filetags: paper
 
 * 算法
 - 解决了[[id:40569874-79d1-40ae-b3f3-ee5b8ce47bb3][矩阵分解]]的以下问题：

@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       1e1f5d9e-2576-48b5-8c60-6ae00718d2e2
+:END:
+#+title: SSH配置心跳包
+#+filetags: ssh
+
+* SSH配置心跳包
+1. 配置心跳包用于保持会话的活跃，SSH配置文件在 =~/.ssh/config= ，配置方式通过示例展示
+   #+begin_src bash
+   Host 111.47.28.118
+        HostName 111.47.28.118
+        Port 9722
+        User hubu
+        # 心跳包
+        # 每300秒（5分钟）向服务器发送空闲检查消息
+        ServerAliveInterval 300
+        # 如果连续3次未响应，则断开连接
+        ServerAliveCountMax 3
+    #+end_src

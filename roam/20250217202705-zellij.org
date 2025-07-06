@@ -2,19 +2,13 @@
 :ID:       8ca61e04-0c10-43ab-8135-f54a477a94c6
 :END:
 #+title: zellij
-#+LAST_MODIFIED: 2025-03-15 13:33:07
+#+filetags: linux
 
-
-* 使用
-- 分离会话 :: Ctrl-b d
-- 重新连接会话 :: zellij attach
-- 查看所有会话 :: zellij ls
-
-** 在一个tab中上下对称产生四个pane的方法
-1. 新建2个pane(此时总共3个pane)
-2. 增大pane大小，还原
-3. 新建第3个pane
-
-
-* 概念
-- 简介 :: 终端复用工具
+* zellij
+1. 终端复用工具， *常用操作* 如下
+   | 命令/快捷键   | 作用         |
+   |---------------+--------------|
+   | zellij attach | 重新连接会话 |
+   | zellij ls     | 查看所有会话 |
+   | Ctrl-b d      | 分离会话     |
+2. 若想要 zellij 产生对称的四窗格，见 [[id:e671cb66-d990-48db-bf8f-00c68a1a5eec][zellij在一个tab中创建对称的四个pane]]

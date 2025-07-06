@@ -1,9 +1,0 @@
-:PROPERTIES:
-:ID:       7d035f06-0af9-4edf-a866-34031a53bd70
-:END:
-#+title: ivy
-
-* 概念
-- 简介 ::
-  1. [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中的补全框架(前端)
-  2. 接收来自[[id:ef5b7883-d43b-4765-bdc9-daf62b50a036][lsp]]服务器(后端)的数据

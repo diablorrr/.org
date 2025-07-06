@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       395677a5-f825-4935-a1d1-ef8a31f366cc
+:END:
+#+title: 编译grpc
+#+filetags: grpc
+
+* 编译grpc
+1. [[id:54642b64-644b-4f5a-977f-572f75973445][git走代理]]
+2. git clone -b <选择Tag> https://github.com/grpc/grpc
+3. cd grpc
+4. git submodule update --init
+5. mkdir -p cmake/build
+6. cd cmake/build
+7. cmake -DCMAKE_CXX_STANDARD=17 ../..
+8. make -j$(nproc)
+9. make install
+10. 安装到 /usr/local/bin，有些程序在 /usr/bin下寻找 => 解决方式：[[id:bb654a41-440c-468d-999c-fd8470e4f15c][软连接]]

@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       9db0adc8-8d90-40c1-9249-0f80bf4ece43
+:END:
+#+title: std::size_t
+#+filetags: cpp stl
+
+* std::size_t [[https://www.learncpp.com/cpp-tutorial/fixed-width-integers-and-size-t/][参考]]
+是系统相关的无符号整数类型，用于表示 *系统中最大对象大小* ，[[id:ddbf120e-034e-4fdc-96cd-92df650d588e][32位和64位系统]] 表示 CPU *一次* 能处理的数据大小为 32/64位，也就是说最大也就 32/64位（4/8字节）大小的对象

@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       a48d200f-d7ad-41ad-8592-a7ff528378ea
+:END:
+#+title: 预处理器
+#+filetags: cpp
+
+* 预处理器 [[https://www.learncpp.com/cpp-tutorial/introduction-to-the-preprocessor/][参考]]
+1. 预处理器 在预处理阶段 *查找、处理 预处理指令* -> 执行文本操作
+   - 预处理指令 :: =#= 开头，换行符结尾的指令
+2. *常见的预处理指令* ，如下
+   |---------------------------+--------------------------+----------------------------------------|
+   | 预处理指令                | 作用                     | 备注                                   |
+   |---------------------------+--------------------------+----------------------------------------|
+   | #include                  | 文件包含                 | <>：系统目录；""：当前目录 -> 系统目录 |
+   | #define                   | 定义宏                   |                                        |
+   | #ifdef、 #ifndef、 #endif | 条件判断                 | 可用于选择性编译、调试                 |
+   | #pragma                   | （非标准）控制编译器行为 | #pragma once 防止头文件重复包含        |
+   |---------------------------+--------------------------+----------------------------------------|
+   示例：
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+
+   #include <iostream>
+
+   #define PRINT_JOE
+
+   int main()
+   {
+   #ifdef PRINT_JOE
+       std::cout << "Joe\n"; // will be compiled since PRINT_JOE is defined
+   #endif
+
+   #ifdef PRINT_BOB
+       std::cout << "Bob\n"; // will be excluded since PRINT_BOB is not defined
+   #endif
+
+       return 0;
+   }
+
+   #+end_src

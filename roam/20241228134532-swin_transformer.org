@@ -2,9 +2,7 @@
 :ID:       951a204b-d3ac-43d7-9d05-c73427147c6a
 :END:
 #+title: Swin Transformer
-# 2021.3
-# 标题：Swin Transformer: Hierarchical Vision Transformer using Shifted Windows
-# ICCV
+#+filetags: paper
 
 * 先前工作的问题
 ViT：

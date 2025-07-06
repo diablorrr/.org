@@ -2,7 +2,7 @@
 :ID:       bfd44ea9-75b8-4d39-980a-0daaa5c816c3
 :END:
 #+title: archlinux安装向日葵
-#+filetags: arch linux
+#+filetags: arch
 
 * arch linux安装向日葵
 #+begin_src bash

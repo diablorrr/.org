@@ -1,7 +1,8 @@
 :PROPERTIES:
 :ID:       0a9f28a1-50a8-4b07-9ed1-5d73d97c232c
 :END:
-#+title: English音标
+#+title: 音标
+#+filetags: english
 
 * 音标
 ** KK音标、IPA音标

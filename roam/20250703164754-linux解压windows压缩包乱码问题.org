@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       bcc501dc-a36a-4804-8774-d16f583d3123
+:END:
+#+title: linux解压windows的zip压缩包乱码问题
+#+filetags: linux windows
+
+* linux解压windows的zip压缩包乱码问题
+- 原因 :: linux 和 windows 默认字符编码不同（linux：UTF-8；windows：GBK）
+- 解决 :: 解压时指定编码： =unzip -O GBK <压缩包名>.zip=

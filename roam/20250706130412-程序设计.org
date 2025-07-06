@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID:       78a02c98-fd61-4644-960e-f74ee363c0f0
+:END:
+#+title: 程序设计
+#+filetags: software_design
+
+* 程序设计 [[https://www.learncpp.com/cpp-tutorial/how-to-design-your-first-programs/][参考]]
+1. 勾勒程序主体框架：函数名和相应注释
+   示例：设计一个计算器
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int main()
+   {
+    // Get first number from user
+    //    getUserInput();
+
+    // Get mathematical operation from user
+    //    getMathematicalOperation();
+
+    // Get second number from user
+    //    getUserInput();
+
+    // Calculate result
+    //    calculateResult();
+
+    // Print result
+    //    printResult();
+       return 0;
+   }
+   #+end_src
+
+2. 实现函数
+3. 测试函数
+4. 测试整个程序

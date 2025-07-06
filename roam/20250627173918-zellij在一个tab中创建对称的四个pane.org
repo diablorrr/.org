@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       e671cb66-d990-48db-bf8f-00c68a1a5eec
+:END:
+#+title: zellij在一个tab中创建对称的四个pane
+#+filetags: zellij
+
+* zellij在一个tab中创建对称的四个pane
+1. 新建2个pane(此时总共3个pane)
+2. 增大pane大小，还原
+3. 新建第3个pane

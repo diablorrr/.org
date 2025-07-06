@@ -4,6 +4,7 @@
 :NOTER_PAGE: 75
 :END:
 #+title: UML
+#+filetags: book
 
 * 前言
 :PROPERTIES:

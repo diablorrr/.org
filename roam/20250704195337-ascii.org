@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       dfb83e03-e939-4a01-87b5-54aaa92fd424
+:END:
+#+title: ASCII
+#+filetags: encoding
+
+* ASCII [[https://www.runoob.com/w3cnote/ascii.html][参考]]
+用于显示英语的编码系统；使用 128 个字符表示：英语字母、数字、标点符号、控制符号
+- 'A'-'Z' 65-90
+- 'a'-'z' 97-122

@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       4b0b3990-5e14-47a4-ab66-a2e2c50c9ade
+:END:
+#+title: pip install错误：OSError: [Errno 28] No space left on device
+#+filetags: pip
+
+* pip install错误：OSError: [Errno 28] No space left on device [[https://blog.csdn.net/aixuexideou/article/details/125597407][参考]]
+1. 删除 linux 中 =~/= 中的文件（相当于 windows C盘的内容）

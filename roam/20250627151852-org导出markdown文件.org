@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       a68e99e4-92ff-4d60-8c8d-994ae50577ff
+:END:
+#+title: org导出markdown文件
+#+filetags: org-pandoc
+
+* org导出markdown文件
+1. M-x =org-pandoc-export-to-markdown_mmd= （markdown推荐）
+2. MultiMarkdown 是 markdown的扩展版本；支持更多功能：表格、跨文档链接等

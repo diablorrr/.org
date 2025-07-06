@@ -3,11 +3,9 @@
 :ROAM_REFS: https://arxiv.org/pdf/1704.04861
 :END:
 #+title: MobileNet
-#+LAST_MODIFIED: 2025-02-28 17:18:00
-# 标题：MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications
-#+filetags: 论文
+#+filetags: paper
 
-* 深度可分离卷积 :trick:
+* 深度可分离卷积
 :PROPERTIES:
 :ID:       36522fd8-9d4a-48d0-bace-6a7440820aa0
 :ROAM_REFS: https://blog.csdn.net/kangdi7547/article/details/117925389

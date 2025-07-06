@@ -2,120 +2,15 @@
 :ID:       42cbcb5f-e832-4245-b59b-21c87f4a9a3d
 :END:
 #+title: elisp
+#+filetags: emacs
 
-* 查询
-** 变量和函数
-:PROPERTIES:
-:VISIBILITY: show2leavel
-:END:
-| 分类      | 变量/函数                  |
-|-----------+----------------------------|
-| 常规      | message[fn:3]              |
-|           | set[fn:1]                  |
-|           | setq[fn:2]                 |
-|           | setq-default               |
-|           | eval-last-sexp             |
-|           | eq                         |
-|           | equal                      |
-|-----------+----------------------------|
-| 缓冲区    | generate-new-buffer        |
-|           | current-buffer             |
-|           | switch-to-buffer           |
-|           | with-output-to-temp-buffer |
-|           | other-buffer               |
-|           | buffer-size                |
-|           | set-buffer                 |
-|           | beginning-of-buffer        |
-|           | mark-whole-buffer          |
-|           | append-to-buffer           |
-|           | insert-buffer-substring    |
-|           | get-buffer-create          |
-|           | get-buffer                 |
-|           | copy-to-buffer             |
-|           | erase-buffer               |
-|           | insert-buffer              |
-|           | buffer-read-only           |
-|           | eobp                       |
-|-----------+----------------------------|
-| 位点      | point                      |
-|           | point-min                  |
-|           | point-max                  |
-|           | goto-char                  |
-|-----------+----------------------------|
-| 标记      | push-mark                  |
-|-----------+----------------------------|
-| 变窄      | what-line                  |
-|           | narrow-to-region           |
-|-----------+----------------------------|
-|           | prefix-numeric-value       |
-|           | forward-line               |
-|           | count-words                |
-|           | length                     |
-|           | yank                       |
-|           | kill                       |
-|           | zap-to-char                |
-|           | progn                      |
-|           | prog1                      |
-|           | search-forward             |
-|-----------+----------------------------|
-| 域        | kill-region                |
-|           | copy-region-as-kill        |
-|           | delete-region              |
-|-----------+----------------------------|
-| 列表操作  | cons                       |
-|           | car                        |
-|           | cdr                        |
-|           | setcar                     |
-|           | setcdr                     |
-|           | nthcdr                     |
-|           | apend                      |
-|           | sort                       |
-|           | nreverse                   |
-|-----------+----------------------------|
-| kill-ring | kill-append                |
-|           | kill-ring-yank-pointer     |
-|-----------+----------------------------|
-| 正则      | regexp-quote               |
-|           | looking-at                 |
-|           | match-beginning            |
-|           | occur                      |
-|-----------+----------------------------|
-| 文件      | find-file                  |
-|           | find-file-noselect         |
-|           | expand                     |
-|           | directory-files            |
-|-----------+----------------------------|
-| 按键绑定  | global-set-key             |
-|           | global-unset-key           |
-|           | define-key                 |
-|-----------+----------------------------|
-| 配置      | add-hook                   |
-|           | defalisa                   |
-|           | autoload                   |
-|           | load                       |
-|           | load-path                  |
-** 特殊表和其他
-:PROPERTIES:
-:VISIBILITY: show2leavel
-:END:
-|-------------------|
-| 特殊表            |
-|-------------------|
-| let/let*[fn:5]    |
-| quote(')          |
-| if[fn:6]          |
-| defun[fn:4]       |
-| save-excursion    |
-| save-restriction  |
-| defvar[fn:8]      |
-| while             |
-| cond              |
-| or                |
-|-------------------|
-| 其他              |
-|-------------------|
-| interactive[fn:7] |
-
+* elisp
+1. 学会使用 *内置帮助文档*
+   | 帮助文档           | 作用                              |
+   |--------------------+-----------------------------------|
+   | shortdoc           | 分类常用elisp函数，附带使用示例   |
+   | elisp-index-search | 在 emacs lisp manual 中搜索关键字 |
+   | emacs-index-search | 在 emacs manual 中搜索关键字      |
 
 
 * 概念
@@ -407,7 +302,7 @@ nil -> nil
 - 2种debug方式 ::
   + debug :: 旧的内置debug器
   + edebug :: 新的内置debug器，源码级调试器
-- debug测试用代码 :: [fn:9]
+- debug测试用代码 :: [fn:1]
 *** 报错信息
 #+begin_src emacs-lisp
 (+ 2 'hello)
@@ -430,14 +325,9 @@ nil -> nil
 
 
 
-
-
-
 * Footnotes
-:PROPERTIES:
-:VISIBILITY: show2leavel
-:END:
-[fn:9]
+
+[fn:1]
 #+begin_src emacs-lisp
 (defun triangle-bugged (number)
   "Return sum of numbers 1 through NUMBER inclusive."
@@ -448,85 +338,4 @@ nil -> nil
     total))
 (triangle-bugged 4)
 #+end_src
-[fn:8]
-#+begin_src emacs-lisp
-(defvar var 42 "heloo")
-var ;; 42
-(setq var 100)
-var ;; 100
-(defvar var 200)
-var ;; 200
-#+end_src
-[fn:7]
-#+begin_src emacs-lisp
-;; p：将前缀参数传入，并将它的值(整数)作为函数参数传入函数；
-; 使用场景：简单的数值操作；无参数时返回nil
-;; P：同上，但是是原始格式(列表)；
-; 使用场景：用作条件判断中的布尔开关；无参数时返回1
-p -> 4
-P -> (4) 使用prefix-numeric-value将原始前缀参数转换为数字：转换为4
 
-;; interactive中的控制符可以填入多个，两部分用\n隔开(因为是在字符串中)
-;; B：用缓冲区的名字作为函数参量；可以在B后加上文字信息：B<信息>
-(defun name (buffer start end)
-  "docs"
-  (interactve "BAppend to buffer: \nr") ;; 这里用\n将B和r隔开
-   ;;body-of-function...
-  )
-#+end_src
-[fn:6]
-#+begin_src emacs-lisp
-(defun type-of-animal (characteristic) ;; 一个if-else结构
-  (if (equal characteristic 'fierce)
-      (message "It's a tiger!")
-    (message "It's not fierce!")))
-(type-of-animal 'fierce)
-(type-of-animal 'zebra)
-#+end_src
-[fn:5]
-#+begin_src emacs-lisp
-; let的使用
-(let ((birch 3)
-      pine
-      fir
-      (oak 'some))
-  (message
-   "Here are %d variables with %s, %s, and %s value."
-   birch pine fir oak))
-; let*的使用
-
-#+end_src
-[fn:4]
-#+begin_src emacs-lisp
-(defun multiply-by-seven (number1 number2)  ; defun 函数名 参量列表
-  "Multiply NUMBER."                        ; (可选)函数描述的文档字符串
-  ; (interactive <参数传入信息>)               (可选)成为交互函数
-    (* number1 number2))                    ; 函数体
-; 安装完后就能求值了
-(multiply-by-seven 3 4)
-#+end_src
-[fn:3]
-#+begin_src emacs-lisp
-(message "The value of fill-column is %d." fill-column)
-(message "There are %d %s in the office!"
-         (- fill-column 14) "pick elephants")
-#+end_src
-[fn:2]
-#+begin_src emacs-lisp
-; 同时设置多个参数
-(setq trees '(pine fir oak maple)
-      herbivores '(gazelle antelope zebra))
-trees
-herbivores
-
-; 计数
-(setq counter 0)
-(setq counter (+ counter 1))
-counter
-#+end_src
-[fn:1]
-#+begin_src emacs-lisp
-(set 'flowers '(rose violet daisy buttercup))
-flowers
-'flowers
-#+end_src

@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       e69486e3-9fd5-4b66-8cec-04ba50709e83
+:END:
+#+title: github配置SSH key
+#+filetags: github ssh
+
+* github配置SSH key
+1. *生成 SSH key* ： =ssh-keygen -t rsa -C "1299331829@qq.com"= ； *位置* ： =~/.ssh=
+2. 将 id_rsa.pub 中的内容放入 github/Settings/SSH and GPG keys

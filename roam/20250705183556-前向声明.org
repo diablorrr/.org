@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID:       98b78b88-32ba-4ad7-b5d5-efeae3da8405
+:END:
+#+title: 前向声明
+#+filetags: cpp
+
+* 前向声明 [[https://www.learncpp.com/cpp-tutorial/forward-declarations/][参考]]
+1. 实际 *定义标识符之前* ，告诉编译器某个 *标识符的存在* ；声明和定义的区别，见：[[id:1752c1cb-3fd8-4272-96c9-fa73e14a7d3c][声明和定义]]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+
+   int add(int x, int y); // forward declaration of add() (using a function declaration)
+
+   int main()
+   {
+       std::cout << "The sum of 3 and 4 is: " << add(3, 4) << '\n'; // this works because we forward declared add() above
+       return 0;
+   }
+
+   int add(int x, int y) // even though the body of add() isn't defined until here
+   {
+       return x + y;
+   }
+
+   #+end_src
+
+2. 解决 *循环依赖* 问题
+
+3. 用于 *多文件程序链接* [[https://www.learncpp.com/cpp-tutorial/programs-with-multiple-code-files/][参考]]；更优解：使用 [[id:fbf786c2-5b6e-47a1-81b9-c1c644b567bb][头文件]]
+   1) main.cpp文件
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+
+   #include <iostream>
+
+   int add(int x, int y); // needed so main.cpp knows that add() is a function defined elsewhere
+
+   int main()
+   {
+       std::cout << "The sum of 3 and 4 is: " << add(3, 4) << '\n';
+       return 0;
+   }
+
+   #+end_src
+
+   1) add.cpp文件
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+
+   int add(int x, int y)
+   {
+       return x + y;
+   }
+
+   #+end_src

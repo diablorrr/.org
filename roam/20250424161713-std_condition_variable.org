@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       f54fd0da-668f-4a8f-bbc7-47344ef25360
-:END:
-#+title: std::condition_variable

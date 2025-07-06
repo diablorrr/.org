@@ -3,9 +3,9 @@
 :END:
 #+title: reactor
 
-* 概念[fn:3]
+* 概念[fn:1]
 - 简介 ::
-  1. reactor是一种事件驱动[fn:1]的高性能网络模式，通过[[id:706ae573-ec8c-400d-841c-3d3cd47ec8f2][io多路复用]]，监听和分发事件[fn:2]，将数据收发与业务逻辑处理解耦
+  1. reactor是一种事件驱动[fn:2]的高性能网络模式，通过[[id:706ae573-ec8c-400d-841c-3d3cd47ec8f2][io多路复用]]，监听和分发事件[fn:3]，将数据收发与业务逻辑处理解耦
   2. 三种方案
      1) 单reactor单进程/线程
      2) 单reactor多进程/线程
@@ -47,6 +47,6 @@
 *** 多Reactor多线程
 
 * Footnotes
-[fn:3] 参考：[[https://blog.csdn.net/u013256816/article/details/115388239][五分钟快速理解 Reactor 模型]]
-[fn:2] 连接、读写
-[fn:1] 核心思想：当事件就绪时触发回调，而不是主动轮询
+[fn:1] 参考：[[https://blog.csdn.net/u013256816/article/details/115388239][五分钟快速理解 Reactor 模型]]
+[fn:2] 核心思想：当事件就绪时触发回调，而不是主动轮询
+[fn:3] 连接、读写

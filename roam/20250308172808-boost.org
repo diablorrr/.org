@@ -2,12 +2,8 @@
 :ID:       3e9409a2-89df-4ee7-b5de-6fe57544cee6
 :END:
 #+title: boost
+#+filetags: index
 
-* 使用
-** [[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]]编译安装boost库
-1. wget https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz  #[[https://www.boost.org/users/download/][官网]]下载boost库
-2. tar -zxvf boost_1_87_0.tar.gz && cd boost_1_87_0                          #解压
-3. ./bootstrap.sh
-4. ./b2
-5. sudo ./b2 install
-7. ls /​usr/local/include/boost
+* boost
+1. 跨平台的 cpp stl 扩展集合
+2. *编译方法* 见[[id:f8b79cb7-0ec5-43ce-8cda-387c9d3d7b42][编译boost]]

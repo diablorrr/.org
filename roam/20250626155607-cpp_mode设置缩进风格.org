@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       fad6e7fc-dc36-4d73-8773-52ea667e7d25
+:END:
+#+title: emacs设置缩进风格
+#+filetags: emacs
+
+* emacs设置缩进风格
+1. c-set-style

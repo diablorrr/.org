@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       0f3d0482-4e44-431a-8a41-b63d7d87a102
-:END:
-#+title: apt-cache

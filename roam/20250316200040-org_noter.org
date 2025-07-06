@@ -2,40 +2,19 @@
 :ID:       d65dd25a-e032-4237-b38b-e1a9eec370f0
 :END:
 #+title: org-noter
-#+LAST_MODIFIED: 2025-03-16 20:11:20
+#+filetags: org
 
-* 使用
-1. M-x org-noter => 选择pdf文件
-2. 生成属性抽屉。示例如下
-   #+begin_example
-   设计模式.org中
-   1 :PROPERTIES:
-   2 :NOTER_DOCUMENT: /home/yoshiki01/Documents/(软件工程)设计模式v1.31（全部）.pdf #记录org文件对应的pdf文件的位置
-   3 :NOTER_PAGE: 202                                                               #下次打开pdf时，所在的页数
-   4 :END:
-   5 #+title: 设计模式
-   #+end_example
-
-
-* 查询
-| 函数                                      | 作用                               |
-|-------------------------------------------+------------------------------------|
-| org-noter-insert-note                     | 当前页面插入笔记                   |
-| org-noter-insert-precise-note             | 鼠标选中区域插入headline内容区域   |
-| org-noter-insert-note-toggle-no-questions | 将选中区域变成headline记录在笔记中 |
-|-------------------------------------------+------------------------------------|
-| org-noter-sync-prev-note                  | 将pdf翻到上一个笔记处              |
-| org-noter-sync-next-note                  | 将pdf翻到下一个笔记处              |
-| org-noter-sync-current-note               | 从笔记定位pdf位置                  |
-
-
-* 配置
-| 变量                              | 函数 | 作用         |
-|-----------------------------------+------+--------------|
-| org-noter-highlight-selected-text |      | 选中区域高亮 |
-
-
-* 概念
-- 简介 ::
-  1. 用于记录pdf笔记
-  2. 移动pdf/笔记，显示对应笔记/pdf
+* org-noter
+1. [[id:2d50336c-dabb-4c57-8cb5-b7853cabd245][org]] 中用于记 PDF笔记 的工具
+2. *配置* 在 PDF 中，选中的区域高亮：变量 =org-noter-highlight-selected-text= 设置为 on
+3. *常用函数* 如下
+   | 函数                                      | 作用                               |
+   |-------------------------------------------+------------------------------------|
+   | org-noter-insert-note                     | 当前页面插入笔记                   |
+   | org-noter-insert-precise-note             | 鼠标选中区域插入笔记               |
+   | org-noter-insert-note-toggle-no-questions | 鼠标选中区域变成 headline 插入笔记 |
+   |-------------------------------------------+------------------------------------|
+   | org-noter-sync-prev-note                  | 将 PDF 翻到上一个笔记处            |
+   | org-noter-sync-next-note                  | 将 PDF 翻到下一个笔记处            |
+   | org-noter-sync-current-note               | 从笔记定位 PDF 位置                |
+4. =org-noter= 选择 PDF文件 打开后，里面记录了 org文件对应的PDF文件以及对应的页数，见 [[id:237f39df-a83c-4e3d-a979-9767b14d4d1b][org-noter设置笔记对应的PDF以及PDF页数]]

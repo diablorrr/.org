@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       73f9ea05-2107-4089-9d93-49a4afa9b8ae
+:END:
+#+title: windows关闭快速启动和休眠
+#+filetags: windows
+
+* windows关闭快速启动和休眠
+1. 管理员权限运行 PowerShell
+2. =powercfg /H off= 关闭
+3. =powercfg /a= 验证

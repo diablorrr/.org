@@ -2,11 +2,7 @@
 :ID:       b171b65c-5b04-4d60-b061-5edb30c130d5
 :END:
 #+title: table.el
-#+LAST_MODIFIED: 2025-03-16 18:30:09
+#+filetags: org
 
-
-* 概念
-- 简介 ::
-  1. 表格生成
-  2. 不能计算、操作表格
-  3. 对应函数为table-xx
+* table.el
+org 中用于生成表格， *可以合并单元格* ，但是 *不能计算、操作表格* ，对应函数为 =table-xx= ；若想计算表格，使用 [[id:dc392b84-65d5-4c41-9d09-15de26a5aa6b][org-table]]

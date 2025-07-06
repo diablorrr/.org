@@ -4,8 +4,9 @@
 :NOTER_PAGE: 39
 :VERSION: 1.0
 :END:
-#+EXPORT_FILE_NAME: ~/export/设计模式
 #+title: 设计模式
+#+filetags: book
+#+EXPORT_FILE_NAME: ~/export/设计模式
 
 * TODO 什么是设计模式
 :PROPERTIES:

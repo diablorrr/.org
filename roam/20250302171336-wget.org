@@ -2,35 +2,10 @@
 :ID:       7d9efa4c-4ab0-46b9-a8cb-22926ec11e59
 :END:
 #+title: wget
-#+startup: show2levels
+#+filetags: linux
 
-* 使用
-** 递归下载网站内容
-#+begin_src bash
-wget -r https://example.com
-#+end_src
+* wget
+1. *命令行下载* 工具
+2. 使用 wget *递归下载* 网站内容： =wget -r https://example.com=
+3. 下载的文件所在网站需要登录，解决方式：[[id:2e91cc78-7b17-4d01-8347-a878615c7b7d][wget下载需要登录才能下载的资源]]
 
-** 下载需要登录才能下载的资源
-- 示例 :: 登录 Cityscapes Dataset 网站并下载数据集
-
-1. 模拟用户登录，获取认证 Cookie 并存入文件 cookies.txt
-#+begin_src bash
-wget --keep-session-cookies --save-cookies=cookies.txt --post-data 'username=myusername&password=mypassword&submit=Login' https://www.cityscapes-dataset.com/login/
-#+end_src
-
-2. 使用已登录的身份下载 packageID=1 对应的数据集文件
-#+begin_src bash
-wget --load-cookies cookies.txt --content-disposition https://www.cityscapes-dataset.com/file-handling/?packageID=1
-#+end_src
-
-*** 参数解释
-+ --keep-session-cookies :: 保留会话 Cookies（通常是短期有效的身份验证信息）
-+ --save-cookies=cookies.txt :: 将认证后的 Cookie 保存到 cookies.txt 供后续请求使用
-+ --post-data :: 使用 POST 方法提交表单数据（用户名、密码）
-
-+ --load-cookies=cookies.txt :: 使用之前保存的 Cookie 进行身份认证
-+ --content-disposition :: 确保使用服务器提供的正确文件名（通常是 Content-Disposition 头部信息）
-
-
-* 概念
-- 简介 :: 命令行下载工具

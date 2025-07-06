@@ -2,7 +2,7 @@
 :ID:       2336a5ac-eb4b-4b2d-918b-147bbc0394a5
 :END:
 #+title: calfw
-#+LAST_MODIFIED: 2025-03-15 20:42:29
+#+filetags: emacs
 
 * 使用
 - 查看当日细节 :: SPC

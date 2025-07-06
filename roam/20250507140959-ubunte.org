@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       d155f1d7-01e9-4893-afc8-967ffa8581c9
-:END:
-#+title: ubunte

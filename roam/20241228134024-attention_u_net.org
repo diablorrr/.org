@@ -2,9 +2,7 @@
 :ID:       fd1764dd-273e-4304-b930-3b45e4f9fadd
 :END:
 #+title: Attention U-Net
-# 2018.5
-# 标题：Attention U-Net: Learning Where to Look for the Pancreas
-# 任务：医学图像分割
+#+filetags: paper
 
 * 先前工作的问题
 1. 资源浪费：U-Net使用大量CNN，耗费大量运算资源在低阶特征的重复提取上

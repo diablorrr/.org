@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       853a3bee-b823-49fc-acd6-804eecb74822
+:END:
+#+title: 生命周期
+#+filetags: cpp
+
+* 生命周期
+*对象存活时间* ，即对象从创建到销毁的周期；是 *运行时属性* （[[id:79cf3da5-7ff7-4a47-b4da-5380da55b840][作用域]]是编译时属性）

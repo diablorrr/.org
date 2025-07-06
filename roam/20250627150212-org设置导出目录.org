@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       ef458bab-4387-4ddd-9a1a-342809f1c220
+:END:
+#+title: org设置导出目录
+#+filetags: org-export
+
+* org设置导出目录
+1. 在 org文件 中加入属性 =EXPORT_FILE_NAME= [fn:1]
+   #+begin_example
+   DoomEmacs使用手册.org中
+   1 #+title: DoomEmacs使用手册
+   2 #+EXPORT_FILE_NAME: ~/.org/export/DoomEmacs使用手册
+   3 ...
+   #+end_example
+
+
+* Footnotes
+[fn:1] 发现过程
+导出函数，如org-pandoc-export-to-markdown_mmd中发现用到org-export-output-file-name来导出，而该函数又与EXPORT_FILE_NAME属性有关

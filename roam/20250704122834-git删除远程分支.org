@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       466f9b6a-268c-41ac-9411-77cb9ca96a15
+:END:
+#+title: git删除远程分支
+#+filetags: git
+
+* git删除远程分支
+git push origin（远程仓库名） -d <分支名>

@@ -5,64 +5,58 @@
 #+filetags: deep_learning
 
 * 思路
-1. Sum Pooling => 多模态融合 、门控多模态融合
-2. MGDN => 替换模块 查看后续工作的论文（工具？）
-3. 3张图 => 改成2张：早期融合text和graph，再通过MGDN进行消息传播 => 可能可以减少计算量，提高text和graph模态的交互
-4. 自蒸馏、在线蒸馏
-5. 对比学习
-6. GCN问题：过渡平滑问题(推荐不连续，比如：咖啡->咖啡机->咖啡豆却推荐成茶杯)
+- 多模态融合
+  - [X] OSF
+  - [-] 门控多模态融合：GMU ---> 考虑优化
+  - [ ] GAU：https://zhuanlan.zhihu.com/p/496701014
+  - [ ] 注意力机制
+    1. 跨模态注意力、稀疏注意力、门控注意力、局部-全局注意力 [[https://zhuanlan.zhihu.com/p/1891136980370302219][参考]]
+    2. 水：通道注意力、空间注意力、线性注意力
+- 消息传播方式 => MGDN 替换模块 查看后续工作的论文（工具？）
+- 3张图 => 改成2张：早期融合text和graph，再通过MGDN进行消息传播 => 可能可以减少计算量，提高text和graph模态的交互
+- 自蒸馏、在线蒸馏
+- 对比学习
+- GCN问题：过渡平滑问题(推荐不连续，比如：咖啡->咖啡机->咖啡豆却推荐成茶杯)
+
 
 * 实验
-| 方法 | 类别           | 结果         | 代码来源 |
-|------+----------------+--------------+----------|
-| OSF  | 多模态融合     | 普遍大幅降低 | 豆包ai   |
-| GMU  | 门控多模态融合 | 普遍小幅降低 | [[https://blog.csdn.net/zly_Always_be/article/details/135634388#pytorch_31][CSDN]]     |
+|   | 方法 | 类别           | 结果         | 来源   | 代码 |
+|---+------+----------------+--------------+--------+------|
+| x | OSF  | 多模态融合     | 普遍大幅降低 | 豆包ai |      |
+| - | GMU  | 门控多模态融合 | 普遍小幅降低 | [[https://blog.csdn.net/zly_Always_be/article/details/135634388#pytorch_31][CSDN]]   | [[id:f7009f6d-ea96-49ad-97a3-65cb23404585][GMU]]  |
+** MIG_GT记录
+融合前：emb_h、t_h、v_h 形状 [26495, 64]
+融合后：combined_h 形状 [26495, 64]
+** MIG_GT实验
+|              0.0665 |              0.1021 |              0.0361 |               0.0452 |
+| 0.06540733715585863 | 0.10151936846331293 | 0.03561936769173602 |  0.04485742338179212 |
 
-
-* 环境
-** torch(带cuda)
-1. 查看官网：选择安装方式：wheel(推荐)、conda
-   [[https://pytorch.org/get-started/locally/][新版本]] [[https://pytorch.org/get-started/previous-versions/][老版本]]
-2. 验证是否安装成功
-   #+begin_src python
-   python -c 'import torch;print(torch.__version__);print(torch.version.cuda)'
-   #+end_src
-3. 若import torch出现模块未找到问题：
-   [[id:f3c23bfd-80db-4d03-a687-3e520c4a7901][conda环境中存在pytorch但是import时找不到模块]]
-
-** torch-scatter[[https://blog.csdn.net/weixin_42421914/article/details/132875571][参考]]
-- 进入[[https://data.pyg.org/whl/index.html][网站]]，找到对应版本的[[id:7216a5c5-6580-4f5f-b5d6-5f63349e6875][.whl文件]]
-- 下载后，pip install 安装
-** dgl[[https://blog.csdn.net/qq_44583635/article/details/127341198][参考]]
-1. [[https://www.dgl.ai/pages/start.html][新版本]] [[https://conda.anaconda.org/dglteam/linux-64][历史版本]] 下载对应的.tar.bz2包
-2. 解压到目标路径：可以通过以下方式查看
-   1) python
-   2) import site
-   3) print(site.getsitepackages())
-
-** timm
-#+begin_src bash
-pip install timm          # 失败
-conda install timm        # 失败
-pip install timm          # 加镜像源 失败
-pip install timm==0.4.12  # 成功 速度很快
-#+end_src
-** yaml[[https://blog.csdn.net/HuanCaoO/article/details/104629625/][参考]]
-- pip install pyyaml
-** faiss[[https://blog.csdn.net/weixin_43882112/article/details/107614217][参考]]
-- pip install faiss-gpu
-
-
+* trick
+- 归一化 :: *加速训练* ，缓解 *梯度消失/爆炸* 问题
+  数据分布 是数据在不同取值上的规律，可以通过均值和方差决定，神经网络对于数据分布很敏感，如果输入数据的范围差距过大，则会出现梯度不稳定，因此需要将数据归一化为 均值为0、方差为1
+  - Dropout :: 随机丢弃部分神经元，防止 *过拟合* ，增强模型的泛化能力
+- 残差连接 :: 极端情况下，即使增加的层什么都没有学习到，深层网络的性能也至少和浅层网络一样
+- 激活函数 :: 引入非线性，使神经网络可以 *拟合复杂函数* （否则多层线性变换等价于单层）
 
 
 * 复现
 ** MIG-GT[[https://github.com/CrawlScript/MIG-GT][仓库]]
 1. conda创建环境python3.8
-2. torch安装：torch==1.12.1+cu113
-3. dgl安装：dgl-cuda11.3-0.9.1post1-py38_0.tar.bz2
-4. torch-scatter安装
-5. 按照Requirements需求安装剩余的内容
-6. 运行时根据报错内容安装
-** FREEDOM[[https://github.com/enoche/FREEDOM][参考]]
+2. torch安装：torch==1.12.1+cu113；见 [[id:cfe89b94-ace5-4816-896f-a1ffce8d10c5][pip安装torch(带cuda)]]
+   #+begin_src bash
+   pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
+   #+end_src
+3. dgl安装：dgl-cuda11.3-0.9.1post1-py38_0.tar.bz2；见 [[id:6c6faca5-847e-4b1a-a882-4246f293b573][pip安装dgl]]
+4. torch-scatter安装；见 [[id:e00f1993-5152-4a4c-866c-f0fe91761cb8][pip安装torch-scatter]]
+5. 按照 Requirements 需求安装剩余的内容；见 [[id:5fb308e4-2d7c-43ba-8c39-07cc94d02c2d][pip安装faiss]] [[id:8a2869e2-dc0b-40e9-acf5-4f80fb954de8][pip安装yaml]]
+   #+begin_src bash
+   pip install torchmetrics==0.11.4 ogb==1.3.5 shortuuid==1.0.11 pandas==1.3.5 numpy==1.21.6 tqdm==4.64.1 networkx faiss-gpu lmdb pyyaml
+   #+end_src
+6. 运行
+   #+begin_src bash
+   python main.py --gpu 0 --seed 1 --dataset baby --result_dir results --method mig_gt
+   #+end_src
+
+** FREEDOM [[https://github.com/enoche/FREEDOM][参考]]
 1. conda创建环境python3.8
 2. torch安装：torch==1.12.1+cu113

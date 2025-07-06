@@ -4,7 +4,7 @@
 #+STARTUP: show3levels
 
 * Inbox
-** TODO [#A] 小论文 [4/7]
+** TODO [#A] 小论文 [6/7]
 DEADLINE: <2025-07-15 四>
 *** DONE pytorch框架学习: Introduction to PyTorch
 SCHEDULED: <2025-06-04 三>
@@ -19,12 +19,13 @@ DEADLINE: <2025-06-09 一>
 **** DONE LightGCN
 **** KILL bert：李沫
 **** KILL transformer：李沫
-*** TODO MIG-GT项目注释、文档
-DEADLINE: <2025-06-25 三>
-*** TODO 训练loss代码
-DEADLINE: <2025-06-25 三>
-*** TODO MGDCF论文
+*** DONE MIG-GT项目注释
 DEADLINE: <2025-06-26 四>
+*** DONE 训练loss代码
+DEADLINE: <2025-06-25 三>
+:LOGBOOK:
+CLOCK: [2025-06-27 五 14:43]
+:END:
 ** TODO [#B] hot100
 ** TODO [#B] 面经
 ** -----------------------------------

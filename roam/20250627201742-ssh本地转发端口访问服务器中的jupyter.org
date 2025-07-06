@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       c95be272-e93c-467d-b189-c81739de2346
+:END:
+#+title: SSH本地转发端口访问服务器中的jupyter
+#+filetags: ssh jupyter
+
+* SSH本地转发端口访问服务器中的jupyter
+1. 本地转发端口
+   #+begin_src bash
+   ssh -L 8888:localhost:8888 hubu@111.47.28.118 # 将111.47.28.118服务器的8888端口映射到本地8888端口
+   #+end_src
+2. 服务器安装 jupyter
+   #+begin_src bash
+   pip install jupyter
+   #+end_src
+3. 启动 jupyter
+   #+begin_src bash
+   jupyter notebook --no-browser --ip=0.0.0.0 --port=8888
+   #+end_src

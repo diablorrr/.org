@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       eda95060-dd3e-4d04-b060-5eedacd91738
+:END:
+#+title: org隐藏headline前的*和强调标记
+#+filetags: org
+
+* org隐藏headline前的*和强调标记
+1. M-x customize
+2. Org Hide Leading Stars      => on
+   Org Hide Emphasis Markers   => on

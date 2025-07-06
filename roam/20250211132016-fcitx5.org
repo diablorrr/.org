@@ -1,9 +1,0 @@
-:PROPERTIES:
-:ID:       c226d4d5-86df-4a66-b26d-c4aa0385f340
-:END:
-#+title: fcitx5
-#+LAST_MODIFIED: 2025-02-11 13:21:15
-
-
-* 概念
-- 简介 :: 输入法框架

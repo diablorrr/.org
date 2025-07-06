@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       24e50c2e-dec6-4b32-8a66-25aafd803633
+:END:
+#+title: modules
+#+filetags: deep_learning
+
+* GMU
+:PROPERTIES:
+:ID:       f7009f6d-ea96-49ad-97a3-65cb23404585
+:END:
+#+begin_src python
+class GatedMultimodalLayer(nn.Module):
+    def __init__(self,  size_out=64, dropout_rate=0.3):
+        super(GatedMultimodalLayer, self).__init__()
+
+        self.hidden1 = nn.Linear(64, size_out, bias=False)
+        self.hidden2 = nn.Linear(64, size_out, bias=False)
+        self.hidden_sigmoid = nn.Linear(128, 1, bias=False)
+        self.dropout = nn.Dropout(dropout_rate)
+
+        self.tanh_f = nn.Tanh()
+        self.sigmoid_f = nn.Sigmoid()
+
+    def forward(self, x1, x2):
+        h1 = self.tanh_f(self.hidden1(x1))
+        h2 = self.tanh_f(self.hidden2(x2))
+        h1 = self.dropout(h1)
+        h2 = self.dropout(h2)
+
+        x = torch.cat((h1, h2), dim=1)
+        z = self.sigmoid_f(self.hidden_sigmoid(x))
+
+        return z.view(z.size()[0], 1) * h1 + (1 - z).view(z.size()[0], 1) * h2
+#+end_src

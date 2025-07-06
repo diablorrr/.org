@@ -2,9 +2,7 @@
 :ID:       791cd2b0-195d-4b96-bbcf-b468525f5a28
 :END:
 #+title: Mask R-CNN
-# 2017.10
-# 标题：Mask R-CNN
-# 任务：实例分割（也可以完成目标分类、目标检测、语义分割、实例分割、人体姿势识别等任务）
+#+filetags: paper
 
 * 对先前工作的改进 :ATTACH:
 :PROPERTIES:

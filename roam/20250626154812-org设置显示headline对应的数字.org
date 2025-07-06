@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       9c525464-f8f8-4db8-9a86-28636fd582fb
+:END:
+#+title: org设置显示headline对应的数字
+#+filetags: org
+
+* org设置显示headline对应的数字
+1. M-x org-num-mode

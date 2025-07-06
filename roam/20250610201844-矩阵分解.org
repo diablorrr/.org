@@ -2,7 +2,7 @@
 :ID:       40569874-79d1-40ae-b3f3-ee5b8ce47bb3
 :END:
 #+title: 矩阵分解
-#+filetags: nlp
+#+filetags: paper
 
 * 算法
 - 解决了[[id:732f117f-202e-4c69-a84f-c20b07866383][协同过滤算法]]难以处理稀疏矩阵的问题

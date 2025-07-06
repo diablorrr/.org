@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       ddbf120e-034e-4fdc-96cd-92df650d588e
+:END:
+#+title: 32位和64位系统
+#+filetags: operating_system
+
+* 32位和64位系统
+指 CPU 一次处理能 32位（4字节）/64位（8字节） 的数据

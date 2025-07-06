@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       5fb308e4-2d7c-43ba-8c39-07cc94d02c2d
+:END:
+#+title: pip安装faiss
+#+filetags: pip
+
+* pip安装faiss [[https://blog.csdn.net/weixin_43882112/article/details/107614217][参考]]
+1. pip install faiss-gpu

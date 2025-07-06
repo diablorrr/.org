@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       1f3d6196-77e0-47a7-95e3-fb61a399ee2b
+:END:
+#+title: 顶层const和底层const
+#+filetags: cpp
+
+* 顶层const和底层const
+顶层const：作用于 *对象本身*
+底层const：作用于 *引用/指向的对象*

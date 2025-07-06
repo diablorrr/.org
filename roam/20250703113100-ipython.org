@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       944a17db-d60c-4ccd-bf94-3cf730439fbd
+:END:
+#+title: IPython
+#+filetags: python
+
+* IPython [[https://ipython.org/][参考]]
+1. IPython 是 *增器的 python 交互解释器* ，支持：
+   - 魔法命令（ =%开头的命令= ，eg：%matplotlib inline）
+   - Shell命令（ =!开头的命令= ，eg：!pip install）
+   - 显示系统（图片、LateX）
+2. 是 [[id:6a95d71e-f7ea-4258-bf08-62ce584d3842][jupyter]] 的 *默认 python 内核*

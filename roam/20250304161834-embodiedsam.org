@@ -2,7 +2,7 @@
 :ID:       131788ba-3396-44a7-99d7-88a907f50164
 :END:
 #+title: EmbodiedSAM
-#+LAST_MODIFIED: 2025-03-05 21:35:12
+#+filetags: paper
 
 * 动机 :ATTACH:
 :PROPERTIES:

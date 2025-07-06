@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       66ba615a-39a5-46e2-8cb4-6b22aa2d9408
+:END:
+#+title: rofi
+#+filetags: linux

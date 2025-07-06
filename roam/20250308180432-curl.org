@@ -2,7 +2,7 @@
 :ID:       47eb3326-7aac-4300-904e-33f7539709c8
 :END:
 #+title: curl
-
+#+filetags: linux
 
 * 查询
 | 命令                                | 作用                  |

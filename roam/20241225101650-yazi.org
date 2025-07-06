@@ -1,6 +1,0 @@
-:PROPERTIES:
-:ID:       3951bd55-bd04-49f4-9fdd-b77bf8468fc5
-:END:
-#+title: yazi
-
-. 显示隐藏文件

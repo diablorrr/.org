@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       e89fc341-b237-4f89-be64-8041f59438ea
-:END:
-#+title: IP

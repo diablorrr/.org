@@ -4,6 +4,7 @@
 :NOTER_PAGE: 301
 :END:
 #+title: Modern CMake for C++
+#+filetags: book
 
 
 * 第1章 初识CMake

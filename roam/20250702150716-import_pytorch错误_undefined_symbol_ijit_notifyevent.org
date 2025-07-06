@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       3fefe051-d81c-4201-a37d-419180792619
+:END:
+#+title: import pytorch错误:undefined symbol: iJIT_NotifyEvent
+#+filetags: pytorch
+
+* import pytorch错误:undefined symbol: iJIT_NotifyEvent [[https://blog.csdn.net/mr_hore/article/details/138961434][参考]]
+- 错误原因 :: mkl 包版本不匹配，[[id:f3c23bfd-80db-4d03-a687-3e520c4a7901][conda]]和[[id:1f8e3fa6-ad53-4b9c-8d06-43ffa046fb1c][pip]]使用不同的 mkl 版本
+1. 对 mkl 进行降级
+   #+begin_src bash
+   conda install mkl=2024.0
+   #+end_src

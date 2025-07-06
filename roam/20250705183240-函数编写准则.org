@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       2aad484e-8689-4b72-aee5-969187ee11a6
+:END:
+#+title: 函数编写准则
+#+filetags: software_design
+
+* 函数编写准则 [[https://www.learncpp.com/cpp-tutorial/why-functions-are-useful-and-how-to-use-them-effectively/][参考]]
+以下情况考虑编写函数：
+1. 重复出现的语句
+2. 输入输出明确的代码
+3. 一个函数一个功能
+4. 太大的函数 拆分

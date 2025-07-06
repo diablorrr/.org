@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       1752c1cb-3fd8-4272-96c9-fa73e14a7d3c
+:END:
+#+title: 声明和定义
+#+filetags: cpp
+
+* 声明和定义 [[https://www.learncpp.com/cpp-tutorial/forward-declarations/][参考]]
+1. *声明* ：告诉编译器某个标识符（符号）存在
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+
+   int add(int x, int y); // tells the compiler about a function named "add" that takes two int parameters and returns an int.  No body!
+   int x;                 // tells the compiler about an integer variable named x
+
+   #+end_src
+
+2. *定义* ：是声明，且有对应实现
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+
+   // because this function has a body, it is an implementation of function add()
+   int add(int x, int y)
+   {
+       int z{ x + y };   // instantiates variable z
+       return z;
+   }
+
+   int x;                // instantiates variable x
+
+   #+end_src

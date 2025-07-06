@@ -2,18 +2,7 @@
 :ID:       f42439b6-bbfa-4fe1-8156-7046961930a0
 :END:
 #+title: tree
-#+LAST_MODIFIED: 2025-03-08 18:57:07
+#+filetags: emacs
 
-
-
-* 使用
-#+begin_src bash
-tree          # 当前目录树形结构
-tree 路径     # 指定目录树形结构
-tree -L 数字  # 树形结构深度
-tree -d       # 只显示文件夹目录
-#+end_src
-
-
-* 概念
-- 简介 :: 显示目录结构
+* tree
+以树状形式列出文件夹中的内容； =tree= 可以在当前目录列出树形结构， =-L选项= 设置结构深度， =-d选项= 只显示文件夹

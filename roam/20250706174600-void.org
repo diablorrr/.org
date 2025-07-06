@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       dc7e4f53-4a77-4d6f-bda9-4fc328bdfee8
+:END:
+#+title: void
+#+filetags: cpp
+
+* void [[https://www.learncpp.com/cpp-tutorial/void/][参考]]
+1. 空类型是一个声明但没有定义的类型，见：[[id:1752c1cb-3fd8-4272-96c9-fa73e14a7d3c][声明和定义]]；意味着编译器知道这是一个类型，但不知道分配多少内存
+2. 应用场景：用于不返回值的函数

@@ -1,8 +1,0 @@
-:PROPERTIES:
-:ID:       a919522a-6e1d-44e5-8ad8-25e2af115e8a
-:END:
-#+title: 调试
-#+LAST_MODIFIED: 2025-03-08 15:08:12
-
-* 使用
-- [[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]调试 :: [[id:8a46ff3c-7b8e-42e8-a6c9-bdaf55195c4a][gdb]]

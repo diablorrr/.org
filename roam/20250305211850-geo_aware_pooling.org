@@ -2,7 +2,7 @@
 :ID:       69e48c36-d1d9-42c7-883b-dc94e2c212fa
 :END:
 #+title: Geo-aware Pooling
-#+LAST_MODIFIED: 2025-03-05 21:21:11
+#+filetags: paper
 
 * 动机
 - 最大值或平均值汇聚这样的简单操作可能会降低Fs的表示能力 => 为了更好地保留每个超点内的点特征

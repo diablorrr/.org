@@ -2,23 +2,14 @@
 :ID:       f7692632-d29a-42bb-959f-505a78768643
 :END:
 #+title: projectile
+#+filetags: emacs
 
-* 查询
-** 命令
-| 函数                                      | 快捷键  | 作用                     |
-|-------------------------------------------+---------+--------------------------|
-| projectile-add-known-project              | C-c p a | 设置某个文件夹为项目     |
-| projectile-add-known-project              | C-c p r | 从项目目录删除           |
-| projectile-switch-project                 | C-c p p | 切换项目                 |
-** 配置
-| 变量                          | 作用                         |
-|-------------------------------+------------------------------|
-| projectile-project-root-files | 设置projectile如何识别为项目 |
-
-
-
-
-* 概念
-- 简介 ::
-  1. [[id:42689b29-37d3-457a-be3a-be8d83cfaf74][emacs]]中用于管理项目的第三方插件
-  2. 功能比[[id:99dc145b-93bc-423d-9aa4-1cd1f24318b0][project.el]]更强大，是[[id:99dc145b-93bc-423d-9aa4-1cd1f24318b0][project.el]]的上位替代
+* projectile
+1. emacs 中用于 *管理项目* 的第三方插件；是 emacs 内置的 project.el 的上位替代
+2. *常用函数* 如下
+   | 函数                         | 快捷键  | 作用                 |
+   |------------------------------+---------+----------------------|
+   | projectile-add-known-project | C-c p a | 设置某个文件夹为项目 |
+   | projectile-add-known-project | C-c p r | 从项目目录删除       |
+   | projectile-switch-project    | C-c p p | 切换项目             |
+3. 可以通过 *配置* 变量 =projectile-project-root-files= ，来让 projectile 识别项目

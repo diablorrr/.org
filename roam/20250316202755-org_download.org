@@ -2,14 +2,12 @@
 :ID:       04055be6-57c9-44f2-b4d1-ddf389c58e4b
 :END:
 #+title: org-download
-#+LAST_MODIFIED: 2025-03-16 20:29:03
+#+filetags: org
 
-* 查询
-| 函数                     | 作用               |
-|--------------------------+--------------------|
-| org-download-crlipboard  | 将剪切板的图片粘贴 |
-| org-toggle-inline-images | 切换显示图片       |
-
-
-* 概念
-- 简介 :: 粘贴图片
+* org-download
+1. 用于粘贴图片
+2. *常用函数* 如下
+   | 函数                     | 作用               |
+   |--------------------------+--------------------|
+   | org-download-crlipboard  | 粘贴剪切板的图片   |
+   | org-toggle-inline-images | 切换显示图片       |

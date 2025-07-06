@@ -1,7 +1,0 @@
-:PROPERTIES:
-:ID:       99a3f734-5060-4b75-bcf4-760ac79c4ef2
-:END:
-#+title: company-capf
-
-* 概念
-- 简介 :: [[id:08cef6cf-a442-48f3-8fc1-e07ffdf365fe][company-mode]]的补全后端

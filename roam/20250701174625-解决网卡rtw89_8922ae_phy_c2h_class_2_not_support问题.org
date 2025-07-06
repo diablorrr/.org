@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       1297e0dc-c789-4337-88d5-db3f8e8de096
+:END:
+#+title: 解决网卡rtw89_8922ae PHY c2h class 2 not support问题
+#+filetags: hardware
+
+* 解决网卡rtw89_8922ae PHY c2h class 2 not support问题 [[https://github.com/lwfinger/rtw89][参考]]
+1. =sudo dmesg= 可以发现这个问题，原因在于驱动版本老旧
+2. 解决方法：
+   #+begin_src bash
+   git clone https://aur.archlinux.org/rtw89-dkms-git.git
+   cd rtw89-dkms-git
+   makepkg -sri
+   #+end_src
+3. =reboot=

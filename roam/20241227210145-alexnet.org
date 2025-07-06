@@ -2,8 +2,7 @@
 :ID:       e618ce46-af56-46ea-b5d0-15576d0fd45d
 :END:
 #+title: AlexNet
-# 2012.6
-# 标题：ImageNet Classification with Deep Convolutional Neural Networks
+#+filetags: paper
 
 
 

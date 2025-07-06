@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       29f43a49-8123-4541-a02d-02c7ed24a042
+:END:
+#+title: 命名规范
+#+filetags: cpp
+
+* 命名规范 [[https://www.learncpp.com/cpp-tutorial/keywords-and-naming-identifiers/][参考]]
+1. *变量* ：小写字母开头；后续 蛇形（下划线）、驼峰 都可以
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int value; // conventional
+   int my_variable_name;   // conventional (separated by underscores/snake_case)
+   int myVariableName;     // conventional (intercapped/camelCase)
+   #+end_src
+
+2. *函数名* ：小写字母开头；后续 蛇形（下划线）、驼峰 都可以
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int my_function_name(); // conventional (separated by underscores/snake_case)
+   int myFunctionName();   // conventional (intercapped/camelCase)
+   #+end_src
+
+3. *类、枚举、结构体* ： 大写字母开头
+
+4. *操作系统、库、编译器* ：下划线开头

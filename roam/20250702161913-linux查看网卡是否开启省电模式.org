@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       33898a6e-27dc-415b-8fe5-01c694f009ca
+:END:
+#+title: linux查看网卡是否开启省电模式
+#+filetags: linux
+
+* linux查看网卡是否开启省电模式
+1. =iw dev <网卡> get power_save= 为 on；则开了省电模式
+2. =iw dev <网卡> set power_save on/off= 设置网卡省电模式开/关

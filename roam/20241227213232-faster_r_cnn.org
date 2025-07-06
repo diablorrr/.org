@@ -2,9 +2,7 @@
 :ID:       c36f47f2-82c6-4b97-85b5-6984a5f6e3ae
 :END:
 #+title: Faster R-CNN
-# 2015.12
-# 标题：Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks
-# 任务：目标检测
+#+filetags: paper
 
 * 先前工作的问题
 Fast R-CNN：选择性搜索，找出所有候选框，非常耗时。

@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       b60cad9d-053c-4def-b2d0-88f1ea8dd963
+:END:
+#+title: org-refile设置目标文件和层级
+#+filetags: org-refile
+
+* org-refile设置目标文件和层级
+1. M-x customize
+2. org-refile-targets

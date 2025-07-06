@@ -2,7 +2,7 @@
 :ID:       ba51b0c6-3efd-4306-97cc-49420249b5d0
 :END:
 #+title: archlinux管理java jdk
-#+filetags: arch linux
+#+filetags: arch
 
 * arch linux管理java jdk
 | 命令                                       | 作用                             |

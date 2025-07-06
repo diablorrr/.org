@@ -2,11 +2,8 @@
 :ID:       9ca6d1f0-13c2-4be8-bc78-b27cb366fa81
 :END:
 #+title: consult
+#+filetags: emacs
 
-consult-flycheck
-consult-flymake
-consult-line
-consult-bookmark
-
-* 概念
-- 简介 :: 增强搜索功能(弹出交互式窗口)
+* consult使用
+1. 增强搜索、导航功能； =consult-line= 用于搜索当前 buffer内容； =consult-bookmark= 用于搜索书签； =consult-flycheck= 用于搜索语法错误；在 [[id:13d1007d-c805-482c-bf95-5e53ba86bf4c][doom]] 中对 consult 进行了封装，对应的函数为 +default/search-xxx，例如： =+default/search-project= 搜索当前项目， =+default/search-other-project= 搜索其他项目
+2. consult 的搜索功能还能 *过滤* ，例如：#org -- -g someday.org，先搜索 org 关键字候选项，然后过滤出文件名为 someday.org 的候选项，更过过滤方法见 [[https://github.com/minad/consult#asynchronous-search][参考]]

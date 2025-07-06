@@ -2,8 +2,7 @@
 :ID:       e709bfbf-1bf2-467b-921c-709b3a44b20f
 :END:
 #+title: BN
-# 2015.2
-# 标题：Batch Normalization：Accelerating Deep Network Training by Reducing Internal Covariate Shift
+#+filetags: paper
 
 * Batch Normalization
 - 作用：维持数据的稳定分布；防止梯度爆炸或梯度消失；提高训练速度和模型的稳定性

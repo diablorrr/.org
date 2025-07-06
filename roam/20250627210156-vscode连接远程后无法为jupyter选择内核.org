@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       13522bcf-1e56-4afb-9486-6adb8a9ed427
+:END:
+#+title: vscode连接远程后无法为jupyter选择内核
+#+filetags: vscode jupyter
+
+* vscode连接远程后无法为jupyter选择内核 [[https://blog.csdn.net/jyk19991222/article/details/131486776][参考]]
+1. 在远程服务器上重新安装 [[id:6a95d71e-f7ea-4258-bf08-62ce584d3842][jupyter]]

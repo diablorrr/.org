@@ -2,6 +2,7 @@
 :ID:       682195ed-75db-4183-a437-fcf107cec05d
 :END:
 #+title: pacman
+#+filetags: arch linux
 
 * 使用
 ** 包缓存目录

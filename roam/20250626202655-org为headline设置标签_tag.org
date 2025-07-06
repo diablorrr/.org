@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       4c089825-d7d6-48ff-8903-22f87906a9d1
+:END:
+#+title: org为headline设置标签(tag)
+#+filetags: org
+
+* org为headline设置标签(tag)
+1. 在文件开头设置标签列表供 headline 使用 =#+TAGS: tag1 tag2 ...=
+2. 或设置带快捷键的标签列表 =#+TAGS: tag1(快捷键1) tag2(快捷键2) ...=

@@ -2,7 +2,7 @@
 :ID:       303978a0-1a54-45eb-b422-a745fe3ff123
 :END:
 #+title: VBPR
-#+filetags: 多模态推荐系统 AAAI2016
+#+filetags: paper
 
 * 动机
 ** 先前工作的问题

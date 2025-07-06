@@ -1,9 +1,4 @@
 :PROPERTIES:
-:ID:       2732f7a7-3f0e-4ce0-a466-38b9a072818c
-:END:
-#+title: protoc
-#+LAST_MODIFIED: 2025-03-12 16:29:03
-
 * 使用
 - 生成[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]代码 :: --cpp_out=./out：指定输出目录 ./out，会生成 example.pb.h 和 example.pb.cc
   #+begin_src bash
@@ -13,6 +8,9 @@
   #+begin_src bash
   protoc --grpc_out=./out --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` example.proto
   #+end_src
+* 保留旧的pb和grpc文件导致编译错误
+1. 删除后，重新用protoc生成pb和grpc文件
+
 
 * 概念
 - protoc ::
@@ -21,3 +19,11 @@
 ** 插件
 protoc-gen-cpp(protoc内置) => 解析.proto文件生成相应[[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]代码
 grpc_cpp_plugin =>
+
+* .proto
+- 简介 ::
+  1. [[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][protobuf]]的文件扩展名
+  2. [[id:2732f7a7-3f0e-4ce0-a466-38b9a072818c][protoc]]从.proto文件生成服务端、客户端代码
+** 使用
+服务(暴露给客户端的远程方法集合) => rpc方法 => 类型、输入参数、输出参数
+消息(服务端、客户端交换的数据结构) => 字段 => 类型、索引值

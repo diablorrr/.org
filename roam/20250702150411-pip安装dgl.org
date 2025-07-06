@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       6c6faca5-847e-4b1a-a882-4246f293b573
+:END:
+#+title: pip安装dgl
+#+filetags: pip
+
+* pip安装dgl [[https://blog.csdn.net/qq_44583635/article/details/127341198][参考]]
+1. [[https://www.dgl.ai/pages/start.html][新版本]] [[https://conda.anaconda.org/dglteam/linux-64][历史版本]] 下载对应的.tar.bz2包
+2. 解压到目标路径：可以通过以下方式查看
+   #+begin_src bash
+   python
+   import site
+   print(site.getsitepackages())
+   #+end_src

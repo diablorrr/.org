@@ -2,6 +2,7 @@
 :ID:       f678366d-60e6-4a1e-937d-4aba72608499
 :END:
 #+title: LightGCN
+#+filetags: paper
 
 * 提出LightGCN的动机是什么？
 - 先前的问题 :: 在推荐任务中，GNN中的特征转换、非线性激活是不必要的 => 增加了训练难度

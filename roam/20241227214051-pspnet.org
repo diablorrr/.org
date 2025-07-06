@@ -2,9 +2,7 @@
 :ID:       0c0e34f8-6f45-41f5-a5a5-0dfcfc2d8247
 :END:
 #+title: PSPNet
-# 2017.4
-# 标题：Pyramid Scene Parsing Network
-# 任务：语义分割
+#+filetags: paper
 
 * 先前工作的问题
 ** 场景解析

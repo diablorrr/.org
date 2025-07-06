@@ -2,6 +2,7 @@
 :ID:       362a1bfe-9b93-427b-80ad-853b3ea46ec2
 :END:
 #+title: bash
+#+filetags: shell
 
 * 查询
 | 命令 | 参数 | 作用                                               |

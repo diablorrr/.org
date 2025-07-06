@@ -1,8 +1,0 @@
-:PROPERTIES:
-:ID:       658cc2f1-6e88-4e1a-a172-000334d7b584
-:END:
-#+title: void*
-
-* 概念
-- 简介 ::
-  1. [[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]中的无类型指针，可以指向任意内存块

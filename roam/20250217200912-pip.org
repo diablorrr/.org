@@ -2,6 +2,16 @@
 :ID:       1f8e3fa6-ad53-4b9c-8d06-43ffa046fb1c
 :END:
 #+title: pip
+#+filetags: python
+
+* pip
+[[id:4b0b3990-5e14-47a4-ab66-a2e2c50c9ade][pip install错误：OSError: [Errno 28] No space left on device]]
+[[id:cfe89b94-ace5-4816-896f-a1ffce8d10c5][pip安装torch(带cuda)]]
+[[id:e00f1993-5152-4a4c-866c-f0fe91761cb8][pip安装torch-scatter]]
+[[id:6c6faca5-847e-4b1a-a882-4246f293b573][pip安装dgl]]
+[[id:58345174-9871-418d-b753-828271b9b5c1][pip安装timm]]
+[[id:8a2869e2-dc0b-40e9-acf5-4f80fb954de8][pip安装yaml]]
+[[id:5fb308e4-2d7c-43ba-8c39-07cc94d02c2d][pip安装faiss]]
 
 
 * 使用
@@ -10,8 +20,6 @@
 pip config list --verbose
 #+end_src
 
-** pip install错误:OSError: [Errno 28] No space left on device[fn:1]
-1. 删除c盘文件的内容([[id:ec7aef91-2628-4ba9-b300-16652314877f][linux]] ~/ 相当于 c盘)
 
 
 * 配置
@@ -20,5 +28,3 @@ pip config list --verbose
   ~/.config/pip/pip.conf
   #+end_example
 
-* Footnotes
-[fn:1] 参考：[[https://blog.csdn.net/aixuexideou/article/details/125597407][解决pip install错误“OSError: [Errno 28] No space left on device”]]

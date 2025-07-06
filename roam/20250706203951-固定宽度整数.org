@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       321d5bac-2ec7-459e-9315-7b21d0e16f03
+:END:
+#+title: 固定宽度整数
+#+filetags: cpp
+
+* 固定宽度整数 [[https://www.learncpp.com/cpp-tutorial/fixed-width-integers-and-size-t/][参考]]
+1. 由来：cpp标准 *只限定了 int 的最小大小（16位 = 2字节），没有限定 int 的大小* -> 可能导致 *溢出* 的问题（eg：在 16位的系统上，程序假定 int 为32位 ）
+   - 因此，cpp11标准引入 *固定宽度整数* ： =std::int#_t（有符号）、std::uint#_t（无符号）；# 为位数（8、16、32、64）= -> 使得 int 始终为 # 位， *实际是现有类型的别名*
+     #+begin_example
+     在 int 为16位，long 为32位  的系统；std::int32_t 为该系统 long 的别名
+     #+end_example
+2. 使用的 *Best practice* ：
+   1) 使用 int（int范围不重要时，如年龄）
+   2) 使用 固定宽度类型（需要明确的 int范围）

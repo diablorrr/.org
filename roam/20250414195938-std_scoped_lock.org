@@ -1,9 +1,0 @@
-:PROPERTIES:
-:ID:       a9951f61-ca29-4c16-8908-c4aca8f37b38
-:END:
-#+title: std::scoped_lock
-
-* 概念
-- 简介 ::
-  1. [[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]17标准引入的[[id:80bc3e2a-ba66-4828-8883-7cf5d7f455f2][RAII]]锁封装类，可以同时锁定多个互斥量，避免死锁
-  2. [[id:f3588577-c0e0-4667-b141-1bddfcb3b97c][std::lock_guard]]的增强版

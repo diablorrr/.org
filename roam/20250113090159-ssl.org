@@ -1,7 +1,0 @@
-:PROPERTIES:
-:ID:       d9110c06-f742-4e49-b1d7-4c82a33ff2f5
-:END:
-#+title: SSL
-
-* 简介
-SSL（Secure Sockets Layer，安全套接层）是一种用于在计算机网络中提供加密通信和数据完整性的安全协议。广泛用于保护浏览器与服务器之间的数据传输安全，比如在访问网站时的 HTTPS 协议。

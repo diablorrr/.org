@@ -2,13 +2,8 @@
 :ID:       182a3be6-99f8-4df1-a8db-47a6a3550345
 :END:
 #+title: org-capture
-#+LAST_MODIFIED: 2025-03-16 20:31:37
+#+filetags: org
 
-* 使用
-** 自定义捕获模板
-1. M-x customize
-2. Org Capture Templates
-
-
-* 概念
-- 简介 :: 随时随地写笔记、todo等
+* org-capture
+1. 用于随时随地写笔记、todo等
+2. 设置自定义模板，见 [[id:fc41ee15-5ff1-4674-aff6-4c119fa019be][org-capture自定义捕获模板]]

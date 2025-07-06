@@ -1,9 +1,0 @@
-:PROPERTIES:
-:ID:       f3588577-c0e0-4667-b141-1bddfcb3b97c
-:END:
-#+title: std::lock_guard
-
-* 概念
-- 简介 ::
-  1. 构造时加锁，析构时解锁
-  2. 不支持手动解锁

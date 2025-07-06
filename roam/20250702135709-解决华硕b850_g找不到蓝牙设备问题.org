@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       f6c85933-fa3b-4df0-955f-94aed3c70747
+:END:
+#+title: 解决华硕B850-G找不到蓝牙设备问题
+#+filetags: hardware
+
+* 解决华硕B850-G找不到蓝牙设备问题
+1. [[https://rog.asus.com.cn/motherboards/rog-strix/rog-strix-b850-g-gaming-wifi-s/helpdesk_download/][官网]] 下载驱动
+2. 解压缩
+3. 双击 =AsusSetup.exe=

@@ -2,9 +2,6 @@
 :ID:       247f3c54-b3b7-4a77-8fdf-bad941b8fc2e
 :END:
 #+title: google
-#+LAST_MODIFIED: 2025-03-12 16:18:33
-
-
 
 * 使用
 ** 只搜索某网站 site:

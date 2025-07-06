@@ -2,9 +2,7 @@
 :ID:       e86a36b7-5082-4b6a-88fe-498eec53bdd3
 :END:
 #+title: FCN
-# 2014.11月29日
-# 标题：Fully Convolutional Networks for Semantic Segmentation
-# 任务：语义分割
+#+filetags: paper
 
 * 核心思想
 1. 无连接层的全卷积网络，适应任意尺寸的输入

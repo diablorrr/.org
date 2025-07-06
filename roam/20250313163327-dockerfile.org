@@ -2,6 +2,7 @@
 :ID:       8987bd3a-de7e-4c6c-83de-96d8b42ccfdd
 :END:
 #+title: Dockerfile
+#+filetags: docker
 
 * 使用
 ** 基于[[id:a47cc941-ccc6-4893-9862-d5b245ea912b][docker]] mysql官方镜像，构建镜像，期望运行时自动执行.sql文件

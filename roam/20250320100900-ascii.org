@@ -1,9 +1,0 @@
-:PROPERTIES:
-:ID:       bc0b7272-ae2a-43e6-9727-0992493ddc04
-:END:
-#+title: ASCII
-
-
-* 概念
-- 简介 ::
-  1. ASCII (American Standard Code for Information Interchange，美国信息交换标准代码)

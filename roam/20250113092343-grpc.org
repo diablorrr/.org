@@ -2,24 +2,9 @@
 :ID:       a5c426e4-365b-447d-89f3-eddc9c517a01
 :END:
 #+title: grpc
+#+filetags: index
 
-* 使用
-** 编译grpc
-1. 先[[id:edf9b6ef-cd6c-4caa-bd2d-dff2131f6efb][git走代理]]
-2. git clone -b <选择Tag> https://github.com/grpc/grpc
-3. cd grpc
-4. git submodule update --init
-5. mkdir -p cmake/build
-6. cd cmake/build
-7. cmake -DCMAKE_CXX_STANDARD=17 ../..
-8. make -j$(nproc)
-9. make install
-10. 安装到/usr/local/bin，有些程序在/usr/bin下寻找；=> [[id:bb654a41-440c-468d-999c-fd8470e4f15c][软连接]]
-** 保留旧的pb和grpc文件导致编译错误
-1. 删除后，重新用protoc生成pb和grpc文件
-
-
-* 概念
-- 简介 ::
-  1. 是[[id:247f3c54-b3b7-4a77-8fdf-bad941b8fc2e][google]]公司开发的一个高性能、开源的 远程调用([[id:3ec78292-c01a-491f-a35c-e745a87a05f6][rpc]])框架，是[[id:3ec78292-c01a-491f-a35c-e745a87a05f6][rpc]]协议的一种实现
-  2. 使用[[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][protobuf]]序列化消息，并通过HTTP/2实现网络传输
+* grpc
+1. 高性能的 *RPC（远程过程调用）框架* ，基于 HTTP/2协议，使用 [[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][Protocol Buffers]] 序列化
+2. *实现序列化* /反序列化：使用 [[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][Protocol Buffers]]编译器 [[id:2732f7a7-3f0e-4ce0-a466-38b9a072818c][protoc]] 将 .proto文件 编译成 对应语言的代码（Python、Java、C++）
+3. *编译方法* 见：[[id:395677a5-f825-4935-a1d1-ef8a31f366cc][编译grpc]]

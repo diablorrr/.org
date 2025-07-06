@@ -2,8 +2,6 @@
 :ID:       ef5b7883-d43b-4765-bdc9-daf62b50a036
 :END:
 #+title: lsp
-#+LAST_MODIFIED: 2025-03-02 19:14:01
-
 
 * 概念
 ** 简介

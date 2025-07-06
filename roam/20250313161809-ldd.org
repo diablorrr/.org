@@ -2,6 +2,7 @@
 :ID:       e0d36f23-9091-4354-a15f-100166065bd8
 :END:
 #+title: ldd
+#+filetags: linux
 
 
 * 查询

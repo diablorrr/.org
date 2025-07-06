@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       fc41ee15-5ff1-4674-aff6-4c119fa019be
+:END:
+#+title: org-capture自定义捕获模板
+#+filetags: org-capture
+
+* org-capture自定义捕获模板
+1. M-x customize
+2. Org Capture Templates

@@ -1,7 +1,0 @@
-:PROPERTIES:
-:ID:       9ea97ec5-2ade-4267-9387-bdea24983ca1
-:END:
-#+title: /proc
-
-/proc/进程id/fd目录 => 存放了每个进程打开的fd(常与ps命令行工具一起使用)
-每个linux进程默认打开三个fd：0(标准输入：键盘)、1(标准输出：显示器)、2(标准错误：显示器)。cin cout cerr

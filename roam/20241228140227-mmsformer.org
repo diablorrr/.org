@@ -2,9 +2,7 @@
 :ID:       a16d35ec-de65-434e-98e5-e4ce6ebd0b29
 :END:
 #+title: MMSFormer
-# 2023.9
-# 标题：MMSFORMER: MULTIMODAL TRANSFORMER FOR MATERIAL  AND SEMANTIC SEGMENTATION
-# 任务：语义分割
+#+filetags: paper
 
 * 动机
 ** 先前工作的问题

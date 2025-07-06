@@ -1,6 +1,0 @@
-:PROPERTIES:
-:ID:       981b3120-eef1-4daa-b8ce-817e5bc3b6d1
-:END:
-#+title: promise
-
-promise 是用来设置值的，通常在生产者线程中使用。

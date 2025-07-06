@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       11714ec9-8e95-41e7-a2ec-9be7f47b3598
-:END:
-#+title: echo

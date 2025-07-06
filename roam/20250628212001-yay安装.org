@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       0c3212d8-bb4d-4284-b25e-a0023865690d
+:END:
+#+title: yay安装
+#+filetags: yay
+
+* yay安装
+1. 挂代理；见 [[id:b2299062-b568-4efd-8288-9ba461a40031][同一局域网一台机器连另一台机器的代理]]
+2. =git clone https://aur.archlinux.org/yay-bin.git=
+3. =cd yay-bin=
+4. =makepkg -si=
+5. 有时候 makepkg -si 因为网络问题没法下载 yay_12.5.0_x86_64.tar.gz 导致失败；此时在 yay-bin文件夹中 =wget https://github.com/Jguer/yay/releases/download/v12.5.0/yay_12.5.0_x86_64.tar.gz= 再执行 =makepkg -si=
+6. 也可以在 *浏览器中手动设置代理* 再去 yay 的 github 上下载 yay_12.5.0_x86_64.tar.gz

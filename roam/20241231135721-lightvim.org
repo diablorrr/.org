@@ -2,9 +2,7 @@
 :ID:       af21cc91-a063-473f-abc3-204aef34b6c2
 :END:
 #+title: LightViM
-# 2024.6
-# 标题：A lightweight visual mamba network for image recognition under resource-limited environments
-# 期刊&会议：Applied Soft Computing Journal (中科院sci一区)
+#+filetags: paper
 
 * 动机
 ** 先前的问题

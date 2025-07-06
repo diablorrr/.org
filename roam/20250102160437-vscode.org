@@ -2,66 +2,20 @@
 :ID:       bfd7b7bf-ea5d-45c4-ad33-6da35fbb0de7
 :END:
 #+title: vscode
-#+LAST_MODIFIED: 2025-03-08 17:41:15
-#+startup: show2levels
+#+filetags: index
 
-* 使用
-
-** root权限运行vscode(且使用普通用户的配置)
-#+begin_src bash
-sudo code --user-data-dir="$HOME/.config/Code" --extensions-dir="$HOME/.vscode/extensions" --no-sandbox
-#+end_src
-- 只能使用$HOME，使用~不生效。原因未知
-
-** 配置boost库
-1. [[id:a1ec5ccd-270f-4ca6-8c0b-b1bb9b815c62][linux编译安装boost库]]
-2. [[id:7a2d69bf-554b-4132-8d90-3b818adbe730][C/C++:Edit Configurations(UI)]]中设置包含路径
-
-** 远程连接到服务器使用jupyter notebook
-1. [[id:956841e6-7532-44bb-aa20-168fad48365f][vscode连接到远程服务器使用jupyter notebook]]
-
-** vscode连接远程后，无法为jupyter选择内核
-1. 在远程服务器上重新安装[[id:6a95d71e-f7ea-4258-bf08-62ce584d3842][jupyter]]
-*** 参考链接
-[[https://blog.csdn.net/jyk19991222/article/details/131486776][vscode中 ssh连接服务器后 无法为jupyter文件选择内核kernel]]
-** debug深度学习项目
-1. 控制面板 => Python: Select Interpreter => 选择conda环境
-2. 编写[[id:3bc9bc09-2279-40c8-8269-532289bf2bfe][launch.json]][fn:1]
-3. 控制面板 => [[id:37f43feb-ef0e-4261-aa70-6bdd8f2b1c2f][Python Debugger]]: Debug using launch.json
-
-
-* 查询
-** TODO vscode的cpp配置文件
-| 文件                  | 作用                     | 生成方式                      |
-|-----------------------+--------------------------+-------------------------------|
-| c_cpp_properties.json | 配置编译器设置、[[id:96ca4e3b-31e8-4e28-989e-c66aa6b67bc3][智能感知]] | [[id:7a2d69bf-554b-4132-8d90-3b818adbe730][C/C++:Edit Configurations(UI)]] |
-| tasks.json            | 配置[[id:0e613551-8941-4d69-b64b-6e1c3433027e][构建]]任务             | Task:Configure Task           |
-| [[id:3bc9bc09-2279-40c8-8269-532289bf2bfe][launch.json]]           | 配置[[id:a919522a-6e1d-44e5-8ad8-25e2af115e8a][调试]]设置             |                               |
-
-
-* 配置
-** 普通用户
-- 用户配置 :: ~/.config/Code/User/
-- 扩展插件 :: ~/.vscode/extensions/
-
-** root用户
-- 用户配置 :: /​root/.config/Code/User/
-- 扩展插件 :: /​root/.vscode/extensions/
-
-
-* 概念
-** vscode中"Run Code"和"运行C/C++文件的机制"
-*** Run Code
-- 来源 :: Code Runner插件
-- 运行代码 ::
-  1. 使用code-runner.executorMap中预定义的命令运行代码
-     # 对于C++，如 g++ your_file.cpp -o your_file && ./your_file
-  2. 不会加载tasks.json或其他vscode项目配置
-
-*** 运行C/C++文件的机制
-- 来源 :: Microsoft C/C++ 扩展
-- 运行代码 :: 使用tasks.json中的编译选项
-
-* Footnotes
-
-[fn:1] 参考：[[https://www.cnblogs.com/swx123/p/17827203.html][vscode python remote debug极速入门]]
+* vscode
+1. Microsoft 开发的代码编辑器
+2. vscode *普通用户配置位置、扩展插件位置*
+   | 路径                              | 说明     |
+   |-----------------------------------+----------|
+   | ~/.config/Code/User/settings.json | 用户配置 |
+   | ~/.vscode/extensions/             | 扩展插件 |
+3. vscode 中 *"Run Code" 和 "运行C/C++文件"* 的区别
+   |               | 来源                 | 运行方式                                            |
+   |---------------+----------------------+-----------------------------------------------------|
+   | Run Code      | Code Runner插件      | 使用 code-runner.executorMap 中预定义的命令运行代码 |
+   |               |                      | 不会加载 tasks.json 或其他 vscode项目配置           |
+   | 运行C/C++文件 | Microsoft C/C++ 扩展 | 使用 tasks.json 中的编译选项                        |
+4. 连接服务器后无法为 jupyter 选择内核，解决方法：[[id:13522bcf-1e56-4afb-9486-6adb8a9ed427][vscode连接远程后无法为jupyter选择内核]]
+5. *root权限运行* vscode，但 *使用普通用户配置、扩展* ，见 [[id:09f51db8-5ce4-4089-8e18-c64d1601ed1c][vscode root权限运行但使用普通用户配置和扩展]]

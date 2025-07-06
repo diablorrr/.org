@@ -2,10 +2,9 @@
 :ID:       83c484d7-c8a8-40af-a728-0c27d5f270e2
 :END:
 #+title: gud
-#+LAST_MODIFIED: 2025-03-15 19:42:13
+#+filetags: emacs
 
 * 使用
-
 ** TODO 使用gud进行调试
 1. M-x gdb                  => 在minibuffer输入命令：gdb -i=mi 二进制文件
 2. M-x gdb-many-windows     => 打开多个gud窗口，且可与鼠标互动

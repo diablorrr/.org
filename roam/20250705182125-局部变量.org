@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       4a91da25-6384-4b42-9917-cd4dd28f7220
+:END:
+#+title: 局部变量
+#+filetags: cpp
+
+* 局部变量 [[https://www.learncpp.com/cpp-tutorial/introduction-to-local-scope/][参考]]
+局部变量销毁时是按 *创建的逆序* 销毁
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int add(int x, int y)
+{
+    int z{ x + y };
+
+    return z;
+} // z, y, and x destroyed here
+#+end_src

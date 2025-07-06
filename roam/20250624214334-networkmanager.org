@@ -5,3 +5,8 @@
 #+filetags: linux
 
 * NetworkManager [[https://wiki.archlinux.org/title/NetworkManager][参考]]
+
+* 802-11-wireless-security.key-mgmt : property is missing
+- 问题复现 :: 无线网A 突然断开，当我使用 =nmcli device wifi connect 无线A password xxx= 再次连接 A 时，出现上述错误
+- 原因 :: NetworkManager 存储了 无线网A网络配置 在 connections，通过 =nmcli connection show= 可以找到 A
+- 解决方式 :: =nmcli connection up 无线网A=

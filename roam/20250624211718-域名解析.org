@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       8e45e00f-ae1a-41fa-b347-c71fa1fa120c
-:END:
-#+title: 域名解析

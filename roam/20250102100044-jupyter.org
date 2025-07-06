@@ -2,36 +2,17 @@
 :ID:       6a95d71e-f7ea-4258-bf08-62ce584d3842
 :END:
 #+title: jupyter
+#+filetags: index
 
-* 使用
-** 远程服务器中使用jupyter notebook
-1. [[id:eb955da4-d9f2-4122-bf2c-cd2900c71a53][ssh]]连接上远程服务器
-2. 远程服务器上安装jupyter插件
-   #+begin_src bash
-   pip install jupyter
-   #+end_src
-3. 服务器中运行jupyter(二选一)：
-   #+begin_src bash
-jupyter notebook --allow-root
-   jupyter notebook --port 端口 --allow-root设置特定端口
-   #+end_src
-4. 打开网站，输入密码
-
-** 查看密码
-~/.jupyter/jupyter_notebook_config.py文件中的c.NotebookApp.password
-
-** 更改工作目录
-~/.jupyter/jupyter_notebook_config.py文件中的c.NotebookApp.notebook_dir
-
-** notebook中输入终端命令
-#+begin_src jupyter
-!命令
-#+end_src
-
-** notebook中使用conda虚拟环境
-#+begin_src jupyter
-!conda run -n 虚拟环境名
-#+end_src
-
-
-
+* jupyter
+1. *交互式计算* 平台，支持多种编程语言内核（python、cpp...）
+2. 可以 *配置* 密码、工作目录
+   | 路径                                                                    | 说明                             |
+   |-------------------------------------------------------------------------+----------------------------------|
+   | ~/.jupyter/jupyter_notebook_config.py中的c.NotebookApp.password         | 密码                             |
+   | ~/.jupyter/jupyter_notebook_config.py文件中的c.NotebookApp.notebook_dir | 工作目录（网页进入时显示的目录） |
+3. 在 jupyter notebook 中 *常用操作* 如下
+   | 操作                | 作用                       |
+   |---------------------+----------------------------|
+   | 输入终端命令        | !<命令>                    |
+   | 使用 conda 虚拟环境 | !conda run -n <虚拟环境名> |

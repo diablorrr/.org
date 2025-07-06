@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       ecc4af61-b691-4f7e-9948-013cde605293
+:END:
+#+title: org解决重复任务过了deadline在org-agenda中依旧显示的问题
+#+filetags: org
+
+* org解决重复任务过了deadline在org-agenda中依旧显示的问题
+- 问题 :: 假设我计划25-27号重复任务，SCHEDULED 设置为25，DEADLINE 设置为27；但是27号后也会显示重复任务
+- 解决 :: 设置变量 =org-agenda-skip-scheduled-repeats-after-deadline= 为 t

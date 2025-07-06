@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       e56f5517-0062-4481-bd2a-20762da3f0ad
+:END:
+#+title: matplotlib画训练损失图
+#+filetags: matplotlib deep_learning
+
+* matplotlib画训练损失图
+1. 将损失收集到一个 List 中
+2. 使用 matplotlib 的 *pyplot* 模块
+3. 画横纵坐标： =pyplot.plot()=
+4. 可视化结果： =pyplot.show() / pyplot.savefig()=

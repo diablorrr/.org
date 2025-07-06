@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       8a2869e2-dc0b-40e9-acf5-4f80fb954de8
+:END:
+#+title: pip安装yaml
+#+filetags: pip
+
+* pip安装yaml [[https://blog.csdn.net/HuanCaoO/article/details/104629625/][参考]]
+1. pip install pyyaml

@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       20cce17d-d2a2-4b48-9920-7debc5760a71
+:END:
+#+title: 键盘使用VIA改键
+#+filetags: hardware
+
+* 键盘使用VIA改键
+1. 将键盘用 USB 插入电脑， =Fn + t= 改为有线模式
+2. 进入 VIA网站（注意： *不是官方网站* ） 改键即可：https://via.toqmk.com/
+3. VIA 对键盘按键的修改是直接 *写入键盘固件* 里的

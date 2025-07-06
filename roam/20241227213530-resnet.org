@@ -2,8 +2,7 @@
 :ID:       590995a2-6dcd-4ab4-a52d-3ffdce10e8fd
 :END:
 #+title: ResNet
-# 2015.12
-# 标题：Deep Residual learning for Image Recognition
+#+filetags: paper
 
 * 先前工作的问题
 在ResNet提出之前，人们认为网络的层数越多，获取的图片特征信息越全，学习效果越好。

@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       604d5ad5-f060-4504-b407-933fc82aeb7e
+:END:
+#+title: 命名空间
+#+filetags: cpp
+
+* 命名空间 [[https://www.learncpp.com/cpp-tutorial/naming-collisions-and-an-introduction-to-namespaces/][参考]]
+1. 命名空间 是一种 作用域；内部名称 通过 ::（命名空间限定符）访问
+2. 在 命名空间 中只能有 [[id:1752c1cb-3fd8-4272-96c9-fa73e14a7d3c][声明和定义]]， *不能有执行语句，除非是定义的一部分*
+3. 命名空间的使用方式
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   std::<名称>           // ::（命名空间限定符）显式使用
+   using namespace std   // 使用 using
+   #+end_src
+
+4. 全局作用域 属于 *隐式的全局命名空间* ，即 =::<名称>= ，因此不能有执行语句
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+
+   #include <iostream> // imports the declaration of std::cout into the global scope
+
+   // All of the following statements are part of the global namespace
+
+   void foo();    // okay: function forward declaration
+   int x;         // compiles but strongly discouraged: non-const global variable definition (without initializer)
+   int y { 5 };   // compiles but strongly discouraged: non-const global variable definition (with initializer)
+   x = 5;         // compile error: executable statements are not allowed in namespaces
+
+   int main()     // okay: function definition
+   {
+       return 0;
+   }
+
+   void goo();    // okay: A function forward declaration
+
+   #+end_src
+
+5. 标准命名空间，即 =std::<名称>=

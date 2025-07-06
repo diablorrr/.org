@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       f6d22fc8-049c-4366-a86e-bb722c96b469
+:END:
+#+title: linux X11下安装中文输入法
+#+filetags: linux
+
+* linux安装中文输入法
+1. =sudo pacman -S fcitx5-im fcitx5-chinese-addons fcitx5-rime fcitx5-configtool=
+2. 由于我是使用 startx 手动启动 Xorg会话，因此需要将环境变量添加到 .xinitrc：在 exec 这行上方写入 [[https://wiki.archlinuxcn.org/wiki/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F#Xorg_%E4%BC%9A%E8%AF%9D][参考]]
+   #+begin_example
+   GTK_IM_MODULE=fcitx       # 让 GTK程序 使用 Fcitx5 作为输入法模块
+   QT_IM_MODULE=fcitx        # 让 Qt程序 使用 Fcitx5 作为输入法模块
+   XMODIFIERS=@im=fcitx      # 指定传统终端、旧版应用输入法为 Fcitx5
+   SDL_IM_MODULE=fcitx       # 让 SDL程序（游戏、多媒体应用）使用 Fcitx5
+   INPUT_METHOD=fcitx        # 部分旧程序可能依赖此变量
+   GLFW_IM_MODULE=ibus       # kitty 默认关闭了IBus，因此需要启用
+   fcitx5 -d &
+   #+end_example
+3. 命令行输入 =fcitx5-configtool= 进入图形化界面，在右边 Available Input Method 选中 Rime ，点击 中间的左箭头，保存 [[https://wiki.archlinuxcn.org/wiki/Fcitx5#%E9%85%8D%E7%BD%AE%E5%B7%A5%E5%85%B7][参考]]
+4. 重启后， =Ctrl + SPC= 就能调出输入法， =Shift= 切换输入法， =F4= 切换 Rime 到简体中文方案

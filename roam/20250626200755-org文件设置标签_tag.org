@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       b196dda6-f460-4f91-b6b7-660e6e912593
+:END:
+#+title: org为文件设置标签(tag)
+#+filetags: org
+
+* org为文件设置标签(tag)
+在文件开头 =#+filetags: tag1 tag2 ...=

@@ -4,7 +4,5 @@
 #+title: embark
 #+filetags: emacs
 
-* 目标
-
-* 快速开始
-- embark 就类似于鼠标右键菜单。对着某个 target 使用 embark-act 就能选择 actions；内部原理是 embark 的世界中，target 是有不同类型的，对于不同类型的 target 有相应的 actions(变量 embark-keymap-alist 是一个列表，记录了 target 类型 与 keymap 的映射类型，keymap 即对应 actions 的快捷键)
+* embark
+embark 就类似于鼠标右键菜单。对着某个 target 使用 embark-act 就能选择 actions；内部原理是 embark 的世界中，target 是有不同类型的，对于不同类型的 target 有相应的 actions(变量 embark-keymap-alist 是一个列表，记录了 target 类型 与 keymap 的映射类型，keymap 即对应 actions 的快捷键)

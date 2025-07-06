@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       f8b79cb7-0ec5-43ce-8cda-387c9d3d7b42
+:END:
+#+title: 编译boost
+#+filetags: boost
+
+* 编译boost
+1. wget https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz  #[[https://www.boost.org/users/download/][官网]]下载boost库
+2. tar -zxvf boost_1_87_0.tar.gz && cd boost_1_87_0                          #解压
+3. ./bootstrap.sh
+4. ./b2
+5. sudo ./b2 install
+7. ls /​usr/local/include/boost

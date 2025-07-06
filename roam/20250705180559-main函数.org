@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       f4a757af-96df-44bc-abef-4720a0c40275
+:END:
+#+title: main函数
+#+filetags: cpp
+
+* main函数 [[https://www.learncpp.com/cpp-tutorial/function-return-values-value-returning-functions/][参考]]
+1. main函数 是 *操作系统调用的函数* ，但 *不一定是第一个被调用的函数* ：因为 全局变量 在 main函数 调用前初始化，若 全局变量 是 通过某个函数初始化的，则那个函数为第一个调用的函数
+2. main函数 可以没有 return（ *隐式的返回0* ）

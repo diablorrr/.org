@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       1faf0010-54a5-4c8b-88a6-62e1db4a588e
+:END:
+#+title: org-pomodoro手动取消番茄钟也能记录时间
+#+filetags: org-pomodoro
+
+* org-pomodoro手动取消番茄钟也能记录时间
+1. M-x customize
+2. Org Pomodoro Keep Killed Pomodoro Time => on

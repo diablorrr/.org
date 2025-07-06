@@ -2,10 +2,7 @@
 :ID:       ecd6ccb5-164a-4688-b673-e322c8d95180
 :END:
 #+title: CLIP-RC
-# 2024.6
-# 标题：Exploring Regional Clues in CLIP for Zero-Shot Semantic Segmentation
-# 期刊：CVPR
-# 任务：零样本语义分割
+#+filetags: paper
 
 * 动机
 ** 先前工作的问题

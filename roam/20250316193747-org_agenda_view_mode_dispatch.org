@@ -2,13 +2,14 @@
 :ID:       3ae3d36b-0b90-4447-bc6f-f9b87a212481
 :END:
 #+title: org-agenda-view-mode-dispatch
-#+LAST_MODIFIED: 2025-03-16 19:39:51
+#+filetags: org-agenda
 
-
-* 查询
-- 视图种类 ::
-  | 日/周/月/年视图         |
-  | Log模式                 |
-  | 周报                    |
-  | diary模式(显示各种节日) |
-  | 时间打卡完整性          |
+* org-agenda-view-mode-dispatch
+选择 [[id:ff91392f-bdeb-4fd6-b4fd-d0355c3be5eb][org-agenda]] 的某个视图模式，视图种类如下
+| 视图种类                |
+|-------------------------|
+| 日/周/月/年视图         |
+| Log模式                 |
+| 周报                    |
+| diary模式(显示各种节日) |
+| 时间打卡完整性          |

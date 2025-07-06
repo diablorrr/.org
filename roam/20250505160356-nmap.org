@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       53ce5c11-d4b4-4ada-a24b-ff21254159e5
-:END:
-#+title: nmap

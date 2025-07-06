@@ -1,7 +1,0 @@
-:PROPERTIES:
-:ID:       df779374-d30b-4e22-842d-ccf7b690e6eb
-:END:
-#+title: 同步
-
-* 概念
-- 简介 :: 协调多个进程/线程的执行顺序

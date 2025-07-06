@@ -2,7 +2,7 @@
 :ID:       29a2fc5a-1db6-4a13-a5cd-397e587c21ec
 :END:
 #+title: arch
-#+filetags: index linux
+#+filetags: linux
 
 * 概念
 ** 简介

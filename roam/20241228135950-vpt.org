@@ -2,8 +2,7 @@
 :ID:       20e0cbee-061b-48b2-b093-00134cd92eb1
 :END:
 #+title: VPT
-# 2022.3
-# 标题：Visual Prompt Tuning
+#+filetags: paper
 
 * 作用
 用于transformer模型 的小样本学习 的微调

@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       e4d048e0-8ec1-43f8-b9a4-110b4d22db35
-:END:
-#+title: zsh

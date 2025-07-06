@@ -2,18 +2,13 @@
 :ID:       54b77c23-d971-4522-b36a-5c620e6db2ff
 :END:
 #+title: org-clock
-#+LAST_MODIFIED: 2025-03-16 20:25:43
+#+filetags: org
 
-
-* 查询
-| 函数             | 作用                   |
-|------------------+------------------------|
-| org-clock-in     | 当前headline上开启时钟 |
-| org-clock-out    | 当前headline上关闭时钟 |
-| org-clock-report | 生成时长报告           |
-
-
-* 概念
-- 简介 ::
-  1. 任务计时，生成时长报告
-  2. 可搭配[[id:ff91392f-bdeb-4fd6-b4fd-d0355c3be5eb][org-agenda]]的agenda视图使用
+* org-clock
+1. 对 *任务计时，生成时长报告* ；可在 *Org Agenda*视图 中使用
+2. *常见函数* 如下
+   | 函数             | 作用                   |
+   |------------------+------------------------|
+   | org-clock-in     | 当前headline上开启时钟 |
+   | org-clock-out    | 当前headline上关闭时钟 |
+   | org-clock-report | 生成时长报告           |

@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       e00f1993-5152-4a4c-866c-f0fe91761cb8
+:END:
+#+title: pip安装torch-scatter
+#+filetags: pip pytorch
+
+* pip安装torch-scatter [[https://blog.csdn.net/weixin_42421914/article/details/132875571][参考]]
+1. 进入 https://data.pyg.org/whl/ ：这个网站里都是 *pytorch依赖的预编译二进制包*
+2. 找到对应版本的 [[id:7216a5c5-6580-4f5f-b5d6-5f63349e6875][.whl文件]]
+3. pip install 即可
+   #+begin_src bash
+   pip uninstall torch-scatter
+   pip install torch-scatter --upgrade -f https://data.pyg.org/whl/torch-1.12.1+cu113.html
+   #+end_src

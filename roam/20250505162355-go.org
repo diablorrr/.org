@@ -1,4 +1,0 @@
-:PROPERTIES:
-:ID:       08706863-69ee-46f6-8aa5-70e5a0d8edd3
-:END:
-#+title: go

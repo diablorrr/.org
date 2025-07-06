@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       7b497f15-400a-4b32-af6e-1c8006d72e39
+:END:
+#+title: org设置进入文件时显示的headline层级
+#+filetags: org
+
+* org设置进入文件时显示的headline层级
+ *文件级别* ：在 org 文件的上方写入
+   #+begin_example
+   #+STARTUP: overview
+   #+STARTUP: content
+   #+STARTUP: showall
+   #+STARTUP: show<数字>levels
+   #+STARTUP: showeverything（默认）
+   #+end_example
+ *标题级别* ：在 drawer 里写入:VISIBILITY:键值对
+  #+begin_example
+  * Heading 1
+  :PROPERTIES:
+  :VISIBILITY: show2levels
+  :END:
+  #+end_example

@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       79cf3da5-7ff7-4a47-b4da-5380da55b840
+:END:
+#+title: 作用域
+#+filetags: cpp
+
+* 作用域 [[https://www.learncpp.com/cpp-tutorial/naming-collisions-and-an-introduction-to-namespaces/][参考]]
+1. *名称可见范围* ，用于避免名称冲突
+2. 是 *编译时属性* ，与此相对 [[id:853a3bee-b823-49fc-acd6-804eecb74822][生命周期]] 是 *运行时属性*
+3. *作用域种类* ：
+   1) 全局作用域
+   2) 局部作用域（{}块作用域、函数作用域）
+   3) 类作用域
+   4) [[id:604d5ad5-f060-4504-b407-933fc82aeb7e][命名空间]]作用域

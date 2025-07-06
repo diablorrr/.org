@@ -2,7 +2,7 @@
 :ID:       d687dc43-4cbb-411e-97b5-28050a471c88
 :END:
 #+title: GNN
-#+filetags: nlp
+#+filetags: paper
 
 * 图是什么？
 - 顶点和边构造的数据结构

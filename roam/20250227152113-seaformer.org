@@ -2,8 +2,7 @@
 :ID:       58e2a0c9-b596-405d-b07a-4093c957b884
 :END:
 #+title: SeaFormer
-#+LAST_MODIFIED: 2025-02-28 17:40:03
-#+filetags: 论文
+#+filetags: paper
 
 * 动机
 

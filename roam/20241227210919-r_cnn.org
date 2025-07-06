@@ -2,9 +2,7 @@
 :ID:       8122499f-c12d-4a41-870d-01ff770626d7
 :END:
 #+title: R-CNN
-# 2014.03
-# 标题：Rich feature hierarchies for accurate object detection and semantic segmentation
-# 任务：目标检测
+#+filetags: paper
 
 * 目标检测要做的事 :ATTACH:
 :PROPERTIES:

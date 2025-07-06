@@ -2,9 +2,7 @@
 :ID:       d6d8b066-c84e-4c09-9e37-43df5e0c1304
 :END:
 #+title: SPP
-# 2014.06
-# 标题：Spatial Pyramid Pooling in Deep ConvolutionalNetworks for Visual Recognition
-# 任务：目标检测
+#+filetags: paper
 
 * 先前工作的问题
 - R-CNN：因为全连接层的存在，因此需要将图片使用crop和warp预处理，使其统一大小后输入CNN => 导致图像拉伸变形、物体不全等问题，限制了识别精度

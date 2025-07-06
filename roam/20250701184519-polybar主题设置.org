@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       f2c70590-4dbd-47a6-9f4b-9b55a5dd8608
+:END:
+#+title: polybar-themes设置forest主题
+#+filetags: polybar
+
+* polybar-themes设置forest主题 [[https://github.com/adi1090x/polybar-themes?tab=readme-ov-file#forest][参考]]
+1. 安装依赖
+   #+begin_src bash
+   sudo pacman -S networkmanager dmenu openbox
+   sudo pacman -S polybar rofi python-pywal calc
+   yay networkmanager-dmenu
+   yay ttf-icomoon-feather ttf-iosevka-nerd
+   #+end_src
+2. 安装主题
+   #+begin_src bash
+   git clone --depth=1 https://github.com/adi1090x/polybar-themes.git
+   cd polybar-themes
+   chmod +x setup.sh
+   ./setup.sh
+   #+end_src
+3. 启动 bar： =~/.config/polybar/launch.sh --forest=
+4. 解决 bar 上网络图标无法点击问题： [[https://github.com/adi1090x/polybar-themes/issues/101][参考]]
+   #+begin_src bash
+   cp /usr/share/doc/networkmanager-dmenu-git/config.ini.example ~/.config/networkmanager-dmenu/config.ini
+   注释掉 ~/.config/networkmanager-dmenu/config.ini 里面 dmenu_command
+   写入 dmenu_command = rofi -no-config -no-lazy-grab -show drun -modi drun -theme ~/.config/polybar/forest/scripts/rofi/networkmenu.rasi
+   #+end_src

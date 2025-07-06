@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       cfe89b94-ace5-4816-896f-a1ffce8d10c5
+:END:
+#+title: pip安装torch(带cuda)
+#+filetags: pip
+
+* pip安装torch(带cuda)
+1. 查看官网：选择安装方式：wheel(推荐)、conda
+   [[https://pytorch.org/get-started/locally/][新版本]] [[https://pytorch.org/get-started/previous-versions/][老版本]]
+2. 验证是否安装成功
+   #+begin_src bash
+   python -c 'import torch;print(torch.__version__);print(torch.version.cuda)'
+   #+end_src
+3. 若import torch出现模块未找到问题：
+   [[id:f3c23bfd-80db-4d03-a687-3e520c4a7901][conda环境中存在pytorch但是import时找不到模块]]

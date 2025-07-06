@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       eee36e22-f7fb-48c0-9b3a-0c2960868d37
+:END:
+#+title: org-roam为node设置别名
+#+filetags: org-roam
+
+* org-roam为node设置别名
+1. :PROPERTIES:和:END:之间 写入 =:ROAM_ALIASES: <别名>=

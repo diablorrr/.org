@@ -2,10 +2,7 @@
 :ID:       a671c4c4-4c8e-49a5-bc5c-f118503b764c
 :END:
 #+title: Transformer
-#+LAST_MODIFIED: 2025-02-27 15:28:34
-# 2017.6
-# 标题：Attention Is All You Need
-#+filetags: 论文
+#+filetags: paper
 
 * 先前工作的问题
 RNN和CNN都能获取全局信息，但存在以下问题

@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       09f51db8-5ce4-4089-8e18-c64d1601ed1c
+:END:
+#+title: vscode root权限运行但使用普通用户配置和扩展
+#+filetags: vscode
+
+* vscode root权限运行但使用普通用户配置和扩展
+1. sudo code --user-data-dir="$HOME/.config/Code" --extensions-dir="$HOME/.vscode/extensions" --no-sandbox
+# 只能使用$HOME，使用~不生效。原因未知

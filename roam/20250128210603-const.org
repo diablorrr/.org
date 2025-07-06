@@ -40,9 +40,6 @@
 this指针
 
 * 顶层const和底层const
-:PROPERTIES:
-:NOTER_PAGE: 83
-:END:
 - 顶层const :: 修饰自身
 - 底层const :: 修饰指向或引用的对象
 指针可以是顶、底；引用是底

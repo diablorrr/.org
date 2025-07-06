@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       8f976cb6-39b9-4b30-88ab-9a98132cf555
+:END:
+#+title: rofi的安装和配置
+#+filetags: rofi
+
+* rofi的安装和配置 [[https://github.com/davatorium/rofi?tab=readme-ov-file][参考]]
+1. rofi 是 *快速应用程序启动器* ；类似 KDE 中的 KRunner，同类的还有 dmenu
+2. *安装* ： =sudo pacman -S rofi=
+3. *配置* ：用以下命令生成默认配置
+   #+begin_src bash
+   mkdir -p ~/.config/rofi
+   rofi -dump-config > ~/.config/rofi/config.rasi
+   #+end_src
+4. *运行* ： =rofi -show <mode>= ； *在 i3wm 中集成* 在配置文件 =~/.config/i3/config= 中， 注释掉 dmenu 部分的配置，解注释 rofi 部分的配置
+5. *使用现成的主题* ：[[https://github.com/newmanls/rofi-themes-collection][rofi主题收集]]（按照里面的步骤进行，注意要拷贝 template文件夹）； 预览主题： =rofi-theme-selector= ；应用主题：在配置文件 =~/.config/rofi/config.rasi= 中写入 =@theme "主题名"=

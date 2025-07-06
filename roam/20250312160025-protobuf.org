@@ -1,7 +1,8 @@
 :PROPERTIES:
 :ID:       13f67abf-4087-4d20-87d7-ed11e5b99edc
 :END:
-#+title: protobuf
+#+title: Protocol Buffers
+#+filetags: grpc
 
 
 * 概念
