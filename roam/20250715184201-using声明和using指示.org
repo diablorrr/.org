@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       6b9c2860-3495-43ed-a6a9-8b92d7c8680f
+:END:
+#+title: using声明和using指示
+#+filetags: cpp
+
+*Best Practice*
+1. 优先使用限定名称（eg：std::cout）
+2. .cpp文件 中有限使用 using声明
+3. 避免使用 using指示（除非测试代码中）
+
+
+* 限定名称和非限定名称 [[https://www.learncpp.com/cpp-tutorial/using-declarations-and-using-directives/][learncpp7.13]]
+- 限定名称   :: 使用 =作用域解析运算符（::）= 将名称和命名空间关联的名称
+  #+begin_src cpp :results output :namespaces std :includes <iostream>
+  std::cout // identifier cout is qualified by namespace std
+  ::foo // identifier foo is qualified by the global namespace
+  #+end_src
+- 非限定名称 :: 名称和命名空间没有关联的名称
+
+
+* using声明
+1. 将命名空间中的名称导入当前作用域，使用非限定名称访问： =using <命名空间>::<名称>=
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   using std::cout; // 之后可直接用 cout 代替 std::cout
+   cout << "Hello"; // 等同于 std::cout << "Hello";
+   #+end_src
+2. 仅在声明的[[id:79cf3da5-7ff7-4a47-b4da-5380da55b840][作用域]]有效
+
+
+* using指示
+1. 将命名空间中的名称全部导入当前作用域，通过非限定名称访问全部内容： =using namespace <命名空间>=
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   using namespace std; // 之后可直接用 cout、cin 等
+   cout << "Hello";     // 等同于 std::cout << "Hello";
+   #+end_src
+2. 仅在声明的[[id:79cf3da5-7ff7-4a47-b4da-5380da55b840][作用域]]有效

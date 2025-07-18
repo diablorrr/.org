@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       77c81947-ba5c-4bad-93da-03bb11cee093
+:END:
+#+title: 常量(constants)
+#+filetags: cpp index
+
+*Best Practice* ：优先使用 常量变量 而不是 替换文本的类对象宏
+
+* 常量(constants) [[https://www.learncpp.com/cpp-tutorial/constant-variables-named-constants/][参考]]
+1. 常量 分为：命名常量（也称为符号常量）、字面值常量（也称为[[id:27733720-d27e-4852-bb07-b50130457fc9][字面值]]）
+   - *命名常量* 分为：常量变量（[[id:1450514f-880d-42f5-8bb4-f114c1a5b675][const]]修饰）、枚举常量、替换文本的类对象宏（只是对文本的简单替换，没有语法检查）
+     - *常量变量* 特点： 值不能修改、必须初始化
+
+2. 常量 又可分为：编译时常量、运行时常量
+   - 编译时常量 :: 在编译期初始化，不存在内存分配和管理，因此也没有地址；通常存储在 *只读数据段（.rodata）或 代码段（.text）*
+   - 运行时常量 :: 在运行期初始化

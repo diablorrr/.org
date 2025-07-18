@@ -1,0 +1,131 @@
+:PROPERTIES:
+:ID:       a8100707-ed3c-4c60-ad7c-61ae20bf4da6
+:END:
+#+title: 多个文件中共享全局常量
+#+filetags: cpp
+
+* 方式1:作为内部变量的全局常量(const/constexpr)
+#+name: constants.h
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+// Define your own namespace to hold constants
+namespace constants
+{
+    // Global constants have internal linkage by default
+    constexpr double pi { 3.14159 };
+    constexpr double avogadro { 6.0221413e23 };
+    constexpr double myGravity { 9.2 }; // m/s^2 -- gravity is light on this planet
+    // ... other related constants
+}
+#endif
+#+end_src
+
+#+name: main.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "constants.h" // include a copy of each constant in this file
+
+int main()
+{
+    std::cout << "Enter a radius: ";
+    double radius{};
+    std::cin >> radius;
+
+    std::cout << "The circumference is: " << 2 * radius * constants::pi << '\n';
+
+    return 0;
+}
+#+end_src
+
+- 缺点 :: 因为是内部变量（只能在文件内部使用），因此每次被 include 进一个文件，都会 *增加编译时长和内存使用* ；当然，修改也会造成重新编译
+
+
+* 方式2:作为外部变量的全局常量
+#+name: constants.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "constants.h"
+
+namespace constants
+{
+    // We use extern to ensure these have external linkage
+    extern constexpr double pi { 3.14159 };
+    extern constexpr double avogadro { 6.0221413e23 };
+    extern constexpr double myGravity { 9.2 }; // m/s^2 -- gravity is light on this planet
+}
+#+end_src
+
+#+name: constants.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+namespace constants
+{
+    // Since the actual variables are inside a namespace, the forward declarations need to be inside a namespace as well
+    // We can't forward declare variables as constexpr, but we can forward declare them as (runtime) const
+    extern const double pi;
+    extern const double avogadro;
+    extern const double myGravity;
+}
+
+#endif
+#+end_src
+
+#+name: main.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "constants.h" // include all the forward declarations
+
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter a radius: ";
+    double radius{};
+    std::cin >> radius;
+
+    std::cout << "The circumference is: " << 2 * radius * constants::pi << '\n';
+
+    return 0;
+}
+#+end_src
+
+- 优点 :: 只需要编译一份 =constants.cpp= ，且修改时也只重新编译 =constants.cpp=
+- 缺点 :: =constants.h= 中只能使用 =const= ，因为 =constexpr=  是需要在必须编译时计算的 -> 因此其他地方包含这个头文件，头文件中的变量无法用于常量表达式（只能在 =constants.cpp= 中用于常量表达式）
+
+
+* 方式3:作为[[id:37338922-6483-4d68-9f73-16926e875301][内联变量]]的全局常量
+#+name: constants.h
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+// define your own namespace to hold constants
+namespace constants
+{
+    inline constexpr double pi { 3.14159 }; // note: now inline constexpr
+    inline constexpr double avogadro { 6.0221413e23 };
+    inline constexpr double myGravity { 9.2 }; // m/s^2 -- gravity is light on this planet
+    // ... other related constants
+}
+#endif
+#+end_src
+
+#+name: main.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "constants.h"
+
+int main()
+{
+    std::cout << "Enter a radius: ";
+    double radius{};
+    std::cin >> radius;
+
+    std::cout << "The circumference is: " << 2 * radius * constants::pi << '\n';
+
+    return 0;
+}
+#+end_src
+
+- 优点 :: 包含该头文件，头文件中的变量可以用于常量表达式
+- 缺点 :: 只适用于cpp17及以后的版本；修改会导致重新编译

@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       f72a714e-5a38-4c4b-a773-17fb7e216e6f
+:END:
+#+title: 迭代
+#+filetags: cpp
+
+* 迭代 [[https://www.learncpp.com/cpp-tutorial/introduction-to-loops-and-while-statements/][learncpp8.8]]
+1. 每次循环执行时，就称为一次迭代

@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       99463280-0fa3-491e-82ae-2c3402272509
+:END:
+#+title: 复合数据类型
+#+filetags: cpp
+
+* 复合数据类型 [[https://www.learncpp.com/cpp-tutorial/introduction-to-compound-data-types/][learncpp12.1]]
+1. 根据现有类型定义的类型
+
+2. 以下是常见复合类型
+   - 函数：void func(int x, double y) 的类型是 void(int, double) -> 所以函数是复合类型
+   - C风格数组
+   - 指针类型
+     + 对象指针
+     + 指向函数的指针
+   - 指向成员类型
+     + 数据成员指针
+     + 指向成员函数的指针
+   - 引用类型
+     + [[id:1f772bce-0f88-46a2-ab44-c9bf04b30653][左值引用]]
+     + 右值引用
+   - [[id:d091d455-5933-4047-92fb-4c2d2d2f7ff9][枚举]]类型
+     + 无作用域枚举
+     + 作用域枚举
+   - 类类型
+     + 结构体
+     + 类
+     + 联合体

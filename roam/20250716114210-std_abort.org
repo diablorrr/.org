@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       bf65fb36-d17f-42ed-8435-88510d7a502b
+:END:
+#+title: std::abort()
+#+filetags: cpp
+
+* std::abort() [[https://www.learncpp.com/cpp-tutorial/halts-exiting-your-program-early/][learncpp8.12]]
+1. 用于 *异常终止* 的函数， *不会执行任何清理操作*
+2. 调用 std::terminate() 会隐式调用 std::abort()

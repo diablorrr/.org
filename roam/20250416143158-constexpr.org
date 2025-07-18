@@ -5,28 +5,49 @@
 #+filetags: cpp
 
 * constexpr [[https://www.learncpp.com/cpp-tutorial/constexpr-variables/][参考]]
-1. cpp 11标准 引入的关键字，是一种优化手段；可以用于修饰：变量、表达式、函数，声明它们是[[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]]，强制编译器将上述内容在编译期求值（相关的编译器优化见：[[id:a047ed53-7758-4ecd-8451-1eaf172442eb][编译期计算]]）-> 提升运行时性能
+1. cpp11 引入的 [[id:f77d9ae9-2589-446f-99c4-217423a4e41e][类型限定符]]，用于 *修饰* ：变量、函数， *声明* 它们是[[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]]；让编译器帮助 *判断* 上述内容是否为常量表达式，且 *强制* 编译器在编译期求值（相关的编译器优化见：[[id:a047ed53-7758-4ecd-8451-1eaf172442eb][编译期计算]]）-> 是一种 *优化* 手段，提升运行时性能
    #+begin_src cpp :results output :namespaces std :includes <iostream>
-   // The return value of a non-constexpr function is not constexpr
-   int five()
-   {
-       return 5;
-   }
-
-   int main()
-   {
-       constexpr double gravity { 9.8 }; // ok: 9.8 is a constant expression
-       constexpr int sum { 4 + 5 };      // ok: 4 + 5 is a constant expression
-       constexpr int something { sum };  // ok: sum is a constant expression
-
-       std::cout << "Enter your age: ";
-       int age{};
-       std::cin >> age;
-
-       constexpr int myAge { age };      // compile error: age is not a constant expression
-       constexpr int f { five() };       // compile error: return value of five() is not constexpr
-
-       return 0;
-   }
+   const int a{b};      // 此时不好判断a是否为常量表达式，得看b是不是常量表达式
+   const int c{func()}; // 此时不好判断c是否为常量表达式，得看func()是否为常量表达式
    #+end_src
-2. 包含隐式的 const
+   有没有让编译器来替我们判断的方法呢？有！使用 constexpr ，若 a 不是常量表达式，则编译错误；综合示例：[fn:1]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   constexpr int a{b};      // 若a不是常量表达式，则报错
+   #+end_src
+
+2. 包含 *隐式* 的 [[id:1450514f-880d-42f5-8bb4-f114c1a5b675][const]]，因此 constexpr 也具有 [[id:c3e47726-c072-4c68-9905-1fc6e2c1e016][内部链接性]]
+   constexpr 代表对象的初始值必须在 *编译期* 确定                               -> 编译时常量
+   const 代表对象的初始值在初始化后不能更改，初始值可以在 *编译期、运行期* 确定 -> 运行时常量
+   编译时常量和运行时常量，见：[[id:77c81947-ba5c-4bad-93da-03bb11cee093][常量(constants)]]
+
+3. constexpr函数 默认内联；constexpr变量 默认不是内联
+
+4. 若修饰的 [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]] ，则会在 *静态初始化* 阶段初始化；见：[[id:819c9ef5-5220-4678-994a-3122d7d17ab7][初始化]]
+
+
+
+
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+// The return value of a non-constexpr function is not constexpr
+int five()
+{
+    return 5;
+}
+int main()
+{
+    constexpr double gravity { 9.8 }; // ok: 9.8 is a constant expression
+    constexpr int sum { 4 + 5 };      // ok: 4 + 5 is a constant expression
+    constexpr int something { sum };  // ok: sum is a constant expression
+    std::cout << "Enter your age: ";
+    int age{};
+    std::cin >> age;
+    constexpr int myAge { age };      // compile error: age is not a constant expression
+    constexpr int f { five() };       // compile error: return value of five() is not constexpr
+    return 0;
+ }
+ #+end_src

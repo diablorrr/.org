@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       4ffb2be5-cd6a-40e3-b24b-46775e536f8b
+:END:
+#+title: 强制类型转换(显示类型转换)
+#+filetags: cpp
+
+* 强制类型转换(显示类型转换) [[https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/][learncpp10.6]]
+1. 程序员明确指示编译器进行的类型转换， *必要性* 如下
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int x = 10, y = 4;
+   double d = x / y; // 结果为2.0；因为 先进行 x / y 得到 int 2，然后转为 double 2.0
+   cout << d << '\n';
+   #+end_src
+
+   #+RESULTS:
+   : 2
+
+   使用 static_cast 进行强制类型转换
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int x = 10, y = 4;
+   double d = static_cast<double>(x) / y; // 结果为2.5；因为 x 转为 double 10.0，根据 算数转换，y 转为 double 4.0
+   cout << d << '\n';
+   #+end_src
+
+   #+RESULTS:
+   : 2.5
+
+
+2. *静态类型转换*  ： =static_cast<类型>(变量)= 进行 *编译期类型转换* -> 提供编译时类型检查 -> 安全
+3. *C风格类型转换* ： =(类型)变量= ； *底层* 使用到 static_cast、const_cast、reinterpret_cast 或 它们的组合； *应避免使用*
+
+
+** 5种强制类型转换 :ATTACH:
+:PROPERTIES:
+:ID:       4d09b863-c477-4521-a800-b5edbb9fb2be
+:END:
+[[attachment:_20250716_192752screenshot.png]]

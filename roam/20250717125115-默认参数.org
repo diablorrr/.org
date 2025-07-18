@@ -1,0 +1,105 @@
+:PROPERTIES:
+:ID:       0274638c-01a6-4c23-8e98-c9288336a570
+:END:
+#+title: 默认参数
+#+filetags: cpp
+
+* 默认参数 [[https://www.learncpp.com/cpp-tutorial/default-arguments/][learncpp11.5]]
+1. 是为函数参数提供的 *默认值*
+
+2. 默认参数 *规则*
+   1) 默认参数 的 *右边* 必须是默认参数；默认参数匹配时也是从左到右匹配
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      void print(int x=10, int y); // not allowed
+      void print(std::string_view sv="Hello", double d=10.0);
+
+      int main()
+      {
+          print(20.0);       // error: does not match above function (cannot skip argument for sv)
+      }
+      #+end_src
+   2) 默认参数 *不能同时出现* 在 [[id:98b78b88-32ba-4ad7-b5d5-efeae3da8405][前置声明]] 和 函数定义 中 [fn:1]；且 默认参数 使用前也得在 [[id:d8366823-aedc-4b95-ab2f-f81d3aadea6e][翻译单元]] 声明 [fn:2]
+      *Best Practice* ：默认参数在 [[id:fbf786c2-5b6e-47a1-81b9-c1c644b567bb][头文件]] 中前置声明 [fn:3]
+   3) 默认参数 可以 *用于[[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][函数重载]]*[fn:4]；但可能导致模糊匹配 [fn:5]
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void print(int x, int y=4); // forward declaration
+
+void print(int x, int y=4) // compile error: redefinition of default argument
+{
+    std::cout << "x: " << x << '\n';
+    std::cout << "y: " << y << '\n';
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void print(int x, int y); // forward declaration, no default argument
+
+int main()
+{
+    print(3); // compile error: default argument for y hasn't been defined yet
+
+    return 0;
+}
+
+void print(int x, int y=4)
+{
+    std::cout << "x: " << x << '\n';
+    std::cout << "y: " << y << '\n';
+}
+#+end_src
+
+[fn:3]
+#+name: foo.h
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifndef FOO_H
+#define FOO_H
+void print(int x, int y=4);
+#endif
+#+end_src
+
+#+name: main.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "foo.h"
+
+void print(int x, int y)
+{
+    std::cout << "x: " << x << '\n';
+    std::cout << "y: " << y << '\n';
+}
+
+int main()
+{
+    print(5);
+
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void print(int x);                  // signature print(int)
+void print(int x, int y = 10);      // signature print(int, int)
+void print(int x, double y = 20.5); // signature print(int, double)
+#+end_src
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void print(int x);                  // signature print(int)
+void print(int x, int y = 10);      // signature print(int, int)
+void print(int x, double y = 20.5); // signature print(int, double)
+
+int main()
+{
+    print(1, 2);   // will resolve to print(int, int)
+    print(1, 2.5); // will resolve to print(int, double)
+    print(1);      // ambiguous function call
+
+    return 0;
+}
+#+end_src

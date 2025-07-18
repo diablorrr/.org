@@ -1,10 +1,10 @@
 :PROPERTIES:
 :ID:       62f9a384-bfce-4cec-a0ad-d954061eb430
 :END:
-#+title: std::endl和\n
+#+title: std::endl和换行符(\n)
 #+filetags: cpp
 
-* std::endl和\n [[https://www.learncpp.com/cpp-tutorial/introduction-to-iostream-cout-cin-and-endl/][参考]]
+* std::endl和换行符(\n) [[https://www.learncpp.com/cpp-tutorial/introduction-to-iostream-cout-cin-and-endl/][参考]]
 *Best practice* ：控制台输出文本，优先使用 =\n=
 - std::endl :: 会输出一个 \n（换行符），然后刷新缓冲区[fn:1]（这比较慢）
 - \n :: 只会换行，不会刷新缓存区

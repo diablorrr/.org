@@ -1,0 +1,61 @@
+:PROPERTIES:
+:ID:       a1a9b3a8-35a3-4d81-9df5-bb6ac3216515
+:END:
+#+title: 内部链接
+#+filetags: cpp
+
+* 内部链接 [[https://www.learncpp.com/cpp-tutorial/internal-linkage/][learncpp7.6]] [[https://www.learncpp.com/cpp-tutorial/scope-duration-and-linkage-summary/][learncpp7.12]]
+1. 具有内部链接性的标识符， *只能在当前[[id:d8366823-aedc-4b95-ab2f-f81d3aadea6e][翻译单元]]访问，无法从其他翻译单元访问* ；因此 两个翻译单元中有同名标识符也不会出现冲突
+2. *有哪些* ？
+   1) const/constexpr [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]]
+   2) static 非const/constexpr的全局变量
+   3) static 函数
+   4) 未命名命名空间及其内部定义的任何内容
+   eg：具有内部链接的变量
+   #+name: a.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   [[maybe_unused]] constexpr int g_x { 2 }; // this internal g_x is only accessible within a.cpp
+   #+end_src
+
+   #+name: main.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   static int g_x { 3 };  // this separate internal g_x is only accessible within main.cpp
+   const int g_y { 2 };   // const全局变量；只能本翻译单元中使用
+   constexpr int g_z {4}; // constexpr全局变量；只能本翻译单元中使用
+
+   int main()
+   {
+       std::cout << g_x << '\n'; // uses main.cpp's g_x, prints 3
+
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : 3
+
+   eg：具有内部链接的函数
+   #+name: add.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // This function is declared as static, and can now be used only within this file
+   // Attempts to access it from another file via a function forward declaration will fail
+   [[maybe_unused]] static int add(int x, int y)
+   {
+       return x + y;
+   }
+   #+end_src
+
+   #+name: main.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int add(int x, int y); // forward declaration for function add
+
+   int main()
+   {
+       std::cout << add(3, 4) << '\n';
+
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : 编译错误，main.cpp 无法访问 add.cpp 中的 add()

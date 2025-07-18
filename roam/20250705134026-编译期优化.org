@@ -1,10 +1,10 @@
 :PROPERTIES:
 :ID:       a047ed53-7758-4ecd-8451-1eaf172442eb
 :END:
-#+title: 编译期计算
+#+title: 编译期优化
 #+filetags: cpp
 
-* 编译期计算
+* 编译期优化 [[https://www.learncpp.com/cpp-tutorial/the-as-if-rule-and-compile-time-optimization/][参考]]
 1. 编译器对 *变量/表达式* 运行时计算 提前到 编译时计算，好处：提高运行时候效率，坏处：不好 debug；有下面三种优化方式 [[https://www.learncpp.com/cpp-tutorial/the-as-if-rule-and-compile-time-optimization/][参考]]
    - 常量折叠 :: 将常量 *表达式* （3 + 7）替换为结果（10）
    - 常量传播 :: 已知常量值的 *变量* 替换为结果（x 替换为7）
@@ -35,6 +35,8 @@
 
    #+RESULTS:
    : 4.6
+
+
 
 * Footnotes
 

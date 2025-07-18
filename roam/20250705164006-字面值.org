@@ -1,8 +1,30 @@
 :PROPERTIES:
 :ID:       27733720-d27e-4852-bb07-b50130457fc9
 :END:
-#+title: 字面值
-#+filetags: cpp
+#+title: 字面量
+#+filetags: cpp constants
 
-* 字面值
-是直接写死的常量值，比如：12、'a'、"hello"
+* 字面量 [[https://www.learncpp.com/cpp-tutorial/literals/][参考]]
+1. 是直接嵌入到代码中的值，是 [[id:77c81947-ba5c-4bad-93da-03bb11cee093][编译时常量]]，在 *编译期初始化* ；存储在 *只读数据段（.rodata）或 代码段（.text）* -> 因此生命周期贯穿整个程序
+
+2. 字面量有 *默认类型* ，是根据其 value 推导出的 type
+   | 字面值      | 示例          | 默认字面值类型          |
+   |-------------+---------------+-------------------------|
+   | 整型值      | 5，0，-3      | int                     |
+   | 布尔值      | true，false   | bool                    |
+   | 浮点值      | 1.2，3.4      | double（ *not float！* ） |
+   | 字符        | 'a'，'\n'     | char                    |
+   | [[id:a713e19b-ae94-4202-8834-c586754c4275][C风格字符串]] | "hello,world" | const char[]            |
+
+3. 若我们想改变推导出的字面量type，使用 *字面量后缀*
+   | [[id:a730ea97-35fa-4a65-930f-bf2285457550][数据类型]] | 后缀 | 含义               |
+   |----------+------+--------------------|
+   | 整型     | u    | unsigned int       |
+   | 整型     | l    | long               |
+   | 整型     | ul   | unsigned long      |
+   | 整型     | ll   | long long          |
+   | 整型     | ull  | unsigned long long |
+   | 浮点     | f    | float              |
+   | 浮点     | l    | long double        |
+   | string   | s    | std::string        |
+   | string   | sv   | std::string_view   |

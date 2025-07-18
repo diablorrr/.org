@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID:       698b0467-2c90-4942-a2e3-078f725b31c7
+:END:
+#+title: 断言
+#+filetags: cpp
+
+*Best Practice* ：优先使用 static_assert
+
+* 断言 [[https://www.learncpp.com/cpp-tutorial/assert-and-static_assert/][learncpp9.6]]
+1. 是程序员视角的代码检查（程序员：这里绝对不可能XXX！），是 *条件检查-打印错误信息-终止程序* 的快捷方式；断言分为
+   - 运行时断言 :: =assert宏= ，可以使用 =NDEBUG宏= 开启/禁用断言，打印消息的小技巧 =&&=
+     #+begin_src cpp :results output :namespaces std :includes <iostream>
+     #define NDEBUG // 关闭断言 (must be placed before any #includes)
+     // #undef NDEBUG  开启断言
+     #include <cassert>
+     int main()
+     {
+         assert(false && "必须为true！"); // won't trigger since asserts have been disabled in this translation unit
+         std::cout << "Hello, world!\n";
+
+         return 0;
+     }
+     #+end_src
+
+     #+RESULTS:
+     : Hello, world!
+
+   - 编译时断言 :: =static_assert关键字= -> 因为是编译时求值，条件必须为[[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]]
+     #+begin_src cpp :results output :namespaces std :includes <iostream>
+     static_assert(sizeof(long) == 8, "long must be 8 bytes");
+     static_assert(sizeof(int) >= 4, "int must be at least 4 bytes");
+
+     int main()
+     {
+         return 0;
+     }
+     #+end_src
+

@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       b4f04018-ac5e-4784-9d44-8856871c3244
+:END:
+#+title: torch.nn.Linear
+#+filetags: pytorch
+
+* torch.nn.Linear
+1. 用于个将张量 *映射到新的特征空间* ，方便后续计算（后续计算可能需要某些形状要求）
+   #+begin_src python
+   m = nn.Linear(20, 30)
+   input = torch.randn(128, 20)
+   output = m(input)
+   print(output.size()) # 输出：torch.Size([128, 30])
+   #+end_src

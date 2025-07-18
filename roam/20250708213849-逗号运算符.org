@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       b8425e01-0c33-46e5-86b8-9c0ae4d2279c
+:END:
+#+title: 逗号运算符
+#+filetags: cpp
+
+* 逗号运算符
+1. =x,y= ：先计算 x，再计算 y，返回 y
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   z = (a, b); // 先计算 a 的值然后抛弃，再计算 b 的值，再将 b 的值赋给 z
+   z = a, b;   // 先计算 a 的值，再将 a 值赋给 z ，再计算 b 的值并丢弃
+   #+end_src
+
+2. 经常出现的场景
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int a = 1, b = 2;
+   for (int c = 3, d = 4; ...; ...) {...}
+   #+end_src

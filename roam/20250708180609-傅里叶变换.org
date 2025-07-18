@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       3bf77a47-7801-494f-a525-42a3d840b669
+:END:
+#+title: 傅里叶变换
+#+filetags: math
+
+* 傅里叶变换 [[https://zhuanlan.zhihu.com/p/19759362][知乎]]

@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       dd96b0cf-8cde-4a33-a358-85ba55483b87
+:END:
+#+title: 代码块(复合语句)
+#+filetags: cpp
+
+* 代码块(复合语句) [[https://www.learncpp.com/cpp-tutorial/compound-statements-blocks/][参考]]
+1. 由 ={}= 包裹的 =0 或 多= 个语句组成，且后头没有 =;= ， *初始化器不是代码块* ，eg：函数体就是代码块
+2. 代码块可以 *嵌套*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int add(int x, int y)
+   { // block
+       return x + y;
+   } // end block
+
+   int main()
+   { // outer block
+
+       // multiple statements
+       int value {};   //初始化器，不是代码块
+
+       { // inner/nested block
+           add(3, 4);
+       } // end inner/nested block
+
+       return 0;
+
+   } // end outer block
+   #+end_src

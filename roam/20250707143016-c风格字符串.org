@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       a713e19b-ae94-4202-8834-c586754c4275
+:END:
+#+title: C风格字符串
+#+filetags: cpp
+
+* C风格字符串 [[https://www.learncpp.com/cpp-tutorial/chars/][参考]]
+1. 属于 [[id:27733720-d27e-4852-bb07-b50130457fc9][字面值]]， =""= 包裹的文本，里面包含多个字符（也就是 [[id:6809ddca-f657-4095-83b8-317dfc40b7c0][char]]），字符串结尾隐含字符 ='\0'=
+2. 类型为 =const char[N]= （N = 字符串长度 + 1），隐式转换为： =const char *=

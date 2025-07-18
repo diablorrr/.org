@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       a14ff439-4fb7-40f9-8ba5-182651b82cee
+:END:
+#+title: 存储类限定符
+#+filetags: cpp
+
+* 存储类限定符 [[https://www.learncpp.com/cpp-tutorial/scope-duration-and-linkage-summary/][learncpp7.12]] :ATTACH:
+:PROPERTIES:
+:ID:       d895114b-9f49-4aa7-bc5e-5bad41834883
+:END:
+1. 用于说明标识符的 [[id:853a3bee-b823-49fc-acd6-804eecb74822][生命周期]]、[[id:c3e47726-c072-4c68-9905-1fc6e2c1e016][链接性]]；cpp 中一共有4类
+   [[attachment:_20250715_184132screenshot.png]]

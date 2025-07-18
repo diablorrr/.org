@@ -2,6 +2,7 @@
 :ID:       04b223e7-c9e1-4c4b-a75d-733e9f16c972
 :END:
 #+title: ld(链接器)
+#+filetags: cpp
 
 * 使用
 ** 链接问题

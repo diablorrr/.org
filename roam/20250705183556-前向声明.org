@@ -1,11 +1,11 @@
 :PROPERTIES:
 :ID:       98b78b88-32ba-4ad7-b5d5-efeae3da8405
 :END:
-#+title: 前向声明
+#+title: 前置声明
 #+filetags: cpp
 
-* 前向声明 [[https://www.learncpp.com/cpp-tutorial/forward-declarations/][参考]]
-1. 实际 *定义标识符之前* ，告诉编译器某个 *标识符的存在* ；声明和定义的区别，见：[[id:1752c1cb-3fd8-4272-96c9-fa73e14a7d3c][声明和定义]]
+* 前置声明 [[https://www.learncpp.com/cpp-tutorial/forward-declarations/][参考]]
+1. 是一种[[id:93f32e84-8167-4897-a64f-30d23f1bab17][不完全类型]]；实际 *定义标识符之前* ，告诉编译器某个 *标识符的存在* ；声明和定义的区别，见：[[id:1752c1cb-3fd8-4272-96c9-fa73e14a7d3c][声明和定义]]
    #+begin_src cpp :results output :namespaces std :includes <iostream>
 
    int add(int x, int y); // forward declaration of add() (using a function declaration)

@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       6b7beb8f-fac9-4651-bc19-ef423f8f7a4d
+:END:
+#+title: 匿名命名空间
+#+filetags: cpp
+
+* 匿名命名空间 [[https://www.learncpp.com/cpp-tutorial/unnamed-and-inline-namespaces/][learncpp7.14]]
+1. 没有名字的命名空间；内部标识符属于父命名空间，具有[[id:c3e47726-c072-4c68-9905-1fc6e2c1e016][内部链接性]]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   namespace // unnamed namespace
+   {
+       void doSomething() // can only be accessed in this file
+       {
+           std::cout << "v1\n";
+       }
+   }
+
+   int main()
+   {
+       doSomething(); // we can call doSomething() without a namespace prefix
+
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : v1

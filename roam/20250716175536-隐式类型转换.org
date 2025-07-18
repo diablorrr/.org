@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       9c9c2b6a-92d9-431f-9f25-7f588848596a
+:END:
+#+title: 隐式类型转换
+#+filetags: cpp
+
+* 隐式类型转换 [[https://www.learncpp.com/cpp-tutorial/implicit-type-conversion/][learncpp10.1]]
+1. 编译器自动执行的类型转换；若精度缺失，则发生[[id:74371219-77ab-4491-94cd-705a03d1a74b][窄化转换]]；若二元运算符操作数数据类型不同，则发生[[id:c49fb0b9-4417-4458-966d-44df03566bd0][算数转换]]
+   #+name: 如果没有隐式类型转换...
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   #include <cstring>
+
+   int main()
+   {
+       int n { 3 };                        // here's int value 3
+       float f {};                         // here's our float variable
+       std::memcpy(&f, &n, sizeof(float)); // copy the bits from n into f
+       std::cout << f << '\n';             // print f (containing the bits from n)
+
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : 4.2039e-45
+   原因在于：[[id:a730ea97-35fa-4a65-930f-bf2285457550][编译器对数据类型的解释是不同的]]
+
+2. 隐式转换5种 *类别*
+   - 数值提升 :: 整型提升、浮点提升
+   - 数值转换
+
+3. *数值提升* 的必要性： *使得 CPU 处理更高效* [[https://www.learncpp.com/cpp-tutorial/floating-point-and-integral-promotion/][learncpp10.2]]
+   - eg：32位CPU 处理 int（32位）相比 char（8位）更快
+
+** 14种标准隐式转换 :ATTACH:
+:PROPERTIES:
+:ID:       a70f3170-fbe4-4e8a-b73d-54a97f128c78
+:END:
+[[attachment:_20250716_180323screenshot.png]]

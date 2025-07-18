@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID:       9c59a5ce-61f3-45a3-b463-a6277125fb1a
+:END:
+#+title: 代码覆盖率
+#+filetags: cpp
+
+* 代码覆盖率 [[https://www.learncpp.com/cpp-tutorial/code-coverage/][learncpp9.2]]
+1. 用于 *验证测试的完整性*
+2. *常见类型*
+   - 语句覆盖率   :: 测试覆盖到的语句
+     #+begin_src cpp :results output :namespaces std :includes <iostream>
+     int foo(int x, int y) {     // 测试 foo(1, 0) foo(0, 1)
+         int z{y};
+         if (x > y) z = x;       // 需测试 x > y 和 x <= y 两种情况
+         return z;
+     }
+     #+end_src
+   - 分支覆盖率   :: 测试覆盖到的分支（eg：if、switch）
+     #+begin_src cpp :results output :namespaces std :includes <iostream>
+     void compare(int x, int y) {         // 测试 compare(1,0)、compare(0,1)、compare(0,0)
+         if (x > y) cout << "Greater";    // 分支1
+         else if (x < y) cout << "Less";  // 分支2
+         else cout << "Equal";            // 分支3
+     }
+     #+end_src
+   - 循环覆盖率   :: 测试覆盖到的不同迭代次数
+     #+begin_src cpp :results output :namespaces std :includes <iostream>
+     void spam(int times) {
+         for (int i=0; i<times; ++i) cout << "Spam! ";     // 测试 spam(1) spam(2) spam(3)
+     }
+     #+end_src
+   - 不同输入类别 :: eg：整数、浮点、字符串、指针等

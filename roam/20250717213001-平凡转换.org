@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       855c6ccc-6bce-4b3a-8c5f-e75d5fb156c0
+:END:
+#+title: 平凡转换
+#+filetags: cpp
+
+* 平凡转换
+1. 规则如下
+   - 左值    -> 右值
+   - 非const -> 顶层const
+   - 非引用  -> 引用

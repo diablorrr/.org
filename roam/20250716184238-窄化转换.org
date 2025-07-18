@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       74371219-77ab-4491-94cd-705a03d1a74b
+:END:
+#+title: 窄化转换
+#+filetags: cpp
+
+* 窄化转换 [[https://www.learncpp.com/cpp-tutorial/narrowing-conversions-list-initialization-and-constexpr-initializers/][learncpp10.4]]
+1. 精度缺失的转换，在 [[id:9c9c2b6a-92d9-431f-9f25-7f588848596a][隐式类型转换]] 的时候可能发生，可以使用 =static_cast= 明确转化意图
+
+2. 缩小转换源值为 [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]] 时，不视为窄化转换
+   - 原因 :: constexpr变量的值在编译期确定，编译器可以选择自行转化或报错；因此成功转化了，将不会视为窄化转换
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int main()
+   {
+       constexpr int n1{ 5 };   // note: constexpr
+       unsigned int u1 { n1 };  // okay: conversion is not narrowing due to exclusion clause
+
+       constexpr int n2 { -5 }; // note: constexpr
+       unsigned int u2 { n2 };  // compile error: conversion is narrowing due to value change
+
+       return 0;
+   }
+   #+end_src
+
+3. [[id:819c9ef5-5220-4678-994a-3122d7d17ab7][列表初始化]] 不允许 窄化转换
+   鉴于 =2.= 使用 constexpr初始化器 的列表初始化，允许 窄化转换

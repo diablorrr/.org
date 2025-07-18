@@ -2,49 +2,61 @@
 :ID:       71086d36-a2b1-4797-b5f1-358f9c35c965
 :END:
 #+title: std::string
+#+filetags: cpp
 
+* std::string [[https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/][参考]]
+*Best Practice* ：按引用传递 std::string
+1. 相比于 [[id:a713e19b-ae94-4202-8834-c586754c4275][C风格字符串]]，可以处理 *变长* 的字符串
+   eg：用一个变量 name，就能存储不同长度的字符串；而 C风格字符串 是 const char[N]，是一个固定的数组，无法达到同样效果
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+   std::string name { "Alex" }; // initialize name with string literal "Alex"
+   std::cout << name << '\n';
+   name = "Jason";              // change name to a longer string
+   std::cout << name << '\n';
+   name = "Jay";                // change name to a shorter string
+   std::cout << name << '\n';
+   #+end_src
 
-* 查询
-| 方法                  | 时间复杂度   | 说明                                                               |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| 构造与赋值            |              |                                                                    |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| string()              | O(1)         | 构造空字符串（无动态分配）                                         |
-| string(const char*)   | O(n)         | n为输入字符串长度（需拷贝）                                        |
-| operator=             | O(n)         | n为赋值内容的长度（可能触发内存分配）                              |
-| assign()              | O(n)         | n为赋值内容的长度                                                  |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| 访问字符              |              |                                                                    |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| operator[] / at()     | O(1)         | 直接访问（at()有边界检查，但时间相同）                             |
-| front() / back()      | O(1)         | 直接访问首尾字符                                                   |
-| c_str() / data()      | O(1)         | 返回内部指针（可能触发O(n)的'\0'追加，但现代实现通常已维护终止符） |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| 修改操作              |              |                                                                    |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| append() / operator+= | O(n)         | n为追加内容的长度（可能触发O(n)的内存重分配）                      |
-| push_back()           | 均摊O(1)     | 可能触发O(n)的内存重分配（但均摊分析下为O(1)）                     |
-| insert()              | O(n + k)     | n为原字符串长度，k为插入内容长度（可能需要移动后续字符）           |
-| erase()               | O(n)         | n为原字符串长度（可能需要移动后续字符）                            |
-| replace()             | O(n + k)     | n为原字符串长度，k为新内容长度（可能需移动字符）                   |
-| clear()               | O(1)         | 仅重置大小（不保证释放内存）                                       |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| 子串与查找            |              |                                                                    |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| substr()              | O(k)         | k为子串长度（需拷贝）                                              |
-| find() / rfind()      | O(n * m)     | n为原字符串长度，m为待查找子串长度（最坏情况，如朴素算法）         |
-| find_first_of()       | O(n * m)     | n为原字符串长度，m为字符集长度                                     |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| 容量管理              |              |                                                                    |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| size() / length()     | O(1)         | 直接返回存储的长度                                                 |
-| resize()              | O(n)         | n为目标大小（可能需要填充或截断）                                  |
-| reserve()             | O(n)         | n为目标容量（可能触发内存分配）                                    |
-| shrink_to_fit()       | O(n)         | n为当前字符串长度（可能触发内存重分配）                            |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| 其他操作              |              |                                                                    |
-|-----------------------+--------------+--------------------------------------------------------------------|
-| compare()             | O(min(n, m)) | n和m为比较的两个字符串长度                                         |
-| swap()                | O(1)         | 仅交换内部指针（不拷贝数据）                                       |
-| to_string()           | O(log₁₀n)    | n为数值的位数（如整数转字符串）                                    |
-| stoi() / stod()       | O(n)         | n为字符串长度（需逐字符解析）                                      |
+   #+RESULTS:
+   : Alex
+   : Jason
+   : Jay
+
+2. 使用 std::cin 对 std::string 进行输入，遇到 *空白符* 会发生截断，解决方法是使用 =std::getline= 和 输入操控符 =std::ws=
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+   // #include <string>  For std::string and std::getline
+   std::cout << "Enter your full name: ";
+   std::string name{};
+   std::getline(std::cin >> std::ws, name); // read a full line of text into name，std::ws 忽略空白符，直接输出它们
+   std::cout << "Enter your favorite color: ";
+   std::string color{};
+   std::getline(std::cin >> std::ws, color); // read a full line of text into color
+   std::cout << "Your name is " << name << " and your favorite color is " << color << '\n';
+   #+end_src
+
+   #+name: 输出
+   #+begin_example
+   Enter your full name: John Doe
+   Enter your favorite color: blue
+   Your name is John Doe and your favorite color is blue
+   #+end_example
+
+3. =""= 的默认 [[id:27733720-d27e-4852-bb07-b50130457fc9][字面值]]类型 为 [[id:a713e19b-ae94-4202-8834-c586754c4275][C风格字符串]]；若要 *创建 std::string风格 字面值* ，需要 =s后缀=
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+   using namespace std::string_literals; // s后缀 所在的命名空间
+   std::cout << "foo\n";   // no suffix is a C-style string literal
+   std::cout << "goo\n"s;  // s suffix is a std::string literal
+   #+end_src
+
+   #+RESULTS:
+   : foo
+   : goo
+
+4. 如果要 *返回 [[id:a713e19b-ae94-4202-8834-c586754c4275][C风格字符串* ]]，函数返回类型应该使用 [[id:4fade514-4065-4f15-bc2b-595a99b40a1d][std::string_view]] ，而不是 std::string
+
+5. constexpr std::string 会发生编译错误，应该改用 =constexpr std::string_view=
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+   using namespace std::string_literals;
+   constexpr std::string name{ "Alex"s }; // compile error
+   std::cout << "My name is: " << name;
+   #+end_src

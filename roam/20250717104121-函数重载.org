@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       6c92dc3d-9ce0-4d40-9597-5ecc93ea3366
+:END:
+#+title: 函数重载
+#+filetags: cpp
+
+* 函数重载 [[https://www.learncpp.com/cpp-tutorial/introduction-to-function-overloading/][learncpp11.1]] [[https://www.learncpp.com/cpp-tutorial/function-overload-differentiation/][learncpp11.2]]
+1. 在同一作用域内创建多个同名函数；通过 [[id:8c55eec4-57bb-45c2-8890-c65d7c473a24][重载解析]] 匹配函数
+   - 背景 :: add(int x, int y) 只能用于 int 相加，对于 double 相加，我们需要创建新的函数名，随着函数名增多导致管理困难 -> 解决方式：函数重载
+   - 函数类型签名 :: 用于区分不同函数：函数名、函数参数（参数类型、参数数量）、函数级限定符， *不包括返回类型*
+
+2. 区分方式： *函数参数的数量、类型* ；返回类型不作为区分方式
+   - 参数类型重载 :: [[id:15357ed3-3530-4c07-b743-9af983e05e96][类型别名]]、[[id:1450514f-880d-42f5-8bb4-f114c1a5b675][const]] *不能区分重载* ； =...= （省略号） *能区分重载*
+     #+begin_src cpp :results output :namespaces std :includes <iostream>
+     typedef int Height; // typedef
+     using Age = int; // type alias
+
+     void print(int value);
+     void print(Age value); // not differentiated from print(int)
+     void print(Height value); // not differentiated from print(int)
+     void print(const int value); // not differentiated from print(int)
+
+     void foo(int x, int y);
+     void foo(int x, ...); // differentiated from foo(int, int)
+     #+end_src

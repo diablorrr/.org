@@ -1,18 +1,21 @@
 :PROPERTIES:
 :ID:       fec1bdbd-cae6-4b45-b136-00dcad95b5ad
 :END:
-#+title: 常量表达式和运行时表达式
+#+title: 常量表达式
 #+filetags: cpp
 
 * 常量表达式和运行时表达式 [[https://www.learncpp.com/cpp-tutorial/constant-expressions/][参考]]
-1. *常量表达式* 是在编译时期可以确定值的表达式，但 *不一定在编译期计算* ，可以使用 [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]] 强制编译期计算， *编译期计算进行的优化方式* 见：[[id:a047ed53-7758-4ecd-8451-1eaf172442eb][编译期计算]] ； *运行时表达式* 等价于 非常量表达式
+1. *常量表达式* 是在编译时期可以求值的表达式，但 *不一定在编译期计算* ，可以使用 [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]] *指定 xxx 是常量表达式并强制编译期计算* ， *编译期计算进行的优化方式* 见：[[id:a047ed53-7758-4ecd-8451-1eaf172442eb][编译期优化]] ；
+   *运行时表达式* = 非常量表达式
+
 2. *常见的常量表达式*
-   - 字面量（'5'、'1.2'）
-   - 运算符：操作数为 常量表达式（3 + 4）
+   - [[id:27733720-d27e-4852-bb07-b50130457fc9][字面值]]（'5'、'1.2'）
+   - 常量表达式 和 运算符 组合成的常量表达式（3 + 4）
    - 用常量表达式初始化的 const int
    - constexpr 变量
    - constexpr 函数
    - ...
+
 3. *特殊* ： =用常量表达式初始化的const int= 因为历史原因，会被视为 常量表达式；且会在 编译时计算
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    const int a {10};       // 常量表达式，且会编译时计算

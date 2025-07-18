@@ -1,0 +1,88 @@
+:PROPERTIES:
+:ID:       2d04c210-79ae-4346-81f4-c5faf95ca902
+:END:
+#+title: switch语句
+#+filetags: cpp
+
+*Best Practice* [[https://www.learncpp.com/cpp-tutorial/switch-statement-basics/][learncpp8.5]] [[https://www.learncpp.com/cpp-tutorial/switch-fallthrough-and-scoping/][learncpp8.6]]
+1. 判断的值为 整型/枚举，且使用 == 条件判断 -> 使用 switch；否则 if-else
+
+* switch语句
+1. 相比 if-else 更可读；条件判断只支持 *整型/枚举* ，只使用 *相等比较（==）*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   switch(整型/枚举) {
+       case 值1: // 类型 if(整型/枚举 == 值1)
+         语句;
+         break;
+       case 值2:
+         语句;
+         break;
+       default: // 类似 if-else 中的 else
+         语句;
+         break;
+   }
+   #+end_src
+
+2. switch语句 *穿透执行* 特性：case块 缺少 break 或 return，则会继续执行后面的 case块
+  #+begin_src cpp :results output :namespaces std :includes <iostream>
+  int main()
+  {
+      switch (2)
+      {
+      case 1: // Does not match
+          std::cout << 1 << '\n'; // Skipped
+      case 2: // Match!
+          std::cout << 2 << '\n'; // Execution begins here
+      case 3:
+          std::cout << 3 << '\n'; // This is also executed
+      case 4:
+          std::cout << 4 << '\n'; // This is also executed
+      default:
+          std::cout << 5 << '\n'; // This is also executed
+      }
+
+      return 0;
+  }
+  #+end_src
+
+  #+RESULTS:
+  : 2
+  : 3
+  : 4
+  : 5
+
+3. 所有 case语句 共享 switch *作用域*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   switch (1)
+   {
+   case 1: // does not create an implicit block
+       foo(); // this is part of the switch scope, not an implicit block to case 1
+       break; // this is part of the switch scope, not an implicit block to case 1
+   default:
+       std::cout << "default case\n";
+       break;
+   }
+   #+end_src
+
+4. case语句中的 *变量声明和初始化* ：允许在 switch语句 中声明变量；禁止在 *非最后case语句* 中初始化变量
+   - 原因 :: 因为 case语句 同属 switch作用域（除非 case语句用 {}），就算某个 case语句 被跳过，虽然没有执行 case语句中的语句，但也能看到 那个case语句 中的声明 -> 因此何处声明都 ok；因为存在 case语句 被跳过 -> case语句内的初始化语句无法执行 -> 因此禁止在非最后case语句中初始化变量
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   switch (1)
+   {
+       int a; // okay: definition is allowed before the case labels
+       int b{ 5 }; // illegal: initialization is not allowed before the case labels
+
+   case 1:
+       int y; // okay but bad practice: definition is allowed within a case
+       y = 4; // okay: assignment is allowed
+       break;
+
+   case 2:
+       int z{ 4 }; // illegal: initialization is not allowed if subsequent cases exist
+       y = 5; // okay: y was declared above, so we can use it here too
+       break;
+
+   case 3:
+       break;
+   }
+   #+end_src

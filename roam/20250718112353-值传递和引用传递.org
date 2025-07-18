@@ -1,0 +1,68 @@
+:PROPERTIES:
+:ID:       d8c76fec-fe5e-44f9-a9ff-ef95ec356bce
+:END:
+#+title: 值传递、引用传递、地址传递
+#+filetags: cpp
+
+* 值传递、引用传递、地址传递 [[https://www.learncpp.com/cpp-tutorial/pass-by-const-lvalue-reference/][learncpp12.6]] [[https://www.learncpp.com/cpp-tutorial/pass-by-address/][learncpp12.10]] [[https://www.learncpp.com/cpp-tutorial/pass-by-address-part-2/][learncpp12.11]]
+1. 值传递、引用传递、地址传递、对地址的引用传递 [fn:1]
+   - 值传递   :: 复制对象，访问对象的副本
+   - 引用传递 :: 引用直接绑定对象，直接访问，无复制（ *Best Practice* ）
+   - 地址传递 :: 传递对象地址（指针），通过解引用访问，无复制
+
+2. 值传递、引用传递 *使用场景*
+   - *基本类型、枚举类型* ：值传递
+   - *类类型* ：引用传递
+
+3. 值传递、引用传递 *开销*
+   - 值传递  ：对于复制成本较低的对象，复制成本与绑定成本类似；但 *访问对象更快* ；并且 *编译器可能进行优化*
+   - 引用传递：对于复制成本高昂的对象，综合性能考量， *复制成本占主导地位*
+     - 为什么值传递访问对象更快？ :: 值传递 程序直接访问对象，引用传递 先访问引用所在位置，再解引用，访问被引对象所在位置
+
+4. 三种传递的 *底层* ：都是 值传递
+   - 引用传递 本质上就是 地址传递；地址传递就是传递地址的值 -> 值传递
+
+
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <string>
+
+void printByValue(std::string val) // 值传递
+{
+    std::cout << val << '\n'; // print the value via the copy
+}
+
+void printByReference(const std::string& ref) // 引用传递
+{
+    std::cout << ref << '\n'; // print the value via the reference
+}
+
+void printByAddress(const std::string* ptr) // 地址传递（复制了一份地址）
+{                                           // 我们可以修改地址里变量的值，不能修改地址（因为只是地址的拷贝）
+    std::cout << *ptr << '\n'; // print the value via the dereferenced pointer
+}
+
+void nullify(int*& refptr) // 地址引用传递（对地址的引用）
+{                          // 可以修改地址（因为是对地址的引用）
+    refptr = nullptr; // Make the function parameter a null pointer
+}
+
+int main()
+{
+    std::string str{ "Hello, world!" };
+
+    printByValue(str);     // pass str by value, makes a copy of str
+    printByReference(str); // pass str by reference, does not make a copy of str
+    printByAddress(&str);  // pass str by address, does not make a copy of str
+
+    int x{ 5 };
+    int* ptr{ &x }; // ptr points to x
+    nullify(ptr);
+
+    return 0;
+}
+#+end_src

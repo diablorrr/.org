@@ -4,14 +4,14 @@
 #+title: 数据类型
 #+filetags: cpp
 
-* 数据类型 [[https://www.learncpp.com/cpp-tutorial/introduction-to-fundamental-data-types/][参考]]
+* 数据类型 [[https://www.learncpp.com/cpp-tutorial/introduction-to-fundamental-data-types/][learncpp4.1]] [[https://www.learncpp.com/cpp-tutorial/introduction-to-program-defined-user-defined-types/][learncpp13.1]]
 1. *数据类型* ：就是告诉 编译器 如何 *解释内存中的数据*
    - 位   :: *内存组成的单位* ；每个位存 0或1
    - 字节 :: *内存访问的单位* ；每个字节有唯一地址；1字节 = 8位
 
-2. 三类数据类型
+2. 数据类型 *种类*
    1) 基本数据类型
-   2) 复合数据类型
-   3) 标准库提供的数据类型
+   2) [[id:99463280-0fa3-491e-82ae-2c3402272509][复合数据类型]]
+   3) [[id:f1619246-a266-4149-a059-021406106873][用户(程序)定义类型]]
 
 3. 一些 *数据类型的命名规范* ：xxx_t 代表是一个类型，比如：size_t

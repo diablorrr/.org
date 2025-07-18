@@ -4,8 +4,9 @@
 #+title: 初始化
 #+filetags: cpp
 
-* 初始化 [[https://www.learncpp.com/cpp-tutorial/variable-assignment-and-initialization/][参考]]
 *Best practice* ：使用 列表初始化，且始终初始化变量
+
+* 初始化 [[https://www.learncpp.com/cpp-tutorial/variable-assignment-and-initialization/][learncpp1.4]]
 1. cpp 中初始化方式有多种
    - 现代初始化 :: 基于 *列表初始化* ，用 ={}= 表示；引出：列表直接初始化 、列表拷贝初始化、值初始化
    - 古代初始化 :: 使用 =()= 表示 *直接初始化* ， === 表示 *拷贝初始化* ；没有初始化值的是 *默认初始化*
@@ -24,7 +25,7 @@
    #+end_src
 
 2. *列表初始化* 有以下特点
-   1) 不允许 窄化转换（精度缺失的转换），否则报错
+   1) 不允许 窄化转换（精度缺失的转换），否则报错；见：[[id:1b0646eb-ed64-4b37-a394-4974750aaf7a][类型转换]]
       #+begin_src cpp :results output :namespaces std :includes <iostream>
       int w1 { 4.5 }; // compile error: list-init does not allow narrowing conversion
       int w2 = 4.5;   // compiles: w2 copy-initialized to value 4
@@ -32,3 +33,4 @@
       #+end_src
    2) 无初始化值的初始化 更统一（使用 {}空花括号 会进行 值初始化：0、nullptr、类默认构造）；古代的默认初始化在不同位置定义，行为不一样
 
+3. *[[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]]的初始化顺序* ：在 main() 调用之前，静态初始化 -> 动态初始化

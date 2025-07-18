@@ -1,0 +1,93 @@
+:PROPERTIES:
+:ID:       3e85303c-39c7-4ac3-9d88-a9513d036477
+:END:
+#+title: inline
+#+filetags: cpp
+
+* inline(内联函数) [[https://www.learncpp.com/cpp-tutorial/inline-functions-and-variables/][learncpp7.9]]
+1. 建议编译器在函数调用处展开代码，没有函数调用开销（eg：参数传递..）；相比 宏文本替换 有类型检查
+   - 背景 :: 我们有较短的几行代码需要经常使用，考虑用函数封装，好处在于模块化，更容易使用和管理；但函数调用有开销，我们又是频繁调用的小函数，因此使用内联函数
+
+2. inline 只是对编译器请求，不一定内联；现代编译器 优化的时候，擅长确定哪些函数应该内联，因此无需手动使用 inline
+
+3. *现代 inline 含义* ：允许重复定义 函数（不违反[[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]]）-> 最终 [[id:04b223e7-c9e1-4c4b-a75d-733e9f16c972][链接器]] 会对重复函数的定义进行去重
+   eg：因为 pi() 都声明为 inline 了，因此不会在链接时出现 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]] 错误
+   #+name: main.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   double circumference(double radius); // forward declaration
+
+   inline double pi() { return 3.14159; }
+
+   int main()
+   {
+       std::cout << pi() << '\n';
+       std::cout << circumference(2.0) << '\n';
+
+       return 0;
+   }
+   #+end_src
+
+   #+name: math.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   inline double pi() { return 3.14159; }
+
+   double circumference(double radius)
+   {
+       return 2.0 * pi() * radius;
+   }
+   #+end_src
+
+4. *现代 inline 使用条件*
+   1) 所有定义必须相同
+   2) 编译器必须在使用处看到完整定义（通常将内联函数放入头文件）
+
+5. *现代 inline 使用场景* ：在 *头文件中定义* 函数
+   - eg   :: 纯头文件的工具库（其他代码用这个库，直接 #include 就行，而不需要编译链接）
+   - 缺点 :: 增加编译时间（每一个使用该头文件的，都需要编译一遍这个函数）
+   #+name: pi.h
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   #ifndef PI_H
+   #define PI_H
+
+   inline double pi() { return 3.14159; }
+
+   #endif
+   #+end_src
+
+   #+name: main.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   #include "pi.h" // will include a copy of pi() here
+
+   double circumference(double radius); // forward declaration
+
+   int main()
+   {
+       std::cout << pi() << '\n';
+       std::cout << circumference(2.0) << '\n';
+
+       return 0;
+   }
+   #+end_src
+
+   #+name: math.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   #include "pi.h" // will include a copy of pi() here
+
+   double circumference(double radius)
+   {
+       return 2.0 * pi() * radius;
+   }
+   #+end_src
+
+6. [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]]函数 *默认是内联* 的
+
+7. 从模板实例化的实例是隐式内联的，见：[[id:21dd5470-8f8b-4d95-8c33-cb741b817fbc][在多个文件中使用函数模板]]
+
+
+* inline(内联变量) [[https://www.learncpp.com/cpp-tutorial/inline-functions-and-variables/][learncpp7.9]]
+1. cpp17； *允许重复定义* 的变量，具有外部[[id:c3e47726-c072-4c68-9905-1fc6e2c1e016][链接性]]
+2. *使用条件*
+   1) 所有定义必须相同
+   2) 编译器必须在使用处看到完整定义（通常将内联函数放入头文件
+3. 用于 [[id:a8100707-ed3c-4c60-ad7c-61ae20bf4da6][多个文件中共享全局常量]]
+4. [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]]变量 *默认不是内联* 的

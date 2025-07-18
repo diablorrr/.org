@@ -1,0 +1,69 @@
+:PROPERTIES:
+:ID:       15357ed3-3530-4c07-b743-9af983e05e96
+:END:
+#+title: 类型别名
+#+filetags: cpp
+
+*Best Practice* ：优先使用 using 而不是 typedef
+
+* 类型别名 [[https://www.learncpp.com/cpp-tutorial/typedefs-and-type-aliases/][learncpp10.7]]
+1. 为现有类型创建新名称，增强代码可读性和可维护性； *使用方法*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   using 别名 = 原类型;  // 现代C++推荐
+   typedef 原类型 别名;  // 古代C风格（不推荐）
+
+   using FcnType = int(*)(double, char); // FcnType easier to find
+   typedef int (*FcnType)(double, char); // FcnType hard to find
+   #+end_src
+
+2. *[[id:79cf3da5-7ff7-4a47-b4da-5380da55b840][作用域]]* ：同 [[id:4276f9fb-4b68-4c73-bd8f-8a7c1e5f82a9][变量]] 具有 全局作用域、局部作用域
+
+3. *使用场景*
+   - 平台无关编码 :: 定义 [[id:321d5bac-2ec7-459e-9315-7b21d0e16f03][固定宽度整数类型]]（eg：int32_t）适配不同平台 [fn:1]
+   - 简化复杂类型 :: 减少重复出入 [fn:2]
+   - 记录值的含义 :: 明确值的含义 [fn:3]
+   - 便于代码维护 :: 一处修改，处处生效 [fn:4]
+
+4. *命名规范*
+   - 现代 :: 大写字母开头，无后缀（eg：Distance）
+   - 古代 :: _t 或 _type后缀（过时）
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifdef INT_2_BYTES
+  using int32_t = long;  // 2字节平台
+#else
+  using int32_t = int;   // 4字节平台
+#endif
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <string> // for std::string
+#include <utility> // for std::pair
+using VectPairSI = std::vector<std::pair<std::string, int>>; // make VectPairSI an alias for this crazy type
+bool hasDuplicates(VectPairSI pairlist) // use VectPairSI in a function parameter
+{
+  // some code here
+  return false;
+}
+int main()
+{
+  VectPairSI pairlist; // instantiate a VectPairSI variable
+  return 0;
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+using TestScore = int;
+TestScore gradeTest(); // 若这里返回 int，则不知道返回的是啥
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+using StudentId = long;  // 只需修改此处的 long，所有使用 StudentId 的地方都会生效
+#+end_src

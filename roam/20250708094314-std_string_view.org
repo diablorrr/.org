@@ -1,0 +1,130 @@
+:PROPERTIES:
+:ID:       4fade514-4065-4f15-bc2b-595a99b40a1d
+:END:
+#+title: std::string_view
+#+filetags: cpp
+
+*Best Practice*
+以下情况优先使用 =std::string_view=
+1. 函数只读参数
+2. 函数返回类型是字面量、函参传入的 view
+3. 读取子字符串
+函参 使用 =const std::string&= 的情况 [[https://www.learncpp.com/cpp-tutorial/pass-by-const-lvalue-reference/][learncpp12.6]]
+1. 非 cpp17 标准
+2. 函数需要调用 *接受C风格字符串或std::string参数的函数*
+
+* std::string_view [[https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring_view/][参考]] [[https://www.learncpp.com/cpp-tutorial/stdstring_view-part-2/][参考2]]
+1. *cpp17* 引入，提供对 *字符串/子字符串* 的 *只读访问* （[[id:a713e19b-ae94-4202-8834-c586754c4275][C风格字符串]]、[[id:71086d36-a2b1-4797-b5f1-358f9c35c965][std::string]]、std::string_view）-> 减少 *复制的开销* -> 提升了性能
+
+2. 是 std::string 的查看器 ，而不是所有者，若删除原始 std::string 会造成 *悬空视图* ，几种导致悬空视图的情况：
+   1) 作用域内创建 string，离开作用域后使用 view [fn:1]
+   2) view 接管返回的局部 string [fn:2]；同理 函数返回值为 view，函数内部返回 局部string 也是同样情况
+   3) 使用 string字面量 创建 view [fn:3]
+   4) 更改 string内容，而 view 读取 原始string [fn:4]
+
+3. =""= 默认是 C风格字符串字面值， *转为 std::string_view 字面值* ，加 =sv= ；见：[[id:27733720-d27e-4852-bb07-b50130457fc9][字面值]]
+
+4.  *std::string_view 不保证以 =\0= 结尾*
+   - 强行将 std::string_view 转为 C风格字符串 可能导致 *未定义行为*
+   - 作为 *函数参数* 时，若传入 C风格字符串， =\0= 可能消失，导致某些 C风格字符串函数 出现问题
+
+5. 可以使用 *不同类型字符串初始化* （C风格字符串、std::string、std::string_view）； *赋值* 可以改变 std::string_view 作用的对象
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+   std::string_view s1 { "Hello, world!" }; // initialize with C-style string literal
+   std::cout << s1 << '\n';
+   std::string s{ "Hello, world!" };
+   std::string_view s2 { s };  // initialize with std::string
+   std::cout << s2 << '\n';
+   std::string_view s3 { s2 }; // initialize with std::string_view
+   std::cout << s3 << '\n';
+   s3 = "hahahah";             // 通过赋值改变 std::string_view 作用的对象
+   std::cout << s3 << '\n';
+   #+end_src
+
+   #+RESULTS:
+   : Hello, world!
+   : Hello, world!
+   : Hello, world!
+   : hahahah
+
+   同理，std::string_view *接受不同类型的字符串实参* （C风格字符串、std::string、std::string_view）
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+   void printSV(std::string_view str)
+   {
+       std::cout << str << '\n';
+   }
+
+   int main()
+   {
+       printSV("Hello, world!"); // call with C-style string literal
+       std::string s2{ "Hello, world!" };
+       printSV(s2); // call with std::string
+       std::string_view s3 { s2 };
+       printSV(s3); // call with std::string_view
+
+       return 0;
+   }
+   #+end_src
+
+6. 不同类型的字符串 可以 *[[id:9c9c2b6a-92d9-431f-9f25-7f588848596a][隐式类型转换]]* 为 std::string_view；只能使用 std::string初始化器、static_cast *显式转换* std::string_view 为 std::string
+
+7. std::string_view *支持 [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]]* （[[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]]）
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <string_view>
+   constexpr std::string_view s{ "Hello, world!" }; // s is a string symbolic constant
+   std::cout << s << '\n'; // s will be replaced with "Hello, world!" at compile-time
+   #+end_src
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+std::string_view sv{};
+{ // create a nested block
+    std::string s{ "Hello, world!" }; // create a std::string local to this nested block
+    sv = s; // sv is now viewing s
+} // s is destroyed here, so sv is now viewing an invalid string
+std::cout << sv << '\n'; // undefined behavior
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+std::string getName()
+{
+    std::string s { "Alex" };
+    return s;
+}
+
+int main()
+{
+  std::string_view name { getName() }; // name initialized with return value of function
+  std::cout << name << '\n';           // undefined behavior
+
+  return 0;
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+int main()
+{
+    using namespace std::string_literals;
+    std::string_view name { "Alex"s }; // "Alex"s creates a temporary std::string
+    std::cout << name << '\n'; // undefined behavior
+
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+int main()
+{
+    std::string s { "Hello, world!" };
+    std::string_view sv { s }; // sv is now viewing s
+
+    s = "Hello, a!";    // modifies s, which invalidates sv (s is still valid)
+    std::cout << sv << '\n';   // undefined behavior
+
+    return 0;
+}
+#+end_src

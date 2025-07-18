@@ -18,6 +18,6 @@
    int myFunctionName();   // conventional (intercapped/camelCase)
    #+end_src
 
-3. *类、枚举、结构体* ： 大写字母开头
+3. *类、用户定义类型、枚举、结构体、命名空间、类型别名、类型模板参数* ： 大写字母开头
 
 4. *操作系统、库、编译器* ：下划线开头

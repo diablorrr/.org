@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       c2be420e-464a-4713-8ebc-19e943a0cf67
+:END:
+#+title: extern
+#+filetags: cpp
+
+* extern [[https://www.learncpp.com/cpp-tutorial/external-linkage-and-variable-forward-declarations/][learncpp7.7]]
+根据上下文，有两个含义：
+1. 赋予变量[[id:f6bf51b1-6034-48c5-9fea-81e561eef430][外部链接]]属性
+2. [[id:98b78b88-32ba-4ad7-b5d5-efeae3da8405][前向声明]]某个变量在其他地方定义过
+#+name: main.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+extern int g_x;       // this extern is a forward declaration of a variable named g_x that is defined somewhere else
+extern const int g_y; // this extern is a forward declaration of a const variable named g_y that is defined somewhere else
+
+int main()
+{
+    std::cout << g_x << ' ' << g_y << '\n'; // prints 2 3
+
+    return 0;
+}
+#+end_src
+
+#+name: a.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+// global variable definitions
+int g_x { 2 };              // non-constant globals have external linkage by default
+extern const int g_y { 3 }; // this extern gives g_y external linkage
+#+end_src

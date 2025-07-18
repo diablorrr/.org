@@ -1,0 +1,117 @@
+:PROPERTIES:
+:ID:       0e5cf534-08a1-48b9-ab6c-e46d95e27c57
+:END:
+#+title: 测试策略
+#+filetags: cpp
+
+* 测试策略 [[https://www.learncpp.com/cpp-tutorial/introduction-to-testing-your-code/][learncpp9.1]]
+: 单元测试
+- 非正式测试     :: 在调用处写测试代码，直接测试；适合单次测试，不适合多次测试 [fn:1]
+- 保留测试函数   :: 保留测试代码；适合多次测试，但每次需要 *人工比对* 预期答案 [fn:2]
+- 自动化测试函数 :: 包含测试代码和预期答案 [fn:3]
+- 单元测试框架   ::
+: 集成测试
+每个单元都测试过后，将它们集成到程序中测试
+
+
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+// We want to test the following function
+// For simplicity, we'll ignore that 'y' is sometimes counted as a vowel
+bool isLowerVowel(char c)
+{
+    switch (c)
+    {
+    case 'a':
+    case 'e':
+    case 'i':
+    case 'o':
+    case 'u':
+        return true;
+    default:
+        return false;
+    }
+}
+
+int main()
+{
+    // So here's our temporary tests to validate it works
+    std::cout << isLowerVowel('a') << '\n'; // temporary test code, should produce 1
+    std::cout << isLowerVowel('q') << '\n'; // temporary test code, should produce 0
+
+    return 0;
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+bool isLowerVowel(char c)
+{
+    switch (c)
+    {
+    case 'a':
+    case 'e':
+    case 'i':
+    case 'o':
+    case 'u':
+        return true;
+    default:
+        return false;
+    }
+}
+
+// Not called from anywhere right now
+// But here if you want to retest things later
+void testVowel()
+{
+    std::cout << isLowerVowel('a') << '\n'; // temporary test code, should produce 1
+    std::cout << isLowerVowel('q') << '\n'; // temporary test code, should produce 0
+}
+
+int main()
+{
+    return 0;
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+bool isLowerVowel(char c)
+{
+    switch (c)
+    {
+    case 'a':
+    case 'e':
+    case 'i':
+    case 'o':
+    case 'u':
+        return true;
+    default:
+        return false;
+    }
+}
+
+// returns the number of the test that failed, or 0 if all tests passed
+int testVowel()
+{
+    if (!isLowerVowel('a')) return 1;
+    if (isLowerVowel('q')) return 2;
+
+    return 0;
+}
+
+int main()
+{
+    int result { testVowel() };
+    if (result != 0)
+        std::cout << "testVowel() test " << result << " failed.\n";
+    else
+        std::cout << "testVowel() tests passed.\n";
+
+    return 0;
+}
+#+end_src

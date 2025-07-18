@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       40f0ed1d-7ba2-4bbe-90d5-cc9088e88f2e
+:END:
+#+title: torch.Tensor
+#+filetags: pytorch
+
+* torch.Tensor.permute
+调整张量维度顺序
+#+begin_src python
+x = torch.randn(3, 5, 2)
+y = x.permute(1, 2, 0)     # 形状变为 (5, 2, 3)
+#+end_src
+
+
+* torch.Tensor.view [[https://zhuanlan.zhihu.com/p/721855580][知乎]]
+用于改变张量形状， *共享原张量的底层数据* ，因此对 view 修改会改变底层张量数据
+- 使用条件 :: 张量满足 *内存连续性* ；可以用 =torch.Tensor.is_contiguous= 判断，使用 =torch.Tensor.contiguous= 将不连续张量转为连续张量；有些操作会改变步长（内存中数据的访问方式），导致内存不连续
+  + 内存连续性 :: 数据在内存中以行优先顺序存储
+  + 步长 :: 定义了如何访问内存中的数据：描述了 *维度之间 移动所需的步数* ；通过 =torch.Tensor.stride= 查看
+    #+begin_example
+    张量 x 形状 ：(2 , 3, 4)    # 矩阵，行，列
+    步长        ：(12, 4, 1)    # 移动到下一个矩阵，移动到下一行，移动到下一列 的步数
+    12          ：从当前矩阵移动到下一个矩阵 需要 3 x 4 = 12 步
+    4           ：从当前行到下一行 需要 4 步（一行4列）
+    1           ：从当前列到下一列 需要 1 步
+    #+end_example

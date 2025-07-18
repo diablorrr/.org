@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       b0a58c4a-957f-4568-b0d6-f2ea38ada013
+:END:
+#+title: constexpr if语句
+#+filetags: cpp
+
+* constexpr if语句 [[https://www.learncpp.com/cpp-tutorial/constexpr-if-statements/][learncpp8.4]]
+1. cpp17引入，用于 *将if语句的求值从运行时转移到编译时*
+
+2. *使用条件* ：if语句的条件判断是 [[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int main()
+   {
+      constexpr double gravity{ 9.8 };
+      // if (gravity == 9.8)
+      if constexpr (gravity == 9.8) // now using constexpr if
+        std::cout << "Gravity is normal.\n";
+      else
+        std::cout << "We are not on Earth.\n";
+
+      return 0;
+   }
+   #+end_src

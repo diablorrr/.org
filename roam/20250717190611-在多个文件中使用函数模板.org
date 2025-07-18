@@ -1,0 +1,74 @@
+:PROPERTIES:
+:ID:       21dd5470-8f8b-4d95-8c33-cb741b817fbc
+:END:
+#+title: 在多个文件中使用函数模板
+#+filetags: cpp
+
+* 在多个文件中使用函数模板 [[https://www.learncpp.com/cpp-tutorial/using-function-templates-in-multiple-files/][learncpp11.10]]
+- 问题 :: [[id:98b78b88-32ba-4ad7-b5d5-efeae3da8405][前置声明]]在普通函数中可以用于多文件链接，但在[[id:d296e2b2-3557-479c-ad2d-58c1600fbfd9][函数模板]]中不行
+   #+name: main.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   template <typename T>
+   T addOne(T x); // function template forward declaration
+
+   int main()
+   {
+       std::cout << addOne(1) << '\n';
+       std::cout << addOne(2.3) << '\n';
+
+       return 0;
+   }
+   #+end_src
+
+   #+name: add.cpp
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   template <typename T>
+   T addOne(T x) // function template definition
+   {
+       return x + 1;
+   }
+   #+end_src
+   发生链接错误：因为在 main.cpp 中 addOne调用处 编译器没看到完整定义，因此在 main.cpp 中 *没法实例化函数模板* ， addOne<int> addOne<double> 自然没法连接到实际函数
+
+
+- 解决方法 :: *将模板代码放入 =.h= [[id:fbf786c2-5b6e-47a1-81b9-c1c644b567bb][头文件]]，然后 =include= 进 =.cpp= 源文件* -> 这样编译器能在 .cpp 文件中看见完整的函数模板，需要时实例化
+  #+name: max.h
+  #+begin_src cpp :results output :namespaces std :includes <iostream>
+  #ifndef MAX_H
+  #define MAX_H
+
+  template <typename T>
+  T max(T x, T y)
+  {
+      return (x < y) ? y : x;
+  }
+
+  #endif
+  #+end_src
+
+  #+name: foo.cpp
+  #+begin_src cpp :results output :namespaces std :includes <iostream>
+  #include "max.h" // import template definition for max<T>(T, T)
+
+  void foo()
+  {
+    std::cout << max(3, 2) << '\n';
+  }
+  #+end_src
+
+  #+name: main.cpp
+  #+begin_src cpp :results output :namespaces std :includes <iostream>
+  #include "max.h" // import template definition for max<T>(T, T)
+
+  void foo(); // forward declaration for function foo
+
+  int main()
+  {
+      std::cout << max(3, 5) << '\n';
+      foo();
+
+      return 0;
+  }
+  #+end_src
+  为什么在 foo.cpp main.cpp 实例化了两个 max<int>(int, int) 却不会发生链接错误？
+  - 原因 :: 因为 *从模板实例化的函数是隐式内联的* （[[id:3e85303c-39c7-4ac3-9d88-a9513d036477][inline]]）根据 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]]

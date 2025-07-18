@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID:       5aea3bf8-964d-4925-91bf-c5cf83f88753
+:END:
+#+title: =delete
+
+* =delete [[https://www.learncpp.com/cpp-tutorial/deleting-functions/][learncpp11.4]]
+1. =delete说明符用于 *删除函数*
+
+2. 可以用于删除某些 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][函数重载]] 版本，因为 [[id:d296e2b2-3557-479c-ad2d-58c1600fbfd9][函数模板]] 用于创建一系列 重载函数，因此可以删除
+   #+name: 原始
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   void printInt(int x)
+   {
+       std::cout << x << '\n';
+   }
+
+   int main()
+   {
+       printInt(5);    // okay: prints 5
+       printInt('a');  // 隐式类型转换：prints 97，但没有意义，因此我们需要删除 printInt(char)
+       printInt(true); // 隐式类型转换：print 1  ，但没有意义，因此我们需要删除 printInt(bool)
+
+       return 0;
+   }
+   #+end_src
+
+   使用 ==delete= 删除 printInt(char) printInt(bool)
+   #+name: 删除
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   void printInt(int x)
+   {
+       std::cout << x << '\n';
+   }
+
+   void printInt(char) = delete; // calls to this function will halt compilation
+   void printInt(bool) = delete; // calls to this function will halt compilation
+
+   // 随着类型增多，可以使用 函数模板
+   // template <typename T>
+   // void printInt(T x) = delete;
+
+   int main()
+   {
+       printInt(97);   // okay
+
+       printInt('a');  // compile error: function deleted
+       printInt(true); // compile error: function deleted
+       printInt(5.0);  // compile error: ambiguous match
+
+       return 0;
+   }
+   #+end_src

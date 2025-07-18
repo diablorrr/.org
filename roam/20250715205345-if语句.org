@@ -1,0 +1,44 @@
+:PROPERTIES:
+:ID:       94836d0c-9571-4d59-83c4-12461b485f9d
+:END:
+#+title: if-else和if-if选择
+#+filetags: cpp
+
+* if-else和if-if选择 [[https://www.learncpp.com/cpp-tutorial/if-statements-and-blocks/][learncpp8.2]]
+if-else：只执行第一个满足条件的代码块，其他跳过
+if-if  ：每个条件都判断，可能执行多个代码块
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void ifelse(bool a, bool b, bool c)
+{
+    if (a)      // always evaluates
+        std::cout << "a";
+    else if (b) // only evaluates when prior if-statement condition is false
+        std::cout << "b";
+    else if (c) // only evaluates when prior if-statement condition is false
+        std::cout << "c";
+    std::cout << '\n';
+}
+
+void ifif(bool a, bool b, bool c)
+{
+    if (a) // always evaluates
+        std::cout << "a";
+    if (b) // always evaluates
+        std::cout << "b";
+    if (c) // always evaluates
+        std::cout << "c";
+    std::cout << '\n';
+}
+
+int main()
+{
+    ifelse(false, true, true);
+    ifif(false, true, true);
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: b
+: bc

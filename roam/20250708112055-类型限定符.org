@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       f77d9ae9-2589-446f-99c4-217423a4e41e
+:END:
+#+title: 类型限定符
+#+filetags: cpp
+
+* 类型限定符
+1. 用于 *修饰类型* ；常见的类型限定符如下：
+   - [[id:1450514f-880d-42f5-8bb4-f114c1a5b675][const]]    ：表示对象不可被修改
+   - volatile ：防止编译器优化，告知编译器对象可能被意外修改
+   - mutable  ：运行 const成员函数 修改 类的非const成员变量
+   - [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]]：要求对象或函数在编译期求值

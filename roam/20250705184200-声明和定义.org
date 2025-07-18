@@ -26,3 +26,5 @@
    int x;                // instantiates variable x
 
    #+end_src
+
+3. 声明了但没有定义的类型，称为 [[id:93f32e84-8167-4897-a64f-30d23f1bab17][不完全类型]]

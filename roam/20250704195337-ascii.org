@@ -5,6 +5,6 @@
 #+filetags: encoding
 
 * ASCII [[https://www.runoob.com/w3cnote/ascii.html][参考]]
-用于显示英语的编码系统；使用 128 个字符表示：英语字母、数字、标点符号、控制符号
+使用 1字节里的7位（0-127：因此能表示128个字符）来映射：整数 -> 字符；在 cpp 中用 [[id:6809ddca-f657-4095-83b8-317dfc40b7c0][char]] 类型 表示
 - 'A'-'Z' 65-90
 - 'a'-'z' 97-122

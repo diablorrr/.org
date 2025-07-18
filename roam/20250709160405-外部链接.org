@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       f6bf51b1-6034-48c5-9fea-81e561eef430
+:END:
+#+title: 外部链接
+#+filetags: cpp
+
+* 外部链接 [[https://www.learncpp.com/cpp-tutorial/external-linkage-and-variable-forward-declarations/][learncpp7.7]] [[https://www.learncpp.com/cpp-tutorial/scope-duration-and-linkage-summary/][learncpp7.12]]
+1. 具有外部链接的标识符， *可以在不同[[id:d8366823-aedc-4b95-ab2f-f81d3aadea6e][翻译单元]]中访问*
+2. *默认情况* 下具有外部链接的有哪些？
+   1) 非成员函数
+   2) 非static 函数
+   3) 非const [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]]
+   4) [[id:c2be420e-464a-4713-8ebc-19e943a0cf67][extern]] const/constexpr全局变量（需要注意 extern 的两个语义）
+   5) inline const/constexpr全局变量
+   6) 命名空间

@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       6809ddca-f657-4095-83b8-317dfc40b7c0
+:END:
+#+title: char
+#+filetags: cpp
+
+* char [[https://www.learncpp.com/cpp-tutorial/chars/][参考]]
+1. 表示字符，char类型 大小为 1字节
+2. *底层* ：就是编译器对 一个字节 数据进行解释，解释为 char 类型；具体来说：就是将这一个字节内存储的数字 通过 [[id:dfb83e03-e939-4a01-87b5-54aaa92fd424][ASCII]] 对应到 字符；因此 char 和 int 很容易互相转换；数据类型的本质见 [[id:a730ea97-35fa-4a65-930f-bf2285457550][数据类型]]
+3. 多个字符（char）组成 [[id:a713e19b-ae94-4202-8834-c586754c4275][C风格字符串]]
+4. 除了用 char 表示 ASCII；cpp 中还有 =char8_t= 、 =char16_t= 、 =char32_t= 表示 [[id:6bc9e9e1-145f-48dd-ab31-08b18698892d][UTF-8]]、UTF-16、UTF-32

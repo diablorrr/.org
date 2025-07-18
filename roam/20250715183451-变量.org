@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       4276f9fb-4b68-4c73-bd8f-8a7c1e5f82a9
+:END:
+#+title: 变量
+#+filetags: cpp
+
+* 变量 :ATTACH:
+:PROPERTIES:
+:ID:       4be6ff25-b321-4e52-8f3b-addef570c692
+:END:
+1. *变量* 是有名字的存储区域（有类型）， *对象* 是有类型的存储区域；因此一般来说 *变量是有名字的对象*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   Sales_item item; // item 是对象，也是变量
+   int a;           // a 是对象，也是变量
+   #+end_src
+
+2. 变量的 *存储类属性* ：[[id:79cf3da5-7ff7-4a47-b4da-5380da55b840][作用域]]、[[id:853a3bee-b823-49fc-acd6-804eecb74822][生命周期]]、[[id:c3e47726-c072-4c68-9905-1fc6e2c1e016][链接性]] 总结（[[https://www.learncpp.com/cpp-tutorial/scope-duration-and-linkage-summary/][learncpp7.12]]）
+   [[attachment:_20250715_183842screenshot.png]]
+
+3. [[id:4a91da25-6384-4b42-9917-cd4dd28f7220][局部变量]] [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]] [[id:be24bcfa-3a9e-4e52-93e4-66163f87f280][static(静态局部变量)]]

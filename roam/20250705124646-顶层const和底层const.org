@@ -5,5 +5,8 @@
 #+filetags: cpp
 
 * 顶层const和底层const
-顶层const：作用于 *对象本身*
-底层const：作用于 *引用/指向的对象*
+顶层const：修饰 *自生*
+底层const：修饰 *引用/指向的对象*
+
+指针 顶、底
+引用 底

@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       ab9cc8cd-48c3-4aa9-9d91-e542ff69c6f3
+:END:
+#+title: pip安装sparsesvd
+#+filetags: pip
+
+* pip安装sparsesvd [[https://blog.csdn.net/Chendx66/article/details/135295454][csdn]]
+1. 前置安装
+   #+begin_src bash
+   pip install numpy
+   pip install scipy
+   pip install cython
+   #+end_src
+2. 下载 https://pypi.org/project/sparsesvd/#files 中的压缩包
+3. 解压后进入
+4. 安装
+   #+begin_src bash
+   python setup.py test
+   python setup.py install
+   pip install sparsesvd
+   #+end_src

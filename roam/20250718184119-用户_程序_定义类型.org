@@ -1,0 +1,44 @@
+:PROPERTIES:
+:ID:       f1619246-a266-4149-a059-021406106873
+:END:
+#+title: 用户(程序)定义类型
+#+filetags: cpp
+
+* 用户(程序)定义类型 [[https://www.learncpp.com/cpp-tutorial/introduction-to-program-defined-user-defined-types/][learncpp13.1]]
+1. 即非 cpp 中定义的类型；不会违反 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]] [fn:1]
+2. 使用时，编译器需看到 *完整定义* （不能只是前向声明），为 *该类型对象分配内存*
+3. *命名规范* 大写字母开头，见：[[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
+
+* Footnotes
+
+[fn:1]
+#+name: Fraction.h
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifndef FRACTION_H
+#define FRACTION_H
+
+struct Fraction {  // 类型定义
+    int numerator;
+    int denominator;
+};
+
+#endif
+#+end_src
+
+#+name: file1.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "Fraction.h"
+
+void func1() {
+    Fraction f{3, 4};  // 使用 Fraction 类型
+}
+#+end_src
+
+#+name: file2.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "Fraction.h"
+
+void func2() {
+    Fraction f{1, 2};  // 再次使用 Fraction 类型
+}
+#+end_src

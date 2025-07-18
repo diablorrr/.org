@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       d8366823-aedc-4b95-ab2f-f81d3aadea6e
+:END:
+#+title: 翻译单元
+#+filetags: cpp
+
+* 翻译单元
+指 .cpp源文件 经过预处理（#include 展开、宏替换）后生成的完整代码单元

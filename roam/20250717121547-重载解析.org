@@ -1,0 +1,126 @@
+:PROPERTIES:
+:ID:       8c55eec4-57bb-45c2-8890-c65d7c473a24
+:END:
+#+title: 重载解析
+#+filetags: cpp
+
+* 重载解析(overload resolution) [[https://www.learncpp.com/cpp-tutorial/function-overload-resolution-and-ambiguous-matches/][learncpp11.3]]
+1. 调用重载函数时，编译器根据 *函数参数* 匹配重载版本
+
+2. *重载解析规则*
+   1) 精确匹配（或 *[[id:855c6ccc-6bce-4b3a-8c5f-e75d5fb156c0][平凡转换]]* 得到的精确匹配）[fn:1]
+   2) [[id:9c9c2b6a-92d9-431f-9f25-7f588848596a][数值提升]] [fn:2]
+   3) [[id:9c9c2b6a-92d9-431f-9f25-7f588848596a][数值转换]] [fn:3]
+   4) 用户定义转换 [fn:4]
+   5) =...= 省略号匹配
+   6) 匹配错误
+   当然匹配过程中也可能出现 *ambiguous match（模糊匹配）* [fn:5]
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void foo(const int)
+{
+}
+
+void foo(const double&) // double& is a reference to a double
+{
+}
+
+int main()
+{
+    int x { 1 };
+    foo(x); // x trivially converted from int to const int
+
+    double d { 2.3 };
+    foo(d); // d trivially converted from double to const double& (non-ref to ref conversion)
+
+    return 0;
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void foo(int)
+{
+}
+
+void foo(double)
+{
+}
+
+int main()
+{
+    foo('a');  // promoted to match foo(int)
+    foo(true); // promoted to match foo(int)
+    foo(4.5f); // promoted to match foo(double)
+
+    return 0;
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <string> // for std::string
+
+void foo(double)
+{
+}
+
+void foo(std::string)
+{
+}
+
+int main()
+{
+    foo('a'); // 'a' converted to match foo(double)
+
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+// We haven't covered classes yet, so don't worry if this doesn't make sense
+class X // this defines a new type called X
+{
+public:
+    operator int() { return 0; } // Here's a user-defined conversion from X to int
+};
+
+void foo(int)
+{
+}
+
+void foo(double)
+{
+}
+
+int main()
+{
+    X x; // Here, we're creating an object of type X (named x)
+    foo(x); // x is converted to type int using the user-defined conversion from X to int
+
+    return 0;
+}
+#+end_src
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void foo(int)
+{
+}
+
+void foo(double)
+{
+}
+
+int main()
+{
+    foo(5L); // 5L is type long
+
+    return 0;
+}
+#+end_src

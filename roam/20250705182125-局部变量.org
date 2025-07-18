@@ -4,13 +4,16 @@
 #+title: 局部变量
 #+filetags: cpp
 
-* 局部变量 [[https://www.learncpp.com/cpp-tutorial/introduction-to-local-scope/][参考]]
-局部变量销毁时是按 *创建的逆序* 销毁
-#+begin_src cpp :results output :namespaces std :includes <iostream>
-int add(int x, int y)
-{
-    int z{ x + y };
+* 局部变量 [[https://www.learncpp.com/cpp-tutorial/introduction-to-local-scope/][learncpp2.5]] [[https://www.learncpp.com/cpp-tutorial/local-variables/][learncpp7.3]]
+1. 定义在函数中的变量（包括函数参数）；具有 局部[[id:79cf3da5-7ff7-4a47-b4da-5380da55b840][作用域]]；没有 [[id:c3e47726-c072-4c68-9905-1fc6e2c1e016][链接性]]
 
-    return z;
-} // z, y, and x destroyed here
-#+end_src
+2. *默认初始化* 为随机值
+
+3. 销毁时是按 *创建的逆序* 销毁
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int add(int x, int y)
+   {
+       int z{ x + y };
+       return z;
+   } // z, y, and x destroyed here
+   #+end_src

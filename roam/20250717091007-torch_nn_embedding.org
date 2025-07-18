@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       c989eb94-bbce-47b1-967d-b11bbe4b6b4e
+:END:
+#+title: torch.nn.Embedding
+#+filetags: pytorch
+
+* torch.nn.Embedding
+1. 用于将 *离散的符号* （eg：单词ID）转换为 *连续的可学习的张量* （也称嵌入张量，随机初始化的，后续通过大量语料训练它们之间的关系，eg：猫和狗都属于动物，因此它们在向量空间的距离更近）；可以通过 =.weight= 的方式访问内部所有张量；也能通过 *索引* 形式访问对应张量
+   #+begin_src python
+   import torch
+   import torch.nn as nn
+
+   # 创建嵌入层：5个符号（如5个单词），每个符号3维
+   embedding = nn.Embedding(5, 3)
+
+   # 1. 访问全部嵌入向量（.weight）
+   print("所有嵌入向量:\n", embedding.weight)  # 形状 [5, 3]
+
+   # 2. 通过索引访问部分向量
+   input_idx = torch.tensor([0, 2, 4])  # 查询索引0、2、4的向量
+   output = embedding(input_idx)
+   print("\n索引对应的向量:\n", output)  # 输出形状 [3, 3]
+
+   # 验证等价性
+   print("\n验证:", output[1] == embedding.weight[2])  # 输出: tensor([True, True, True])
+   #+end_src

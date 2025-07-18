@@ -4,25 +4,22 @@
 :NOTER_PAGE: 81
 :END:
 #+title: const
+#+filetags: cpp constants
 
 * const
-:PROPERTIES:
-:NOTER_PAGE: 79
-:END:
+const变量 具有 内部链接性，见：[[id:c3e47726-c072-4c68-9905-1fc6e2c1e016][链接性]]
+const全局变量 可能静态初始化也可能动态初始化
+[[id:1f3d6196-77e0-47a7-95e3-fb61a399ee2b][顶层const和底层const]]
+
+
+
+
 - 简介 ::
   1. 限定一个对象的值不被修改
   2. 编译期或运行期求得值
 - 特点 ::
   1. const对象必须被初始化
   2. const对象仅在文件内有效
-** 修饰内置类型
-- ✨[[https://www.zhihu.com/question/443195492/answer/1723886545][修饰规则]] :: 先左后右
-  #+begin_src cpp
-  const int* // 指向整型常量的指针
-  int const * // 指向整型常量的指针
-  int* const // 指向整型的常量指针
-  const int* const // 指向整型常量的常量指针
-  #+end_src
 ** 修饰引用
 - 绑定规则 ::
   1. 引用类型与所引用对象的类型一致
@@ -39,14 +36,7 @@
 ** 修饰类成员函数
 this指针
 
-* 顶层const和底层const
-- 顶层const :: 修饰自身
-- 底层const :: 修饰指向或引用的对象
-指针可以是顶、底；引用是底
-
 * 发生[[id:de2b315b-cd05-419b-98f3-dbd79f03087a][拷贝操作]]
 1. 忽略顶层const
 2. 相同底层const资格
 
-* 参考链接
-[[https://zhuanlan.zhihu.com/p/403182089][C++中const的6种用法总结]]

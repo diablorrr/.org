@@ -8,6 +8,7 @@
 :PROPERTIES:
 :ID:       f7009f6d-ea96-49ad-97a3-65cb23404585
 :END:
+: 模态融合（门控）
 #+begin_src python
 class GatedMultimodalLayer(nn.Module):
     def __init__(self,  size_out=64, dropout_rate=0.3):
@@ -31,4 +32,124 @@ class GatedMultimodalLayer(nn.Module):
         z = self.sigmoid_f(self.hidden_sigmoid(x))
 
         return z.view(z.size()[0], 1) * h1 + (1 - z).view(z.size()[0], 1) * h2
+#+end_src
+
+
+* 频域去噪融合
+:PROPERTIES:
+:ID:       a7eede37-3607-40fe-9d34-f6df4dd2ccde
+:END:
+: 去噪（时域 -> 频域 -> 去噪 -> 时域） 模态融合（在频域融合）
+#+begin_src python
+class SpectralConv(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.embedding_dim = 64
+        # 初始化可学习权重（实部+虚部）
+        self.image_complex_weight = nn.Parameter(torch.randn(1, self.embedding_dim // 2 + 1, 2, dtype=torch.float32))
+        self.text_complex_weight = nn.Parameter(torch.randn(1, self.embedding_dim // 2 + 1, 2, dtype=torch.float32))
+        self.fusion_complex_weight = nn.Parameter(torch.randn(1, self.embedding_dim // 2 + 1, 2, dtype=torch.float32))
+
+    def spectrum_convolution(self, image_embeds, text_embeds):
+            """
+                Modality Denoising & Cross-Modality Fusion
+                """
+            image_fft = torch.fft.rfft(image_embeds, dim=1, norm='ortho')
+            text_fft = torch.fft.rfft(text_embeds, dim=1, norm='ortho')
+
+            image_complex_weight = torch.view_as_complex(self.image_complex_weight)
+            text_complex_weight = torch.view_as_complex(self.text_complex_weight)
+            fusion_complex_weight = torch.view_as_complex(self.fusion_complex_weight)
+
+            #   Uni-modal Denoising
+            image_conv = torch.fft.irfft(image_fft * image_complex_weight, n=image_embeds.shape[1], dim=1, norm='ortho')
+            text_conv = torch.fft.irfft(text_fft * text_complex_weight, n=text_embeds.shape[1], dim=1, norm='ortho')
+
+            #   Cross-modality fusion
+            fusion_conv = torch.fft.irfft(text_fft * image_fft * fusion_complex_weight, n=text_embeds.shape[1], dim=1, norm='ortho')
+
+            return image_conv, text_conv, fusion_conv
+#+end_src
+
+
+* BehaviorAwareFuser
+#+begin_src python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class BehaviorAwareFuser(nn.Module):
+    def __init__(self, embedding_dim):
+        """
+        行为感知融合器模块
+
+        Args:
+            embedding_dim (int): 嵌入维度
+        """
+        super(BehaviorAwareFuser, self).__init__()
+        self.embedding_dim = embedding_dim
+
+        # 公共成分注意力机制
+        self.query_common = nn.Sequential(
+            nn.Linear(embedding_dim, embedding_dim),
+            nn.Tanh(),
+            nn.Linear(embedding_dim, 1, bias=False)
+        )
+
+        # 模态偏好门控机制
+        self.gate_image_prefer = nn.Sequential(
+            nn.Linear(embedding_dim, embedding_dim),
+            nn.Sigmoid()
+        )
+        self.gate_text_prefer = nn.Sequential(
+            nn.Linear(embedding_dim, embedding_dim),
+            nn.Sigmoid()
+        )
+
+        self.softmax = nn.Softmax(dim=-1)
+
+    def forward(self, image_embeds, text_embeds, content_embeds):
+        """
+        前向传播
+
+        Args:
+            image_embeds (Tensor): 图像模态嵌入 (n_nodes, emb_dim)
+            text_embeds (Tensor): 文本模态嵌入 (n_nodes, emb_dim)
+            content_embeds (Tensor): 内容嵌入 (用户-物品视图嵌入) (n_nodes, emb_dim)
+
+        Returns:
+            Tensor: 融合后的嵌入表示 (n_nodes, emb_dim)
+        """
+        # 1. 计算公共成分注意力权重
+        att_common = torch.cat([
+            self.query_common(image_embeds),
+            self.query_common(text_embeds)
+        ], dim=-1)
+        weight_common = self.softmax(att_common)
+
+        # 2. 提取公共表示
+        common_embeds = (
+            weight_common[:, 0].unsqueeze(1) * image_embeds +
+            weight_common[:, 1].unsqueeze(1) * text_embeds
+        )
+
+        # 3. 分离特有成分
+        sep_image_embeds = image_embeds - common_embeds
+        sep_text_embeds = text_embeds - common_embeds
+
+        # 4. 行为感知门控
+        image_prefer = self.gate_image_prefer(content_embeds)
+        text_prefer = self.gate_text_prefer(content_embeds)
+
+        # 5. 加权特有成分
+        sep_image_embeds = torch.multiply(image_prefer, sep_image_embeds)
+        sep_text_embeds = torch.multiply(text_prefer, sep_text_embeds)
+
+        # 6. 融合三个成分
+        side_embeds = (sep_image_embeds + sep_text_embeds + common_embeds) / 3
+
+        # 7. 与内容嵌入融合
+        all_embeds = content_embeds + side_embeds
+
+        return all_embeds
 #+end_src

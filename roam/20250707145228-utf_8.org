@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       6bc9e9e1-145f-48dd-ab31-08b18698892d
+:END:
+#+title: UTF-8
+#+filetags: encoding
+
+* UTF-8 [[https://www.learncpp.com/cpp-tutorial/chars/][参考]]
+变长编码（1-4字节，eg：中文用2-3字节编码）；是 [[id:dfb83e03-e939-4a01-87b5-54aaa92fd424][ASCII]] 的超集；在 cpp 中用 =char8_t= 表示；除此之外 =char16_t= 表示 UTF-16； =char32_t= 表示 UTF-32

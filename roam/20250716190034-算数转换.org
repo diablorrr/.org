@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       c49fb0b9-4417-4458-966d-44df03566bd0
+:END:
+#+title: 算数转换
+#+filetags: cpp
+
+* 算数转换 [[https://www.learncpp.com/cpp-tutorial/arithmetic-conversions/][learncpp10.5]]
+1. 二元运算符操作数数据类型不同时发生
+2. *规则*
+   1) 数值提升（不是整型提升）：将低精度类型转为高精度类型
+   2) 有符号无符号转换（规则麻烦，用到时查）

@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       9ec8b508-eab7-443b-a19e-6ab6026efbff
+:END:
+#+title: git撤销工作区的修改
+#+filetags: git
+
+* git撤销工作区的修改
+#+begin_src python
+
+# 古代 git
+git checkout -- .          # 撤销所有修改
+git checkout -- <文件名>   # 撤销指定文件修改
+
+# 现代 git
+git restore .              # 撤销所有修改
+git restore <文件名>       # 撤销指定文件修改
+
+#+end_src

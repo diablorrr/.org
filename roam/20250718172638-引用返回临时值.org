@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID:       119083e2-90b1-4ac8-8938-4fa0b68b304a
+:END:
+#+title: 按引用返回
+#+filetags: cpp
+
+*Best Practice* ：以下行为可取
+1. 引用返回 引用参数
+
+
+* 按引用返回 [[https://www.learncpp.com/cpp-tutorial/return-by-reference-and-return-by-address/][learncpp12.12]]
+引用只是一个别名，一个符号，因此 *没有销毁的说法*
+1. 函数返回 =const int &= 绑定的临时对象，会导致 悬空引用
+   #+name: 示例1
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   const int& returnByConstReference() //
+   {
+       return 5; // 生成 临时对象，并用 5 初始化，返回的 const int& 绑定到这个 临时对象，临时对象在这个局部作用域结束后销毁，此时 返回的 const int& 变成悬空引用
+   }
+
+   int main()
+   {
+       const int& ref { returnByConstReference() }; // 这里的 ref 引用 returnByConstReference 返回的悬空引用
+
+       std::cout << ref;                            // 导致未定义行为
+
+       return 0;
+   }
+   #+end_src
+
+   #+name: 示例2
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   const int& returnByConstReference(const int& ref)
+   {
+       return ref;  // 生成临时对象，用5初始化，然后 ref 绑定到临时对象，临时对象在这个局部作用域结束后销毁，导致 ref 变成悬空引用
+   }
+
+   int main()
+   {
+       // case 1: direct binding
+       const int& ref1 { 5 }; // extends lifetime
+       std::cout << ref1 << '\n'; // okay
+
+       // case 2: indirect binding
+       const int& ref2 { returnByConstReference(5) }; // ref2 绑定到了 ref 这个悬空引用
+       std::cout << ref2 << '\n'; // undefined behavior
+
+       return 0;
+   }
+   #+end_src

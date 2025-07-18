@@ -5,7 +5,7 @@
 #+filetags: cpp
 
 * 头文件 [[https://www.learncpp.com/cpp-tutorial/header-files/][参考]]
-1. =.h= 结尾的文件，里面存放一系列的 前向声明；用于 *多文件程序链接* ，是 [[id:98b78b88-32ba-4ad7-b5d5-efeae3da8405][前向声明]] 的替代方法
+1. =.h= 结尾的文件，用于 *传播前置声明* ，里面存放一系列的 前向声明；是在 cpp文件中使用 [[id:98b78b88-32ba-4ad7-b5d5-efeae3da8405][前置声明]] 的替代方法
    #+begin_example
    有一个cpp文件A，还有很多其他cpp文件；现在其他文件都要使用到A中的某个函数f
    前向声明：我们需要在所有其他文件中，前向声明f，随着文件数量增多，这将极其繁琐
@@ -16,7 +16,7 @@
    - #include <> 搜索路径 :: 系统目录
    - #include "" 搜索路径 :: 当前目录 -> 系统目录
 
-3. *头文件中不应该包含定义* ，会违反 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][单一定义规则(ODR)]] 的 第2条
+3. *头文件中不应该包含定义* ，会违反 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][单一定义规则(ODR)]] 的 第2条；除非使用 [[id:3e85303c-39c7-4ac3-9d88-a9513d036477][inline]] 定义
    add.h
    #+begin_src cpp :results output :namespaces std :includes <iostream>
 
