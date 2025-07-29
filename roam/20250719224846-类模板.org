@@ -1,0 +1,236 @@
+:PROPERTIES:
+:ID:       d07f0b33-4003-44a4-a950-7435313ff677
+:END:
+#+title: 类模板
+#+filetags: cpp
+
+* 类模板 [[https://www.learncpp.com/cpp-tutorial/class-templates/][learncpp13.13]]
+1. 用于实例化一系列 类类型（类、结构体、共用体） 的模板； *[[id:9148c346-c9dd-4480-9b37-25d448987e98][模板参数]]* 作为占位符；在编译期 编译器遇到  *创建对象* 时发生 *类模板实例化* （在发生实例化的文件处 *复制* 一份模板，模板参数 -> 具体类型，因此会 *增加编译时间* [fn:1]）
+
+2. 在 *多个源文件* 中使用类模板：类似 [[id:d296e2b2-3557-479c-ad2d-58c1600fbfd9][函数模板]]，通常是将模板放入 =.h= 头文件，然后 =include= 进 =.cpp= 源文件 [fn:2]
+
+3. 类模板中的 *成员函数* [fn:5] [[https://www.learncpp.com/cpp-tutorial/class-templates-with-member-functions/][learncpp15.5]]
+   - 类模板内部定义 *无需* 模板参数声明
+   - 类模板外部定义 *需要* 模板参数声明
+
+4. *注入的类名* ：[fn:5] [[https://www.learncpp.com/cpp-tutorial/class-templates-with-member-functions/][learncpp15.5]]
+   1) 类的作用域内，类的非限定名称
+   2) 使得类模板中的类名可以简写
+
+5. 在 *函数* 中使用类模板
+   - 类模板作为 函数参数（普通函数、函数模板）
+
+6. cpp17 中可以使用 *类模板实参推导（CTAD）* ：只有无参数列表发生，用于根据实参推导类型，有时候可能需要 *模板参数推导指南* 辅助编译器推导；见 [[id:542f88ff-7ad0-41c6-a46b-c54dc9fe1840][模板参数推导]]
+
+7. 为类模板起 *别名* [[https://www.learncpp.com/cpp-tutorial/alias-templates/][learncpp13.15]]
+   - 已实例化的类模板：可以使用 普通 using 别名 [fn:3]
+   - 未实例化的类模板：使用 [[id:73c5cb24-1bb3-4f91-a80b-043d701ca570][别名模板]] [fn:4]（必须在全局作用域定义）
+
+
+
+* Footnotes
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <ios>
+template <typename T>
+class Pair
+{
+private:
+    T m_first{};
+    T m_second{};
+
+public:
+    // 类模板内部定义成员函数：无需 模板参数声明（template <typename T>）
+    // 注入的类名：类模板内部使用 类名，无需Pair<T>
+    Pair(const T& first, const T& second)
+        : m_first{ first }, m_second{ second } { }
+
+    bool isEqual(const Pair<T>& pair);
+};
+
+// 类模板外部定义的成员函数：需要 模板参数声明（template <typename T>）
+template <typename T>
+bool Pair<T>::isEqual(const Pair<T>& pair)
+{
+    return m_first == pair.m_first && m_second == pair.m_second;
+}
+
+int main()
+{
+    Pair p1{ 5, 6 }; // 使用 CTAD：从实参推导出 Pair<int>
+    std::cout << std::boolalpha << "isEqual(5, 6): " << p1.isEqual( Pair{5, 6} ) << '\n';
+    std::cout << std::boolalpha << "isEqual(5, 7): " << p1.isEqual( Pair{5, 7} ) << '\n';
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: isEqual(5, 6): true
+: isEqual(5, 7): false
+
+
+[fn:1]
+#+name: 原始模板代码
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+template <typename T>
+struct Pair
+{
+    T first{};
+    T second{};
+};
+
+int main()
+{
+    Pair<int> p1{ 5, 6 };        // instantiates Pair<int> and creates object p1
+    std::cout << p1.first << ' ' << p1.second << '\n';
+    Pair<double> p2{ 1.2, 3.4 }; // instantiates Pair<double> and creates object p2
+    std::cout << p2.first << ' ' << p2.second << '\n';
+    Pair<double> p3{ 7.8, 9.0 }; // creates object p3 using prior definition for Pair<double>
+    std::cout << p3.first << ' ' << p3.second << '\n';
+    return 0;
+}
+#+end_src
+
+#+name: 模板实例化后的代码
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+// A declaration for our Pair class template
+// (we don't need the definition any more since it's not used)
+template <typename T>
+struct Pair;
+
+// Explicitly define what Pair<int> looks like
+template <> // 告诉编译器这是一个没有模板参数的模板类型
+struct Pair<int>
+{
+    int first{};
+    int second{};
+};
+
+// Explicitly define what Pair<double> looks like
+template <> // 告诉编译器这是一个没有模板参数的模板类型
+struct Pair<double>
+{
+    double first{};
+    double second{};
+};
+
+int main()
+{
+    Pair<int> p1{ 5, 6 };        // instantiates Pair<int> and creates object p1
+    std::cout << p1.first << ' ' << p1.second << '\n';
+    Pair<double> p2{ 1.2, 3.4 }; // instantiates Pair<double> and creates object p2
+    std::cout << p2.first << ' ' << p2.second << '\n';
+    Pair<double> p3{ 7.8, 9.0 }; // creates object p3 using prior definition for Pair<double>
+    std::cout << p3.first << ' ' << p3.second << '\n';
+    return 0;
+}
+#+end_src
+
+[fn:2]
+不会发生 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]] 错误
+#+name: pair.h
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifndef PAIR_H
+#define PAIR_H
+
+template <typename T>
+struct Pair
+{
+    T first{};
+    T second{};
+};
+
+template <typename T>
+constexpr T max(Pair<T> p)
+{
+    return (p.first < p.second ? p.second : p.first);
+}
+
+#endif
+#+end_src
+
+#+name: foo.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "pair.h"
+
+void foo()
+{
+    Pair<int> p1{ 1, 2 };
+    std::cout << max(p1) << " is larger\n";
+}
+#+end_src
+
+#+name: main. cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "pair.h"
+
+void foo(); // forward declaration for function foo()
+
+int main()
+{
+    Pair<double> p2 { 3.4, 5.6 };
+    std::cout << max(p2) << " is larger\n";
+
+    foo();
+
+    return 0;
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+template <typename T>
+struct Pair
+{
+    T first{};
+    T second{};
+};
+
+template <typename T>
+void print(const Pair<T>& p)
+{
+    std::cout << p.first << ' ' << p.second << '\n';
+}
+
+int main()
+{
+    using Point = Pair<int>; // 为 已实例化的类模板 起别名
+    Point p { 1, 2 };        // compiler replaces this with Pair<int>
+
+    print(p);
+
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+template <typename T>
+struct Pair
+{
+    T first{};
+    T second{};
+};
+
+// 别名模板（必须在全局作用域定义）
+template <typename T>
+using Coord = Pair<T>; // 为 还没实例化的类模板 起别名
+
+// Our print function template needs to know that Coord's template parameter T is a type template parameter
+template <typename T>
+void print(const Coord<T>& c)
+{
+    std::cout << c.first << ' ' << c.second << '\n';
+}
+
+int main()
+{
+    Coord<int> p1 { 1, 2 }; // Pre C++-20: We must explicitly specify all type template argument
+    Coord p2 { 1, 2 };      // In C++20, we can use alias template deduction to deduce the template arguments in cases where CTAD works
+
+    std::cout << p1.first << ' ' << p1.second << '\n';
+    print(p2);
+
+    return 0;
+}
+#+end_src

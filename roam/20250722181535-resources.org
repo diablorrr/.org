@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       8299b26c-8897-406e-bc56-8de9cfef2fd8
+:END:
+#+title: resources
+#+filetags: other
+
+[[https://beej.us/guide/][Beej's Guides]]
+[[https://www.tutorialspoint.com/][tutorialspoint]]
+
+* 在线运行代码
+[[https://godbolt.org/][godbolt]]
+
+* emacs
+[[http://xahlee.info/emacs/index.html][Xah Emacs Tutorial]]
+
+* cpp
+[[https://www.learncpp.com/][learncpp]]：大量的示例代码，良好的代码注释，实践经验
+[[https://hackingcpp.com/index.html][hackingcpp]]：大量的可视化图表，良好的代码注释

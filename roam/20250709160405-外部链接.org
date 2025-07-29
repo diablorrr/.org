@@ -1,10 +1,10 @@
 :PROPERTIES:
 :ID:       f6bf51b1-6034-48c5-9fea-81e561eef430
 :END:
-#+title: 外部链接
+#+title: 外部链接性
 #+filetags: cpp
 
-* 外部链接 [[https://www.learncpp.com/cpp-tutorial/external-linkage-and-variable-forward-declarations/][learncpp7.7]] [[https://www.learncpp.com/cpp-tutorial/scope-duration-and-linkage-summary/][learncpp7.12]]
+* 外部链接性 [[https://www.learncpp.com/cpp-tutorial/external-linkage-and-variable-forward-declarations/][learncpp7.7]] [[https://www.learncpp.com/cpp-tutorial/scope-duration-and-linkage-summary/][learncpp7.12]]
 1. 具有外部链接的标识符， *可以在不同[[id:d8366823-aedc-4b95-ab2f-f81d3aadea6e][翻译单元]]中访问*
 2. *默认情况* 下具有外部链接的有哪些？
    1) 非成员函数

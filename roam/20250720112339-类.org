@@ -1,0 +1,351 @@
+:PROPERTIES:
+:ID:       d63526f2-db09-4c79-8a1a-57d6a7d82ec9
+:END:
+#+title: 类(class)
+#+filetags: cpp
+
+* 类
+1. 用户定义的 [[id:99463280-0fa3-491e-82ae-2c3402272509][复合数据类型]]，将 [[id:372c18aa-a68a-47b2-a5b8-9685e7677a69][成员变量]] 和 [[id:3a39bdbf-179e-4dd8-aaf9-3aeb1d0c3863][成员函数]] 封装在一起，形成自己的一种类型
+
+2. 默认 *访问权限* private（不能使用 [[id:382ff65a-9dfa-476a-8868-78b7418bcba8][聚合初始化]] [fn:1]）
+   默认 *继承权限* private
+
+3. *初始化* 方式：[[id:50402d44-720e-42ed-b590-2b18d219acc1][构造函数]]（因为有 private 成员的类没法使用 聚合初始化）
+   不同初始化方式 都能调用 不同类型的构造函数 [fn:2] [[https://www.learncpp.com/cpp-tutorial/class-initialization-and-copy-elision/][learncpp14.15]]
+
+4. *销毁* 方式：[[id:be44b0c2-d234-409f-b1a6-b447e365db37][析构函数]]
+
+5. *类内标识符次序 任意* （成员变量、成员函数）；但是如果用 一个成员变量 初始化 另一个成员变量， *需要考虑声明顺序*
+   #+name: 用一个成员变量 初始化 另一个成员变量
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   struct Bad
+   {
+       int m_bad1 { m_data }; // 未定义行为: m_bad1 在 m_data 之前初始化
+       int m_bad2 { fcn() };  // 未定义行为: m_bad2 在 m_data 之前初始化（通过 fcn()）
+
+       int m_data { 5 };
+       int fcn() { return m_data; }
+   };
+   #+end_src
+
+   *底层* ：编译器 将 成员函数 *隐式前置声明* ，将成员函数定义 紧跟在 类定义结束之后
+   #+name: 原始形式
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   struct Foo
+   {
+       int z() { return m_data; } // m_data not declared yet
+       int x() { return y(); }    // y not declared yet
+       int y() { return 5; }
+
+       int m_data{};
+   };
+   #+end_src
+
+   #+name: 等价形式
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   struct Foo
+   {
+       // 成员函数隐式前置声明
+       int z(); // forward declaration of Foo::z()
+       int x(); // forward declaration of Foo::x()
+       int y(); // forward declaration of Foo::y()
+
+       int m_data{};
+   };
+
+   // 成员函数定义
+   int Foo::z() { return m_data; } // m_data already declared above
+   int Foo::x() { return y(); }    // y already declared above
+   int Foo::y() { return 5; }
+   #+end_src
+
+6. *类 与 常量（const/constexpr）*[fn:5] [[https://www.learncpp.com/cpp-tutorial/const-class-objects-and-const-member-functions/][learncpp14.4]]
+   - const/constexpr对象：必须初始化
+   - const对象：不能调用 非const成员函数 [fn:6]；可以调用 const成员函数 ，不能修改 const对象的成员变量
+   - 非const对象：可以调用 非const成员函数 和 const成员函数
+   - constexpr聚合体对象：[fn:7] [[https://www.learncpp.com/cpp-tutorial/constexpr-aggregates-and-classes/][learncpp14.17]]
+   - constexpr非聚合体对象：需要有 constexpr构造函数 才能初始化[fn:8]  [[https://www.learncpp.com/cpp-tutorial/constexpr-aggregates-and-classes/][learncpp14.17]]
+
+7. *类 与 函数* [[https://www.learncpp.com/cpp-tutorial/temporary-class-objects/][learncpp14.13]]
+   - 函数参数 :: 可以传递 对象 或 *临时对象* （使用 =const &= 形式，减少复制开销）
+     #+begin_src cpp :results output :namespaces std :includes <iostream>
+     IntPair p { 1, 2 }; // 用 {1,2} 初始化 具名IntPair类型对象 p
+     IntPair { 1, 2 };   // 用 {1,2} 初始化 IntPair类型临时对象
+     { 1, 2 };           // 编译器将 {1,2} 转换为 IntPair类型临时对象
+     #+end_src
+   - 函数返回 :: 可以返回 对象 或 *临时对象* [fn:9]
+
+8. *命名规范* ：成员变量、成员函数 见 [[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Date
+{
+    // class members are private by default, can only be accessed by other members
+    int m_year {};     // private by default
+    int m_month {};    // private by default
+    int m_day {};      // private by default
+
+    void print() const // private by default
+    {
+        // private members can be accessed in member functions
+        std::cout << m_year << '/' << m_month << '/' << m_day;
+    }
+};
+
+int main()
+{
+    Date today { 2020, 10, 14 }; // 编译错误：不能使用聚合初始化，将 成员变量 改为 public 后可以使用
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <iostream>
+
+class Foo
+{
+public:
+
+    // 默认构造函数
+    Foo()
+    {
+        std::cout << "Foo()\n";
+    }
+
+    // 普通构造函数
+    Foo(int x)
+    {
+        std::cout << "Foo(int) " << x << '\n';
+    }
+
+    // 拷贝构造函数
+    Foo(const Foo&)
+    {
+        std::cout << "Foo(const Foo&)\n";
+    }
+};
+
+int main()
+{
+    // 调用 默认构造：Foo()
+    Foo f1;           // 默认初始化
+    Foo f2{};         // 值初始化 (preferred)
+
+    // 调用 普通构造：Foo(int)
+    Foo f3 = 3;       // 拷贝初始化 (non-explicit constructors only)
+    Foo f4(4);        // 直接初始化
+    Foo f5{ 5 };      // 直接列表初始化 (preferred)
+    Foo f6 = { 6 };   // 拷贝列表初始化 (non-explicit constructors only)
+
+    // 调用 拷贝构造函数：Foo(const Foo&)
+    Foo f7 = f3;      // 拷贝初始化
+    Foo f8(f3);       // 直接初始化
+    Foo f9{ f3 };     // 直接列表初始化 (preferred)
+    Foo f10 = { f3 }; // 拷贝列表初始化
+
+    return 0;
+}
+#+end_src
+
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Something
+{
+    void print()
+    {
+        std::cout << "non-const\n";
+    }
+
+    void print() const
+    {
+        std::cout << "const\n";
+    }
+
+    void print(int i)
+    {
+      cout << "int\n";
+    }
+
+    // void mod() const
+    // {
+    //    ++member;
+    // }
+
+    void print2() const
+    {
+      cout << "非const对象调用const成员函数\n";
+    }
+
+    int member {};
+};
+
+int main()
+{
+    Something s1{};
+    s1.print();  // const成员函数 重载：calls print()
+    s1.print(1); // 非const对象调用 非const成员函数
+    s1.print2(); // 非const对象调用   const成员函数
+
+    const Something s2{};
+    s2.print(); // const成员函数 重载：calls print() const
+
+    // s2.print(1); FIXME const对象 不能调用 非const成员函数
+    // s2.mod();    FIXME const对象 不能修改 成员变量
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: non-const
+: int
+: 非const对象调用const成员函数
+: const
+
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Date
+{
+    int year {};
+    int month {};
+    int day {};
+
+    void print() // non-const
+    {
+        std::cout << year << '/' << month << '/' << day;
+    }
+};
+
+void doSomething(const Date& date) // 此时传入的 非const对象 date的类型 从 Date 变为 const Date
+{
+    date.print(); // const对象 调用 非const成员函数 -> 编译错误 -> 解决：将 print 声明为 const成员函数
+}
+
+int main()
+{
+    Date today { 2020, 10, 14 }; // 非const对象
+    today.print();
+
+    doSomething(today);
+
+    return 0;
+}
+#+end_src
+
+[fn:7]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Pair // Pair 是聚合体
+{
+    int m_x {};
+    int m_y {};
+
+    constexpr int greater() const
+    {
+        return (m_x > m_y  ? m_x : m_y);
+    }
+};
+
+int main()
+{
+    constexpr Pair p { 5, 6 };        // constexpr对象
+    std::cout << p.greater() << '\n'; // p.greater() 编译时 或 运行时 计算
+
+    constexpr int g { p.greater() };  // p.greater() 必须在 编译时 计算
+    std::cout << g << '\n';
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: 6
+: 6
+
+[fn:8]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Pair // Pair is no longer an aggregate
+{
+private:
+    int m_x {};
+    int m_y {};
+
+public:
+    // 修改为 constexpr Pair(int x, int y): m_x { x }, m_y { y } {} -> ok
+    Pair(int x, int y): m_x { x }, m_y { y } {}
+
+    constexpr int greater() const
+    {
+        return (m_x > m_y  ? m_x : m_y);
+    }
+};
+
+int main()
+{
+    constexpr Pair p { 5, 6 };       // FIXME p is not a literal type
+    std::cout << p.greater() << '\n';
+
+    constexpr int g { p.greater() };
+    std::cout << g << '\n';
+
+    return 0;
+}
+#+end_src
+
+[fn:9]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class IntPair
+{
+private:
+    int m_x{};
+    int m_y{};
+
+public:
+    IntPair(int x, int y)
+        : m_x { x }, m_y { y }
+    {}
+
+    int x() const { return m_x; }
+    int y() const { return m_y; }
+};
+
+void print(IntPair p)
+{
+    std::cout << "(" << p.x() << ", " << p.y() << ")\n";
+}
+
+// Case 1: Create named variable and return
+IntPair ret1()
+{
+    IntPair p { 3, 4 };
+    return p; // returns temporary object (initialized using p)
+}
+
+// Case 2: Create temporary IntPair and return
+IntPair ret2()
+{
+    return IntPair { 5, 6 }; // returns temporary object (initialized using another temporary object)
+}
+
+// Case 3: implicitly convert { 7, 8 } to IntPair and return
+IntPair ret3()
+{
+    return { 7, 8 }; // returns temporary object (initialized using another temporary object)
+}
+
+int main()
+{
+    print(ret1());
+    print(ret2());
+    print(ret3());
+
+    return 0;
+}
+#+end_src

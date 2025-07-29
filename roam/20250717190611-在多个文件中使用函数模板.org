@@ -5,11 +5,11 @@
 #+filetags: cpp
 
 * 在多个文件中使用函数模板 [[https://www.learncpp.com/cpp-tutorial/using-function-templates-in-multiple-files/][learncpp11.10]]
-- 问题 :: [[id:98b78b88-32ba-4ad7-b5d5-efeae3da8405][前置声明]]在普通函数中可以用于多文件链接，但在[[id:d296e2b2-3557-479c-ad2d-58c1600fbfd9][函数模板]]中不行
+- 问题 :: 在源文件中使用[[id:98b78b88-32ba-4ad7-b5d5-efeae3da8405][前置声明]] 在普通函数中可以用于多文件链接，但在[[id:d296e2b2-3557-479c-ad2d-58c1600fbfd9][函数模板]]中不行
    #+name: main.cpp
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    template <typename T>
-   T addOne(T x); // function template forward declaration
+   T addOne(T x); // 函数模板前向声明
 
    int main()
    {
@@ -23,7 +23,7 @@
    #+name: add.cpp
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    template <typename T>
-   T addOne(T x) // function template definition
+   T addOne(T x) // 函数模板定义
    {
        return x + 1;
    }

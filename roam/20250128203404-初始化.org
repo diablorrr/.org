@@ -7,20 +7,20 @@
 *Best practice* ：使用 列表初始化，且始终初始化变量
 
 * 初始化 [[https://www.learncpp.com/cpp-tutorial/variable-assignment-and-initialization/][learncpp1.4]]
-1. cpp 中初始化方式有多种
-   - 现代初始化 :: 基于 *列表初始化* ，用 ={}= 表示；引出：列表直接初始化 、列表拷贝初始化、值初始化
+1. cpp 中的初始化方式
+   - 现代初始化 :: 基于 *列表初始化* ，用 ={}= 表示；引出： *直接列表初始化* 、 *拷贝列表初始化* 、 *值初始化*
    - 古代初始化 :: 使用 =()= 表示 *直接初始化* ， === 表示 *拷贝初始化* ；没有初始化值的是 *默认初始化*
    #+begin_src cpp :results output :namespaces std :includes <iostream>
 
-   // 现代初始化：基于 列表初始化
-   int d {};      // value-initialization (empty braces)
-   int e { 7 };   // direct-list-initialization (initial value in braces)
-   int f = { 6 }; // copy-list-initialization
+   // 列表初始化（现代）
+   int d {};      // 值初始化：0... (empty braces)
+   int e { 7 };   // 直接列表初始化 (initial value in braces)
+   int f = { 6 }; // 拷贝列表初始化
 
-   // 古代初始化
-   int a;         // default-initialization (no initializer)
-   int b = 5;     // copy-initialization (initial value after equals sign)
-   int c ( 6 );   // direct-initialization (initial value in parenthesis)
+   // 初始化（古代）
+   int a;         // 默认初始化：随机值 (no initializer)
+   int b = 5;     // 拷贝初始化 (initial value after equals sign)
+   int c ( 6 );   // 直接初始化 (initial value in parenthesis)
 
    #+end_src
 
@@ -33,4 +33,7 @@
       #+end_src
    2) 无初始化值的初始化 更统一（使用 {}空花括号 会进行 值初始化：0、nullptr、类默认构造）；古代的默认初始化在不同位置定义，行为不一样
 
-3. *[[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]]的初始化顺序* ：在 main() 调用之前，静态初始化 -> 动态初始化
+3. *列表初始化* 的本质
+   当编译器看到一个初始化列表（和列表初始化不是一个东西），会将其转换为 [[id:2c40eca3-bd07-4fda-a1f2-d5fd37040ca9][std::initializer_list]] 类型的对象，因此类中有接收 std::initializer_list 的 [[id:50402d44-720e-42ed-b590-2b18d219acc1][构造函数]]，就能用初始化列表 创建对象
+
+4. *[[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]]的初始化顺序* ：在 main() 调用之前，静态初始化 -> 动态初始化

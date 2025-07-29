@@ -1,16 +1,18 @@
 :PROPERTIES:
 :ID:       f4a757af-96df-44bc-abef-4720a0c40275
 :END:
-#+title: main函数
+#+title: main()
 #+filetags: cpp
 
-* main函数 [[https://www.learncpp.com/cpp-tutorial/function-return-values-value-returning-functions/][learncpp2.2]] [[https://www.learncpp.com/cpp-tutorial/halts-exiting-your-program-early/][learncpp8.12]]
-1. main函数 是 *操作系统调用的函数* ，但 *不一定是第一个被调用的函数* ：因为 全局变量 在 main() 前初始化，若 [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]] 是 通过某个函数初始化的，则那个函数为第一个调用的函数
+* main() [[https://www.learncpp.com/cpp-tutorial/function-return-values-value-returning-functions/][learncpp2.2]] [[https://www.learncpp.com/cpp-tutorial/halts-exiting-your-program-early/][learncpp8.12]]
+1. 可以有参数，[[id:c60053e0-0b27-4e96-a46d-5945713a664d][命令行参数]]
 
-2. 可以没有 return（ *隐式的返回0* ）
+2. main() 是 *操作系统调用的函数* ，但 *不一定是第一个被调用的函数* ：因为 全局变量 在 main() 前初始化，若 [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]] 是 通过某个函数初始化的，则那个函数为第一个调用的函数
 
-3. *main函数退出流程*
+3. *main()退出流程*
    - 清理 main() 和 调用栈 中的局部变量
    - 隐式调用 [[id:ebd68d1b-110b-40a5-9e3b-2687f3b9b17d][std::exit()]]，并将 main() 的返回值（状态码）作为参数传递
    - std::exit() 销毁[[id:853a3bee-b823-49fc-acd6-804eecb74822][静态存储期]]对象（static变量、全局变量）以及一些清理操作
    - 将控制权返回给操作系统
+
+4. 可以没有 return（ *隐式的 return 0* ）

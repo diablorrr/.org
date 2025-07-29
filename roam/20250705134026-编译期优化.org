@@ -4,8 +4,8 @@
 #+title: 编译期优化
 #+filetags: cpp
 
-* 编译期优化 [[https://www.learncpp.com/cpp-tutorial/the-as-if-rule-and-compile-time-optimization/][参考]]
-1. 编译器对 *变量/表达式* 运行时计算 提前到 编译时计算，好处：提高运行时候效率，坏处：不好 debug；有下面三种优化方式 [[https://www.learncpp.com/cpp-tutorial/the-as-if-rule-and-compile-time-optimization/][参考]]
+* 编译期优化 [[https://www.learncpp.com/cpp-tutorial/the-as-if-rule-and-compile-time-optimization/][learncpp5.4]]
+1. 编译器对 *变量/表达式* 运行时计算 提前到 编译时计算，好处：提高运行时候效率，坏处：不好 debug；有下面三种优化方式
    - 常量折叠 :: 将常量 *表达式* （3 + 7）替换为结果（10）
    - 常量传播 :: 已知常量值的 *变量* 替换为结果（x 替换为7）
    - 死代码消除 :: 移除未使用的代码（没有使用的变量定义）
@@ -24,7 +24,9 @@
    常量折叠   -> 将 7 + 3 替换为 10 [fn:1]
    死代码消除 -> 移除 =int z { 10 };= 这行代码，因为它没被使用
 
-2. 限定 const 是 *建议编译时计算* ， *特殊情况* ： =用常量表达式初始化的const int= 初始化表达式为常量表达式 时会编译期计算；使用 constexpr *强制编译时计算*
+  - 拷贝省略 :: 编译器优化掉 不必要的拷贝构造函数调用，见：[[id:3cc311ac-4ed0-4e9c-af58-5b1daed5ec94][拷贝省略]]
+
+3. constexpr变量 具有 *编译时计算* 的能力 ，（特殊） =用常量表达式初始化的const int= 为常量表达式；具有 编译期计算 的能力
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    const double x { 1.2 };
    const double y { 3.4 };

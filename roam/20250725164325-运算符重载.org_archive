@@ -1,0 +1,86 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/yoshiki01/.org/roam/20250725164325-运算符重载.org
+
+
+* Footnotes
+:PROPERTIES:
+:ARCHIVE_TIME: 2025-07-26 六 13:07
+:ARCHIVE_FILE: ~/.org/roam/20250725164325-运算符重载.org
+:ARCHIVE_CATEGORY: 20250725164325-运算符重载
+:END:
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Cents
+{
+private:
+  int m_cents{};
+
+public:
+  Cents(int cents) : m_cents{ cents } { }
+
+  int getCents() const { return m_cents; }
+};
+
+// 普通函数：使用类提供的公共接口访问私有成员
+Cents operator+(const Cents& c1, const Cents& c2)
+{
+  return Cents{ c1.getCents() + c2.getCents() };
+}
+
+int main()
+{
+  Cents cents1{ 6 };
+  Cents cents2{ 8 };
+  Cents centsSum{ cents1 + cents2 };
+  std::cout << "I have " << centsSum.getCents() << " cents.\n";
+
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+: I have 14 cents.
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Cents
+{
+private:
+	int m_cents {};
+public:
+  Cents(int cents) : m_cents{ cents } { }
+
+	friend Cents operator+(const Cents& c1, const Cents& c2); // NOTE 友元函数：类外实现 Cents + Cents
+
+	int getCents() const { return m_cents; }
+
+  // NOTE 友元函数：类内实现 -> 类内实现也属于 类的成员
+  // friend Cents operator+(const Cents& c1, const Cents& c2)
+	// {
+	//    return Cents { c1.m_cents + c2.m_cents };
+	// }
+
+};
+
+// 友元函数：类外实现
+Cents operator+(const Cents& c1, const Cents& c2)
+{
+	return c1.m_cents + c2.m_cents; // 因为是友元函数，因此可以访问类私有变量
+}
+
+int main()
+{
+	Cents cents1{ 6 };
+	Cents cents2{ 8 };
+	Cents centsSum{ cents1 + cents2 };
+	std::cout << "I have " << centsSum.getCents() << " cents.\n";
+
+	return 0;
+}
+#+end_src
+
+#+RESULTS:
+: I have 14 cents.

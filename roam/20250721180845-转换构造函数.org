@@ -1,0 +1,85 @@
+:PROPERTIES:
+:ID:       cf5f4669-1abc-45b6-9882-83008c96bd4a
+:END:
+#+title: 转换构造函数
+#+filetags: cpp
+
+*Best Practice* ：单参数的构造函数（包括多个参数有默认值的情况） 都 explicit
+
+* 转换构造函数 [[https://www.learncpp.com/cpp-tutorial/converting-constructors-and-the-explicit-keyword/][learncpp14.16]]
+1. 可以 *隐式转换* 的构造函数（默认情况：所有构造函数 都是 转换构造函数）；基本类型 -> 类（隐式转换）
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   class Foo
+   {
+   public:
+       // NOTE 参数有默认值的情况：Foo(int x, int y = 1) 同理发生隐式转换
+       // NOTE 参数有默认值的情况：Foo(int x = 1, int y = 1) 同理发生隐式转换
+       Foo(int x) {
+           cout << "发生隐式转换：调用 Foo(int) -> " << x << '\n';
+       }
+
+       Foo(int x, int y ) {
+           cout << "发生隐式转换：调用 Foo(int, int) -> " << x << ' ' << y << '\n';
+       }
+   };
+
+   void printFoo(Foo f) {}
+
+   int main()
+   {
+       printFoo(5);       // 发生隐式转换：调用 Foo(int)
+       printFoo({6, 7});  // 发生隐式转换：调用 Foo(int, int)
+
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : 发生隐式转换：调用 Foo(int) -> 5
+   : 发生隐式转换：调用 Foo(int, int) -> 6 7
+
+2. 转换构造函数的隐式转换 *只能发生一次*
+      #+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+      class Employee
+      {
+      public:
+          Employee(std::string_view name) {}
+      };
+
+      void printEmployee(Employee e) {}
+
+      int main()
+      {
+          printEmployee("Joe"); // FIXME const char* -> string_view -> 隐式转换为 Employee（调用 Employee(std::string_view) 构造对象）；2次隐式转换，因此编译错误
+                                // NOTE 解决方法：printEmployee("Jos"sv) 或 printEmployee(Employee{ "Joe" })
+          return 0;
+      }
+      #+end_src
+
+3. 大的程序中可能发生 *意想不到的隐式转换* ： 使用 [[id:34134e75-291c-45b5-b333-9488592c61af][explicit]] 阻止，只能 *显式调用* 构造函数（函数传参、函数返回）
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+class Foo
+{
+public:
+    explicit Foo() {}
+
+    explicit Foo(int x) {}
+};
+
+Foo getFoo()
+{
+    // explicit Foo() cases
+    return Foo{ };   // ok
+    return { };      // FIXME 不能隐式转换 initializer list 到 Foo
+
+    // explicit Foo(int) cases
+    return 5;        // FIXME 不能隐式转换 int 到 Foo
+    return Foo{ 5 }; // ok
+    return { 5 };    // FIXME 不能隐式转换 initializer list 到 Foo
+}
+
+int main()
+{
+    return 0;
+}
+   #+end_src

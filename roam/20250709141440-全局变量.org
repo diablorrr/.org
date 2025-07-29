@@ -9,7 +9,7 @@
 2. 尽量不使用全局变量
 
 * 全局变量 [[https://www.learncpp.com/cpp-tutorial/introduction-to-global-variables/][learncpp7.4]] [[https://www.learncpp.com/cpp-tutorial/why-non-const-global-variables-are-evil/][learncpp7.8]]
-1. *函数外部声明的变量* ；默认具有 [[id:f6bf51b1-6034-48c5-9fea-81e561eef430][外部链接]]性
+1. *函数外部声明的变量* ；默认具有 [[id:f6bf51b1-6034-48c5-9fea-81e561eef430][外部链接性]]
 
 2. *初始化顺序* ：静态初始化 -> 动态初始化；见：[[id:819c9ef5-5220-4678-994a-3122d7d17ab7][初始化]]
    - 静态初始化 :: 以 [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]]初始化器（包括[[id:27733720-d27e-4852-bb07-b50130457fc9][字面值]]）作为初始值的全局变量；没有初始值的全局变量（被0初始化）
@@ -52,8 +52,6 @@
    给定两个文件，a.cpp 和 b.cpp，二者的全局变量都有可能先被初始化。如果 a.cpp 中某个具有静态生存期的变量是用 b.cpp 中定义的一个具有静态生存期的变量初始化的，那么 b.cpp 中的这个变量有50% 的可能性尚未初始化
    #+end_example
 
-
-
 3. *默认初始化* 为 0
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    // Non-constant global variables
@@ -61,16 +59,16 @@
    int g_x {};              // defines explicitly value-initialized global variable
    int g_x { 1 };           // defines explicitly initialized global variable
 
-   // Const global variables
+   // const全局变量
    const int g_y;           // error: const variables must be initialized
    const int g_y { 2 };     // defines initialized global const
 
-   // Constexpr global variables
+   // constexpr全局变量
    constexpr int g_y;       // error: constexpr variables must be initialized
    constexpr int g_y { 3 }; // defines initialized global constexpr
    #+end_src
 
-4. *命名规范* ： =g_= 前缀
+4. *命名规范* ：见 [[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
 
 5. 具有 *静态生命周期* ；见：[[id:853a3bee-b823-49fc-acd6-804eecb74822][生命周期]]
 

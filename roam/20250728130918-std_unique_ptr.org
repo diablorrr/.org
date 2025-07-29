@@ -1,0 +1,163 @@
+:PROPERTIES:
+:ID:       02ce83ed-31b4-4906-89e4-271bbf432834
+:END:
+#+title: std::unique_ptr
+#+filetags: cpp
+
+* std::unique_ptr [[https://www.learncpp.com/cpp-tutorial/stdunique_ptr/][learncpp22.5]]
+1. cpp11， *独占资源* 的智能指针
+   - 内部 ::
+     1) 指针指向 资源
+     2) 无 拷贝语义（ [[id:828d1a9b-3ab1-4471-8906-1cf535ea8e7d][拷贝构造函数、拷贝赋值]]）
+     3) 有 [[id:0512d335-6d3f-4ebc-9021-88424c326876][移动语义]]（[[id:ac154a46-7700-4286-96aa-a45f8d93c6b6][移动构造函数、移动赋值]]）
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   #include <memory> // for std::unique_ptr
+
+   class Resource
+   {
+   public:
+     Resource() { std::cout << "Resource acquired\n"; }
+     ~Resource() { std::cout << "Resource destroyed\n"; }
+   };
+
+   std::ostream& operator<<(std::ostream& out, const Resource&)
+   {
+     out << "I am a resource";
+     return out;
+   }
+
+   int main()
+   {
+     std::unique_ptr<Resource> res{ new Resource{} };
+     if (res) // 用于判断是否包含资源：隐式转换为 bool
+       std::cout << *res << '\n'; // 打印资源：使用 *解引用
+     return 0;
+   }
+   #+end_src
+
+2. cpp14，推荐使用 *std::make_unique* ，更简洁，且解决了一个异常安全问题
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // 编译器可能的处理顺序：T -> function_that_can_throw_exception -> std::unique_ptr
+   // 可能的异常安全：T 已经被创建，函数抛出异常，但 std::unique_ptr 还没创建好，造成内存泄漏
+   some_function(std::unique_ptr<T>(new T), function_that_can_throw_exception());
+
+   // 不会内存泄漏：T 和 std::unique_ptr 都在 make_unique 内部创建
+   some_function(std::make_unique<T>(), function_that_can_throw_exception());
+   #+end_src
+
+3. *错误使用*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // 多个 std::unique_ptr 管理同一个资源 -> FIXME 多次释放
+   Resource* res{ new Resource() };
+   std::unique_ptr<Resource> res1{ res };
+   std::unique_ptr<Resource> res2{ res };
+
+   // delete 删除原始资源 -> std::unique_ptr 释放，FIXME 多次释放
+   Resource* res{ new Resource() };
+   std::unique_ptr<Resource> res1{ res };
+   delete res;
+   #+end_src
+
+
+4. std::unique_ptr 与 *函数*
+   - 函数参数 :: 传递资源本身（指针或引用），而不是 std::unique_ptr（使用 get() 获取资源：裸指针）
+     + 问题 :: 直接传递 std::unique_ptr 导致 *资源所有权转移到函数* 里，然后资源在函数中销毁[fn:1]；大部分时候我们并不想，因此传入资源本身[fn:2]
+   - *函数返回* :: 值返回就行，编译器会使用移动语义移动
+     #+begin_src cpp :results output :namespaces std :includes <iostream> <memory>
+     std::unique_ptr<Resource> createResource() // 值返回，但移动语义可用时，会移动；此处使用 移动语义
+     {
+          return std::make_unique<Resource>();
+     }
+
+     int main()
+     {
+         auto ptr{ createResource() };
+         // do whatever
+         return 0;
+     }
+     #+end_src
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <memory>
+class Resource
+{
+public:
+	Resource() { std::cout << "Resource acquired\n"; }
+	~Resource() { std::cout << "Resource destroyed\n"; }
+};
+
+std::ostream& operator<<(std::ostream& out, const Resource&)
+{
+	out << "I am a resource";
+	return out;
+}
+
+// The function only uses the resource, so we'll accept a pointer to the resource, not a reference to the whole std::unique_ptr<Resource>
+void useResource(const Resource* res)
+{
+	if (res)
+		std::cout << *res << '\n';
+	else
+		std::cout << "No resource\n";
+}
+
+int main()
+{
+	auto ptr{ std::make_unique<Resource>() };
+
+	useResource(ptr.get()); // 获取资源本身
+
+	std::cout << "Ending program\n";
+
+	return 0;
+} // NOTE NOTE NOTE 资源在此处释放，ok：也就是说 调用完函数，回到 main，资源依旧被 std::unique_ptr 管理着
+#+end_src
+
+#+RESULTS:
+: Resource acquired
+: I am a resource
+: Ending program
+: Resource destroyed
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <memory> <utility>
+class Resource
+{
+public:
+	Resource() { std::cout << "Resource acquired\n"; }
+	~Resource() { std::cout << "Resource destroyed\n"; }
+};
+
+std::ostream& operator<<(std::ostream& out, const Resource&)
+{
+	out << "I am a resource";
+	return out;
+}
+
+// 这个函数获取 资源的管理权，这不是我们想要的
+void takeOwnership(std::unique_ptr<Resource> res)
+{
+     if (res)
+          std::cout << *res << '\n';
+} // NOTE NOTE NOTE资源在此释放；这不是我们想要的
+
+int main()
+{
+    auto ptr{ std::make_unique<Resource>() };
+
+    //    takeOwnership(ptr); // FIXME 错误，std::unique_ptr 没有拷贝语义
+    takeOwnership(std::move(ptr)); // 使用移动语义
+
+    std::cout << "Ending program\n";
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Resource acquired
+: I am a resource
+: Resource destroyed
+: Ending program

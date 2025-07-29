@@ -1,0 +1,76 @@
+:PROPERTIES:
+:ID:       d4285c38-cefe-4bb5-8ebf-0625bd976fa1
+:END:
+#+title: std::move
+#+filetags: cpp
+
+* std::move [[https://www.learncpp.com/cpp-tutorial/stdmove/][learncpp22.4]]
+1. cpp11，用于将左值转为右值，以此调用 [[id:0512d335-6d3f-4ebc-9021-88424c326876][移动语义]] [fn:1]
+   标准库中使用移动语义的例子
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   std::vector<std::string> v;
+   std::string str { "Knock" };
+
+   v.push_back(str);            // 调用 push_back 左值版本
+   v.push_back(std::move(str)); // 调用 push_back 右值版本
+   #+end_src
+
+* Footnotes
+
+[fn:1]
+#+name: 拷贝语义
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+template <typename T>
+void mySwapCopy(T& a, T& b)
+{
+  T tmp { a }; // invokes copy constructor
+  a = b; // invokes copy assignment
+  b = tmp; // invokes copy assignment
+}
+
+int main()
+{
+  std::string x{ "abc" };
+  std::string y{ "de" };
+
+  std::cout << "x: " << x << '\n';
+  std::cout << "y: " << y << '\n';
+
+  mySwapCopy(x, y); // 拷贝语义，后续用 std::move 调用移动语义
+
+  std::cout << "x: " << x << '\n';
+  std::cout << "y: " << y << '\n';
+
+  return 0;
+}
+#+end_src
+
+#+name: 移动语义
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+#include <utility> // for std::move
+
+template <typename T>
+void mySwapMove(T& a, T& b)
+{
+  // 使用 std::move 将左值转右值，使用移动语义
+	T tmp { std::move(a) }; // invokes move constructor
+	a = std::move(b); // invokes move assignment
+	b = std::move(tmp); // invokes move assignment
+}
+
+int main()
+{
+	std::string x{ "abc" };
+	std::string y{ "de" };
+
+	std::cout << "x: " << x << '\n';
+	std::cout << "y: " << y << '\n';
+
+	mySwapMove(x, y);
+
+	std::cout << "x: " << x << '\n';
+	std::cout << "y: " << y << '\n';
+
+	return 0;
+}
+#+end_src

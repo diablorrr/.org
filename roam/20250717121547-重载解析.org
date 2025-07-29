@@ -1,7 +1,7 @@
 :PROPERTIES:
 :ID:       8c55eec4-57bb-45c2-8890-c65d7c473a24
 :END:
-#+title: 重载解析
+#+title: 函数重载解析
 #+filetags: cpp
 
 * 重载解析(overload resolution) [[https://www.learncpp.com/cpp-tutorial/function-overload-resolution-and-ambiguous-matches/][learncpp11.3]]
@@ -43,39 +43,29 @@ int main()
 
 [fn:2]
 #+begin_src cpp :results output :namespaces std :includes <iostream>
-void foo(int)
-{
-}
+void foo(int) { }
 
-void foo(double)
-{
-}
+void foo(double) { }
 
 int main()
 {
-    foo('a');  // promoted to match foo(int)
-    foo(true); // promoted to match foo(int)
-    foo(4.5f); // promoted to match foo(double)
+    foo('a');  // 提升：char  -> int
+    foo(true); // 提升：bool  -> int
+    foo(4.5f); // 提升：float -> double
 
     return 0;
 }
 #+end_src
 
 [fn:3]
-#+begin_src cpp :results output :namespaces std :includes <iostream>
-#include <string> // for std::string
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+void foo(double) { }
 
-void foo(double)
-{
-}
-
-void foo(std::string)
-{
-}
+void foo(std::string) { }
 
 int main()
 {
-    foo('a'); // 'a' converted to match foo(double)
+    foo('a'); // 转换：char -> double
 
     return 0;
 }

@@ -1,0 +1,144 @@
+:PROPERTIES:
+:ID:       12fb3f7f-a24f-4d01-a2e8-06d2469110fb
+:END:
+#+title: 重载类型转化运算符
+#+filetags: cpp
+
+*Best Priactice*
+优先选择 [[id:cf5f4669-1abc-45b6-9882-83008c96bd4a][转换构造函数]] （因为类类型应该自身负责构造，而不是依赖另一个类来创建并初始化）
+
+* 重载类型转化运算符 [[https://www.learncpp.com/cpp-tutorial/overloading-typecasts/][learncpp21.11]]
+基本类型 -> 类（隐式转换）       ：我们可以使用 [[id:cf5f4669-1abc-45b6-9882-83008c96bd4a][转换构造函数]]
+1. =类 -> 基本类型、类（隐式转换）= ； *重载的类型*
+   1) 必须 非static；应该是 const，以便用于 常量对象
+   2) 无 函数参数（*this还是有的）
+   3) 无 返回类型
+   *类 -> 基本类型 示例* ；类 -> 类，见 [fn:1]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   class Cents
+   {
+   private:
+       int m_cents{};
+   public:
+       Cents(int cents=0) : m_cents{ cents } { }
+
+       // 重载int类型转换：非static，无函参，无返回，为const，就能用于常量对象
+       operator int() const { return m_cents; }
+
+       int getCents() const { return m_cents; }
+       void setCents(int cents) { m_cents = cents; }
+   };
+
+   // 输入 Cents类对象 -> 重载int类型转换
+   void printInt(int value) { std::cout << value; }
+
+   int main()
+   {
+       Cents cents{ 7 };
+       printInt(cents);
+       std::cout << '\n';
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : 7
+
+2. 一般都设置为 =explicit= 重载类型转换；除非要转换到的类型与目标类型基本同义 [fn:2]
+
+
+
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Cents
+{
+private:
+    int m_cents{};
+public:
+    Cents(int cents=0)
+        : m_cents{ cents }
+    {
+    }
+
+    // NOTE 设置重载int类型转换为 explicit：就不能隐式转换，转换前后语义不同，就设置为 explicit
+    explicit operator int() const { return m_cents; }
+
+    int getCents() const { return m_cents; }
+    void setCents(int cents) { m_cents = cents; }
+};
+
+class Dollars
+{
+private:
+    int m_dollars{};
+public:
+    Dollars(int dollars=0)
+        : m_dollars{ dollars }
+    {
+    }
+
+    operator Cents() const { return Cents { m_dollars * 100 }; }
+};
+
+void printCents(Cents cents)
+{
+//  std::cout << cents;                   // operator int() 是 explicit，所以不能使用
+    std::cout << static_cast<int>(cents); // 使用 显式转换
+}
+
+int main()
+{
+    Dollars dollars{ 9 };
+    printCents(dollars); // 隐式转换 Dollars 到 Cents
+
+    std::cout << '\n';
+
+    return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Cents
+{
+private:
+    int m_cents{};
+public:
+    Cents(int cents=0) : m_cents{ cents } { }
+
+    // 重载int类型转换
+    operator int() const { return m_cents; }
+
+    int getCents() const { return m_cents; }
+    void setCents(int cents) { m_cents = cents; }
+};
+
+class Dollars
+{
+private:
+    int m_dollars{};
+public:
+    Dollars(int dollars=0) : m_dollars{ dollars } { }
+
+    // 重载 Dollars类 类型转换：Cents类 转 Dollars类
+    operator Cents() const { return Cents { m_dollars * 100 }; }
+};
+
+void printCents(Cents cents)
+{
+    std::cout << cents; // cents will be implicitly cast to an int here
+}
+
+int main()
+{
+    Dollars dollars{ 9 };
+    printCents(dollars); // dollars will be implicitly cast to a Cents here
+
+    std::cout << '\n';
+
+    return 0;
+}
+#+end_src

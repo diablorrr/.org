@@ -1,0 +1,151 @@
+:PROPERTIES:
+:ID:       9d44bca6-631c-41f5-9304-0d46eb1f2287
+:END:
+#+title: 默认构造函数
+#+filetags: cpp
+
+* 默认构造函数 [[https://www.learncpp.com/cpp-tutorial/default-constructors-and-default-arguments/][learncpp14.11]]
+1. 值初始化（推荐） 和 默认初始化 ->  *调用* 默认构造函数
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   Foo foo{}; // 值初始化, calls Foo() default constructor
+   Foo foo2;  // 默认初始化, calls Foo() default constructor
+   #+end_src
+
+2. 无定义默认构造函数，编译器为我们合成 *隐式的默认构造函数* （也能 ==default= 显式生成）
+
+3. 可以有 *默认参数* ：所有参数都有默认值，则此构造函数 是 默认构造函数 [fn:1]
+
+4. 可以 *重载* ：但可能会导致有歧义的 默认构造函数 调用
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   class Foo
+   {
+   private:
+       int m_x {};
+       int m_y {};
+
+   public:
+       Foo()                 // 默认构造函数
+       {
+           std::cout << "Foo constructed\n";
+       }
+
+       Foo(int x=1, int y=2) // 默认构造函数
+           : m_x { x }, m_y { y }
+       {
+           std::cout << "Foo(" << m_x << ", " << m_y << ") constructed\n";
+       }
+   };
+
+   int main()
+   {
+       //Foo foo{}; // 错误: 有歧义的函数调用
+       Foo foo {1};
+
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : Foo(1, 2) constructed
+
+5. 用户定义空的默认构造函数 和 非用户定义的默认构造函数（隐式默认构造函数 和 用=default定义的默认构造函数） *类对象值初始化时，初始化行为不一样* [fn:2]
+   - 用户定义的 空的默认构造 :: 调用 默认构造函数
+   - 非用户定义的 默认构造   :: 0 初始化，调用 默认构造函数
+
+
+
+
+
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class User
+{
+private:
+    int m_a; // note: no default initialization value
+    int m_b {};
+
+public:
+    User() {} // user-defined empty constructor
+
+    int a() const { return m_a; }
+    int b() const { return m_b; }
+};
+
+class Default
+{
+private:
+    int m_a; // note: no default initialization value
+    int m_b {};
+
+public:
+    Default() = default; // explicitly defaulted default constructor
+
+    int a() const { return m_a; }
+    int b() const { return m_b; }
+};
+
+class Implicit
+{
+private:
+    int m_a; // note: no default initialization value
+    int m_b {};
+
+public:
+    // implicit default constructor
+
+    int a() const { return m_a; }
+    int b() const { return m_b; }
+};
+
+int main()
+{
+    User user{};    // 默认构造函数
+    std::cout << user.a() << ' ' << user.b() << '\n';
+
+    Default def{};  // 0初始化 -> 默认构造函数
+    std::cout << def.a() << ' ' << def.b() << '\n';
+
+    Implicit imp{}; // 0初始化 -> 默认构造函数
+    std::cout << imp.a() << ' ' << imp.b() << '\n';
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: 389018584 0
+: 0 0
+: 0 0
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Foo
+{
+private:
+    int m_x { };
+    int m_y { };
+
+public:
+    Foo(int x=0, int y=0) // 这个默认构造函数
+        : m_x { x }
+        , m_y { y }
+    {
+        std::cout << "Foo(" << m_x << ", " << m_y << ") constructed\n";
+    }
+};
+
+int main()
+{
+    Foo foo1{};     // calls Foo(int, int) constructor using default arguments
+    Foo foo2{6, 7}; // calls Foo(int, int) constructor
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Foo(0, 0) constructed
+: Foo(6, 7) constructed

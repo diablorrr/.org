@@ -1,7 +1,7 @@
 :PROPERTIES:
 :ID:       15357ed3-3530-4c07-b743-9af983e05e96
 :END:
-#+title: 类型别名
+#+title: 类型别名(using、typedef)
 #+filetags: cpp
 
 *Best Practice* ：优先使用 using 而不是 typedef
@@ -24,9 +24,7 @@
    - 记录值的含义 :: 明确值的含义 [fn:3]
    - 便于代码维护 :: 一处修改，处处生效 [fn:4]
 
-4. *命名规范*
-   - 现代 :: 大写字母开头，无后缀（eg：Distance）
-   - 古代 :: _t 或 _type后缀（过时）
+4. *命名规范* ：见 [[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
 
 
 * Footnotes

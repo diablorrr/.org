@@ -4,6 +4,73 @@
 #+title: C风格字符串
 #+filetags: cpp
 
-* C风格字符串 [[https://www.learncpp.com/cpp-tutorial/chars/][参考]]
-1. 属于 [[id:27733720-d27e-4852-bb07-b50130457fc9][字面值]]， =""= 包裹的文本，里面包含多个字符（也就是 [[id:6809ddca-f657-4095-83b8-317dfc40b7c0][char]]），字符串结尾隐含字符 ='\0'=
-2. 类型为 =const char[N]= （N = 字符串长度 + 1），隐式转换为： =const char *=
+* C风格字符串 [[https://www.learncpp.com/cpp-tutorial/chars/][learncpp4.11]] [[https://www.learncpp.com/cpp-tutorial/c-style-strings/][learncpp17.10]] [[https://www.learncpp.com/cpp-tutorial/c-style-string-symbolic-constants/][learncpp17.11]]
+1. C风格字符串 就是 =char= / =const char= 类型的 [[id:0cd3f518-394f-477b-8969-e4a61486357c][C风格数组]] （类型为 =const char[N]= ，N = 字符串长度 + 1 ），里面包含多个字符（也就是 [[id:6809ddca-f657-4095-83b8-317dfc40b7c0][char]]），字符串结尾隐含字符 ='\0'= ; 可以数组退化为： =const char *=
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   char str[6] = "hello";  // 正确：字符串字面量，自动包含隐式的`\0`；数组实际为 ['h', 'e', 'l', 'l', 'o', '\0']
+   char str2[5] = "hello";  // FIXME
+   char arr[5] = {'h', 'e', 'l', 'l', 'o'}; // 普通字符数组，不含`\0`
+   #+end_src
+
+2. 属于 [[id:27733720-d27e-4852-bb07-b50130457fc9][字面值]]
+
+3. =std::cin= 读取 C风格字符串，cpp20前 会尽可能读取，直到 第一个非前导空白字符处
+   解决方式： =std::cin.getline=
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <iterator>
+   char rolls[255] {}; // 直接用std::cin 读取，随意超过 255
+   std::cout << "Enter your rolls: ";
+   std::cin.getline(rolls, std::size(rolls)); // 使用这个方式解决
+   std::cout << "You entered: " << rolls << '\n';
+   #+end_src
+
+4. *获取长度* ：使用 =strlen=
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <cstring>
+   char str[255]{ "string" };
+   std::cout << "length = " << std::size(str) << '\n';   // 计算的整个str的长度：255
+   std::cout << "length = " << std::strlen(str) << '\n'; // 计算str里字符的长度：6
+
+   char *ptr { str };
+   // std::cout << "length = " << std::size(ptr) << '\n';  // FIXME
+   std::cout << "length = " << std::strlen(ptr) << '\n';   // strlen 也能用于退化成指针的数组
+   #+end_src
+
+   #+RESULTS:
+   : length = 255
+   : length = 6
+   : length = 6
+
+5. *类型推导*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   auto s1{ "Alex" };  // const char*
+   auto* s2{ "Alex" }; // const char*
+   auto& s3{ "Alex" }; // const char(&)[5]
+   #+end_src
+
+6. *打印字符指针的地址*
+   =std::cout= 传入非字符指针 打印地址；传入字符指针 打印字符串，想要打印地址 =static_cast<const void*>=
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int narr[]{ 9, 7, 5, 3, 1 };
+   char carr[]{ "Hello!" };
+   const char* ptr{ "Alex" };
+
+   std::cout << narr << '\n'; // int*
+   std::cout << carr << '\n'; // char*
+   std::cout << ptr << '\n';  // char*
+   std::cout << static_cast<const void*>(ptr) << '\n'; // 打印字符指针地址
+   #+end_src
+
+   #+RESULTS:
+   : 0x7ffceeca1ad0
+   : Hello!
+   : Alex
+   : 0x55606d3d2004
+
+7. *二维数组内存布局* ：cpp是行主序（有些语言列主序）[[https://www.learncpp.com/cpp-tutorial/multidimensional-c-style-arrays/][learncpp17.12]]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // col 0   col 1   col 2   col 3   col 4
+   // [0][0]  [0][1]  [0][2]  [0][3]  [0][4]  row 0
+   // [1][0]  [1][1]  [1][2]  [1][3]  [1][4]  row 1
+   // [2][0]  [2][1]  [2][2]  [2][3]  [2][4]  row 2
+   #+end_src
+
+7. 现代替代品 std::string、std::string_view

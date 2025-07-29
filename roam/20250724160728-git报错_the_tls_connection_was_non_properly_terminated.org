@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       6a8d76a4-7b13-400c-acfa-e00a419ff3c9
+:END:
+#+title: git报错:The TLS connection was non-properly terminated
+#+filetags: git
+
+* git报错:The TLS connection was non-properly terminated [[https://blog.csdn.net/qq_42921511/article/details/120551306][csdn]]
+#+name: 报错信息
+#+begin_example
+fatal: unable to access 'https://github.com/CMU-Perceptual-Computing-Lab/openpose.git/': gnutls_handshake() failed: The TLS connection was non-properly terminated.
+#+end_example
+*解决*
+1. 权限不足： =sudo git clone ...=
+2. 取消代理：
+   #+begin_src bash
+   git config --global --unset http.proxy
+   git config --global --unset https.proxy
+   #+end_src

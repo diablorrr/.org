@@ -20,11 +20,12 @@
 
 
 * using声明
-1. 将命名空间中的名称导入当前作用域，使用非限定名称访问： =using <命名空间>::<名称>=
+1. 将命名空间中的 *名称导入当前作用域* ，使用非限定名称访问： =using <命名空间>::<名称>=
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    using std::cout; // 之后可直接用 cout 代替 std::cout
    cout << "Hello"; // 等同于 std::cout << "Hello";
    #+end_src
+   可以用于 [[id:8c55eec4-57bb-45c2-8890-c65d7c473a24][函数重载解析]] [fn:1]
 2. 仅在声明的[[id:79cf3da5-7ff7-4a47-b4da-5380da55b840][作用域]]有效
 
 
@@ -35,3 +36,31 @@
    cout << "Hello";     // 等同于 std::cout << "Hello";
    #+end_src
 2. 仅在声明的[[id:79cf3da5-7ff7-4a47-b4da-5380da55b840][作用域]]有效
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Base
+{
+public:
+    void print(int)    { std::cout << "Base::print(int)\n"; }
+    void print(double) { std::cout << "Base::print(double)\n"; }
+};
+
+class Derived: public Base
+{
+public:
+    using Base::print; // 将基类的print加入派生类作用域，使其可以参与 函数重载解析
+    void print(double) { std::cout << "Derived::print(double)"; }
+};
+
+int main()
+{
+    Derived d{};
+    // 参数是int，我们希望调用 Base::print(int)，若没有使用using，则会调用 Derived::print(double)
+    d.print(5); // 调用Base::print(int)
+
+    return 0;
+}
+#+end_src

@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       3cc311ac-4ed0-4e9c-af58-5b1daed5ec94
+:END:
+#+title: 拷贝省略
+#+filetags: cpp
+
+* 拷贝省略 [[https://www.learncpp.com/cpp-tutorial/class-initialization-and-copy-elision/][learncpp14.15]]
+1. 编译器优化技术，用于 省略不必要的对象复制（拷贝构造函数调用） [fn:1]
+2. cpp17 中在某些情况下 强制拷贝省略
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Something
+{
+public:
+  Something() = default;
+  Something(const Something&)
+  {
+    std::cout << "Copy constructor called\n"; // 一次都没调用
+  }
+};
+
+Something rvo()
+{
+  return Something{}; // 调用 Something() and 拷贝构造
+}
+
+Something nrvo()
+{
+  Something s{}; // 调用 Something()
+  return s;      // 调用 拷贝构造
+}
+
+int main()
+{
+  std::cout << "Initializing s1\n";
+  Something s1 { rvo() };  // 调用拷贝构造
+
+  std::cout << "Initializing s2\n";
+  Something s2 { nrvo() }; // 调用拷贝构造
+
+  return 0;
+}
+#+end_src

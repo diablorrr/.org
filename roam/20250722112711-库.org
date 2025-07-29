@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       6012c06e-c6c5-4001-a287-dfe05404724d
+:END:
+#+title: 库
+#+filetags: cpp
+
+* 库 [[https://www.learncpp.com/cpp-tutorial/classes-and-header-files/][learncpp15.2]]
+1. cpp 中存在的库类型
+   1) 仅头文件（开源项目）：使用方便，直接 include；增加编译时间
+   2) 头文件+源文件（开源项目）：使用麻烦点，编译时间短点
+   3) 头文件+预编译的库文件（商业软件）：不需要重新编译源文件，直接链接库；知识产权

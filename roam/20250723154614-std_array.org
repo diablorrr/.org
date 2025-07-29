@@ -1,0 +1,237 @@
+:PROPERTIES:
+:ID:       c4b5dfae-2be0-4106-acbf-98645af16722
+:END:
+#+title: std::array
+#+filetags: cpp
+
+* std::array [[https://www.learncpp.com/cpp-tutorial/introduction-to-stdarray/][learncpp17.1]] [[https://www.learncpp.com/cpp-tutorial/stdarray-length-and-indexing/][learncpp17.2]] [[https://www.learncpp.com/cpp-tutorial/passing-and-returning-stdarray/][learncpp17.3]]
+1. std::array 是 *固定长度数组* （实例化时知道数组长度，且之后长度无法更改）
+   *为什么不凡事都选择 动态数组？* 固定长度数组有以下优势
+   1) std::array 性能略高于 std::vector
+   2) *用于constexpr数组* （使用 std::array 的关键！！！！）
+      （constexpr数组的意义在于 -> 健壮性：能在编译期检查；编译器优化）
+
+2. =std::array<T, N>= ：N 是非类型模板参数，代表 *std::array的长度* ，必须是 [[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]] [fn:1]；反例[fn:2]
+   1) 整数字面量
+   2) constexpr变量
+   3) [[id:8f6af97c-9e71-4056-865b-ee98eb263939][无作用域枚举]] 枚举成员
+
+3. *越界访问* 解决方案
+   - static_assert [fn:3]
+   - std::get() [fn:4]
+4. std::array<T, N> 的 *长度类型* 是 [[id:9db0adc8-8d90-40c1-9249-0f80bf4ece43][std::size_t]] ； *长度可以为 0* （N = 0），因此需要对数组长度 =static_assert(N !=0)= 判断此时长度，防止越界
+5. 对 =constexpr std::array= 索引时的 *边界检查* ：std::array 长度是 constexpr 的，那索引也是 constexpr，如何进行检查呢？
+   - [[id:10836d5b-7793-47c0-950c-383cbb4933f5][operator[]​]] 不进行边界检查，at() 在运行时进行边界检查， =std::get()= 在 *提供编译时边界检查*
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <array>
+   int main()
+   {
+       constexpr std::array prime{ 2, 3, 5, 7, 11 };
+
+       std::cout << std::get<3>(prime); // print the value of element with index 3
+       std::cout << std::get<9>(prime); // FIXME invalid index (compile error)
+
+       return 0;
+   }
+   #+end_src
+
+6. 使用 *聚合初始化* （因为是聚合体）
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   std::array<int, 6> fibonnaci = { 0, 1, 1, 2, 3, 5 }; // 拷贝列表初始化
+   std::array<int, 5> prime { 2, 3, 5, 7, 11 };         // 聚合初始化
+   std::array<int, 5> a;                                // 默认初始化
+   std::array<int, 5> b{};                              // 值初始化 (int 元素被初始化为 0) (preferred)
+   std::array<int, 4> b { 1, 2 };                       // b[2]、b[3] 值初始化为 0
+   #+end_src
+7. *成员是结构体时初始化* [fn:5]，聚合体的大括号省略[fn:6] [[https://www.learncpp.com/cpp-tutorial/stdarray-of-class-types-and-brace-elision/][learncpp17.4]]
+   - *聚合体的大括号省略* ：单/双大括号 都可
+     不能大括号省略的情况：只能 双大括号
+     1) 使用标量值初始化时
+     2) 类类型、数组每个元素都显式指定类型初始化
+
+8. *多维数组* ：使用 std::array 实现，会有一些 *反直觉的情况（行列相反）* ，因此 使用 [[id:73c5cb24-1bb3-4f91-a80b-043d701ca570][别名模板]] ，由于 std::array *长度可能为 0*  ，因此 计算多维数组的长度 [[id:73c5cb24-1bb3-4f91-a80b-043d701ca570][最佳实践]] ；为了让多维数组更易用，可以 *扁平化数组* 见：[[https://www.learncpp.com/cpp-tutorial/multidimensional-stdarray/][learncpp17.13]]
+
+9. 不支持 [[id:0512d335-6d3f-4ebc-9021-88424c326876][移动语义]]，因此按值返回会进行复制， *函数返回 =std::array= 的方案*
+   1) 按值返回
+   2) 函参里的 std::array 用 &
+   3) 改为 使用并返回 std::vector
+
+10. 创建引用的数组，使用 =std::reference_wrapper= [fn:8]，可以使用 =std::ref= 简化创建 std::reference_wrapper [[https://www.learncpp.com/cpp-tutorial/arrays-of-references-via-stdreference_wrapper/][learncpp17.5]]
+    #+begin_src cpp :results output :namespaces std :includes <iostream>
+    int x { 5 };
+    std::reference_wrapper<int> ref1 { x };        // C++11
+    auto ref2 { std::reference_wrapper<int>{ x }}; // C++11
+    auto ref { std::ref(x) };   // C++11, deduces to std::reference_wrapper<int>
+    auto cref { std::cref(x) }; // C++11, deduces to std::reference_wrapper<const int>
+    #+end_src
+
+
+10. 可以使用 cpp17 的 =CTAD= *推导模板参数* [fn:7]
+
+* Footnotes
+[fn:8]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <array> <functional>
+int main()
+{
+    int x { 1 };
+    int y { 2 };
+    int z { 3 };
+
+    std::array<std::reference_wrapper<int>, 3> arr { x, y, z }; // 包装 int 的引用
+
+    arr[1].get() = 5; // 修改第一个元素的值
+
+    std::cout << arr[1] << y << '\n'; // show that we modified arr[1] and y, prints 55
+
+    return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <array>
+int main()
+{
+    std::array<int, 7> a {}; // Using a literal constant
+
+    constexpr int len { 8 };
+    std::array<int, len> b {}; // Using a constexpr variable
+
+    enum Colors
+    {
+         red,
+         green,
+         blue,
+         max_colors
+    };
+    std::array<int, max_colors> c {}; // Using an enumerator
+
+#define DAYS_PER_WEEK 7
+    std::array<int, DAYS_PER_WEEK> d {}; // Using a macro (don't do this, use a constexpr variable instead)
+    return 0;
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <array>
+void foo(const int length) // length is a runtime constant
+{
+    std::array<int, length> e {}; // FIXME length is not a constant expression
+}
+
+int main()
+{
+    // using a non-const variable
+    int numStudents{};
+    std::cin >> numStudents; // numStudents is non-constant
+
+    std::array<int, numStudents> {}; // FIXME numStudents is not a constant expression
+
+    foo(7);
+
+    return 0;
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <array>
+template <typename T, std::size_t N>
+void printElement3(const std::array<T, N>& arr)
+{
+    // 静态断言；没有这句 数组长度<3 越界
+    static_assert (N > 3);
+    std::cout << arr[3] << '\n';
+}
+
+int main()
+{
+    std::array arr{ 9, 7, 5, 3, 1 };
+    printElement3(arr); // okay
+
+    std::array arr2{ 9, 7 };
+    printElement3(arr2); // compile error
+
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <array>
+template <typename T, std::size_t N>
+void printElement3(const std::array<T, N>& arr)
+{
+    // std::get 提供编译期边界检查
+    std::cout << std::get<3>(arr) << '\n';
+}
+
+int main()
+{
+    std::array arr{ 9, 7, 5, 3, 1 };
+    printElement3(arr); // okay
+
+    std::array arr2{ 9, 7 };
+    printElement3(arr2); // compile error
+
+    return 0;
+}
+#+end_src
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct House
+{
+    int number{};
+    int stories{};
+    int roomsPerStory{};
+};
+
+constexpr std::array houses {
+        House{ 13, 1, 7 }, // we mention House here
+        House{ 14, 2, 5 }, // and here
+        House{ 15, 2, 4 }  // and here
+    };
+
+// FIXME doesn't work -> std::array 中包含 C风格数组
+constexpr std::array<House, 3> houses {
+        { 13, 1, 7 }, // 相当于用这里初始化 C风格数组，后面两行多余
+        { 14, 2, 5 }, // ?
+        { 15, 2, 4 }  // ?
+    };
+
+// NOTE This works as expected
+constexpr std::array<House, 3> houses { // initializer for houses
+    { // 多一层括号，说明这整个才是一个数组
+        { 13, 4, 30 }, // initializer for array element 0
+        { 14, 3, 10 }, // initializer for array element 1
+        { 15, 3, 40 }, // initializer for array element 2
+     }
+};
+#+end_src
+
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+constexpr std::array<int, 5> arr { 1, 2, 3, 4, 5 }; // 标量值初始化 -> 大括号省略 -> 因此单括号 -> 也能写成双括号
+constexpr std::array houses {                       // 显示指定类类型 -> 大括号省略 -> 因此单括号 -> 也能写成双括号
+        House{ 13, 1, 7 },
+        House{ 14, 2, 5 },
+        House{ 15, 2, 4 }
+    };
+constexpr std::array<House, 3> houses {             // 不能使用大括号省略 -> 双括号
+    {
+        { 13, 4, 30 },
+        { 14, 3, 10 },
+        { 15, 3, 40 },
+     }
+};
+
+#+end_src
+
+[fn:7]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <array>
+int main()
+{
+    constexpr std::array a1 { 9, 7, 5, 3, 1 }; // The type is deduced to std::array<int, 5>
+    constexpr std::array a2 { 9.7, 7.31 };     // The type is deduced to std::array<double, 2>
+
+    return 0;
+}
+#+end_src

@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       f59ac49d-176b-40ee-b8fb-1907d3c87f62
+:END:
+#+title: arch中文语言环境
+#+filetags: arch
+
+* arch中文语言环境 [[https://wiki.archlinuxcn.org/wiki/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E6%9C%AC%E5%9C%B0%E5%8C%96][archwiki]]
+1. 生成语言包
+   #+begin_src bash
+   sudo vim /etc/locale.gen
+   取消 zh_CN.UTF-8 UTF-8 前的注释
+   sudo locale-gen 生成语言包
+   #+end_src
+2. 设置 LANG 环境变量（可能出现终端豆腐块问题，解决见 wiki）
+   #+begin_src bash
+   sudo vim /etc/locale.conf
+   LANG=zh_CN.UTF-8
+   #+end_src
+3. reboot

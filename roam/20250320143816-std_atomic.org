@@ -2,9 +2,8 @@
 :ID:       35815261-4069-4577-8db3-f5c93f175c79
 :END:
 #+title: std::atomic
+#+filetags: cpp
 
-* 概念
-- 简介 ::
-  1. [[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]] [[id:1ec315ca-630e-46ab-9567-45e0520b9ca2][stl]]中的原子操作类型
-     - eg :: 不同于bool，std::atomic<bool>具有原子性
-  2. 对std::atomic对象的操作(读、写)是原子的，不会被线程调度打断
+* std::atomic
+1. 原子操作类型，对 =std::atomic= 对象的操作(读、写)是原子的，不会被线程调度打断
+   - eg :: 不同于bool，std::atomic<bool>具有原子性

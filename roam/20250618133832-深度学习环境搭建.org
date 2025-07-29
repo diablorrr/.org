@@ -32,6 +32,7 @@
 融合前：   emb_h、t_h、v_h              形状 [26495, 64]
 融合后：   combined_h                   形状 [26495, 64]
 MLP处理前：item_t_feat、item_v_feat     形状 [7050，384]
+
 ** MIG_GT 实验
 论文
 | 0.0665 | 0.1021 | 0.0361 | 0.0452 |
@@ -50,7 +51,7 @@ MLP处理前：item_t_feat、item_v_feat     形状 [7050，384]
 
 
 * 复现
-** MIG-GT[[https://github.com/CrawlScript/MIG-GT][仓库]]
+** MIG-GT [[https://github.com/CrawlScript/MIG-GT][github]]
 1. conda创建环境python3.8
 2. torch安装：torch==1.12.1+cu113；见 [[id:cfe89b94-ace5-4816-896f-a1ffce8d10c5][pip安装torch(带cuda)]]
    #+begin_src bash

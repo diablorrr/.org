@@ -1,0 +1,129 @@
+:PROPERTIES:
+:ID:       0cd3f518-394f-477b-8969-e4a61486357c
+:END:
+#+title: C风格数组
+#+filetags: cpp
+
+* C风格数组 [[https://www.learncpp.com/cpp-tutorial/introduction-to-c-style-arrays/][learncpp17.7]] [[https://www.learncpp.com/cpp-tutorial/c-style-array-decay/][learncpp17.8]]
+1. *数组的长度* 为 [[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]] （类型为 [[id:9db0adc8-8d90-40c1-9249-0f80bf4ece43][std::size_t]] ）； *长度至少为 1* 否则报错（堆上分配的可以为 0）；
+   当里面存放的是 字符 时，就是 [[id:a713e19b-ae94-4202-8834-c586754c4275][C风格字符串]]，注意后边隐式的 =\0=
+
+2. *索引* 可以 =有符号= 也可以 =无符号= ；因此 *支持负索引* [fn:1]  [[https://www.learncpp.com/cpp-tutorial/pointer-arithmetic-and-subscripting/][learncpp17.9]]
+
+3. *C风格数组退化* ：退化成指向数组第一个元素的指针（const数组同理退化成const指针）
+   1) 不会退化的情况
+      a. 作为 sizeof()、typeid() 的参数
+      b. 使用 operator& 获取数组地址
+      c. 作为 类类型成员 传递
+      d. 通过 引用 传递
+   2) 退化后 *失去长度信息*
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      int [5] -> int* // 数组退化前有长度信息，退化后没有
+      #+end_src
+      *解决* ：函参传入 数组、数组长度 =void printElement2(const int arr[], int length)=
+   3) 下标操作，实际上是对退化后的指针进行 [[id:10836d5b-7793-47c0-950c-383cbb4933f5][operator[]​]] 操作，由指针运算实现的；纯指针运算 可以用于 遍历没有显式长度的 C风格数组； *基于范围的for循环* 遍历C风格数组 是通过 指针运算实现的[fn:2]
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      const int arr[] { 9, 7, 5, 3, 1 };
+      std::cout << arr[2]; // 下标操作
+
+      const int arr[] { 9, 7, 5, 3, 1 }; // 数组长度可省略
+      const int* ptr{ arr };  // 数组退化为指针
+      std::cout << ptr[2];    // 下标操作指针去获取元素
+      #+end_src
+   4) 用于函参传递（避免复制数组，因为当时还没有 & 这种东西）， *函数参数 用数组语法优于指针语法*
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      int arr[]  //更好
+      int * arr
+      #+end_src
+
+4. 现代替代品：[[id:c4b5dfae-2be0-4106-acbf-98645af16722][std::array]]
+
+5. 不能使用 auto；CTAD 也不起作用
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   auto squares[5] { 1, 4, 9, 16, 25 }; // FIXME can't use type deduction on C-style arrays
+   #+end_src
+
+6. 可以省略 数组长度
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   const int prime1[5] { 2, 3, 5, 7, 11 }; // prime1 explicitly defined to have length 5
+   const int prime2[] { 2, 3, 5, 7, 11 };  // prime2 deduced by compiler to have length 5
+   #+end_src
+
+7. 使用 *聚合初始化*
+
+8. *const/constexpr* C风格数组
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   namespace ProgramData
+   {
+       constexpr int squares[5] { 1, 4, 9, 16, 25 }; // constexpr数组必须初始化
+   }
+
+   int main()
+   {
+       const int prime[5] { 2, 3, 5, 7, 11 };       // const数组必须初始化
+       prime[0] = 17; // FIXME 不能修改 const数组
+
+       return 0;
+   }
+   #+end_src
+
+9. 使用 =std::copy= 复制
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <algorithm>
+   int main()
+   {
+       int arr[] { 1, 2, 3 };
+       int src[] { 5, 6, 7 };
+
+       // Copy src into arr
+       std::copy(std::begin(src), std::end(src), std::begin(arr));
+
+       return 0;
+   }
+   #+end_src
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int main()
+{
+  constexpr int arr[]{ 9, 7, 5, 3, 1 };
+
+  // 基于范围的for循环
+  for (auto e : arr)         // iterate from `begin` up to (but excluding) `end`
+  {
+      std::cout << e << ' '; // dereference our loop variable to get the current element
+  }
+
+  // 等价的指针运算形式
+  auto __begin = arr;                // arr is our begin-expr
+  auto __end = arr + std::size(arr); // arr + std::size(arr) is our end-expr
+
+  for ( ; __begin != __end; ++__begin)
+  {
+      auto e = *__begin;         // e is our range-declaration
+      std::cout << e << ' ';     // here is our loop-statement
+  }
+
+}
+
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <array>
+int main()
+{
+    const int arr[] { 9, 8, 7, 6, 5 };
+
+    const int* ptr { &arr[3] };
+    std::cout << *ptr << ptr[0] << '\n'; // prints 66
+    // 负索引
+    std::cout << *(ptr-1) << ptr[-1] << '\n'; // prints 77
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: 66
+: 77

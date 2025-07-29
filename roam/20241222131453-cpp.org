@@ -2,6 +2,7 @@
 :ID:       8ab4df56-e11f-42b8-87f8-4daa2fd045db
 :END:
 #+title: cpp
+#+filetags: del
 
 * 预处理、编译、链接
 ** 编译
@@ -55,8 +56,6 @@ const char created[] =
 const char created[] = "<html><head><title>Created</title></head><body><h1>201 Created</h1></body></html>";
 #+end_src
 * 枚举类型
-- 关键字 :: enum
-- 枚举值 :: {}内部的值
 - 枚举变量 :: (下文中)state_是枚举类型state的变量。它用来保存当前状态，通常会在状态机逻辑中不断更新
 ** 表示状态机中离散的状态
 1) 示例：常用于表示状态机中离散的状态
@@ -216,9 +215,6 @@ int arr[10] = {1,2,3,4,5,6,7,8,9,0};
 int &p = arr[3];
 #+end_src
 * 函数
-** 签名式
-- 通常指函数的签名 = 函数名称 + 参数列表
-- 用于唯一标识一个函数，并决定如何进行重载
 ** lambda的妙用
 默认，lambda体中包含return之外的任何语句，则编译器默认lambda返回的是void；想要制定它返回的类型，需要尾置返回类型
 - 示例：

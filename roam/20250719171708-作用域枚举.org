@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       9d28e5ab-69ee-4b39-9e69-abeba760be13
+:END:
+#+title: 作用域枚举
+#+filetags: cpp
+
+* 作用域枚举 [[https://www.learncpp.com/cpp-tutorial/scoped-enumerations-enum-classes/][learncpp13.6]]
+1. *有作用域枚举* =enum class=
+2. *创建了新的作用域* ，枚举成员的标识符在此作用域中
+3. *不会 隐式转换为整数* ，反之也不行（都可以用 =static_cast= 显示转换）
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int main()
+   {
+       enum class Color // "enum class" defines this as a scoped enum rather than an unscoped enum
+       {
+           red, // red is considered part of Color's scope region
+           blue,
+       };
+
+       std::cout << red << '\n';        // 编译错误: red 在新作用域中
+       std::cout << Color::red << '\n'; // 编译错误: 作用域枚举不会隐式转换为整型 std::cout doesn't know how to print this
+
+       Color color { Color::blue }; // okay
+
+       return 0;
+   }
+   #+end_src

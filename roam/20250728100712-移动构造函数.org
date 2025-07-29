@@ -1,0 +1,157 @@
+:PROPERTIES:
+:ID:       ac154a46-7700-4286-96aa-a45f8d93c6b6
+:END:
+#+title: 移动构造函数、移动赋值
+#+filetags: cpp
+
+* 移动构造函数、移动赋值 [[https://www.learncpp.com/cpp-tutorial/move-constructors-and-move-assignment/][learncpp22.3]]
+1. 构造或赋值 的参数是右值（字面量或临时值）时 *调用* ，通过 [[id:78a7c695-510d-4b03-a1e1-055d32a034cf][右值引用]] 识别右值（临时对象），实现 [[id:0512d335-6d3f-4ebc-9021-88424c326876][移动语义]]（可以使用 [[id:d4285c38-cefe-4bb5-8ebf-0625bd976fa1][std::move]] 激活移动语义）：通过资源转移而非复制提高效率
+3. *隐式* 移动构造和移动赋值 合成条件：
+   1) 没有用户声明的 [[id:828d1a9b-3ab1-4471-8906-1cf535ea8e7d][拷贝构造函数、拷贝赋值]] 、[[id:be44b0c2-d234-409f-b1a6-b447e365db37][析构]]、移动构造、移动赋值
+   2) 可移动的移动，其余复制
+4. 从函数 *值返回的左值* ，如果移动可用就用；当然也可能发生 [[id:3cc311ac-4ed0-4e9c-af58-5b1daed5ec94][拷贝省略]]（不拷贝和移动，复制构造、移动构造都不会被 调用）
+
+5. *可移动不可拷贝的类* ，使用 [[id:5aea3bf8-964d-4925-91bf-c5cf83f88753][=delete]] 删除 [[id:828d1a9b-3ab1-4471-8906-1cf535ea8e7d][拷贝构造函数、拷贝赋值]]
+6. 🔥 *可拷贝不可移动的类* ：使用 [[id:5aea3bf8-964d-4925-91bf-c5cf83f88753][=delete]] 删除 移动构造函数、移动赋值；但 [[id:3cc311ac-4ed0-4e9c-af58-5b1daed5ec94][拷贝省略]] 不适用时，类无法按值返回
+   - 删除的移动函数，依旧是已声明的函数，符合重载解析条件，在函数返回时 移动视为可用，因此会调用删除的移动函数
+     #+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+     class Name
+     {
+     private:
+         std::string m_name {};
+     public:
+         Name(std::string_view name) : m_name{ name } { }
+
+         Name(const Name& name) = default;
+         Name& operator=(const Name& name) = default;
+
+         // 删除 移动构造，依旧是已声明的函数，依旧能 函数重载解析，cpp规则：函数值返回，有移动用移动
+         Name(Name&& name) = delete;
+         Name& operator=(Name&& name) = delete;
+
+         const std::string& get() const { return m_name; }
+     };
+
+     Name getJoe()
+     {
+         Name joe{ "Joe" };
+         return joe; // FIXME 调用 删除的移动构造
+     }
+
+     int main()
+     {
+         Name n{ getJoe() };
+         std::cout << n.get() << '\n';
+         return 0;
+     }
+     #+end_src
+
+7. *移动语义 和 std::swap*
+   使用 std::swap() 实现移动构造、移动赋值
+   - 存在的问题 :: 无限递归，std::swap() 优先调用 移动构造、移动赋值 [fn:1]
+   - 解决 :: 使用自定义的 swap() [fn:2]
+
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <iostream>
+#include <string>
+#include <string_view>
+
+class Name
+{
+private:
+    std::string m_name {};
+
+public:
+    Name(std::string_view name) : m_name{ name }
+    {
+    }
+
+    Name(const Name& name) = delete;
+    Name& operator=(const Name& name) = delete;
+
+    // Create our own swap friend function to swap the members of Name
+    friend void swap(Name& a, Name& b) noexcept
+    {
+        // We avoid recursive calls by invoking std::swap on the std::string member,
+        // not on Name
+        std::swap(a.m_name, b.m_name);
+    }
+
+    Name(Name&& name) noexcept
+    {
+        std::cout << "Move ctor\n";
+
+        swap(*this, name); // Now calling our swap, not std::swap
+    }
+
+    Name& operator=(Name&& name) noexcept
+    {
+        std::cout << "Move assign\n";
+
+        swap(*this, name); // Now calling our swap, not std::swap
+
+        return *this;
+    }
+
+    const std::string& get() const { return m_name; }
+};
+
+int main()
+{
+    Name n1{ "Alex" };
+    n1 = Name{"Joe"}; // invokes move assignment
+
+    std::cout << n1.get() << '\n';
+
+    return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+class Name
+{
+private:
+    std::string m_name {}; // std::string is move capable
+
+public:
+    Name(std::string_view name) : m_name{ name }
+    {
+    }
+
+    Name(const Name& name) = delete;
+    Name& operator=(const Name& name) = delete;
+
+    Name(Name&& name) noexcept
+    {
+        std::cout << "Move ctor\n";
+
+        std::swap(*this, name); // bad!
+    }
+
+    Name& operator=(Name&& name) noexcept
+    {
+        std::cout << "Move assign\n";
+
+        std::swap(*this, name); // bad!
+
+        return *this;
+    }
+
+    const std::string& get() const { return m_name; }
+};
+
+int main()
+{
+    Name n1{ "Alex" };
+    n1 = Name{"Joe"}; // invokes move assignment
+
+    std::cout << n1.get() << '\n';
+
+    return 0;
+}
+#+end_src

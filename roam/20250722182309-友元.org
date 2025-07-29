@@ -1,0 +1,191 @@
+:PROPERTIES:
+:ID:       75ff4453-faed-4909-947d-9764a92b1013
+:END:
+#+title: 友元
+#+filetags: cpp
+
+* 友元
+1. =friend= 关键字用于声明友元函数、友元类，使其能 *访问某个类中的private、protected成员*
+
+2. 友元关系是 *单向的（非双向），不具有传递性*
+
+3. *友元函数*
+   1) 友元非成员函数 [[https://www.learncpp.com/cpp-tutorial/friend-non-member-functions/][learncpp15.8]]
+      - 类外定义[fn:1]
+      - 类内定义：是非成员函数！[fn:2]
+   2) 友元成员函数：麻烦 [fn:4] [[https://www.learncpp.com/cpp-tutorial/friend-classes-and-friend-member-functions/][learncpp15.9]]
+
+4. *友元类* [fn:3] [[https://www.learncpp.com/cpp-tutorial/friend-classes-and-friend-member-functions/][learncpp15.9]]
+
+
+
+
+* Footnotes
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+// NOTE 目标：使 Display::displayStorage成员函数 是 Storage类 的朋友
+
+class Storage; // 前向声明 Storage类
+
+class Display
+{
+private:
+  bool m_displayIntFirst {};
+
+public:
+  Display(bool displayIntFirst)
+    : m_displayIntFirst { displayIntFirst }{ }
+
+  void displayStorage(const Storage& storage); // NOTE 因为这里不完全类型Storage& 出现了Storage；因此 Storage类的前向声明 放在前面
+};
+
+class Storage // Storage 类的定义
+{
+private:
+  int m_nValue {};
+  double m_dValue {};
+public:
+Storage(int nValue, double dValue)
+  : m_nValue { nValue }, m_dValue { dValue }{ }
+
+  // 声明 友元成员函数
+  // NOTE 需要看到 Display类的完整定义 (因为出现了 Display:: )，因此 Display类 放在前面
+  friend void Display::displayStorage(const Storage& storage);
+};
+
+// 现在可以定义 Display::displayStorage
+// NOTE 需要看到 Storage类的完整定义 (因为需要用 Storage了)，因此 Storage类 放在前面
+void Display::displayStorage(const Storage& storage)
+{
+  if (m_displayIntFirst)
+    std::cout << storage.m_nValue << ' ' << storage.m_dValue << '\n';
+  else
+    std::cout << storage.m_dValue << ' ' << storage.m_nValue << '\n';
+}
+
+int main()
+{
+    Storage storage { 5, 6.7 };
+    Display display { false };
+    display.displayStorage(storage);
+
+    return 0;
+}
+#+end_src
+
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Storage
+{
+private:
+    int m_nValue {};
+    double m_dValue {};
+public:
+    Storage(int nValue, double dValue)
+       : m_nValue { nValue }, m_dValue { dValue }
+    { }
+
+    // 声明 Display类 是 Storage类的朋友
+    friend class Display;
+};
+
+class Display
+{
+private:
+    bool m_displayIntFirst {};
+
+public:
+    Display(bool displayIntFirst)
+         : m_displayIntFirst { displayIntFirst }
+    {
+    }
+
+    // Display 是 Storage 的朋友, Display成员 可以访问 Storage 的 private成员
+    void displayStorage(const Storage& storage)
+    {
+        if (m_displayIntFirst)
+            std::cout << storage.m_nValue << ' ' << storage.m_dValue << '\n';
+        else // display double first
+            std::cout << storage.m_dValue << ' ' << storage.m_nValue << '\n';
+    }
+
+    void setDisplayIntFirst(bool b)
+    {
+         m_displayIntFirst = b;
+    }
+};
+
+int main()
+{
+    Storage storage { 5, 6.7 };
+    Display display { false };
+
+    display.displayStorage(storage);
+
+    display.setDisplayIntFirst(true);
+    display.displayStorage(storage);
+
+    return 0;
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Accumulator
+{
+private:
+    int m_value { 0 };
+
+public:
+    void add(int value) { m_value += value; }
+
+    // 定义在类内的 友元函数 是非成员函数！
+    friend void print(const Accumulator& accumulator)
+    {
+        // Because print() is a friend of Accumulator
+        // it can access the private members of Accumulator
+        std::cout << accumulator.m_value;
+    }
+};
+
+int main()
+{
+    Accumulator acc{};
+    acc.add(5);
+    print(acc); // 是非成员函数，因此这样使用，而不是 acc.print 的形式
+
+    return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Accumulator
+{
+private:
+    int m_value { 0 };
+
+public:
+    void add(int value) { m_value += value; }
+
+    // 友元声明：非成员函数 print 是 Accumulator的友元
+    friend void print(const Accumulator& accumulator);
+};
+
+void print(const Accumulator& accumulator)
+{
+    // print 是 Accumulator的友元，因此可以访问 其 private、protected成员
+    std::cout << accumulator.m_value;
+}
+
+int main()
+{
+    Accumulator acc{};
+    acc.add(5);
+    print(acc);
+
+    return 0;
+}
+#+end_src

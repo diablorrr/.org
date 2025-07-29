@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       d039ee4a-6ede-4314-b35d-e9adf902c8e9
+:END:
+#+title: std::function
+#+filetags: cpp
+
+* std::function
+1. 允许从任何 *可调用对象* （函数指针、成员函数指针、仿函数、lambda） *隐式转换*

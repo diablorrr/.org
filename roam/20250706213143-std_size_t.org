@@ -2,7 +2,62 @@
 :ID:       9db0adc8-8d90-40c1-9249-0f80bf4ece43
 :END:
 #+title: std::size_t
-#+filetags: cpp stl
+#+filetags: cpp
 
 * std::size_t [[https://www.learncpp.com/cpp-tutorial/fixed-width-integers-and-size-t/][参考]]
-是系统相关的无符号整数类型，用于表示 *系统中最大对象大小* ，[[id:ddbf120e-034e-4fdc-96cd-92df650d588e][32位和64位系统]] 表示 CPU *一次* 能处理的数据大小为 32/64位，也就是说最大也就 32/64位（4/8字节）大小的对象
+1. 系统相关的 *无符号整数类型* ，通常是 =unsigned long= 或 =unsigned long long= ；用于表示 *系统中最大对象大小* （[[id:ddbf120e-034e-4fdc-96cd-92df650d588e][32位和64位系统]] 表示 CPU *一次* 能处理的数据大小为 32/64位，也就是说最大也就 32/64位（4/8字节）大小的对象）
+
+2. size_t 虽然作为 *无符号整数类型* 相比有符号整数值的 *范围更大* ，但是遇到符号转化问题（ *用负数赋值*  [fn:1]），应该避免使用 或 使用时用 =static_cast<int>= 转 int [fn:2]
+
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <vector>
+// Function template to calculate the average value in a std::vector
+template <typename T>
+T calculateAverage(const std::vector<T>& arr)
+{
+    int length{ static_cast<int>(arr.size()) };
+
+    T average{ 0 };
+    for (int index{ 0 }; index < length; ++index)
+        average += arr[static_cast<std::size_t>(index)];
+    average /= length;
+
+    return average;
+}
+
+int main()
+{
+    std::vector testScore1 { 84, 92, 76, 81, 56 };
+    std::cout << "The class 1 average is: " << calculateAverage(testScore1) << '\n';
+
+    return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <vector>
+template <typename T>
+void printReverse(const std::vector<T>& arr)
+{
+    for (std::size_t index{ arr.size() - 1 }; index >= 0; --index) // index 是 unsigned；每次减少 index导致其变负数时，就会出现问题
+    {
+        std::cout << arr[index] << ' ';
+    }
+
+    std::cout << '\n';
+}
+
+int main()
+{
+    std::vector arr{ 4, 6, 7, 3, 8, 2, 1, 9 };
+
+    printReverse(arr);
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:

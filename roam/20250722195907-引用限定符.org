@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       ebf2a26e-ad99-47bb-b88a-9752aac74088
+:END:
+#+title: 引用限定符
+#+filetags: cpp
+
+* 引用限定符 [[https://www.learncpp.com/cpp-tutorial/ref-qualifiers/][learncpp15.10]]
+1. 用于 *阻止旧标准可以对右值赋值* ；使用 =&= 、 =&&= 分别限定函数只能用于左值或右值；可用于区分重载版本
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   s1 + s2 = "wow";
+   #+end_src

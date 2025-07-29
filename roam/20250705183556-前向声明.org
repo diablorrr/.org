@@ -23,7 +23,7 @@
 
    #+end_src
 
-2. 解决 *循环依赖* 问题
+2. 解决 *循环依赖* 问题：见 [[id:40c9dfcd-6bcb-4bec-8160-89b3187c4997][std::shared_ptr]]
 
 3. 用于 *多文件程序链接* [[https://www.learncpp.com/cpp-tutorial/programs-with-multiple-code-files/][参考]]；更优解：使用 [[id:fbf786c2-5b6e-47a1-81b9-c1c644b567bb][头文件]]
    1) main.cpp文件

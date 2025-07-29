@@ -34,17 +34,6 @@ self attention本身是没有位置信息的，例如：“a打b” 和 “b打a
 [[attachment:_20241227_214452screenshot.png]]
 
 
-* Self-Attention :ATTACH:
-:PROPERTIES:
-:ID:       9fa4df48-a4d9-4399-bfa5-043a53fd5855
-:END:
-[[attachment:_20241227_214521screenshot.png]]
-作用：输入序列中的每一个元素对其他元素的关注程度
-# 例如：
-# 输入序列为x^1^，x^2^，x^3^；输出为b^1^
-# b^1^考虑了整个输入的信息
-
-
 * Multi-Head Self-Attention :ATTACH:
 :PROPERTIES:
 :ID:       cecec7a2-c414-48e6-9a82-ae442db0a850

@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       34134e75-291c-45b5-b333-9488592c61af
+:END:
+#+title: explicit
+#+filetags: cpp
+
+* explicit [[https://www.learncpp.com/cpp-tutorial/converting-constructors-and-the-explicit-keyword/][learncpp14.16]]
+1. 修饰构造函数，使其只能 *显式调用* （函数传参、函数返回），防止意想不到的隐式转换（转换构造函数）
+   - 显式构造函数 :: 用 =explicit= 修饰的构造函数
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // 假设f为explicit的拷贝构造函数
+   f(10);                // 错误
+   f(vector<int>(10));   // 正确
+   #+end_src

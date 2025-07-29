@@ -4,7 +4,38 @@
 #+title: 右值引用
 #+filetags: cpp
 
-* 右值引用
-1. 绑定右值的引用， *本质是左值* ，绑定到一个将销毁的对象
+* 右值引用 [[https://www.learncpp.com/cpp-tutorial/rvalue-references/][learncpp22.2]]
+1. 绑定右值（即将销毁的对象）的引用，用于识别 [[id:e2cacc2b-1353-48ab-8a05-d87eea857b51][左值和右值]]； *本质是左值*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int x{ 5 };
+   int& lref{ x };  // 左值引用：用左值x初始化
+   int&& rref{ 5 }; // 右值引用：用右值5初始化
+   #+end_src
 
-2. 用于减少复制构造的开销，提升性能
+2. *延长 右值的生命周期* 与 右值引用一致
+3. 通过 非const右值引用 *修改右值*
+4. *使用场景* ：函数参数 -> 可以用于 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][函数重载]]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   void fun(const int& lref) // 左值引用版本
+   { std::cout << "l-value reference to const: " << lref << '\n'; }
+
+   // 右值引用作为 函参
+   void fun(int&& rref) // 右值引用版本
+   { std::cout << "r-value reference: " << rref << '\n'; }
+
+   int main()
+   {
+   	int x{ 5 };
+      int&& ref {5}; // 右值引用绑定到右值（临时对象）：构造临时对象，用字面量5初始化，然后右值引用绑定到临时对象
+      ref = 6;       // 通过非const右值引用 NOTE 修改右值
+      fun(ref);      // 右值引用是 NOTE 左值，因此调用左值引用版本
+   	fun(x);        // 调用 左值引用版本
+   	fun(5);        // 调用 右值引用版本
+   	return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : l-value reference to const: 6
+   : l-value reference to const: 5
+   : r-value reference: 5

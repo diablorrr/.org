@@ -1,0 +1,108 @@
+:PROPERTIES:
+:ID:       eb06d6f0-46b3-4793-836e-6bd8e3a4814e
+:END:
+#+title: std::weak_ptr
+#+filetags: cpp
+
+* std::weak_ptr [[https://www.learncpp.com/cpp-tutorial/circular-dependency-issues-with-stdshared_ptr-and-stdweak_ptr/][learncpp22.7]]
+1. cpp11，用于观察和访问 std::shared_ptr 管理的对象；可以解决 [[id:40c9dfcd-6bcb-4bec-8160-89b3187c4997][std::shared_ptr]] 产生的循环引用问题（因为它是资源的 *观察者* ，不是所有者， *不会增加引用计数* ）
+
+2. std::weak_ptr 不能直接使用（没有 =operator->= ），必须使用 =lock()= 将其转为 std::shared_ptr [fn:1]
+
+3. 因为 std::weak_ptr 只是观察者，因此需要避免 *悬空引用* ，使用 =expired()= 判断是否指向无效对象（是为true，反之false）[fn:2]
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <memory>
+// h/t to reader Waldo for an early version of this example
+class Resource
+{
+public:
+	Resource() { std::cerr << "Resource acquired\n"; }
+	~Resource() { std::cerr << "Resource destroyed\n"; }
+};
+
+// Returns a std::weak_ptr to an invalid object
+std::weak_ptr<Resource> getWeakPtr()
+{
+	auto ptr{ std::make_shared<Resource>() };
+	return std::weak_ptr<Resource>{ ptr };
+} // ptr goes out of scope, Resource destroyed
+
+// Returns a dumb pointer to an invalid object
+Resource* getDumbPtr()
+{
+	auto ptr{ std::make_unique<Resource>() };
+	return ptr.get();
+} // ptr goes out of scope, Resource destroyed
+
+int main()
+{
+	auto dumb{ getDumbPtr() };
+	std::cout << "Our dumb ptr is: " << ((dumb == nullptr) ? "nullptr\n" : "non-null\n");
+
+	auto weak{ getWeakPtr() };
+	std::cout << "Our weak ptr is: " << ((weak.expired()) ? "expired\n" : "valid\n"); // 用 expired() 判断是否指向无效对象
+
+	return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <memory> <string>
+class Person
+{
+	std::string m_name;
+	std::weak_ptr<Person> m_partner; // note: This is now a std::weak_ptr
+
+public:
+
+	Person(const std::string &name) : m_name(name)
+	{
+		std::cout << m_name << " created\n";
+	}
+	~Person()
+	{
+		std::cout << m_name << " destroyed\n";
+	}
+
+	friend bool partnerUp(std::shared_ptr<Person> &p1, std::shared_ptr<Person> &p2)
+	{
+		if (!p1 || !p2)
+			return false;
+
+		p1->m_partner = p2;
+		p2->m_partner = p1;
+
+		std::cout << p1->m_name << " is now partnered with " << p2->m_name << '\n';
+
+		return true;
+	}
+  // NOTE 使用 lock() 将  weak_ptr 转换为 shared_ptr
+	std::shared_ptr<Person> getPartner() const { return m_partner.lock(); }
+
+	const std::string& getName() const { return m_name; }
+};
+
+int main()
+{
+	auto lucy { std::make_shared<Person>("Lucy") };
+	auto ricky { std::make_shared<Person>("Ricky") };
+
+	partnerUp(lucy, ricky);
+
+	auto partner = ricky->getPartner(); // get shared_ptr to Ricky's partner
+	std::cout << ricky->getName() << "'s partner is: " << partner->getName() << '\n';
+
+	return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Lucy created
+: Ricky created
+: Lucy is now partnered with Ricky
+: Ricky's partner is: Lucy
+: Ricky destroyed
+: Lucy destroyed

@@ -1,0 +1,123 @@
+:PROPERTIES:
+:ID:       40c9dfcd-6bcb-4bec-8160-89b3187c4997
+:END:
+#+title: std::shared_ptr
+#+filetags: cpp
+
+* std::shared_ptr [[https://www.learncpp.com/cpp-tutorial/stdshared_ptr/][learncpp22.6]]
+1. cpp11， *共享资源* 的智能指针
+   - 内部 ::
+     1) 指针指向 资源
+     2) 指针指向 *控制块* （内部有 *引用计数* ：表示有多少个 共享指针 指向资源；引用计数归 0 时，才释放指针）
+        🔥 常见错误：某个资源被 std::shared_ptr 管理，另一个 std::shared_ptr 不使用拷贝的方式一起管理资源，而是使用资源直接初始化 -> 导致两个指针有各自的 控制块，引用计数不同步
+   #+name: 拷贝初始化
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <memory>
+   class Resource
+   {
+   public:
+     Resource() { std::cout << "Resource acquired\n"; }
+     ~Resource() { std::cout << "Resource destroyed\n"; }
+   };
+
+   int main()
+   {
+     Resource* res { new Resource };
+     std::shared_ptr<Resource> ptr1{ res };     // 直接初始化 ptr1 （用资源直接初始化）
+     {
+       std::shared_ptr<Resource> ptr2 { ptr1 }; // 拷贝初始化 ptr2 （复制的形式初始化）
+       std::cout << "Killing one shared pointer\n";
+     } // ptr2 超出作用域
+     std::cout << "Killing another shared pointer\n";
+     return 0;
+   } // ptr1超出作用域
+   #+end_src
+
+   #+name: 直接初始化
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <memory>
+   class Resource
+   {
+   public:
+     Resource() { std::cout << "Resource acquired\n"; }
+     ~Resource() { std::cout << "Resource destroyed\n"; }
+   };
+
+   int main()
+   {
+    Resource* res { new Resource };
+    std::shared_ptr<Resource> ptr1 { res };   // 直接初始化 ptr1（从资源初始化）
+    {
+      std::shared_ptr<Resource> ptr2 { res }; // FIXME 直接初始化 ptr2（从资源初始化）
+      std::cout << "Killing one shared pointer\n";
+    } // ptr2 超出作用域
+    std::cout << "Killing another shared pointer\n";
+    return 0;
+   } // ptr1 超出作用域
+   #+end_src
+
+2. 可以用 =std::make_shared()= 初始化智能指针，简单安全
+
+3. 创建返回智能指针的函数，选择 *返回 std::unique_ptr* ，因为
+   - 可以 [[id:02ce83ed-31b4-4906-89e4-271bbf432834][std::unique_ptr]]  --转换-->  std::shared_ptr
+   - 不能 std::shared_ptr  --转换-->  std::unique_ptr
+
+4. *循环引用* 问题：两个对象内部的 std::shared_ptr 互相指向对象 -> 引用计数无法归 0，内存泄漏 [[https://www.learncpp.com/cpp-tutorial/circular-dependency-issues-with-stdshared_ptr-and-stdweak_ptr/][learncpp22.7]]
+   （以上是 a -> b、b -> a；也能是三个对象：a -> b、b -> c、c -> a）
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <memory> <string>
+   class Person
+   {
+     std::string m_name;
+     std::shared_ptr<Person> m_partner; // 指向 Person 的指针
+   public:
+     Person(const std::string &name): m_name(name) { std::cout << m_name << " created\n"; }
+     ~Person() { std::cout << m_name << " destroyed\n"; }
+
+     friend bool partnerUp(std::shared_ptr<Person> &p1, std::shared_ptr<Person> &p2)
+     {
+       if (!p1 || !p2)
+         return false;
+       p1->m_partner = p2; // p1 内部的共享指针指向 p2
+       p2->m_partner = p1; // p2 内部的共享指针指向 p1
+       std::cout << p1->m_name << " is now partnered with " << p2->m_name << '\n';
+       return true;
+     }
+   };
+   int main()
+   {
+     auto lucy { std::make_shared<Person>("Lucy") };  // lucy 指向 Person类（Lucy）
+     auto ricky { std::make_shared<Person>("Ricky") }; // lucy 指向 Person类（Ricky）
+     partnerUp(lucy, ricky); // Lucy 和 Ricky 互指
+                             // Lucy 被两个指针指向：lucy、Ricky 内部的 m_partner；Ricky同理被两个指针指
+     return 0;
+   } // 此时释放了两个指针：lucy、ricky；但 Lucy 和 Ricky 还被指针指向（Ricky、Lucy 内部的 m_partner），因此都不会释放
+   #+end_src
+
+   *解决方案* ：[[id:eb06d6f0-46b3-4793-836e-6bd8e3a4814e][std::weak_ptr]]（若是两个不同的类对象互相指向，则还需要 [[id:98b78b88-32ba-4ad7-b5d5-efeae3da8405][前置声明]]）
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <memory> <string>
+   class Person
+   {
+     std::string m_name;
+     std::weak_ptr<Person> m_partner; // 内部改为 std::weak_ptr
+   public:
+
+     Person(const std::string &name): m_name(name) { std::cout << m_name << " created\n"; }
+     ~Person() { std::cout << m_name << " destroyed\n"; }
+
+     friend bool partnerUp(std::shared_ptr<Person> &p1, std::shared_ptr<Person> &p2)
+     {
+       if (!p1 || !p2)
+         return false;
+       p1->m_partner = p2; // std::weak_ptr 是观察者，不是所有者，因此不会增加 引用计数
+       p2->m_partner = p1;
+       std::cout << p1->m_name << " is now partnered with " << p2->m_name << '\n';
+       return true;
+     }
+   };
+
+   int main()
+   {
+     auto lucy { std::make_shared<Person>("Lucy") };
+     auto ricky { std::make_shared<Person>("Ricky") };
+     partnerUp(lucy, ricky);
+     return 0;
+   } // Lucy、Ricky 正常销毁
+   #+end_src

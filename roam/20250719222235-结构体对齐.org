@@ -1,0 +1,64 @@
+:PROPERTIES:
+:ID:       2c06fba7-342c-42ba-a063-176b6c3c8a4d
+:END:
+#+title: 结构体对齐
+#+filetags: cpp
+
+* 结构体对齐 [[https://www.learncpp.com/cpp-tutorial/struct-miscellany/][learncpp13.11]]
+1. 编译器为了 *优化内存访问效率* ，在结构体成员之间填充字节
+
+2. *结构体大小* =>== 包含的数据成员大小之和；原因：结构体对齐
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   struct Foo
+   {
+       short a {};
+       int b {};
+       double c {};
+   };
+
+   int main()
+   {
+       std::cout << "The size of short is " << sizeof(short) << " bytes\n";
+       std::cout << "The size of int is " << sizeof(int) << " bytes\n";
+       std::cout << "The size of double is " << sizeof(double) << " bytes\n";
+
+       std::cout << "The size of Foo is " << sizeof(Foo) << " bytes\n";
+
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : The size of short is 2 bytes
+   : The size of int is 4 bytes
+   : The size of double is 8 bytes
+   : The size of Foo is 16 bytes
+
+3. 对 结构体中数据成员 进行 *位置调整* ，会对结构体大小产生影响
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   struct Foo1
+   {
+       short a{}; // a 后填充 2个字节
+       int b{};
+       short c{}; // c 后填充 2个字节
+   };
+
+   struct Foo2
+   {
+       int b{};
+       short a{};
+       short c{};
+   };
+
+   int main()
+   {
+       std::cout << sizeof(Foo1) << '\n'; // prints 12
+       std::cout << sizeof(Foo2) << '\n'; // prints 8
+
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : 12
+   : 8

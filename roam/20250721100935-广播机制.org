@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       25b29c2d-aafe-4c83-b1df-25eb550a790c
+:END:
+#+title: 广播机制
+#+filetags: pytorch
+
+* 广播机制 [[https://blog.csdn.net/weixin_54335478/article/details/132384563][csdn]]
+规则：
+1. 两个张量 形状不同，则维度数较少张量 *扩充维度个数* -> 形状一致
+   #+name: 维度个数不同
+   #+begin_src python
+   a = torch.randn(2,3)   # (2, 3)
+   b = torch.randn(3)     # ( , 3)
+   c = a + b              # (2, 3)
+   #+end_src
+
+2. 两个张量 维度长度不同，则维度长度较少张量 *扩充维度长度* （复制维度的值）-> 维度长度一致
+   #+name: 维度个数一样，维度长度不同
+   #+begin_src python
+   a = torch.rand(2, 1, 1, 3)  # (2, 1, 1, 3)
+   b = torch.rand(4, 2, 3)     # (1, 4, 2, 3)
+   c = a + b                   # (2, 4, 2, 3)
+   #+end_src

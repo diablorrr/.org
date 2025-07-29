@@ -1,0 +1,294 @@
+:PROPERTIES:
+:ID:       3a39bdbf-179e-4dd8-aaf9-3aeb1d0c3863
+:END:
+#+title: 成员函数
+#+filetags: cpp
+
+* 成员函数 [[https://www.learncpp.com/cpp-tutorial/member-functions/][learncpp14.3]]
+1. *类内实现* 的成员函数 =是隐式inline= 的（因此将 类类型定义 =include= 多个文件中 不会违反 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]]）
+   *类外实现* 的成员函数(头文件、源文件)， =不是隐式inline= 的；需要 显式使用inline [fn:4] [[https://www.learncpp.com/cpp-tutorial/classes-and-header-files/][learncpp15.2]]
+
+2. *this指针* [[https://www.learncpp.com/cpp-tutorial/the-hidden-this-pointer-and-member-function-chaining/][learncpp15.1]]
+   1) 非static成员函数内部有 *this指针* ，记录隐式对象的地址；当对象调用 非static成员函数 时，会将对象传入 this指针
+   2) 非const成员函数：内部是 *指向非const值的const指针*
+      const成员函数  ：内部是 *指向const值的const指针*
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      class Simple {
+      private:
+          int m_id{};
+      public:
+          Simple(int id) : m_id{ id } {}
+
+          int getID() const { return this->m_id; }        // 显式使用 this指针
+          void setID(int id) { m_id = id; }               // 隐式使用 this指针
+          // NOTE 编译器编译后：static void setID(Simple* const this, int id) { this->m_id = id; } -> 内部 this 是 指向非const值的const指针
+      };
+
+      int main() {
+          Simple simple{ 1 };
+          simple.setID(2); // NOTE 编译器编译后： Simple::setID(&simple, 2);
+
+          Simple a{1}; // this = &a 在 Simple 构造函数中
+          Simple b{2}; // this = &b 在 Simple 构造函数中
+          a.setID(3); // this = &a 在成员函数 setID() 中
+          b.setID(4); // this = &b 在成员函数 setID() 中
+          return 0;
+      }
+      #+end_src
+   3) =*this= 可以 *链式调用* 成员函数 [fn:1]
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      std::cout << "Hello, " << userName;
+      (std::cout << "Hello, ") << userName; // 编译器对上述代码的求值方式，调用 operator<< 的返回值，继续调用 operator<<
+      #+end_src
+   4) =*this= 可以 *重置类状态*
+
+3. *调用*
+   |-------------+-----------------|
+   | 对象        | 可调用          |
+   |-------------+-----------------|
+   | const对象   | const成员函数   |
+   | 非const对象 | const成员函数   |
+   |             | 非const成员函数 |
+   |-------------+-----------------|
+
+4. *重载* ：const/非const成员函数、函数参数
+
+5. *constexpr成员函数* （返回值为 constexpr）：使得成员函数具有编译时计算的能力 [fn:2]
+
+6. *static成员函数* [[https://www.learncpp.com/cpp-tutorial/static-member-functions/][learncpp15.7]]
+   1. 可以访问 static成员变量（可以在没实例化类的情况下使用，若是private，就不能通过 =<类名>::<static成员变量>= 访问，此时使用 static成员函数 [fn:5] ）访问方式： =<类名>::<static成员函数>=
+   2. 不能访问 非static成员变量，因为 *没有 this指针*
+   3. 可以 类内定义 也能 类外定义（不使用static）[fn:6]
+
+7. *优先编写 非成员函数* ：减少耦合（只依赖类的公共接口，eg：get、set函数），类的改动不会影响 非成员函数（除非公共接口改变）[fn:3] [[https://www.learncpp.com/cpp-tutorial/the-benefits-of-data-hiding-encapsulation/][learncpp14.8]]
+
+* Footnotes
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class IDGenerator
+{
+private:
+    static inline int s_nextID { 1 };
+
+public:
+     static int getNextID(); // 声明静态函数
+};
+
+// 类外定义静态函数，不使用 static，且不是隐式inline（类内定义才是 隐式inline）
+int IDGenerator::getNextID() { return s_nextID++; }
+
+int main()
+{
+    for (int count{ 0 }; count < 5; ++count)
+        std::cout << "The next ID is: " << IDGenerator::getNextID() << '\n';
+
+    return 0;
+}
+#+end_src
+
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Something
+{
+private: // private
+    static inline int s_value { 1 };
+};
+
+int main()
+{
+    std::cout << Something::s_value; // FIXME s_value 无法通过 :: 访问
+}
+#+end_src
+
+[fn:4]
+#+name: Date.h
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifndef DATE_H
+#define DATE_H
+
+class Date
+{
+private:
+    int m_year{};
+    int m_month{};
+    int m_day{};
+
+public:
+    Date(int year, int month, int day);
+
+    void print() const;
+
+    int getYear() const { return m_year; }
+    int getMonth() const { return m_month; }
+    int getDay() const { return m_day; }
+};
+
+inline Date::Date(int year, int month, int day) // now inline
+    : m_year{ year }
+    , m_month{ month }
+    , m_day{ day }
+{
+}
+
+inline void Date::print() const // now inline
+{
+    std::cout << "Date(" << m_year << ", " << m_month << ", " << m_day << ")\n";
+};
+
+#endif
+#+end_src
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Calc
+{
+private:
+    int m_value{};
+
+public:
+    Calc& add(int value) { m_value += value; return *this; }
+    Calc& sub(int value) { m_value -= value; return *this; }
+    Calc& mult(int value) { m_value *= value; return *this; } // 链式调用的实现：通过成员函数返回 *this 实现
+
+    int getValue() const { return m_value; }
+
+    void reset() { *this = {}; }          // 重置类状态的实现
+};
+
+int main()
+{
+    Calc calc{};
+    calc.add(5).sub(3).mult(4);           // 链式调用
+    std::cout << calc.getValue() << '\n'; // prints 8
+
+    calc.reset();                         // 重置类状态
+    std::cout << calc.getValue() << '\n'; // prints 0
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: 8
+: 0
+
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Pair
+{
+    int m_x {};
+    int m_y {};
+
+    constexpr int greater() const // 可以在编译时和运行时计算
+    {
+        return (m_x > m_y  ? m_x : m_y);
+    }
+};
+
+int main()
+{
+    Pair p { 5, 6 };
+    std::cout << p.greater() << '\n'; // okay: p.greater() 在运行时计算
+
+    constexpr int g { p.greater() };  // FIXME p 不是常量表达式
+    std::cout << g << '\n';
+
+    return 0;
+}
+#+end_src
+
+[fn:3]
+#+name: 成员函数 耦合 类细节（成员变量）
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+class Yogurt
+{
+    std::string m_flavor{ "vanilla" };
+
+public:
+    void setFlavor(std::string_view flavor)
+    {
+        m_flavor = flavor;
+    }
+
+    const std::string& getFlavor() const { return m_flavor; }
+
+    // 差: 成员函数 print() 直接访问 m_flavor ->  m_flavor（类实现） 更新，需要修改 print() 实现
+    void print() const
+    {
+        std::cout << "The yogurt has flavor " << m_flavor << '\n';
+    }
+};
+
+int main()
+{
+    Yogurt y{};
+    y.setFlavor("cherry");
+    y.print();
+
+    return 0;
+}
+#+end_src
+
+#+name: 成员函数 使用 类公共接口
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+class Yogurt
+{
+    std::string m_flavor{ "vanilla" };
+
+public:
+    void setFlavor(std::string_view flavor)
+    {
+        m_flavor = flavor;
+    }
+
+    const std::string& getFlavor() const { return m_flavor; }
+
+    // 稍好: 成员函数 不直接访问 类细节（成员变量）；类实现更新，print() 可能需要更新
+    void print(std::string_view prefix) const
+    {
+        std::cout << prefix << ' ' << getFlavor() << '\n';
+    }
+};
+
+int main()
+{
+    Yogurt y{};
+    y.setFlavor("cherry");
+    y.print("The yogurt has flavor");
+
+    return 0;
+}
+#+end_src
+
+#+name: 非成员函数
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+class Yogurt
+{
+    std::string m_flavor{ "vanilla" };
+
+public:
+    void setFlavor(std::string_view flavor)
+    {
+        m_flavor = flavor;
+    }
+
+    const std::string& getFlavor() const { return m_flavor; }
+};
+
+// 最好: 非成员函数 print() 不属于类的接口，类实现更新，但类的公共接口没更新，print() 就不需要更新
+void print(const Yogurt& y)
+{
+        std::cout << "The yogurt has flavor " << y.getFlavor() << '\n';
+}
+
+int main()
+{
+    Yogurt y{};
+    y.setFlavor("cherry");
+    print(y);
+
+    return 0;
+}
+#+end_src

@@ -1,0 +1,37 @@
+:PROPERTIES:
+:ID:       d8e79de6-b831-40ab-992b-4d70804a2d0b
+:END:
+#+title: 空指针(void*)
+#+filetags: cpp
+
+* 空指针(void*) [[https://www.learncpp.com/cpp-tutorial/void-pointers/][learncpp19.5]]
+1. *可以指向任意类型的对象* ；空指针 不知道自己指向的对象类型是什么，需要强制转换后解引用
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int nValue {};
+   float fValue {};
+
+   struct Something
+   {
+       int n;
+       float f;
+   };
+   Something sValue {};
+
+   void* ptr {};
+   ptr = &nValue; // ok
+   ptr = &fValue; // ok
+   ptr = &sValue; // ok
+   #+end_src
+
+2. *解引用空指针* 条件： 强制类型转换为其他指针类型（否则报错：因为空指针不知道自己指向的对象是什么类型）
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int value{ 5 };
+   void* voidPtr{ &value };
+
+   // std::cout << *voidPtr << '\n'; // FIXME 解引用空指针非法
+
+   int* intPtr{ static_cast<int*>(voidPtr) }; // 强制类型转换为 int 指针类型
+   std::cout << *intPtr << '\n'; // 现在可以解引用了
+   #+end_src
+
+3. *不能指针运算* ：因为指针运算要求知道它所指对象大小

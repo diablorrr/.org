@@ -1,0 +1,83 @@
+:PROPERTIES:
+:ID:       73c5cb24-1bb3-4f91-a80b-043d701ca570
+:END:
+#+title: 别名模板
+#+filetags: cpp
+
+* 别名模板
+1. （cpp11）用于 *为模板创建别名* （eg：未实例化的类模板）；必须在 *全局作用域定义*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   template <模板参数列表>
+   using 别名 = 原始类型;
+   #+end_src
+
+2. *使用场景*
+   1) 给二维数组（[[id:c4b5dfae-2be0-4106-acbf-98645af16722][std::array]] 实现）起别名：简化使用 [fn:2]
+      - 背景 :: 数组维度相反 [fn:1]
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <array>
+// 为 二维数组 起别名 -> 这样我们的使用方式就是 Array2d<T, Row, Col>
+template <typename T, std::size_t Row, std::size_t Col>
+using Array2d = std::array<std::array<T, Col>, Row>;
+
+// When using Array2d as a function parameter, we need to respecify the template parameters
+template <typename T, std::size_t Row, std::size_t Col>
+void printArray(const Array2d<T, Row, Col> &arr)
+{
+    for (const auto& arow: arr)   // 获取行
+    {
+        for (const auto& e: arow) // 获取行中每个元素
+            std::cout << e << ' ';
+
+        std::cout << '\n';
+    }
+}
+
+// 因为 std::array 长度可以为 0，使用 arr.size()、arr[0].size() 会产生未定义行为
+// 解决方案：
+// 获取行
+template <typename T, std::size_t Row, std::size_t Col>
+constexpr int rowLength(const Array2d<T, Row, Col>&) // you can return std::size_t if you prefer
+{
+    return Row;
+}
+
+// 获取列
+template <typename T, std::size_t Row, std::size_t Col>
+constexpr int colLength(const Array2d<T, Row, Col>&) // you can return std::size_t if you prefer
+{
+    return Col;
+}
+
+int main()
+{
+    Array2d<int, 3, 4> arr {{ // 初始化需要双括号
+        { 1, 2, 3, 4 },
+        { 5, 6, 7, 8 },
+        { 9, 10, 11, 12 }}};
+
+    printArray(arr);
+    std::cout << "Rows: " << rowLength(arr) << '\n';
+    std::cout << "Cols: " << colLength(arr) << '\n';
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: 1 2 3 4
+: 5 6 7 8
+: 9 10 11 12
+: Rows: 3
+: Cols: 4
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+std::array<std::array<int, 4>, 3> arr {{  // 这里双括号；我们是 3x4矩阵，这里却反着写，反直觉
+    { 1, 2, 3, 4 },
+    { 5, 6, 7, 8 },
+    { 9, 10, 11, 12 }}};
+#+end_src

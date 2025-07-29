@@ -1,0 +1,330 @@
+:PROPERTIES:
+:ID:       7b0c3ac7-1b45-4b02-97a9-bdad067c03e9
+:END:
+#+title: 继承
+#+filetags: cpp
+
+* 继承 [[https://www.learncpp.com/cpp-tutorial/order-of-construction-of-derived-classes/][learncpp24.3]] [[https://www.learncpp.com/cpp-tutorial/constructors-and-initialization-of-derived-classes/][learncpp24.4]] [[https://www.learncpp.com/cpp-tutorial/inheritance-and-access-specifiers/][learncpp24.5]] [[https://www.learncpp.com/cpp-tutorial/hiding-inherited-functionality/][learncpp24.8]]
+1. *继承* 让派生类会获得基类的 成员变量、成员函数，并可以进行扩展；是 =is-a= 关系（ *组合* 是 =has-a= 关系）
+
+2. 根据 *继承权限* 与 基类访问权限 组合出的权限 来 *访问基类成员* （见：继承权限表；结构体默认 public；类默认 private）
+
+3. [[id:6b9c2860-3495-43ed-a6a9-8b92d7c8680f][using声明]] 可以 *更改继承成员的访问权限* （前提是本身能访问，eg：基类成员是 private，则不行），若继承的成员存在重置，则 *访问权限一并更改* ；也能用于将父类的函数加入派生类进行 [[id:8c55eec4-57bb-45c2-8890-c65d7c473a24][函数重载解析]] [fn:7]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   class Base
+   {
+   public:
+       int m_value{};
+
+       int getValue() const { return m_value; }
+       int getValue(int) const { return m_value; }
+   };
+
+   class Derived : public Base
+   {
+   private:
+     using Base::getValue; // 改变所有 getValue函数的访问权限为 private
+
+   public:
+     Derived(int value) : Base { value } { }
+   };
+
+   int main()
+   {
+     Derived derived{ 7 };
+     std::cout << derived.getValue();  // FIXME getValue() 在 Derived private
+     std::cout << derived.getValue(5); // FIXME getValue(int) 在 Derived 是 private
+     return 0;
+   }
+   #+end_src
+
+3. 派生类 *构造顺序* ：基类 -> 派生类 -> ... [fn:1]（ *派生类的组成* ：一部分基类，一部分自己）； *具体流程* ：
+   1) 为派生类留内存（放得下基类和派生类）
+   2) 调用派生类构造（派生类初始化列表：基类构造 -> 派生类成员）
+   3) 派生类构造函数体
+
+4. 派生类 *销毁顺序* ：构造顺序的相反顺序 [fn:1]
+
+5. 向派生类 *添加新功能* ：继承的方式添加功能 [fn:2] [[https://www.learncpp.com/cpp-tutorial/adding-new-functionality-to-a-derived-class/][learncpp24.6]]
+   #+name: 背景
+   #+begin_example
+   从第三方买了代码库，现在想扩充功能，直接在代码库中写功能不行，后边若第三方更新了代码库，可能出问题 -> 继承的方式添加功能
+   #+end_example
+
+6. *访问基类函数* [[https://www.learncpp.com/cpp-tutorial/calling-inherited-functions-and-overriding-behavior/][learncpp24.7]]
+   - 访问 *基类同名函数* ：加基类作用域限定符 =<基类>::<基类同名函数>= [fn:5]
+   - 访问 *基类友元函数* ：使用 =static_cast= 转为基类后调用 [fn:6]（友元函数不是基类成员，因此不能使用 基类作用域限定符）
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // 使用方法
+   derived.Base::getValue();
+   static_cast<Base&>(derived).getValue();
+   #+end_src
+   - 调用流程 :: 在派生类中查找函数（同名函数：[[id:8c55eec4-57bb-45c2-8890-c65d7c473a24][函数重载解析]]）；否则去基类以同样方式查找 [fn:3]
+   - 函数调用 :: 重新定义基类函数，调用派生类版本 [fn:3]， *访问权限不同* 也使用派生类的 [fn:4]
+
+
+** 继承权限表 :ATTACH:
+:PROPERTIES:
+:ID:       866f63a0-b2eb-4e25-8107-27d569bc4374
+:END:
+[[attachment:_20250729_100703screenshot.png]]
+
+
+
+
+* Footnotes
+
+[fn:7]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Base
+{
+public:
+    void print(int)    { std::cout << "Base::print(int)\n"; }
+    void print(double) { std::cout << "Base::print(double)\n"; }
+};
+
+class Derived: public Base
+{
+public:
+    using Base::print; // 将基类的print加入派生类作用域，使其可以参与 函数重载解析
+    void print(double) { std::cout << "Derived::print(double)"; }
+};
+
+int main()
+{
+    Derived d{};
+    // 参数是int，我们希望调用 Base::print(int)，若没有使用using，则会调用 Derived::print(double)
+    d.print(5); // 调用Base::print(int)
+
+    return 0;
+}
+#+end_src
+
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <iostream>
+
+class Base
+{
+public:
+    Base() { }
+
+	friend std::ostream& operator<< (std::ostream& out, const Base&)
+	{
+		out << "In Base\n";
+		return out;
+	}
+};
+
+class Derived: public Base
+{
+public:
+    Derived() { }
+
+ 	friend std::ostream& operator<< (std::ostream& out, const Derived& d)
+	{
+		out << "In Derived\n";
+		// static_cast 将派生类 转为 基类，调用 基类友元函数 operator<<
+		out << static_cast<const Base&>(d);
+		return out;
+    }
+};
+
+int main()
+{
+    Derived derived {};
+
+    std::cout << derived << '\n';
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: In Derived
+: In Base
+:
+
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Base
+{
+public:
+    Base() { }
+
+    void identify() const { std::cout << "Base::identify()\n"; }
+};
+
+class Derived: public Base
+{
+public:
+    Derived() { }
+
+    void identify() const
+    {
+        std::cout << "Derived::identify()\n";
+        Base::identify(); // 使用基类作用域限定符，调用 Base::identify()
+        // identify(); 这样调用 FIXME 会无线递归
+    }
+};
+
+int main()
+{
+    Derived derived {};
+    derived.identify();
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Derived::identify()
+: Base::identify()
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Base
+{
+private:
+   void print() const
+   {
+      std::cout << "Base";
+   }
+};
+
+class Derived : public Base
+{
+public:
+   void print() const
+   {
+      std::cout << "Derived ";
+   }
+};
+
+
+int main()
+{
+   Derived derived {};
+   derived.print(); // Base::print() 是 private，调用 public 的 derived::print()
+   return 0;
+}
+#+end_src
+
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Base
+{
+public:
+    Base() { }
+
+    void identify() const { std::cout << "Base::identify()\n"; }
+    void name() { cout << "Base\n"; }
+};
+
+class Derived: public Base
+{
+public:
+    Derived() { }
+    void name() { cout << "Derived\n"; }
+};
+
+int main()
+{
+    Derived derived {};
+    derived.identify(); // 派生类中找不到，去基类中查找
+    derived.name();     // 重新定义基类函数，调用派生类版本
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Base::identify()
+: Derived
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Base
+{
+protected:
+    int m_value {};
+
+public:
+    Base(int value)
+        : m_value { value }
+    {
+    }
+
+    void identify() const { std::cout << "I am a Base\n"; }
+};
+
+class Derived: public Base
+{
+public:
+    Derived(int value)
+        : Base { value }
+    {
+    }
+
+    // 在派生类扩展功能：访问基类成员
+    int getValue() const { return m_value; }
+};
+
+int main()
+{
+    Derived derived { 5 };
+    std::cout << "derived has value " << derived.getValue() << '\n';
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: derived has value 5
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class A
+{
+public:
+    A(int a)
+    {
+        std::cout << "A: " << a << '\n';
+    }
+};
+
+class B: public A
+{
+public:
+    B(int a, double b)
+    : A{ a }
+    {
+        std::cout << "B: " << b << '\n';
+    }
+};
+
+class C: public B
+{
+public:
+    C(int a, double b, char c)
+    : B{ a, b }
+    {
+        std::cout << "C: " << c << '\n';
+    }
+};
+
+int main()
+{
+    C c{ 5, 4.3, 'R' }; // 构造顺序：A -> B -> C
+
+    return 0;
+}                       // 销毁顺序：C -> B -> A
+#+end_src
+
+#+RESULTS:
+: A: 5
+: B: 4.3
+: C: R

@@ -1,0 +1,91 @@
+:PROPERTIES:
+:ID:       d69bd9f3-2e77-4ec3-9a7b-b655fbc7ba44
+:END:
+#+title: std::vector
+#+filetags: cpp
+
+* std::vector [[https://www.learncpp.com/cpp-tutorial/introduction-to-stdvector-and-list-constructors/][learncpp16.2]]
+1. *初始化*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   std::vector<int> empty{};                       // 值初始化
+   std::vector<int> primes{ 2, 3, 5, 7 };          // 直接列表初始化
+   std::vector vowels { 'a', 'e', 'i', 'o', 'u' }; // 直接列表初始化：使用 CTAD（cpp17）
+   std::vector<int> data( 10 ); // 直接初始化：vector包含10个int 元素，初始化为 0
+   #+end_src
+
+2. std::vector 与 *const/constexpr*
+   1. =const std::vector= ：必须初始化，不能修改里面的元素
+   2. 不能声明 =constexpr std::vector= （若需要 constexpr数组，使用 constexpr std::array）
+
+3. *索引长度* 类型别名 size_type 基本等于 [[id:9db0adc8-8d90-40c1-9249-0f80bf4ece43][std::size_t]] ，注意窄化转换 [[https://www.learncpp.com/cpp-tutorial/stdvector-and-the-unsigned-length-and-subscript-problem/][learncpp16.3]]；使用时用 static_cast 转换 [fn:1]
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <vector>
+   int main()
+   {
+       std::vector prime{ 2, 3, 5, 7, 11 };
+
+       int index { 3 };                   // 一个 有符号int，非constexpr
+       std::cout << prime[index] << '\n'; // possible warning: index从 int 窄化转换到 std::size_t；若 index是负数，转为 size_t，会变成一个非常大的正数
+
+       return 0;
+   }
+   #+end_src
+
+4. =push_back= vs =emplace_back=
+   - 存在对象时，将对象加入 vector 用 push_back
+   - 不存在对象，将对象加入 vector 用 emplace_back（vector 内部直接构造）
+   - emplace_back 会将参数传入 explicit 构造函数（通过 std::forward），可能造成意外操作
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view> <vector>
+   class Foo
+   {
+   private:
+       std::string m_a{};
+       int m_b{};
+
+   public:
+       Foo(std::string_view a, int b)
+           : m_a { a }, m_b { b }{}
+
+       explicit Foo(int b)
+           : m_a {}, m_b { b }{};
+   };
+
+   int main()
+   {
+     std::vector<Foo> stack{};
+
+     // 对象已存在, push_back 和 emplace_back 效率类似
+     Foo f{ "a", 2 };
+     stack.push_back(f);    // prefer this one
+     stack.emplace_back(f);
+
+     // 对象不存在，创建 临时对象 推入 vector，emplace_back 更高效
+     stack.push_back({ "a", 2 }); // 创建临时对象，拷贝进 vector
+     stack.emplace_back("a", 2);  // 直接在 vector 中构建，无拷贝
+
+     // emplace_back 会使用 explicit 构造函数，更危险
+     stack.push_back({ 2 }); // FIXME Foo(int) is explicit
+     stack.emplace_back(2);  // ok
+
+     return 0;
+   }
+   #+end_src
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <vector>
+int main()
+{
+    std::vector testScore { 84, 92, 76, 81, 56 };
+    std::size_t length { testScore.size() };
+
+    int average { 0 };
+    for (std::size_t index{ 0 }; index < length; ++index) // index from 0 to length-1
+        average += testScore[index];                      // add the value of element with index `index`
+    average /= static_cast<int>(length);                  // calculate the average
+
+    std::cout << "The class average is: " << average << '\n';
+
+    return 0;
+}
+#+end_src

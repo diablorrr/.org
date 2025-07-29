@@ -1,0 +1,249 @@
+:PROPERTIES:
+:ID:       372c18aa-a68a-47b2-a5b8-9685e7677a69
+:END:
+#+title: 成员变量
+#+filetags: cpp
+
+*Best Practice* ：在类类型的顶部定义嵌套类型
+
+* 成员变量
+1. 成员变量可以 *嵌套其他类型* [[https://www.learncpp.com/cpp-tutorial/nested-types-member-types/][learncpp15.3]]
+   1) [[id:d091d455-5933-4047-92fb-4c2d2d2f7ff9][枚举类型(enum)]]：建议使用 *无作用域枚举* [fn:1]
+   2) [[id:15357ed3-3530-4c07-b743-9af983e05e96][类型别名]] [fn:2]
+   3) [[id:d63526f2-db09-4c79-8a1a-57d6a7d82ec9][类(class)]]：
+      - 嵌套类 *不能直接访问外部类成员* （使用外部类的this指针），但通过传入外部类对象的方式 *能访问外部类的私有成员* [fn:3]
+      - 嵌套类 *能在 外部类中前向声明* ， *外部类内或外定义* [fn:4]
+      - 嵌套类 *不能在 外部类定义前 前向声明* [fn:5]
+      （迭代器类都是作为容器类的嵌套类 -> std::string::iterator 是 std::string 的嵌套类）
+
+2. =static= 成员变量 [[https://www.learncpp.com/cpp-tutorial/static-member-variables/][learncpp15.6]]
+   属于类而不是对象；可以在 *类没有实例化* 的情况下访问 =<类名>::<static成员变量>=
+   - *初始化*
+     1) 类外初始化：因为属于类，可以在类没实例化的时候访问，因此在类外初始化 [fn:6]
+     2) 类内初始化： [fn:7]
+        a. static const int（包括 char、bool）
+        b. static inline（cpp17）
+        c. static constexpr（cpp17）
+   - 可以类型推导（auto 和 CTAD）[fn:8]
+
+* Footnotes
+[fn:8]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <utility>
+class Foo
+{
+private:
+    auto m_x { 5 };           // FIXME auto 不允许用于 非static成员变量
+    std::pair m_v { 1, 2.3 }; // FIXME CTAD 不允许用于 非static成员变量
+
+    static inline auto s_x { 5 };           // auto 允许用于 static成员变量
+    static inline std::pair s_v { 1, 2.3 }; // CTAD 允许用于 static成员变量
+
+public:
+    Foo() {};
+};
+
+int main()
+{
+    Foo foo{};
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+
+
+[fn:7]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Whatever
+{
+public:
+    static const int s_value{ 4 }; // a static const int can be defined and initialized directly
+    static inline int s_value{ 4 }; // a static inline variable can be defined and initialized directly
+    static constexpr double s_value{ 2.2 }; // ok
+    static constexpr std::string_view s_view{ "Hello" }; // this even works for classes that support constexpr initialization
+};
+#+end_src
+
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Something
+{
+public:
+    static int s_value;      // 声明静态变量
+};
+
+int Something::s_value{ 1 }; // 类外 定义和初始化 静态变量
+
+int main()
+{
+
+    // NOTE 无实例化 Something 类 直接访问静态变量
+    Something::s_value = 2;
+    std::cout << Something::s_value << '\n';
+    return 0;
+}
+#+end_src
+
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class outer;         // okay: can forward declare non-nested type
+class outer::inner1; // FIXME 不能在 外部类定义前前向声明
+
+class outer
+{
+public:
+    class inner1{}; // note: nested type declared here
+};
+
+class outer::inner1; // okay (but redundant) since nested type has already been declared as part of outer class definition
+
+int main()
+{
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class outer
+{
+public:
+    class inner1;   // okay: 在外部类内 前向声明 inner1
+    class inner1{}; // okay: 在外部类内 定义 inner1
+
+    class inner2;   // okay: 在外部类内 前向声明 inner2
+};
+
+class inner2 {};   // okay: 在外部类外 定义 inner2
+
+int main()
+{
+    return 0;
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <iostream>
+#include <string>
+#include <string_view>
+
+class Employee
+{
+public:
+    using IDType = int;
+
+    class Printer
+    {
+    public:
+        void print(const Employee& e) const
+        {
+            // Printer 不能访问 Employee的 this指针，因此，我们需要传入 Employee对象
+            // 因为 Printer 是 Employee 的成员变量，我们可以访问私有成员 m_name、m_id
+            std::cout << e.m_name << " has id: " << e.m_id << '\n';
+        }
+    };
+
+private:
+    std::string m_name{};
+    IDType m_id{};
+    double m_wage{};
+
+public:
+    Employee(std::string_view name, IDType id, double wage)
+        : m_name{ name }, m_id{ id }, m_wage{ wage }{ }
+};
+
+int main()
+{
+    const Employee john{ "John", 1, 45000 };
+    const Employee::Printer p{}; // 实例化嵌套类对象
+    p.print(john);
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: John has id: 1
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+class Employee
+{
+public:
+    using IDType = int;     // 类 嵌套 类型别名（using、typedef）
+
+private:
+    std::string m_name{};
+    IDType m_id{};
+    double m_wage{};
+
+public:
+    Employee(std::string_view name, IDType id, double wage)
+        : m_name { name }
+        , m_id { id }
+        , m_wage { wage }
+    {
+    }
+
+    const std::string& getName() { return m_name; }
+    IDType getId() { return m_id; }       // 无需 :: 访问类型别名
+};
+
+int main()
+{
+    Employee john { "John", 1, 45000 };
+    Employee::IDType id { john.getId() }; // 用 :: 访问类型别名
+
+    std::cout << john.getName() << " has id: " << id << '\n';
+
+    return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Fruit
+{
+public:
+
+    enum Type // 无作用域枚举类：枚举成员直接使用类作用域，类内直接访问
+    {
+      apple,
+      banana,
+      cherry
+    };
+
+private:
+  Type m_type {};
+  int m_percentageEaten { 0 };
+
+public:
+  Fruit(Type type) : m_type { type } {}
+
+  Type getType() { return m_type;  }
+  int getPercentageEaten() { return m_percentageEaten;  }
+
+  bool isCherry() { return m_type == cherry; } // 枚举成员在类作用域内，直接访问
+};
+
+int main()
+{
+  // 类外访问枚举成员，使用 Fruit 前缀
+  Fruit apple { Fruit::apple };
+
+  if (apple.getType() == Fruit::apple)
+    std::cout << "I am an apple";
+  else
+    std::cout << "I am not an apple";
+
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+: I am an apple

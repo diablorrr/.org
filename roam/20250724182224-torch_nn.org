@@ -1,0 +1,185 @@
+:PROPERTIES:
+:ID:       e4a2f7ed-e5cd-4dc4-9a1a-c39cf2f8a4a4
+:END:
+#+title: torch.nn
+#+filetags: pytorch
+
+* torch.nn.Parameter [[https://blog.csdn.net/qq_43391414/article/details/120484239][csdn]]
+1. 用于将 不可训练Tensor 变成 *可训练的parameter* ；并且将 该parameter *注册到宿主模型* 中（model.parameters()中会包含该parameter），在参数优化时 *自动一起优化*
+2. parameter *本质是 Tensor*
+3. nn.Parameter = nn.parameter.Parameter
+   #+begin_src python
+   import torch
+   import torch.nn as nn
+   a=torch.tensor([1,2],dtype=torch.float32)
+   print(a)
+   print(nn.Parameter(a))
+   print(nn.parameter.Parameter(a))
+   #+end_src
+
+   #+name: 输出
+   #+begin_example
+   tensor([1., 2.])
+   Parameter containing:
+   tensor([1., 2.], requires_grad=True)
+   Parameter containing:
+   tensor([1., 2.], requires_grad=True)
+   #+end_example
+
+4. nn.Parameter(tensor) 和 对tensor使用requires_grad=True 的 *区别* ：
+   在于 =1.= ，后者虽然也变成 可训练的parameter，但是 *不会注册到 model.parameters()* 中
+   #+begin_src python
+   class mod(nn.Module):
+       def __init__(self):
+           super(mod,self).__init__()
+           self.w1=torch.tensor([1,2],dtype=torch.float32,requires_grad=True) # 带梯度的普通tensor
+           a=torch.tensor([3,4],dtype=torch.float32)                          # parameter
+           self.w2=nn.Parameter(a)
+       def forward(self,inputs):
+           o1=torch.dot(self.w1,inputs)
+           o2=torch.dot(self.w2,inputs)
+           return o1+o2
+
+   model=mod()
+   for p in model.parameters():
+       print(p)
+   #+end_src
+
+#+name: 输出
+#+begin_example
+Parameter containing:
+tensor([3., 4.], requires_grad=True)
+#+end_example
+
+
+* torch.nn.Softmax
+用于将 *某个维度的值* 落在 =(0,1)= 区间且和为 =1=
+其次，它能 *放大差异* （大的更大，小的更小），对 *梯度计算友好*
+#+begin_src python
+logits = torch.tensor([1.0, 2.0, 3.0])
+
+# Softmax 计算
+softmax = nn.Softmax(dim=0)
+probs = softmax(logits)  # 输出: [0.0900, 0.2447, 0.6652]，和为1
+                         # 相比与 [1.0, 2.0, 3.0] 放大数据间的差异
+
+# 温度系数调整
+T = 0.5
+probs_T = softmax(logits / T)  # 输出: [0.0159, 0.1173, 0.8668] 放大差异的程度增加
+probs_T
+#+end_src
+
+
+* torch.nn.Linear
+1. 用于个将张量 *映射到新的特征空间* ，方便后续计算（后续计算可能需要某些形状要求）
+   #+begin_src python
+   m = nn.Linear(20, 30)
+   input = torch.randn(128, 20)
+   output = m(input)
+   print(output.size()) # 输出：torch.Size([128, 30])
+   #+end_src
+
+
+* torch.nn.Embedding
+1. 用于将 *离散的符号* （eg：单词ID）转换为 *连续的可学习的张量* （也称嵌入张量，随机初始化的，后续通过大量语料训练它们之间的关系，eg：猫和狗都属于动物，因此它们在向量空间的距离更近）；可以通过 =.weight= 的方式访问内部所有张量；也能通过 *索引* 形式访问对应张量
+   #+begin_src python
+   import torch
+   import torch.nn as nn
+
+   # 创建嵌入层：5个符号（如5个单词），每个符号3维
+   embedding = nn.Embedding(5, 3)
+
+   # 1. 访问全部嵌入向量（.weight）
+   print("所有嵌入向量:\n", embedding.weight)  # 形状 [5, 3]
+
+   # 2. 通过索引访问部分向量
+   input_idx = torch.tensor([0, 2, 4])  # 查询索引0、2、4的向量
+   output = embedding(input_idx)
+   print("\n索引对应的向量:\n", output)  # 输出形状 [3, 3]
+
+   # 验证等价性
+   print("\n验证:", output[1] == embedding.weight[2])  # 输出: tensor([True, True, True])
+   #+end_src
+
+
+* torch.nn.LayerNorm [[https://zhuanlan.zhihu.com/p/18446035638][知乎]] [[https://blog.csdn.net/Flag_ing/article/details/124278245][csdn]]
+在某些维度上进行 *归一化（将值分布拉回 正态分布 -> 值落入激活函数敏感区 -> 梯度变大 -> 避免梯度消失，学习收敛变快，加快学习速度）*
+#+name: 示例1
+#+begin_src python
+# NLP Example
+# nlp 是在 单个样本内进行归一化（比如：[句子，词，特征]，是将一个句子中的所有词向量的所有特征进行归一化）
+batch, sentence_length, embedding_dim = 20, 5, 10
+embedding = torch.randn(batch, sentence_length, embedding_dim)
+layer_norm = nn.LayerNorm(embedding_dim) # 在 embedding_dim 维度进行归一化
+# Activate module
+layer_norm(embedding)
+
+# Image Example
+N, C, H, W = 20, 5, 10, 10
+input = torch.randn(N, C, H, W)
+layer_norm = nn.LayerNorm([C, H, W]) # 在 [C, H, W] 上进行归一化
+output = layer_norm(input)
+#+end_src
+
+#+name: 示例2
+#+begin_src python
+import torch
+import torch.nn as nn
+import numpy as np
+a = np.array([[1, 20, 3, 4],
+               [5, 6, 7, 8,],
+               [9, 10, 11, 12]], dtype=np.double)
+b = torch.from_numpy(a).type(torch.FloatTensor)
+
+layer_norm = nn.LayerNorm(4, eps=1e-6) # 最后一个维度大小为4，NOTE eps 参数用于防止除 0，取一个很小的数就行
+c = layer_norm(b)
+print(c)
+# 结果：
+# tensor([[-0.7913,  1.7144, -0.5275, -0.3956],
+#         [-1.3416, -0.4472,  0.4472,  1.3416],
+#         [-1.3416, -0.4472,  0.4472,  1.3416]],
+#        grad_fn=<NativeLayerNormBackward0>)
+#-----------------------------------------------------------------------------------
+# 对最后两个维度标准化
+layer_norm = nn.LayerNorm([3, 4], eps=1e-6)
+c = layer_norm(b)
+print(c)
+# 结果：
+# tensor([[-1.4543e+00,  2.4932e+00, -1.0388e+00, -8.3105e-01],
+#         [-6.2329e-01, -4.1553e-01, -2.0776e-01,  1.1921e-07],
+#         [ 2.0776e-01,  4.1553e-01,  6.2329e-01,  8.3105e-01]],
+#        grad_fn=<NativeLayerNormBackward0>)
+#+end_src
+
+
+* torch.nn.ReLU
+负数变 0，正数保持原样
+#+begin_src python
+m = nn.ReLU()
+input = torch.randn(2)
+output = m(input)
+#+end_src
+
+
+* torch.nn.Dropout
+训练期间，输入张量中的元素 以 概率p 随机被置为0，保留下来的元素会进行缩放（乘以 1/(1-p)）以保持整体期望值不变
+#+begin_src python
+import torch
+import torch.nn as nn
+dropout = nn.Dropout(p=0.5)
+input = torch.randn(4, 3)
+print(input)
+output = dropout(input)
+print(output)
+
+# 这里 没被置0的元素进行缩放（乘以 2=1/(1-0.5)）
+# tensor([[-0.4381,  0.3995,  0.3502],
+#         [-0.1217,  0.5735, -0.6830],
+#         [ 2.1061,  1.1834, -2.0013],
+#         [-1.1990, -0.7124,  0.2790]])
+
+# tensor([[-0.8763,  0.7989,  0.7004],
+#         [-0.2434,  1.1471, -1.3660],
+#         [ 0.0000,  2.3667, -0.0000],
+#         [-0.0000, -0.0000,  0.0000]])
+#+end_src

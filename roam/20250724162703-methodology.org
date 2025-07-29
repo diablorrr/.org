@@ -1,0 +1,33 @@
+:PROPERTIES:
+:ID:       3f19781d-1730-463d-a079-98008e782347
+:END:
+#+title: methodology
+#+filetags: other
+
+[[id:69db2457-7853-4b25-b4fd-8a67d408e4e5][prompt]]
+* 方法
+学习新语言：15天官方文档教程+标准库；15天看知名开源项目源码
+* 资源
+[[id:8299b26c-8897-406e-bc56-8de9cfef2fd8][resources]]
+* 工具
+- 系统       :: arch linux
+- 桌面环境   :: KDE
+- 开发文档   :: Zeal
+- 代码       :: emacs
+                vscode
+- 笔记       :: emacs：org-mode
+- 截屏       :: Snipaste
+- 代理       :: clash verge
+- 浏览器     :: Chrome
+- 浏览器插件 :: vimium c
+                adblock
+                豆包
+                元宝
+                单词收藏助手
+                raindrop.io
+- 音乐       :: 音乐
+- 终端       :: Yakuake（下拉式）
+- 内容搜索   :: ripgrep
+- AI         :: deepwiki
+                豆包
+                元宝

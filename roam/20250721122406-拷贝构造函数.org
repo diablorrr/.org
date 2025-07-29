@@ -1,0 +1,119 @@
+:PROPERTIES:
+:ID:       828d1a9b-3ab1-4471-8906-1cf535ea8e7d
+:END:
+#+title: 拷贝构造函数、拷贝赋值
+#+filetags: cpp
+
+* 拷贝构造函数 [[https://www.learncpp.com/cpp-tutorial/introduction-to-the-copy-constructor/][learncpp14.14]]
+1. 用 相同类型的现有对象 初始化对象
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   类名(const T&) {}   //  & 必须有，const可选但是建议
+   #+end_src
+   *[面试题] 为什么必须有引用？* 避免无限递归 [fn:1]
+
+2. 无自定义拷贝构造函数，则编译器合成一个 *默认的拷贝构造函数* ：对 类成员 进行 *浅拷贝* （也能用 ==default= 要求编译器生成）；当我们需要 *深拷贝* 时，自定义拷贝构造函数
+3. 当我们不希望某个类的对象可复制时，使用 ==delete= 删除拷贝构造函数
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   class Example {
+   public:
+       int value;
+
+       // 1. 默认拷贝构造函数
+       // 用户未定义时，编译器为我们合成
+
+       // 2. 自定义拷贝构造函数
+       Example(const Example& other) : value(other.value + 1) {
+           std::cout << "自定义拷贝构造 value=" << value << "\n";
+       }
+
+       // 3. 使用=default生成默认拷贝构造
+       // Example(const Example&) = default;
+
+       // 4. 使用=delete禁止拷贝
+       // Example(const Example&) = delete;
+   };
+   #+end_src
+
+4. 有时候我们看不到 *拷贝构造函数的调用* ：因为编译器可能使用[[id:3cc311ac-4ed0-4e9c-af58-5b1daed5ec94][拷贝省略]]优化技术 -> 省略不必要的对象复制（拷贝构造调用） [[https://www.learncpp.com/cpp-tutorial/class-initialization-and-copy-elision/][learncpp14.15]]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   class Something
+   {
+   public:
+     Something() = default;
+     Something(const Something&)
+     {
+       std::cout << "Copy constructor called\n"; // 一次都没调用
+     }
+   };
+
+   Something rvo()
+   {
+     return Something{}; // 调用 Something() and 拷贝构造
+   }
+
+   Something nrvo()
+   {
+     Something s{}; // 调用 Something()
+     return s;      // 调用 拷贝构造
+   }
+
+   int main()
+   {
+     std::cout << "Initializing s1\n";
+     Something s1 { rvo() };  // 调用拷贝构造
+
+     std::cout << "Initializing s2\n";
+     Something s2 { nrvo() }; // 调用拷贝构造
+
+     return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : Initializing s1
+   : Initializing s2
+
+   正常应该调用了4次：rvo返回、s1赋值、nrvo返回、s2赋值；所以应该出现4次 =Copy constructor called= ，但是因为编译器优化，无调用
+
+* 拷贝赋值
+1. *自赋值存在的问题* 赋值，需要删除原对象，再将另一个对象赋值过来，如果是 *自赋值* ，会将自己删除
+   - 解决方案： *检测并处理自赋值* [fn:2] [[https://www.learncpp.com/cpp-tutorial/overloading-the-assignment-operator/][learncpp21.12]]
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+MyString& MyString::operator= (const MyString& str)
+{
+	// 自赋值处理：直接返回
+	if (this == &str)
+		return *this;
+
+	// 删除自己的值
+	if (m_data) delete[] m_data;
+
+	m_length = str.m_length;
+	m_data = nullptr;
+
+  // 复制他人的值
+	if (m_length)
+		m_data = new char[static_cast<std::size_t>(str.m_length)];
+
+	std::copy_n(str.m_data, m_length, m_data);
+
+	// return the existing object so we can chain this operator
+	return *this;
+}
+#+end_src
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class MyClass {
+public:
+    MyClass(MyClass obj) { /* ... */ } // 错误：按值传递
+};
+
+int main() {
+    MyClass a;
+    MyClass b(a); // FIXME 调用拷贝构造函数时，需要先拷贝 a 到 obj，又触发拷贝构造函数，无限递归！
+}
+#+end_src

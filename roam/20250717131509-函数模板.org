@@ -5,51 +5,11 @@
 #+filetags: cpp
 
 * 函数模板 [[https://www.learncpp.com/cpp-tutorial/function-templates/][learncpp11.6]] [[https://www.learncpp.com/cpp-tutorial/function-template-instantiation/][learncpp11.7]] [[https://www.learncpp.com/cpp-tutorial/function-templates-with-multiple-template-types/][learncpp11.8]]
-1. 用于创建一系列的 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][重载函数]]；里面的一些类型用 *模板参数* 作为占位符，在编译期 编译器遇到 *函数调用* 时发生 *模板实例化*
-   - 模板实例化 :: 就是从函数模板创建函数（ *复制* 一份模板，类型模板参数 -> 具体类型）的过程，在编译期 编译器遇到 *函数调用* 时发生（称为隐式实例化）
-   （能用 [[id:5aea3bf8-964d-4925-91bf-c5cf83f88753][=delete]] 删除某些实例化函数 [fn:1]）
-   #+name: 原始模板代码
-   #+begin_src cpp :results output :namespaces std :includes <iostream>
-   template <typename T>
-   T max(T x, T y)
-   {
-       return (x < y) ? y : x;
-   }
+1. 用于创建一系列的 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][重载函数]]； *[[id:9148c346-c9dd-4480-9b37-25d448987e98][模板参数]]* 作为类型的占位符；在编译期 编译器遇到 *函数调用* 时发生 *实例化* ，能用 [[id:5aea3bf8-964d-4925-91bf-c5cf83f88753][=delete]] 删除某些实例化函数 [fn:1] （在发生实例化的文件处 *复制* 一份模板，模板参数 -> 具体类型，因此会 *增加编译时间* [fn:4]）
 
-   int main()
-   {
-       std::cout << max<int>(1, 2) << '\n'; // instantiates and calls function max<int>(int, int)
-       std::cout << max<int>(4, 3) << '\n';
+2. 在 *多个源文件* 中使用函数模板：会发生 链接错误，解决方法是将 模板放入 =.h= 头文件，然后 =include= 进 =.cpp= 源文件；见：[[id:21dd5470-8f8b-4d95-8c33-cb741b817fbc][在多个文件中使用函数模板]]
 
-       return 0;
-   }
-   #+end_src
-
-   #+name: 模板实例化后的代码
-   #+begin_src cpp :results output :namespaces std :includes <iostream>
-   // a declaration for our function template (we don't need the definition any more)
-   template <typename T>
-   T max(T x, T y);
-
-   template<>
-   int max<int>(int x, int y) // 实例化后得到的 函数特化
-   {
-       return (x < y) ? y : x;
-   }
-
-   int main()
-   {
-       std::cout << max<int>(1, 2) << '\n'; // instantiates and calls function max<int>(int, int)
-       std::cout << max<int>(4, 3) << '\n';    // calls already instantiated function max<int>(int, int)
-
-       return 0;
-   }
-   #+end_src
-   编译器将基于此代码进行编译 -> 因此会 *增加编译时间*
-
-2. 模板参数 *种类、声明、命名、推导* 见：[[id:9148c346-c9dd-4480-9b37-25d448987e98][模板参数]]
-
-3. *匹配优先级* ：普通函数调用语法 优先使用 *非模板函数* ，而不是模板实例化后同样可行的函数（核心原因在于 选择更特殊版本）
+3. 普通函数调用语法 *优先匹配* 非模板函数，而不是模板实例化后同样可行的函数（原因在于 选择更特殊版本）
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    // This function template can handle many types, so its implementation is generic
    template <typename T>
@@ -80,15 +40,51 @@
    }
    #+end_src
 
-4. 在多个文件中使用函数模板，见：[[id:21dd5470-8f8b-4d95-8c33-cb741b817fbc][在多个文件中使用函数模板]]
+4. 通过 不同数量的类型模板参数 实现 *函数模板重载* [fn:3]
 
-5. 函数模板 *可以重载* ：不同数量的 类型模板参数 [fn:3]
-
-6. 带有 [[id:be24bcfa-3a9e-4e52-93e4-66163f87f280][static(静态局部变量)]] 的函数模板，需要注意可能因为不同的实例化导致非预期结果 [fn:2]
+5. 带有 [[id:be24bcfa-3a9e-4e52-93e4-66163f87f280][static(静态局部变量)]] 的函数模板，需要注意可能因为不同的实例化导致非预期结果 [fn:2]
 
 
 
 * Footnotes
+
+[fn:4]
+#+name: 原始模板代码
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+template <typename T>
+T max(T x, T y)
+{
+    return (x < y) ? y : x;
+}
+
+int main()
+{
+    std::cout << max<int>(1, 2) << '\n'; // instantiates and calls function max<int>(int, int)
+    std::cout << max<int>(4, 3) << '\n';
+    return 0;
+}
+#+end_src
+
+#+name: 模板实例化后的代码
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+// a declaration for our function template (we don't need the definition any more)
+template <typename T>
+T max(T x, T y);
+
+template<>
+int max<int>(int x, int y) // 实例化后的 函数
+{
+    return (x < y) ? y : x;
+}
+
+int main()
+{
+    std::cout << max<int>(1, 2) << '\n'; // instantiates and calls function max<int>(int, int)
+    std::cout << max<int>(4, 3) << '\n';    // calls already instantiated function max<int>(int, int)
+    return 0;
+}
+#+end_src
+
 [fn:3]
 #+begin_src cpp :results output :namespaces std :includes <iostream>
 // Add two values with matching types

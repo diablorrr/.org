@@ -1,10 +1,10 @@
 :PROPERTIES:
 :ID:       99463280-0fa3-491e-82ae-2c3402272509
 :END:
-#+title: 复合数据类型
+#+title: 复合类型
 #+filetags: cpp
 
-* 复合数据类型 [[https://www.learncpp.com/cpp-tutorial/introduction-to-compound-data-types/][learncpp12.1]]
+* 复合类型 [[https://www.learncpp.com/cpp-tutorial/introduction-to-compound-data-types/][learncpp12.1]]
 1. 根据现有类型定义的类型
 
 2. 以下是常见复合类型
@@ -23,6 +23,6 @@
      + 无作用域枚举
      + 作用域枚举
    - 类类型
-     + 结构体
+     + [[id:373eed2b-8eaf-4b48-b42a-23e031290e5d][结构体]]
      + 类
      + 联合体

@@ -1,10 +1,10 @@
 :PROPERTIES:
 :ID:       a730ea97-35fa-4a65-930f-bf2285457550
 :END:
-#+title: 数据类型
+#+title: 类型
 #+filetags: cpp
 
-* 数据类型 [[https://www.learncpp.com/cpp-tutorial/introduction-to-fundamental-data-types/][learncpp4.1]] [[https://www.learncpp.com/cpp-tutorial/introduction-to-program-defined-user-defined-types/][learncpp13.1]]
+* 类型 [[https://www.learncpp.com/cpp-tutorial/introduction-to-fundamental-data-types/][learncpp4.1]] [[https://www.learncpp.com/cpp-tutorial/introduction-to-program-defined-user-defined-types/][learncpp13.1]]
 1. *数据类型* ：就是告诉 编译器 如何 *解释内存中的数据*
    - 位   :: *内存组成的单位* ；每个位存 0或1
    - 字节 :: *内存访问的单位* ；每个字节有唯一地址；1字节 = 8位

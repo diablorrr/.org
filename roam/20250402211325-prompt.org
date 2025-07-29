@@ -2,8 +2,10 @@
 :ID:       69db2457-7853-4b25-b4fd-8a67d408e4e5
 :END:
 #+title: prompt
+#+filetags: other
 
 1. 表格形式给我XXX
-2. 一句话定义/说明/解释XXX => deepseek官网
-3. 列出关键知识点，ascii图画出它们的关系
-4. 关键概念 联系 验证(简答题)
+2. 一句话定义/说明/解释XXX -> deepseek官网
+3. XXX，简单说             -> 豆包
+4. 列出关键知识点，ascii图画出它们的关系
+5. 关键概念 联系 验证(简答题)

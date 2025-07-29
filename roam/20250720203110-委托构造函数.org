@@ -1,0 +1,83 @@
+:PROPERTIES:
+:ID:       5b76f024-43cb-467b-8e76-c40739b3a2b1
+:END:
+#+title: 委托构造函数
+#+filetags: cpp
+
+* 委托构造函数 [[https://www.learncpp.com/cpp-tutorial/delegating-constructors/][learncpp14.12]]
+1. 在一个构造函数的 *成员初始化列表* 中调用另一个构造函数 [fn:2] -> 用于 *减少重复代码*
+   （构造函数体 中调用构造函数，会创建 *临时对象* [fn:1]）
+
+2. 使用 [[id:0274638c-01a6-4c23-8e98-c9288336a570][默认参数]] 可以 *减少构造函数的数量*
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+class Employee
+{
+private:
+    std::string m_name { "???" };
+    int m_id { 0 };
+
+public:
+    Employee(std::string_view name)
+        : Employee{ name, 0 }         // 委托 Employee(std::string_view, int) 构造
+    {
+    }
+
+    Employee(std::string_view name, int id)
+        : m_name{ name }, m_id { id } // actually initializes the members
+    {
+        std::cout << "Employee " << m_name << " created\n";
+    }
+
+};
+
+int main()
+{
+    Employee e1{ "James" };
+    Employee e2{ "Dave", 42 };
+}
+#+end_src
+
+#+RESULTS:
+: Employee James created
+: Employee Dave created
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+class Employee
+{
+private:
+    std::string m_name { "???" };
+    int m_id { 0 };
+    bool m_isManager { false };
+
+public:
+    Employee(std::string_view name, int id)
+        : m_name{ name }, m_id { id } // this constructor initializes name and id
+    {
+        std::cout << "Employee " << m_name << " created\n"; // our print statement is back here
+    }
+
+    Employee(std::string_view name, int id, bool isManager)
+        : m_isManager { isManager } // 这里初始化 m_isManager
+    {
+        // 调用 Employee(std::string_view, int) 初始化 m_name 和 m_id；但是完全不对！
+        Employee(name, id); // 这里创建临时对象，且对它设置了 m_name 和 m_id
+    }   // 临时对象在这里销毁；e2 的 m_name 和 m_id 根本没设置过
+
+    const std::string& getName() const { return m_name; }
+};
+
+int main()
+{
+    Employee e2{ "Dave", 42, true };
+    std::cout << "e2 has name: " << e2.getName() << "\n"; // print e2.m_name
+}
+#+end_src
+
+#+RESULTS:
+: Employee Dave created
+: e2 has name: ???

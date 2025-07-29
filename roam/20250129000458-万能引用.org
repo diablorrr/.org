@@ -2,7 +2,7 @@
 :ID:       108d37bf-0aa2-4a95-b65b-1306c2e8e39c
 :END:
 #+title: 万能引用
-#+LAST_MODIFIED: 2025-01-29 21:31:32
+#+filetags: cpp del
 
 * 万能引用
 - 简介 :: T&&，使得模板函数可以接收左右值

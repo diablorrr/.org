@@ -6,7 +6,9 @@
 * =delete [[https://www.learncpp.com/cpp-tutorial/deleting-functions/][learncpp11.4]]
 1. =delete说明符用于 *删除函数*
 
-2. 可以用于删除某些 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][函数重载]] 版本，因为 [[id:d296e2b2-3557-479c-ad2d-58c1600fbfd9][函数模板]] 用于创建一系列 重载函数，因此可以删除
+2. 删除的函数依然是已声明的函数，复合 [[id:8c55eec4-57bb-45c2-8890-c65d7c473a24][函数重载解析]] 条件 [fn:1]
+
+3. 可以用于删除某些 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][函数重载]] 版本，因为 [[id:d296e2b2-3557-479c-ad2d-58c1600fbfd9][函数模板]] 用于创建一系列 重载函数，因此可以删除
    #+name: 原始
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    void printInt(int x)
@@ -50,3 +52,40 @@
        return 0;
    }
    #+end_src
+
+4. 在类中删除 [[id:828d1a9b-3ab1-4471-8906-1cf535ea8e7d][拷贝构造函数、拷贝赋值]]、[[id:ac154a46-7700-4286-96aa-a45f8d93c6b6][移动构造函数、移动赋值]]...，则编译器 *不会合成默认版本*
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+class Name
+{
+private:
+    std::string m_name {};
+public:
+    Name(std::string_view name) : m_name{ name } { }
+
+    Name(const Name& name) = default;
+    Name& operator=(const Name& name) = default;
+
+    // 删除 移动构造，依旧是已声明的函数，依旧能 函数重载解析，cpp规则：函数值返回，有移动用移动
+    Name(Name&& name) = delete;
+    Name& operator=(Name&& name) = delete;
+
+    const std::string& get() const { return m_name; }
+};
+
+Name getJoe()
+{
+    Name joe{ "Joe" };
+    return joe; // FIXME 调用 删除的移动构造
+}
+
+int main()
+{
+    Name n{ getJoe() };
+    std::cout << n.get() << '\n';
+    return 0;
+}
+#+end_src

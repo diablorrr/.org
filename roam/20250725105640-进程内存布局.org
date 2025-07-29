@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       ae7fc8d9-0053-45b6-92f4-9a42f1565718
+:END:
+#+title: 进程内存布局
+#+filetags: cpp
+
+* 进程内存布局 [[https://www.learncpp.com/cpp-tutorial/the-stack-and-the-heap/][learncpp20.2]]
+- [[id:1491881a-65d2-41da-9069-0067bb7f8ebc][栈]]（stack：调用栈）：存储 函参、局部变量、函数调用上下文
+- [[id:09cff25e-1c04-475b-b551-1f7a94b1aab3][堆]]（heap）         ：动态分配的内存
+- 数据段（.data）    ：初始化的 全局变量和static变量
+- bss段（.bss）      ：未初始化的 全局变量和static变量
+- 代码段（.text）    ：编译后的 *机器指令*

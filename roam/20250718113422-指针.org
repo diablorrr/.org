@@ -11,9 +11,11 @@
 
 4. *相关* 指针
    - 野指针   :: 未初始化的指针
-   - 悬空指针 :: 被指对象 在 指针 之前销毁
+   - 悬空指针 :: 被指对象 在 指针 之前销毁 见：[[id:6782179f-792b-4eb6-807c-4f95aba88169][内存泄漏]]
    - 空指针   :: 不指向任何对象 ->（推荐） =nullptr= （古代）NULL、0
      （NULL 和 0 可能 *被误认为整型* ，导致 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][函数重载]] 歧义 [fn:1]）[[https://www.learncpp.com/cpp-tutorial/pass-by-address-part-2/][learncpp12.11]]
+   - [[id:ee21abb8-cd89-4207-bbbe-49c4ed887fed][函数指针]] :: 指向函数的指针
+   - 数组指针 :: 由[[id:0cd3f518-394f-477b-8969-e4a61486357c][C风格数组]]退化而来
 
 5. *指针与const* [[https://www.learncpp.com/cpp-tutorial/pointers-and-const/][learncpp12.9]]
    - 指针常量 :: 指针是const的  -> 指向不可变，指向的值可变

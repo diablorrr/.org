@@ -1,0 +1,92 @@
+:PROPERTIES:
+:ID:       50402d44-720e-42ed-b590-2b18d219acc1
+:END:
+#+title: 构造函数
+#+filetags: cpp
+
+* 构造函数 [[https://www.learncpp.com/cpp-tutorial/introduction-to-constructors/][learncpp14.9]] [[https://www.learncpp.com/cpp-tutorial/constructor-member-initializer-lists/][learncpp14.10]]
+1. 特殊的成员函数，用于 *初始化类对象* ；无返回类型，名称同类名
+2. *成员初始化列表* 用于 成员初始化（ =const= 、 =引用= 成员 只能在此初始化，不能在构造函数体中）； *构造函数体*  用于其他任务（打开文件、数据库...）
+3. 构造函数 *执行顺序* ：默认成员初始化器 -> 成员初始化列表 -> 默认初始化 -> 构造函数体[fn:6]
+4. *成员初始化顺序* ：按类中定义的顺序初始化；避免 成员变量之间的依赖关系 [fn:5]
+5. 构造函数 *内存分配*  编译器为对象 分配内存 -> 然后在为初始化的对象上 调用 构造函数 初始化
+
+6. 构造函数 *种类*
+   - 普通构造函数（用户定义的构造函数）
+   - [[id:9d44bca6-631c-41f5-9304-0d46eb1f2287][默认构造函数]]
+   - [[id:5b76f024-43cb-467b-8e76-c40739b3a2b1][委托构造函数]]
+   - [[id:828d1a9b-3ab1-4471-8906-1cf535ea8e7d][拷贝构造函数]]
+   - [[id:cf5f4669-1abc-45b6-9882-83008c96bd4a][转换构造函数]]
+   - [[id:ac154a46-7700-4286-96aa-a45f8d93c6b6][移动构造函数]]
+   - [[id:2c40eca3-bd07-4fda-a1f2-d5fd37040ca9][列表构造函数]]
+
+
+
+
+
+* Footnotes
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Foo
+{
+private:
+    int m_x {};    // default member initializer (因为 成员初始化列表 -> 该值初始化被 忽略)
+    int m_y { 2 }; // default member initializer (will be used)
+    int m_z;       // 默认初始化（随机值）
+
+public:
+    Foo(int x)
+        : m_x { x } // 成员初始化器
+    {
+        std::cout << "Foo constructed\n";
+    }
+
+    void print() const
+    {
+        std::cout << "Foo(" << m_x << ", " << m_y << ", " << m_z << ")\n";
+    }
+};
+
+int main()
+{
+    Foo foo { 6 };
+    foo.print();
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Foo constructed
+: Foo(6, 2, 32764)
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <algorithm> // for std::max
+
+class Foo
+{
+private:
+    int m_x{};
+    int m_y{};
+
+public:
+    Foo(int x, int y)                         // 这里使用 成员初始化列表 进行初始化
+        : m_y { std::max(x, y) }, m_x { m_y } // FIXME 先初始化 m_x，但是 m_x 使用 m_y 初始化，因此出错
+    {
+    }
+
+    void print() const
+    {
+        std::cout << "Foo(" << m_x << ", " << m_y << ")\n";
+    }
+};
+
+int main()
+{
+    Foo foo { 6, 7 };
+    foo.print();
+
+    return 0;
+}
+#+end_src

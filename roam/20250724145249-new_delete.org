@@ -1,0 +1,49 @@
+:PROPERTIES:
+:ID:       3449f1fd-e457-4e12-b08a-35ada296ec80
+:END:
+#+title: new、delete
+#+filetags: cpp
+
+* new、delete [[https://www.learncpp.com/cpp-tutorial/dynamic-memory-allocation-with-new-and-delete/][learncpp19.1]] [[https://www.learncpp.com/cpp-tutorial/dynamically-allocating-arrays/][learncpp19.2]]
+1. 在 *堆* 上动态分配内存，会返回指向该内存的 *指针* ；堆上创建的对象具有具有[[id:853a3bee-b823-49fc-acd6-804eecb74822][动态生命周期]]
+
+2. *new 可能失败* ：抛出 =bad_alloc= 异常（没有异常处理会直接终止程序）；用 =std::nothrow= 告诉 new *无法分配内存就返回空指针*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int* value { new (std::nothrow) int{} }; // 分配内存失败返回空指针
+   if (!value) // 判断是否分配成功
+   {
+       std::cerr << "Could not allocate memory\n";
+   }
+   #+end_src
+
+3. new、delete 对象
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // 分配内存再初始化
+   int* ptr(new int);
+   ,*ptr = 7;
+
+   // 分配内存后立刻初始化
+   int* ptr1{ new int (5) };     // 直接初始化
+   int* ptr2{ new int { 6 } };   // 列表初始化
+
+   // 删除指针指向的内容，并将指针置为空
+   delete ptr;
+   ptr = nullptr;
+   #+end_src
+
+4. new、delete 数组： =new[]= 、 =delete[]=
+   *动态分配的数组，长度不需要为 [[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]]*
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <cstddef>
+   std::size_t length{};
+   std::cin >> length;
+   int* array{ new int[length]{} }; // 动态分配的数组，长度不需要为常量表达式！
+   array[0] = 5;
+   delete[] array; // 删除动态数组
+
+   int* array{ new int[5]{ 9, 7, 5, 3, 1 } }; // 列表初始化
+   // 使用 auto 避免写两次 类型
+   auto* array{ new int[5]{ 9, 7, 5, 3, 1 } };
+   #+end_src
+
+5. 动态删除数组 delete[] *如何知道要释放的内存* ？
+   new[] 会记录分配的内存大小（程序员无法访问），delete[] 就知道释放多少内存；

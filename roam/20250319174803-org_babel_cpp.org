@@ -13,3 +13,4 @@
    | :libs            | 链接库文件               |
    | :namespaces      | 命名空间                 |
    | :flags           | 编译器参数               |
+   | :cmdline         | 设置命令行参数           |

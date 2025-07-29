@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       27ee23b0-9f6b-4b33-a5ac-88fb1b8f84ce
+:END:
+#+title: 所有者和查看者
+#+filetags: cpp
+
+* 所有者和查看者 [[https://www.learncpp.com/cpp-tutorial/struct-miscellany/][learncpp13.11]]
+1. 当 所有者 销毁；查看者 出现 悬空的情况
+2. 查看者 *有哪些* ？ [[id:878bbff5-6362-4cf9-ab1c-15bc1849cd79][指针]]、[[id:1f772bce-0f88-46a2-ab44-c9bf04b30653][引用]]、[[id:4fade514-4065-4f15-bc2b-595a99b40a1d][视图]] [fn:1]
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+struct Owner
+{
+    std::string name{}; // std::string 是所有者
+};
+
+struct Viewer
+{
+    std::string_view name {}; // std::string_view 是查看者
+};
+
+// getName() returns the user-entered string as a temporary std::string
+// This temporary std::string will be destroyed at the end of the full expression
+// containing the function call.
+std::string getName()
+{
+    std::cout << "Enter a name: ";
+    std::string name{};
+    std::cin >> name;
+    return name;
+}
+
+int main()
+{
+    Owner o { getName() };  // The return value of getName() is destroyed just after initialization
+    std::cout << "The owners name is " << o.name << '\n';  // ok
+
+    Viewer v { getName() }; // getName() 返回值是临时值，string视图关联到临时值，临时值销毁，string视图悬空
+    std::cout << "The viewers name is " << v.name << '\n'; // 未定义行为
+
+    return 0;
+}
+#+end_src

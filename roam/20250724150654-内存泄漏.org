@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       6782179f-792b-4eb6-807c-4f95aba88169
+:END:
+#+title: 内存泄漏
+#+filetags: cpp
+
+* 内存泄漏 [[https://www.learncpp.com/cpp-tutorial/dynamic-memory-allocation-with-new-and-delete/][learncpp19.1]]
+可能发生的原因
+1. 指针 超出作用域
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   void doSomething()
+   {
+       int* ptr{ new int{} };
+   }
+   #+end_src
+2. 指针 赋值
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int value = 5;
+   int* ptr{ new int{} }; // allocate memory
+   ptr = &value; // old address lost, memory leak results
+   #+end_src
+3. 为 指针 重新分配内存
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int* ptr{ new int{} };
+   ptr = new int{}; // old address lost, memory leak results
+   #+end_src
+
+* RAII
+1. 用于解决内存泄漏；用类的生命周期自动化管理资源：构造函数中分配资源，析构函数中释放资源

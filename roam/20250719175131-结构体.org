@@ -1,0 +1,285 @@
+:PROPERTIES:
+:ID:       373eed2b-8eaf-4b48-b42a-23e031290e5d
+:END:
+#+title: 结构体(struct)
+#+filetags: cpp
+
+* 结构体 [[https://www.learncpp.com/cpp-tutorial/introduction-to-structs-members-and-member-selection/][learncpp13.7]]
+1. 用户定义的 [[id:99463280-0fa3-491e-82ae-2c3402272509][复合数据类型]]，将 数据成员 和 成员函数 封装在一起，形成自己的一种类型，一般作为 [[id:382ff65a-9dfa-476a-8868-78b7418bcba8][聚合体]] 使用
+
+2. 默认 *访问权限* 为 public，public 继承
+
+3. *初始化* 方式：[fn:1]
+   - *聚合初始化* （结构体是一种 [[id:382ff65a-9dfa-476a-8868-78b7418bcba8][聚合类型]] ）
+   - 使用 =成员选择运算符 .= 初始化
+   - 使用 *另一个结构体* 初始化
+   - 嵌套结构体 使用 *嵌套初始化列表* 初始化
+
+4. *赋值* 方式：
+   - *初始化列表*
+   - 使用 *成员访问运算符* =.= 赋值
+   - 使用 *另一个结构体* 赋值
+   - 嵌套结构体 使用 *嵌套初始化列表* 赋值
+
+5. *访问* 方式：[[https://www.learncpp.com/cpp-tutorial/member-selection-with-pointers-and-references/][learncpp13.12]]
+   - 结构体对象 或 引用： =成员选择运算符 .=
+   - 指针： =箭头运算符 ->= （也称为 指针成员选择运算符）； =ptr->id= 等价于 =(*ptr).id=
+   =->= 支持 *链式调用* [fn:2]（与 =.= 相比更优雅）
+   =->= 与 =.= *混用* =(ptr->id).xx= [fn:3]
+
+6. *应用场景*
+   - 简单的数据存储（可以使用 聚合初始化）
+   - 与 C语言兼容 的数据结构
+
+7. *嵌套结构体* [[https://www.learncpp.com/cpp-tutorial/struct-miscellany/][learncpp13.11]]
+   - 先定义一个 结构体，在 另一个结构体 中作为成员 [fn:7]
+   - 直接在一个 结构体 中嵌套定义 另一个结构体 [fn:8]
+
+8. *结构体大小* 问题，见：[[id:2c06fba7-342c-42ba-a063-176b6c3c8a4d][结构体对齐]]
+
+9. *结构体 与 [[id:77c81947-ba5c-4bad-93da-03bb11cee093][常量(constants)]]* 结构体可以是 const/constexpr 的，必须初始化 [fn:4]
+
+10. *结构体 与 函数* [[https://www.learncpp.com/cpp-tutorial/passing-and-returning-structs/][learncpp13.10]]
+    - 函数参数 :: 可以传递 对象 或 *临时对象* [fn:5]（使用 =const &= 形式，减少复制开销）
+    - 函数返回 :: 可以返回 对象 或 *临时对象* [fn:6]
+
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Employee
+{
+    int id {};
+    int age {};
+    double wage {};
+};
+
+ostream& operator<<(ostream& os, const Employee& e)
+{
+    os << e.id << ' ' << e.age << ' ' << e.wage;
+    return os;
+}
+
+int main()
+{
+    Employee joe {};                  // 使用 成员访问运算符 初始化
+    joe.id = 14;
+    joe.age = 32;
+    joe.wage = 60000.0;
+
+    Employee frank {15, 28, 45000.0}; // 使用 聚合初始化 初始化
+    cout << "joe: " << joe << '\n';
+    cout << "frank: " << frank << '\n';
+
+    frank.id = 111;                   // 使用 成员访问运算符 赋值
+    cout << "frank: " << frank << '\n';
+
+    frank = {1, 1, 1};                // 使用 列表初始化 赋值
+    cout << "frank: " << frank << '\n';
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: joe: 14 32 60000
+: frank: 15 28 45000
+: frank: 111 28 45000
+: frank: 1 1 1
+: joe: 1 1 1
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Point
+{
+    double x {};
+    double y {};
+};
+
+struct Triangle
+{
+    Point* a {}; // 指向 结构体的 指针
+    Point* b {};
+    Point* c {};
+};
+
+int main()
+{
+    Point a {1,2};
+    Point b {3,7};
+    Point c {10,2};
+
+    Triangle tr { &a, &b, &c };
+    Triangle* ptr {&tr};
+
+    // 使用 . 访问
+    std::cout << (*(*ptr).c).y << '\n'; // 丑陋!
+
+    // 使用 -> 访问
+    std::cout << ptr -> c -> y << '\n'; // 优雅！
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+struct Paw
+{
+    int claws{};
+};
+
+struct Animal
+{
+    std::string name{};
+    Paw paw{}; // 不是指向结构体的 指针
+};
+
+int main()
+{
+    Animal puma{ "Puma", { 5 } };
+    Animal* ptr{ &puma };
+
+    // ptr is a pointer, use ->
+    // paw is not a pointer, use .
+    std::cout << (ptr->paw).claws << '\n';
+
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Rectangle
+{
+    double length {};
+    double width {};
+};
+
+int main()
+{
+    const Rectangle unit { 1.0, 1.0 };
+    const Rectangle zero { }; // value-initialize all members
+
+    return 0;
+}
+#+end_src
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Employee
+{
+    int id {};
+    int age {};
+    double wage {};
+};
+
+void printEmployee(const Employee& employee) // note pass by reference here
+{
+    std::cout << "ID:   " << employee.id << '\n';
+    std::cout << "Age:  " << employee.age << '\n';
+    std::cout << "Wage: " << employee.wage << '\n';
+}
+
+int main()
+{
+    Employee joe { 14, 32, 24.15 };
+
+    printEmployee(joe);                        // 传递对象
+    std::cout << '\n';
+    printEmployee(Employee { 14, 32, 24.15 }); // 传递临时对象 (显式指定类型) (推荐)
+    std::cout << '\n';
+    printEmployee({ 15, 28, 18.27 });          // 传递临时对象 (隐式转换为 Employee 类型)
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ID:   14
+Age:  32
+Wage: 24.15
+
+ID:   14
+Age:  32
+Wage: 24.15
+
+ID:   15
+Age:  28
+Wage: 18.27
+#+end_example
+
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Point3d
+{
+    double x { 0.0 };
+    double y { 0.0 };
+    double z { 0.0 };
+};
+
+Point3d getZeroPoint()                 // 返回对象
+{
+    Point3d temp { 0.0, 0.0, 0.0 };
+    return temp;
+}
+
+Point3d getZeroPoint_tmp()             // 返回临时对象（显式指定类型）
+{
+    return Point3d { 0.0, 0.0, 0.0 };
+}
+
+Point3d getZeroPoint2_tmp2()           // 返回临时对象（隐式转换为 Point3d 类型）
+{
+    return { 0.0, 0.0, 0.0 };
+}
+
+[fn:7]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Employee
+{
+    int id {};
+    int age {};
+    double wage {};
+};
+
+struct Company
+{
+    int numberOfEmployees {};
+    Employee CEO {}; // Employee is a struct within the Company struct
+};
+
+int main()
+{
+    Company myCompany{ 7, { 1, 32, 55000.0 } }; // 嵌套初始化列表
+    std::cout << myCompany.CEO.wage << '\n';
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: 55000
+
+[fn:8]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+struct Company
+{
+    struct Employee // accessed via Company::Employee
+    {
+        int id{};
+        int age{};
+        double wage{};
+    };
+
+    int numberOfEmployees{};
+    Employee CEO{}; // Employee 作为 Company 数据成员
+};
+
+int main()
+{
+    Company myCompany{ 7, { 1, 32, 55000.0 } }; // 嵌套初始化列表
+    std::cout << myCompany.CEO.wage << '\n'; // print the CEO's wage
+
+    return 0;
+}
+#+end_src

@@ -1,0 +1,135 @@
+:PROPERTIES:
+:ID:       2c40eca3-bd07-4fda-a1f2-d5fd37040ca9
+:END:
+#+title: std::initializer_list
+#+filetags: cpp
+
+* std::initializer_list [[https://www.learncpp.com/cpp-tutorial/stdinitializer_list/][learncpp23.7]]
+1. cpp11，使得 *类* 可以使用 *列表初始化* 从初始化列表进行初始化 [fn:2]
+2. 是一种 *视图* （复制 std::initializer_list 不会复制列表里的元素），按 *值传递* （非常轻量，比间接引用更廉价）
+3. 列表初始化 会 *优先调用* std::initializer_list 构造函数
+   #+name: 原始
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   #include <initializer_list> // for std::initializer_list
+   class Foo
+   {
+   public:
+     Foo(int, int)
+     {
+       std::cout << "Foo(int, int)" << '\n';
+     }
+   };
+
+   int main()
+   {
+     Foo f1{ 1, 2 }; // 调用 Foo(int, int)
+     return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : Foo(int, int)
+
+   #+name: 添加 列表构造函数
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   #include <initializer_list> // for std::initializer_list
+   class Foo
+   {
+   public:
+     Foo(int, int)
+     {
+       std::cout << "Foo(int, int)" << '\n';
+     }
+     Foo(std::initializer_list<int>) // 增加 列表构造函数
+     {
+       std::cout << "Foo(std::initializer_list<int>)" << '\n';
+     }
+   };
+
+   int main()
+   {
+     Foo f1{ 1, 2 }; // 这里列表初始化了，优先调用 列表构造函数；调用 Foo(std::initializer_list<int>)；NOTE 因为这个优先性，在原有类中添加 列表构造函数 是危险的
+     return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : Foo(std::initializer_list<int>)
+
+4. *底层* ：编译器看到一个初始化列表时，会将它转换为 std::initializer_list 类型的对象 -> 因此构造函数以 std::initializer_list 作为参数时，就能用 初始化列表进行初始化，这样的构造函数称为 *列表构造函数*
+
+5. *访问* std::initializer_list；不能使用 =operator[]= ，解决 [fn:1]
+   1) [[id:1cab172d-a8d4-41c5-810d-e6792a0d1361][基于范围的for循环]]
+   2) 使用成员函数 *begin()*
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <algorithm> // for std::copy
+#include <cassert> // for assert()
+#include <initializer_list> // for std::initializer_list
+
+class IntArray
+{
+private:
+	int m_length {};
+	int* m_data{};
+
+public:
+	IntArray() = default;
+
+	IntArray(int length)
+		: m_length{ length }
+		, m_data{ new int[static_cast<std::size_t>(length)] {} }
+	{
+
+	}
+
+	IntArray(std::initializer_list<int> list) // allow IntArray to be initialized via list initialization
+		: IntArray(static_cast<int>(list.size())) // use delegating constructor to set up initial array
+	{
+		// Now initialize our array from the list
+		std::copy(list.begin(), list.end(), m_data);
+	}
+
+	~IntArray()
+	{
+		delete[] m_data;
+		// we don't need to set m_data to null or m_length to 0 here, since the object will be destroyed immediately after this function anyway
+	}
+
+	IntArray(const IntArray&) = delete; // to avoid shallow copies
+	IntArray& operator=(const IntArray& list) = delete; // to avoid shallow copies
+
+	int& operator[](int index)
+	{
+		assert(index >= 0 && index < m_length);
+		return m_data[index];
+	}
+
+	int getLength() const { return m_length; }
+};
+
+int main()
+{
+	IntArray array{ 5, 4, 3, 2, 1 }; // 初始化列表，调用参数为 std::initializer_list 的构造函数；若没有，则报错
+	for (int count{ 0 }; count < array.getLength(); ++count)
+		std::cout << array[count] << ' ';
+
+	return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+IntArray(std::initializer_list<int> list) // allow IntArray to be initialized via list initialization
+	: IntArray(static_cast<int>(list.size())) // use delegating constructor to set up initial array
+{
+	// Now initialize our array from the list
+	for (std::size_t count{}; count < list.size(); ++count)
+	{
+		m_data[count] = list.begin()[count];
+	}
+}
+#+end_src

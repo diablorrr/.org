@@ -1,0 +1,177 @@
+:PROPERTIES:
+:ID:       ee21abb8-cd89-4207-bbbe-49c4ed887fed
+:END:
+#+title: 函数指针
+#+filetags: cpp
+
+* 函数指针 [[https://www.learncpp.com/cpp-tutorial/function-pointers/][learncpp20.1]]
+1. 是指向函数的指针，调用函数时（ =operator()= ）跳转到函数地址
+   - 函数名 :: 是标识符，在需要函数指针的地方可以 *隐式转换为函数指针*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int foo() // foo 代码在内存地址 0x002717f0 开始
+   {
+       return 5;
+   }
+
+   int main()
+   {
+       foo(); // 通过 operator() 跳到地址 0x002717f0
+       cout << foo() << '\n'; // 输出 函数调用的返回值
+       cout << foo << '\n';   // NOTE 这里函数名隐式转换为指针，函数指针非空，因此转换成的 bool 值为true（即 1）
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : 5
+   : 1
+
+2. 函数指针 *初始化* 与 *赋值* ；能用 [[id:bee683d2-eec4-45a8-af02-be369d182e8d][auto]] 进行类型推断
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int (*fcnPtr)(int);       // fcnPtr指针
+   int (const *fcnPtr)();    // 常量fcnPtr指针
+
+   int foo(){}
+   int goo(){}
+
+   int (*fcnPtr2)(int){ &foo }; // 初始化 fcnPtr2指针，指向 foo 函数
+   // auto fcnPtr2 { &foo }; NOTE 使用auto，更简单
+
+   fcnPtr2 = &goo;           // fcnPtr2 现在指向 goo 函数
+   // FIXME fcnPtr2 = goo()  这是尝试将 goo的返回值赋给 fcnPtr2
+
+   int foo_int(int x) { return x + 1; }
+   using Ptr = int (*)(int); // 用 using 类型别名，简化使用
+   Ptr p { foo_int };        // 初始化
+   p(1);                     // 调用
+   #+end_src
+
+3. 函数指针 *调用函数*
+   1) 显式解引用
+   2) 隐式解引用
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int foo(int x) { return x; }
+
+   int main()
+   {
+       int (*fcnPtr)(int){ &foo }; // 初始化 fcnPtr 指向函数 foo
+       cout << (*fcnPtr)(5) << '\n'; // 显式解引用调用 foo(5)
+       cout << fcnPtr(6) << '\n';    // 隐式解引用调用 foo(6)
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : 5
+   : 6
+
+4. *使用场景* ：
+   1) 回调函数（作为函参传到其他函数的函数）[fn:1]
+   2) 将函数 存储在数组 中
+
+5. *std::function* （cpp11）：用于定义和存储函数指针； *只允许隐式解引用*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   #include <functional>
+
+   bool validate(int x, int y, std::function<bool(int, int)> fcn); // 作为参数
+
+   int foo() { return 5; }
+   int goo(){ return 6; }
+
+   int main()
+   {
+       std::function<int()> fcnPtr{ &foo }; // 定义+初始化 函数指针
+       fcnPtr = &goo; // fcnPtr 指向 goo函数
+       std::cout << fcnPtr() << '\n'; // 调用函数 NOTE std::function 只允许隐式解引用；FIXME (*fcnPtr)() 不允许
+       std::function fcnPtr2{ &foo }; // NOTE CTAD 推导模板参数
+       return 0;
+   }
+   #+end_src
+
+6. [[id:15357ed3-3530-4c07-b743-9af983e05e96][类型别名(using、typedef)]]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   bool validate(int x, int y, bool (*fcnPtr)(int, int)); // 丑陋
+
+   using ValidateFunction = bool(*)(int, int);            // 优雅：原始函数指针的别名
+   using ValidateFunction = std::function<bool(int, int)>; // 优雅：std::function的别名
+
+   bool validate(int x, int y, ValidateFunction pfcn) // 函数中使用定义好的别名
+   #+end_src
+
+7. *函数参数中的函数类型* ，会自动转换为函数指针；可以使用 *默认函数*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // 函数类型形式，转换为函数指针
+   void selectionSort(int* array, int size, bool comparisonFcn(int, int))
+   // 函数指针形式
+   void selectionSort(int* array, int size, bool (*comparisonFcn)(int, int))
+
+   // 默认使用升序排序
+   void selectionSort(int* array, int size, bool (*comparisonFcn)(int, int) = ascending);
+   #+end_src
+
+
+
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <utility>
+// 选择排序：比较函数的函数指针作为第三个参数，用于选择 升序排序 or 降序排序
+void selectionSort(int* array, int size, bool (*comparisonFcn)(int, int))
+{
+    if (!array || !comparisonFcn)
+        return;
+    for (int startIndex{ 0 }; startIndex < (size - 1); ++startIndex)
+    {
+        int bestIndex{ startIndex };
+        for (int currentIndex{ startIndex + 1 }; currentIndex < size; ++currentIndex)
+        {
+            // 这里使用 比较函数
+            if (comparisonFcn(array[bestIndex], array[currentIndex]))
+            {
+                bestIndex = currentIndex;
+            }
+        }
+        std::swap(array[startIndex], array[bestIndex]);
+    }
+}
+
+// 比较函数：升序
+bool ascending(int x, int y)
+{
+    return x > y;
+}
+
+// 比较函数：降序
+bool descending(int x, int y)
+{
+    return x < y;
+}
+
+void printArray(int* array, int size)
+{
+    if (!array)
+        return;
+    for (int index{ 0 }; index < size; ++index)
+    {
+        std::cout << array[index] << ' ';
+    }
+    std::cout << '\n';
+}
+
+int main()
+{
+    int array[9]{ 3, 7, 9, 5, 6, 1, 8, 2, 4 };
+
+    // 降序排序数组
+    selectionSort(array, 9, descending);
+    printArray(array, 9);
+
+    // 升序排序数组
+    selectionSort(array, 9, ascending);
+    printArray(array, 9);
+
+    return 0;
+}
+#+end_src

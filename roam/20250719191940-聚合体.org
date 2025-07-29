@@ -1,0 +1,54 @@
+:PROPERTIES:
+:ID:       382ff65a-9dfa-476a-8868-78b7418bcba8
+:END:
+#+title: 聚合体
+#+filetags: cpp
+
+* 聚合类型 = 聚合体 [[https://www.learncpp.com/cpp-tutorial/struct-aggregate-initialization/][learncpp13.8]]
+1. 可以包含包含多种类型的数据成员，聚合体可以使用 *聚合初始化* 初始化成员变量
+   非聚合体 使用 [[id:50402d44-720e-42ed-b590-2b18d219acc1][构造函数]] 初始化
+
+2. *哪些属于聚合体？*
+   - 满足以下条件的 类类型（[[id:373eed2b-8eaf-4b48-b42a-23e031290e5d][结构体]]、[[id:d63526f2-db09-4c79-8a1a-57d6a7d82ec9][类]]、联合体）
+     + 无 自定义构造函数
+     + 无 private 或 protected 的 非static数据成员（因此默认的类 无法使用聚合初始化）
+     + 无 虚函数
+   - C风格数组（数组）
+
+3. *聚合初始化* 用 ={}= 直接初始化成员，意味着 *我们知道类的实现* -> 因此 private 隐藏的类类型 是希望隐藏实现的
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   struct Employee
+   {
+       int id {};
+       int age { 64 };
+       double wage ;
+   };
+
+   ostream& operator<<(ostream& out, const Employee& e)
+   {
+       out << e.id << ' ' << e.age << ' ' << e.wage;
+       return out;
+   }
+
+   int main()
+   {
+       Employee test;                     // 默认初始化：内部 wage 默认初始化了 为随机值
+       Employee yoshiki { };              // 聚合初始化（值初始化）：内部 wage 值初始化了 为 0
+       Employee frank { 1, 32, 60000.0 }; // 聚合初始化（全部初始化）
+       Employee joe { 2, 28 };            // 聚合初始化（部分初始化）
+
+       cout << "test：" << test << '\n';
+       cout << "yoshiki：" << yoshiki << '\n';
+       cout << "frank：" << frank << '\n';
+       cout << "joe：" << joe << '\n';
+
+       return 0;
+   }
+   #+end_src
+
+   #+RESULTS:
+   : test：0 64 6.94936e-310
+   : yoshiki：0 64 0
+   : frank：1 32 60000
+   : joe：2 28 0
+

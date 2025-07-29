@@ -1,0 +1,324 @@
+:PROPERTIES:
+:ID:       926134dd-d8b9-4358-a89d-e84ce92a735f
+:END:
+#+title: lambda表达式
+#+filetags: cpp
+
+* lambda表达式 [[https://www.learncpp.com/cpp-tutorial/introduction-to-lambdas-anonymous-functions/][learncpp20.6]]
+1. lambda表达式 本质上是 *匿名[[id:077d1dca-3cdc-4702-bd47-67940bc06ae6][仿函数]]*
+   编译器遇到 *lambda定义* 会生成一个实现了 =operator()= 的匿名类对象
+   *调用lambda* 就是 对这个匿名对象调用 =operator()= ； *语法* 如下
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   [ captureClause ] ( parameters ) -> returnType
+   {
+       statements;
+   }
+
+   // captureClause 可以省略，但是 [] 得有
+   // returnType 可以省略
+   // parameters 可以为空；如果没指定 returnType；则 () 也能省略
+   []{}; // 省略的终极形态
+   #+end_src
+
+2. 类型是 *闭包类型* ；每个 lambda表达式 的类型都是独一无二的（很好理解，因为本质是匿名类对象，类名就是类型名），因此一般用 =auto= 推导类型，总结 *存储* lambda表达式 的方式
+   1) [[id:bee683d2-eec4-45a8-af02-be369d182e8d][auto]]（good）
+   2) [[id:d039ee4a-6ede-4314-b35d-e9adf902c8e9][std::function]]：lambda 隐式转换为 std::function
+   3) [[id:ee21abb8-cd89-4207-bbbe-49c4ed887fed][函数指针]]     ：无捕获lambda（[]为空） 隐式转换为 函数指针
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <functional>
+   // 函数指针 [] 必须为空才行
+   double (*addNumbers1)(double, double){
+     [](double a, double b) {
+       return a + b;
+     }
+   };
+   addNumbers1(1, 2);
+
+   // std::function [] 可以不空
+   std::function addNumbers2{ // cpp17 的 CTA：std::function<double(double, double)>
+     [](double a, double b) {
+       return a + b;
+     }
+   };
+   addNumbers2(3, 4);
+
+   // auto（推荐）
+   auto addNumbers3{
+     [](double a, double b) {
+       return a + b;
+     }
+   };
+   addNumbers3(5, 6);
+   #+end_src
+
+3. *返回类型推导* 从内部 return语句 推导出，所有 return 需要返回相同的类型 （否则编译器不知道优先选择哪种类型）；若返回类型不同，解决方案：
+   1) 显式类型转换，让所有返回类型匹配
+   2) 使用 *后置返回类型* 让编译器进行隐式转换（good）
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int main()
+   {
+     // FIXME 发生错误的情况：两个 return 返回类型不同
+     // auto divide{ [](int x, int y, bool intDivision) {
+     //   if ...
+     //     return x / y;                      // int
+     //   else
+     //     return static_cast<double>(x) / y; //double
+     // }
+
+     // 显式指定 后置返回类型
+     auto divide{ [](int x, int y, bool intDivision) -> double {
+       if (intDivision)
+         return x / y; // 编译器根据 后置返回类型 进行隐式转换
+       else
+         return static_cast<double>(x) / y;
+     } };
+
+     std::cout << divide(3, 2, true) << '\n';
+     std::cout << divide(3, 2, false) << '\n';
+
+     return 0;
+   }
+   #+end_src
+
+4. *lambda捕获* [[https://www.learncpp.com/cpp-tutorial/lambda-captures/][learncpp20.7]]
+   值捕获、引用捕获
+   1) *为什么需要* 捕获子句？
+      #+begin_example
+      虽然一般 lambda 作为函数参数，是嵌套块的形式，但与一般 嵌套块（外部块中可访问的标识符在嵌套块中也可访问）不同，lambda 只能访问外部块中特定类型：
+      1. 静态生命周期的对象（包括：全局变量和静态变量）
+      2. 常量表达式对象
+      因此需要捕获子句去访问外部块中的标识符
+      #+end_example
+   2) *值捕获 工作原理* ：值捕获的变量，在lambda内部创建一个外部变量的拷贝（名称相同且用外部变量初始化）作为 成员变量（因为 lambda是匿名类对象）
+   3) 值捕获 的变量是 *常量* [fn:2]，使用 =mutable= 才能修改（修改的是内部的副本） [fn:3]
+      引用捕获 的变量 *不是常量* ，可以修改捕获的变量 [fn:4]
+   4) *默认捕获* ：
+      === 值捕获所有变量
+      =&= 引用捕获所有变量
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      int health{ 33 };
+      int armor{ 100 };
+      std::vector<CEnemy> enemies{};
+
+      // 值捕获 health、armor, 引用捕获 enemies
+      [health, armor, &enemies](){};
+      // 引用捕获 enemies，值捕获 其他所有
+      [=, &enemies](){};
+      // 值捕获 armor，引用捕获 其他所有
+      [&, armor](){};
+      #+end_src
+   5) *捕获的同时定义新变量*
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      // 捕获外部的 width、height 定义新变量 userArea
+      [userArea{ width * height }](int knownArea)
+      {
+        return userArea == knownArea
+      }
+      #+end_src
+   6) 悬空捕获变量[fn:5]、可变lambda表达式的意外副本[fn:6]
+
+5. lambda表达式 *作为函参*
+   1) std::function
+   2) 函数指针（[]得为空）
+   3) 函数模板（const T&）
+   4) 函数模板（const auto&）cpp20
+      #+begin_src cpp :results output :namespaces std :includes <iostream> <functional>
+      // std::function
+      void repeat1(int repetitions, const std::function<void(int)>& fn)
+      {
+          for (int i{ 0 }; i < repetitions; ++i)
+              fn(i);
+      }
+
+      // 函数指针（[]必须为空）
+      void repeat2(int repetitions, void (*fn)(int))
+      {
+          for (int i{ 0 }; i < repetitions; ++i)
+              fn(i);
+      }
+
+      // 带类型参数的 函数模板
+      template <typename T>
+      void repeat3(int repetitions, const T& fn)
+      {
+          for (int i{ 0 }; i < repetitions; ++i)
+              fn(i);
+      }
+
+      // cpp20 auto 函数模板？
+      void repeat4(int repetitions, const auto& fn)
+      {
+          for (int i{ 0 }; i < repetitions; ++i)
+              fn(i);
+      }
+      int main()
+      {
+          auto lambda = [](int i)
+          {
+              std::cout << i << '\n';
+          };
+          repeat1(3, lambda);
+          repeat2(3, lambda);
+          repeat3(3, lambda);
+          repeat4(3, lambda);
+          return 0;
+      }
+      #+end_src
+
+6. cpp14 *泛型lambda表达式*
+   - 可以在 *参数中用auto* ，从 lambda表达式 *调用中 推导参数类型* [fn:1]
+
+7. cpp17 *constexpr lambda表达式* ：满足以下要求，会被隐式声明为 constexpr
+   1) 不捕获变量 或 捕获变量都是 constexpr
+   2) lambda调用的函数必须是 constexpr
+
+* Footnotes
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int main()
+{
+  int i{ 0 };
+
+  auto count{ [i]() mutable {
+    std::cout << ++i << '\n';
+  } };
+
+  count(); // 调用 count -> ++i；count 内部的成员变量 i = 1
+
+  auto otherCount{ count }; // 拷贝 count；otherCount 内部的成员变量 i = 1（同 count）
+
+  count();                  // 调用 count -> ++i；count 内部的成员变量 i = 2
+  otherCount();             // 调用 otherCount -> ++i；otherCount 内部的成员变量 i = 2
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+: 1
+: 2
+: 2
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+auto makeWalrus(const std::string& name)
+{
+  // 引用捕获 name
+  return [&]() {
+    std::cout << "I am a walrus, my name is " << name << '\n'; // FIXME 3.
+  };
+}
+
+int main()
+{
+  // 1. 用 "Roofus" 创建临时的 std::string ，lambda 引用捕获这个临时字符串；临时字符串 在 makeWalrus("Roofus") 调用后消亡，但是 sayName 之后又引用它，悬空引用
+  auto sayName{ makeWalrus("Roofus") };
+
+  // 2. sayName悬空引用，又进行调用
+  sayName();
+
+  return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int main()
+{
+  int ammo{ 10 };
+
+  auto shoot{
+    // 引用捕获
+    [&ammo]() {
+      // 修改 ammo
+      --ammo;
+
+      std::cout << "Pew! " << ammo << " shot(s) left.\n";
+    }
+  };
+
+  shoot();
+
+  std::cout << ammo << " shot(s) left\n";
+
+  return 0;
+}
+#+end_src
+
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int main()
+{
+  int ammo{ 10 };
+
+  auto shoot{
+    [ammo]() mutable { // 现在是 mutable
+      // 现在可以修改 ammo
+      --ammo;
+
+      std::cout << "Pew! " << ammo << " shot(s) left.\n";
+    }
+  };
+
+  shoot();
+  shoot();
+
+  std::cout << ammo << " shot(s) left\n";
+
+  return 0;
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int main()
+{
+  int ammo{ 10 };
+
+  // Define a lambda and store it in a variable called "shoot".
+  auto shoot{
+    [ammo]() {
+      // FIXME ammo 不能修改，因为 值捕获的是常量
+      --ammo;
+
+      std::cout << "Pew! " << ammo << " shot(s) left.\n";
+    }
+  };
+
+  // Call the lambda
+  shoot();
+
+  std::cout << ammo << " shot(s) left\n";
+
+  return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <algorithm>
+#include <array>
+#include <iostream>
+#include <string_view>
+
+int main()
+{
+  // Print a value and count how many times @print has been called.
+  auto print{
+    [](auto value) {
+      static int callCount{ 0 }; // 这里是static变量，我们的print有两种 C字符串字面量、整型字面量，因此我们有两个 lambda，它们之间的计数不共享，因此造成下面的次序
+      std::cout << callCount++ << ": " << value << '\n';
+    }
+  };
+
+  print("hello"); // 0: hello
+  print("world"); // 1: world
+
+  print(1); // 0: 1
+  print(2); // 1: 2
+
+  print("ding dong"); // 2: ding dong
+
+  return 0;
+}
+#+end_src

@@ -2,6 +2,7 @@
 :ID:       9d212108-8cbf-4bec-86d4-924a4a77b1e1
 :END:
 #+title: 定位new
+#+filetags: del
 
 * 概念
 - 定位new(Placement new) ::

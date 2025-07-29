@@ -1,0 +1,113 @@
+:PROPERTIES:
+:ID:       e7b7b040-3ef4-468a-9d7f-27e50e774ba3
+:END:
+#+title: transformer decoder(CausalLM)
+#+filetags: deep_learning
+
+* transformer decoder(CausalLM) [[https://yuanchaofa.com/hands-on-code/hands-on-causallm-decoder.html#%E7%9F%A5%E8%AF%86%E7%82%B9][博客]]
+- =transformer decoder= 的流程
+  input -> self-attention -> cross-attention -> FFN
+- =causalLM decoder= 的流程
+  input -> [[id:e4f3deb0-fe49-45d2-85e7-2cc715ad6b1f][self-attention]] -> FFN（[self-attention、FFN] 是一个 Block ，有 N 个）
+#+begin_src python
+import math
+import torch
+import torch.nn as nn
+
+# 写一个 Block
+class SimpleDecoder(nn.Module):
+    def __init__(self, hidden_dim, nums_head, dropout=0.1):
+        super().__init__()
+
+        # self-attention
+        self.nums_head = nums_head
+        self.head_dim = hidden_dim // nums_head
+
+        self.dropout = dropout
+
+        self.layernorm_att = nn.LayerNorm(hidden_dim, eps=0.00001)
+
+        self.q_proj = nn.Linear(hidden_dim, hidden_dim)
+        self.k_proj = nn.Linear(hidden_dim, hidden_dim)
+        self.v_proj = nn.Linear(hidden_dim, hidden_dim)
+        self.o_proj = nn.Linear(hidden_dim, hidden_dim)
+
+        self.drop_att = nn.Dropout(self.dropout)
+
+        # FFN
+        self.up_proj = nn.Linear(hidden_dim, hidden_dim*4)
+        self.down_proj = nn.Linear(hidden_dim*4, hidden_dim)
+        self.layernorm_ffn = nn.LayerNorm(hidden_dim, eps=0.00001)
+        self.act_fn = nn.ReLU()
+
+        self.drop_ffn = nn.Dropout(self.dropout)
+
+
+    def attention_output(self, query, key, value, attention_mask=None):
+        key = key.transpose(2, 3) # (batch, nums_head, head_dim, seq)
+        att_weight = query @ key / math.sqrt(self.head_dim) # (batch, nums_head, seq, seq)
+
+        if attention_mask is not None:
+            # 用提供的 mask，生成下三角矩阵
+            attention_mask = attention_mask.tril()
+            att_weight = att_weight.masked_fill(attention_mask == 0, float("-1e20"))
+        else:
+            # 构造下三角都是1的下三角矩阵
+            attention_mask = torch.ones_like(att_weight).tril()
+            att_weight = att_weight.masked_fill(attention_mask == 0, float("-1e20"))
+
+        att_weight = torch.softmax(att_weight, dim=-1)
+        print(att_weight)
+
+        att_weight = self.drop_att(att_weight)
+
+        mid_output = att_weight @ value # (batch, nums_head, seq, head_dim)
+
+        mid_output = mid_output.transpose(1, 2).contiguous()
+        batch, seq, _, _ = mid_output.size()
+        mid_output = mid_output.view(batch, seq, -1) # (batch, seq, hidden_dim)
+
+        output = self.o_proj(mid_output)
+        return output
+
+
+    def attention_block(self, X, attention_mask=None):
+        batch, seq, _ = X.size()
+        # (batch, nums_head, seq, head_dim)
+        query = self.q_proj(X).view(batch, seq, self.nums_head, -1).transpose(1, 2)
+        key = self.k_proj(X).view(batch, seq, self.nums_head, -1).transpose(1, 2)
+        value = self.v_proj(X).view(batch, seq, self.nums_head, -1).transpose(1, 2)
+
+        output = self.attention_output(
+            query,
+            key,
+            value,
+            attention_mask=attention_mask,
+        )
+        # 层归一化 + 残差连接
+        return self.layernorm_att(X + output)
+
+
+    def ffn_block(self, X):
+        up = self.act_fn(self.up_proj(X))
+        down = self.down_proj(up)
+        down = self.drop_ffn(down)
+        return self.layernorm_ffn(X + down)
+
+
+    def forward(self, X, attention_mask=None):
+        # X (batch, seq, hidden_dim)
+        att_output = self.attention_block(X, attention_mask=attention_mask)
+        ffn_output = self.ffn_block(att_output)
+        return ffn_output
+
+
+x = torch.rand(3, 4, 64)
+net = SimpleDecoder(64, 8)
+mask = (
+    torch.tensor([[1, 1, 1, 1], [1, 1, 0, 0], [1, 1, 1, 0]])
+    .unsqueeze(1).unsqueeze(2).repeat(1, 8, 4, 1)
+)
+
+net(x, mask).shape
+#+end_src

@@ -4,16 +4,269 @@
 #+title: torch.Tensor
 #+filetags: pytorch
 
+* torch.Tensor.matmul [[https://blog.csdn.net/foneone/article/details/103876519][csdn]]
+矩阵乘法，等价于 =@=
+*规则* ：
+1. input、other 都是 1D -> 点积
+   - 点积 :: 对应元素相乘后相加
+   #+begin_src python
+   x = torch.rand(2)
+   y = torch.rand(2)
+   torch.matmul(x,y).size() # torch.Size([])
+   #+end_src
+2. input、other 都是 2D -> 矩阵乘法
+   #+begin_src python
+   x = torch.rand(2,4)
+   y = torch.rand(4,3)       # 维度也要对应才可以乘
+   torch.matmul(x,y).size()  # torch.Size([2, 3])
+   #+end_src
+3. input 1D、other 2D   -> input 广播到 2D（input前加一维），矩阵乘法得到结果后去掉此维度
+   #+begin_src python
+   x = torch.rand(4)   # 1D
+   y = torch.rand(4,3) # 2D
+   torch.matmul(x,y).size() # torch.Size([3])
+
+   # 扩充x =>(,4)
+   # 相乘x(,4) * y(4,3) =>(,3)
+   # 去掉1D =>(3)
+
+   #+end_src
+4. input 1D、other > 2D -> 规则同 =3.=
+   #+begin_src python
+   y = torch.randn(3)
+   x = torch.randn(2, 3, 4)
+   torch.matmul(y, x).size() # torch.Size([2, 4])
+   #+end_src
+5. input 2D、other 1D   -> 点积
+   #+begin_src python
+   y = torch.rand(4,3) # 2D
+   x = torch.rand(3)   # 1D
+   torch.matmul(y,x).size() # torch.Size([4])
+   #+end_src
+6. input > 2D、other 1D -> 规则同 =5.=
+   #+begin_src python
+   x = torch.randn(2, 3, 4)
+   y = torch.randn(4)
+   torch.matmul(x, y).size() # torch.Size([2, 3])
+   #+end_src
+7. input ND、other ND -> *最右边两维 矩阵乘法，前边维度广播*
+   #+begin_src python
+   x = torch.randn(2,2,4)
+   y = torch.randn(2,4,5)
+   torch.matmul(x, y).size() # torch.Size([2, 2, 5])
+   #+end_src
+   此例 维度数不同，依旧广播
+   #+begin_src python
+   x = torch.randn(10,1,2,4)
+   y = torch.randn(2,4,5)
+   torch.matmul(x, y).size() # torch.Size([10, 2, 2, 5])
+   #+end_src
+
+
 * torch.Tensor.permute
-调整张量维度顺序
+调整维度顺序
 #+begin_src python
 x = torch.randn(3, 5, 2)
 y = x.permute(1, 2, 0)     # 形状变为 (5, 2, 3)
 #+end_src
 
 
+* torch.Tensor.transpose
+返回输入张量的转置版本，交换 dim0 和 dim1
+#+begin_src python
+x = torch.randn(2, 3)
+x
+# 输出：
+# tensor([[-0.6609,  1.0183, -0.0085],
+#        [ 0.6677,  2.1739, -0.9496]])
+
+torch.transpose(x, 0, 1)      # 交换 dim0 和 dim1
+# 输出：
+# tensor([[-0.6609,  0.6677],
+#        [ 1.0183,  2.1739],
+#        [-0.0085, -0.9496]])
+#+end_src
+
+
+* torch.Tensor.unsqueeze
+在张量里面插入新维度（该维度长度为1）
+#+begin_src python
+x = torch.tensor([1, 2, 3])  # 形状 [3]
+y = x.unsqueeze(0)           # 在维度0插入新维度
+
+print("x.shape:", x.shape)   # torch.Size([3])
+print("y.shape:", y.shape)   # torch.Size([1, 3])
+
+
+x = torch.rand(2, 3)         # 形状 [2, 3]
+y = x.unsqueeze(1)           # 在维度1插入新维度
+
+print("y.shape:", y.shape)   # torch.Size([2, 1, 3])
+#+end_src
+
+
+* torch.Tensor.repeat
+在张量指定维度重复，返回新张量
+#+begin_src python
+x = torch.tensor([1, 2, 3])
+x.repeat(4, 2)
+# tensor([[ 1,  2,  3,  1,  2,  3],
+#         [ 1,  2,  3,  1,  2,  3],
+#         [ 1,  2,  3,  1,  2,  3],
+#         [ 1,  2,  3,  1,  2,  3]])
+
+b = torch.tensor(
+    [
+        [1, 1, 1, 0],
+        [1, 1, 0, 0],
+        [1, 0, 0, 0],
+    ]
+)
+print(b.size())
+mask = b.unsqueeze(dim=1)
+print(mask.size())
+print(mask)
+
+mask.repeat(1,4,1)
+
+# torch.Size([3, 4])
+# torch.Size([3, 1, 4])
+# tensor([[[1, 1, 1, 0]],
+
+#         [[1, 1, 0, 0]],
+
+#         [[1, 0, 0, 0]]])
+# tensor([[[1, 1, 1, 0],
+#          [1, 1, 1, 0],
+#          [1, 1, 1, 0],
+#          [1, 1, 1, 0]],
+
+#         [[1, 1, 0, 0],
+#          [1, 1, 0, 0],
+#          [1, 1, 0, 0],
+#          [1, 1, 0, 0]],
+
+#         [[1, 0, 0, 0],
+#          [1, 0, 0, 0],
+#          [1, 0, 0, 0],
+#          [1, 0, 0, 0]]])
+#+end_src
+
+
+* torch.Tensor.split
+将张量切成块
+#+begin_src python
+a = torch.arange(10).reshape(5, 2)
+a
+# tensor([[0, 1],
+#         [2, 3],
+#         [4, 5],
+#         [6, 7],
+#         [8, 9]])
+
+torch.split(a, 2)   # 第2个参数：块的大小
+                    # 第3个参数：在哪个维度切分；默认dim=0
+# (tensor([[0, 1],
+#          [2, 3]]),
+#  tensor([[4, 5],
+#          [6, 7]]),
+#  tensor([[8, 9]]))
+
+torch.split(a, [1, 4])
+# (tensor([[0, 1]]),
+#  tensor([[2, 3],
+#          [4, 5],
+#          [6, 7],
+#          [8, 9]]))
+#+end_src
+
+
+* torch.Tensor.masked_fill
+masked_fill(mask, value)
+- mask：与目标张量形状一样的布尔张量（决定哪些位置被替换）
+- value：填充的值
+#+name: bool元素的 mask矩阵
+#+begin_src python
+x = torch.tensor([[1, 2, 3],
+                  [4, 5, 6]])
+mask = torch.tensor([[True, False, True],     # 掩码（True 的位置会被替换）
+                     [False, True, False]])
+result = x.masked_fill(mask, 0)               # 替换的值为0
+print(result)
+
+# tensor([[0, 2, 0],
+#         [4, 0, 6]])
+#+end_src
+#+name: 0 1 元素的 mask矩阵
+#+begin_src python
+x = torch.tensor([[1, 2, 3],
+                  [4, 5, 6]])
+mask = torch.tensor([[1, 1, 0],
+                     [1, 0, 0]])
+result = x.masked_fill(mask == 0, 0) # mask矩阵中 0 对应的位置替换为 0
+# tensor([[1, 2, 0],
+#         [4, 0, 0]])
+
+x = torch.tensor([[1, 2, 3],
+                  [4, 5, 6]])
+mask = torch.tensor([[1, 1, 0],
+                     [1, 0, 0]])
+result = x.masked_fill(mask == 1, 0) # mask矩阵中 1 对应的位置替换为 0
+# tensor([[0, 0, 3],
+#         [0, 5, 6]])
+#+end_src
+
+是 =torch.Tensor.masked_fill_= 的 Out-of-place（非原位版本）
+- out-of-place（非原位版本） :: 会返回新张量，原张量保持不变
+- in-place（原位版本） :: 直接修改原张量
+
+
+* torch.Tensor.tril
+生成下三角
+#+begin_src python
+a = torch.randn(3, 3)
+a
+# tensor([[-1.0813, -0.8619,  0.7105],
+#         [ 0.0935,  0.1380,  2.2112],
+#         [-0.3409, -0.9828,  0.0289]])
+torch.tril(a)
+# tensor([[-1.0813,  0.0000,  0.0000],
+#         [ 0.0935,  0.1380,  0.0000],
+#         [-0.3409, -0.9828,  0.0289]])
+#+end_src
+  
+
 * torch.Tensor.view [[https://zhuanlan.zhihu.com/p/721855580][知乎]]
 用于改变张量形状， *共享原张量的底层数据* ，因此对 view 修改会改变底层张量数据
+#+begin_src python
+x = torch.randn(4, 4)
+x.size()
+# torch.Size([4, 4])
+
+y = x.view(16)
+y.size()
+# torch.Size([16])
+
+z = x.view(-1, 8)  # -1 是占位符，由其他维度推导
+z.size()
+# torch.Size([2, 8])
+
+a = torch.randn(1, 2, 3, 4)
+a.size()
+# torch.Size([1, 2, 3, 4])
+
+b = a.transpose(1, 2)  # 交换 2，3 维度
+b.size()
+# torch.Size([1, 3, 2, 4])
+
+c = a.view(1, 3, 2, 4)
+c.size()
+# torch.Size([1, 3, 2, 4])
+
+torch.equal(b, c)
+# view 没有改变内存中的张量布局，因此 False
+
+#+end_src
 - 使用条件 :: 张量满足 *内存连续性* ；可以用 =torch.Tensor.is_contiguous= 判断，使用 =torch.Tensor.contiguous= 将不连续张量转为连续张量；有些操作会改变步长（内存中数据的访问方式），导致内存不连续
   + 内存连续性 :: 数据在内存中以行优先顺序存储
   + 步长 :: 定义了如何访问内存中的数据：描述了 *维度之间 移动所需的步数* ；通过 =torch.Tensor.stride= 查看
@@ -24,3 +277,4 @@ y = x.permute(1, 2, 0)     # 形状变为 (5, 2, 3)
     4           ：从当前行到下一行 需要 4 步（一行4列）
     1           ：从当前列到下一列 需要 1 步
     #+end_example
+

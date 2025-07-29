@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       1491881a-65d2-41da-9069-0067bb7f8ebc
+:END:
+#+title: 栈
+#+filetags: cpp
+
+* 栈 [[https://www.learncpp.com/cpp-tutorial/the-stack-and-the-heap/][learncpp20.2]]
+1. 调用栈记录了 *从程序开始到当前调用点的所有函数上下文* ；每个被调用的函数以 *栈帧* 的形式存在调用栈中，在栈上 *分配内存的速度较快* ，栈帧 包含：
+   a. 返回地址（CPU 在函数调用结束后通过这个地址返回）
+   b. 函参、局部变量
+   c. 调用上下文（相关寄存器）
+
+2. 调用栈的 *工作流程*
+   函数调用：
+   1) 遇到调用函数，系统 *创建栈帧压入栈* 中
+   2) CPU 跳转到函数起始点
+   3) 执行函数内部指令
+
+   函数返回：
+   1) 函数执行结束，从 栈帧 恢复寄存器
+   2) 弹出栈帧（这会释放所有局部变量、函数参数）
+   3) CPU 根据返回地址跳回原函数 继续执行
+   4) 处理返回值
+
+3. *栈溢出的场景*
+   1) 栈上分配的过多的变量
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      int main()
+      {
+          int stack[10000000]; // 在栈上分配了一个巨大的数组，FIXME 栈溢出
+          std::cout << "hi" << stack[0]; // we'll use stack[0] here so the compiler won't optimize the array away
+          return 0;
+      }
+      #+end_src
+   2) 递归调用

@@ -2,7 +2,7 @@
 :ID:       cd7d4584-5f14-4a6e-80d4-152e09befe45
 :END:
 #+title: 引用折叠
-#+filetags: cpp
+#+filetags: cpp del
 
 * 查询
 - 规则 ::

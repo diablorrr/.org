@@ -1,0 +1,99 @@
+:PROPERTIES:
+:ID:       c60053e0-0b27-4e96-a46d-5945713a664d
+:END:
+#+title: 命令行参数
+#+filetags: cpp
+
+* 命令行参数 [[https://www.learncpp.com/cpp-tutorial/command-line-arguments/][learncpp20.4]]
+1. 用于在程序外部给程序传参
+   #+begin_example
+   给程序输入的两种方式：程序内输入（std::cin）、程序外输入（命令行参数）
+   使用 std::cin 就得每次在程序运行的时候输入，假设一个程序每次处理一张图片，我们需要反反复复启动程序，然后输入...
+   因此考虑用 命令行参数
+   #+end_example
+
+2. =argc= 代表参数个数、 =argv= 代表参数
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   int main(int argc, char* argv[])
+   int main(int argc, char** argv)  // 等价形式
+   #+end_src
+
+   1) argc 参数从 0开始，依次是： =正在运行的程序路径和名称 参数1 参数2...=
+      #+begin_src cpp :results output :namespaces std :includes <iostream> :cmdline myfile 100
+      // 命令行中程序路径和名称：/tmp/babel-WDQeyq/C-bin-tKs22K
+      // 命令行中参数1：myfile
+      // 命令行中参数2：100
+      int main(int argc, char* argv[])
+      {
+          std::cout << "There are " << argc << " arguments:\n";
+          // 因为 argv是 已退化的C风格数组，因此不能用 范围for循环
+          for (int count{ 0 }; count < argc; ++count)
+          {
+              std::cout << count << ' ' << argv[count] << '\n';
+          }
+          return 0;
+      }
+      #+end_src
+
+      #+RESULTS:
+      : There are 3 arguments:
+      : 0 /tmp/babel-WDQeyq/C-bin-tKs22K
+      : 1 myfile
+      : 2 100
+
+   2) 解析命令行参数： =\= =""= =空格= 分别有不同功能
+      #+begin_example
+      输入参数：MyArgs Hello world!
+      3个参数分别是
+      MyArgs
+      Hello
+      world!
+
+      输入参数：MyArgs "Hello, world!"
+      2个参数分别是
+      MyArgs
+      "Hello, world!"
+
+      输入参数：MyArgs \"Hello world!\"
+      3个参数分别是
+      MyArgs
+      "Hello
+      world!"
+      #+end_example
+
+
+   3) *argv 传入的都是 C风格字符串* ；cpp的方式处理，使用 =std::stringstream= [fn:1]
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> :cmdline "567"
+#include <sstream> // for std::stringstream
+#include <string>
+
+int main(int argc, char* argv[])
+{
+  if (argc <= 1)
+  {
+    if (argv[0])
+      std::cout << "Usage: " << argv[0] << " <number>" << '\n';
+    else
+      std::cout << "Usage: <program name> <number>" << '\n';
+
+    return 1;
+  }
+
+  std::stringstream convert{ argv[1] }; // 我们传入的参数是 567，是字符串；需要转换为数字
+
+  int myint{};
+  if (!(convert >> myint)) // do the conversion
+    myint = 0; // if conversion fails, set myint to a default value
+
+  std::cout << "Got integer: " << myint << '\n';
+
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Got integer: 567

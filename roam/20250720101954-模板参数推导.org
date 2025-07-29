@@ -1,0 +1,107 @@
+:PROPERTIES:
+:ID:       542f88ff-7ad0-41c6-a46b-c54dc9fe1840
+:END:
+#+title: 模板参数推导
+#+filetags: cpp
+
+* 模板参数推导
+1. 根据传入的实参进行推导；可以用 *字面值后缀改变推导结果* ，但 *不会进行类型转换* （[[id:1b0646eb-ed64-4b37-a394-4974750aaf7a][类型转换]] 只在 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][函数重载]]的[[id:8c55eec4-57bb-45c2-8890-c65d7c473a24][重载解析]] 时发生）
+
+2. *CTAD* （类模板实参推导）
+   1) cpp17引入， *不存在参数列表* 时执行 *CTAD* ；有时候可能需要 *模板参数推导指南* 辅助编译器推导实参 [fn:1]，另一个 相关示例 [fn:2] [[https://www.learncpp.com/cpp-tutorial/class-template-argument-deduction-ctad-and-deduction-guides/][learncpp13.14]]
+   2) 限制：
+      a. 不能用于 类的非static成员变量初始化 [fn:3]
+      b. 不能用于 函数参数 [fn:4]
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+std::cout << max<int>(1, 2) << '\n'; // 没有使用 模板参数推导
+std::cout << max<>(1, 2) << '\n';    // 使用 模板参数推导
+std::cout << max(1, 2) << '\n';      // 使用 模板参数推导
+// 都会推导出 max<int>(int, int)
+std::pair<int, int> p1{ 1, 2 }; // 显式指定类模板 std::pair<int, int> (C++11 onward)
+std::pair p2{ 1, 2 };           // 使用 CTAD 推导 std::pair<int, int> (C++17)
+std::pair<> p1 { 1, 2 };        // FIXME
+std::pair<int> p2 { 3, 4 };     // FIXME
+
+// 自定义 Pair
+template <typename T, typename U>
+struct Pair
+{
+    T first{};
+    U second{};
+};
+
+// 类型推导指南
+// Pair对象 用 T、U 初始化，应该推导为 Pair<T,U>
+template <typename T, typename U>
+Pair(T, U) -> Pair<T, U>;
+
+int main()
+{
+    Pair<int, int> p1{ 1, 2 }; // 显式指定 Pair<int, int> ，没有 类型推导指南 也 ok
+    Pair p2{ 1, 2 };           // 没有 类型推导智能 会 报错
+  return 0;
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+template <typename T>
+struct Pair
+{
+    T first{};
+    T second{};
+};
+
+// 类型推导指南
+// 告诉编译器 Pair对象中的参数 T，T 应该推导为 Pair<T>
+template <typename T>
+Pair(T, T) -> Pair<T>;
+
+int main()
+{
+    Pair<int> p1{ 1, 2 }; // 前面的推导指南 告诉编译器 进来两个 T类型参数，推导为一个 Pair<int> (C++11 onward)
+    Pair p2{ 1, 2 };      // CTAD used to deduce Pair<int> from the initializers (C++17)
+
+    return 0;
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <utility> // for std::pair
+
+struct Foo
+{
+    std::pair<int, int> p1{ 1, 2 }; // ok, template arguments explicitly specified
+    std::pair p2{ 1, 2 };           // FIXME CTAD can't be used in this context
+};
+
+int main()
+{
+    std::pair p3{ 1, 2 };           // ok, CTAD can be used here
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <utility>
+
+// 修改为 void print(std::pair<T, U> p) 正确
+void print(std::pair p) // compile error, CTAD can't be used here
+{
+    std::cout << p.first << ' ' << p.second << '\n';
+}
+
+int main()
+{
+    std::pair p { 1, 2 }; // p deduced to std::pair<int, int>
+    print(p);
+    return 0;
+}
+#+end_src

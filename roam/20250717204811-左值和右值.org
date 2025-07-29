@@ -6,5 +6,25 @@
 
 * 左值和右值
 - 左值 :: 有地址、持久值
-- 右值 :: 无地址、临时值；但在 cpp11 中可以通过[[id:78a7c695-510d-4b03-a1e1-055d32a034cf][右值引用]] 获取地址
+- 右值 :: 无地址、临时值（完整表达式结束后销毁[fn:1]）；但在 cpp11 中可以 用于激活 [[id:0512d335-6d3f-4ebc-9021-88424c326876][移动语义]]，通过[[id:78a7c695-510d-4b03-a1e1-055d32a034cf][右值引用]] 获取地址
 当左值出现在右边时，通过 [[id:855c6ccc-6bce-4b3a-8c5f-e75d5fb156c0][平凡转换]] 左值可以隐式转换为右值
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string>
+int get_id()
+{
+  return 5;
+}
+
+int main()
+{
+  // 返回 get_id 产生的临时值，std::cout 使用这个临时值打印，此表达式结束，销毁临时值
+  std::cout << get_id();
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+: 5

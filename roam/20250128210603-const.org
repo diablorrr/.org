@@ -7,16 +7,12 @@
 #+filetags: cpp constants
 
 * const
+const 是运行时常量，除非 用 [[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]] 初始化的 const int；const更多的是运行时只读的语义（常量表达式初始化const int是常量的语义），constexpr是常量的语义
+
 const变量 具有 内部链接性，见：[[id:c3e47726-c072-4c68-9905-1fc6e2c1e016][链接性]]
 const全局变量 可能静态初始化也可能动态初始化
 [[id:1f3d6196-77e0-47a7-95e3-fb61a399ee2b][顶层const和底层const]]
 
-
-
-
-- 简介 ::
-  1. 限定一个对象的值不被修改
-  2. 编译期或运行期求得值
 - 特点 ::
   1. const对象必须被初始化
   2. const对象仅在文件内有效

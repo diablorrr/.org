@@ -5,9 +5,7 @@
 #+filetags: git
 
 * git走代理
-- 注意 :: git不会自动继承系统环境变量([[id:0dfef1fe-1193-4343-9e16-3f95e5edf4dd][linux终端走代理]])，需要单独设置git代理
-1. 设置http代理  => git config --global http.proxy "http://127.0.0.1:7890"
-2. 设置https代理 => git config --global https.proxy "http://127.0.0.1:7890"
-3. 查看是否设置  => git config --global --list
-4. 测试http代理  => curl -I http://www.google.com
-5. 测试https代理 => curl -I https://www.google.com
+- 注意 :: git不会自动继承系统环境变量（[[id:49d53854-7e0a-462b-9397-d54f3a08f559][linux终端走代理]]），需要单独设置git代理
+- 设置http代理  => git config --global http.proxy "http://127.0.0.1:7890"
+- 设置http代理  => git config --global https.proxy "http://127.0.0.1:7890"
+- 查看是否设置  => git config --global --list

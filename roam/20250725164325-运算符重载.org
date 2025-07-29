@@ -1,0 +1,530 @@
+:PROPERTIES:
+:ID:       d39c4157-a6d7-430c-84aa-741878eaa828
+:END:
+#+title: 运算符重载
+#+filetags: cpp
+
+* 运算符重载 [[https://www.learncpp.com/cpp-tutorial/introduction-to-operator-overloading/][learncpp21.1]] [[https://www.learncpp.com/cpp-tutorial/overloading-the-io-operators/][learncpp21.4]] [[https://www.learncpp.com/cpp-tutorial/overloading-operators-using-member-functions/][learncpp21.5]]
+运算符是 *由函数实现* 的，类似 函数有 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][函数重载]]，运算符有运算符重载
+
+1. 编译器 *解析运算符规则*
+   1) 操作数 是 基本类型    ：使用 内置规则
+   2) 操作数 是 [[id:f1619246-a266-4149-a059-021406106873][程序定义类型]]：使用 [[id:8c55eec4-57bb-45c2-8890-c65d7c473a24][函数重载解析]]
+
+2. *重载运算符的方法*
+   - 成员函数 :: 左操作数 是隐式的 =*this= 对象 [fn:4]
+   - 非成员函数 ::
+     + 普通函数 :: 使用类提供的公共接口访问私有成员[fn:2]，与友元的区别：分文件编写时需要提供函数声明[fn:3] [[https://www.learncpp.com/cpp-tutorial/overloading-operators-using-normal-functions/][learncpp21.3]]
+     + 友员函数 :: 可以在类内/外定义 [fn:1] [[https://www.learncpp.com/cpp-tutorial/overloading-the-arithmetic-operators-using-friend-functions/][learncpp21.2]]
+
+   *方法选择*
+   - 成员函数 ::
+     a. [ *必须* ] 赋值、下标、函数调用、成员选择： === ， =[]= ， =()= ， =->=
+     b. 改变对象状态的： =+== ， =-== ， =++= ， =--=
+   - 非成员函数 ::
+     a. [ *必须* ] 左操作数是流对象： =<<= ， =>>= [fn:5]
+     b. 对称性，支持隐式类型装换： =+= ， =-= ， ==== ， =!==
+
+3. 操作数顺序不同 或 操作符之间有关联，可以使用 *已实现的运算符来实现*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // 参数顺序不同
+   Cents operator+(const Cents& c1, int value);
+   Cents operator+(int value, const Cents& c1) { return c1 + value; } // 调用 operator+(const Cents& c1, int value);
+
+   // 操作符之间有关联
+   bool operator== (const Cents& c1, const Cents& c2) { return c1.m_cents == c2.m_cents; }
+   bool operator!= (const Cents& c1, const Cents& c2) { return !(operator==(c1, c2)); }
+   bool operator< (const Cents& c1, const Cents& c2) { return c1.m_cents < c2.m_cents; }
+   bool operator> (const Cents& c1, const Cents& c2) { return operator<(c2, c1); }
+   bool operator<= (const Cents& c1, const Cents& c2) { return !(operator>(c1, c2)); }
+   bool operator>= (const Cents& c1, const Cents& c2) { return !(operator<(c1, c2)); }
+   #+end_src
+
+4. *使用限制*
+   1) 🔥 重载运算符中 *至少一个操作数是 [[id:f1619246-a266-4149-a059-021406106873][用户定义类型]]*
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      operator+(int, Mystring) // ok
+      operator+(int, double)   // FIXME
+      #+end_src
+   2) 只能重载 *已有运算符* ；运算符 *操作数数量* 无法改变 ；运算符保持 *默认优先级和结合性*
+   3) 以下运算符 *不能重载*
+      - =?:= 条件运算符
+      - =sizeof= 运算符
+      - =::= 作用域解析运算符
+      - =.= 成员选择运算符
+      - =.*= 指针成员选择运算符
+      - =typeid= 运算符
+      - =强制类型转换= 运算符
+
+5. *一些注意事项*
+   - operator++/-- :: [[https://www.learncpp.com/cpp-tutorial/overloading-the-increment-and-decrement-operators/][learncpp21.8]]
+     a. 前置++/--：operator++()
+     b. 后置++/--：operator++(int) [fn:6]
+   - operator[] :: [[https://www.learncpp.com/cpp-tutorial/overloading-the-subscript-operator/][learncpp21.9]]
+     a. 返回引用（这就代表我们 🔥 *返回的是左值* ！！！！！）
+     b. 重载增加 检测索引有效性（用 assert） 逻辑[fn:7]
+   - operator() :: 重载以实现 [[id:077d1dca-3cdc-4702-bd47-67940bc06ae6][仿函数]] [fn:8] [[https://www.learncpp.com/cpp-tutorial/overloading-the-parenthesis-operator/][learncpp21.10]]
+   - operator= :: 检测并处理自赋值 [fn:9] [[https://www.learncpp.com/cpp-tutorial/overloading-the-assignment-operator/][learncpp21.12]]
+     + 自赋值存在的问题 :: 赋值，需要删除原对象，再将另一个对象赋值过来，如果是 *自赋值* ，会将自己删除
+
+6. [[id:12fb3f7f-a24f-4d01-a2e8-06d2469110fb][重载类型转化运算符]]：优先还是选择 [[id:cf5f4669-1abc-45b6-9882-83008c96bd4a][转换构造函数]]
+
+7. 运算符重载 与 *函数模板* [fn:10] [[https://www.learncpp.com/cpp-tutorial/overloading-operators-and-function-templates/][learncpp21.14]]
+   模板实例化时，类型替换，可能需要实现运算符重载 [fn:11]
+
+8. *返回值*
+   1) 值返回          ：不修改操作数的运算符
+   2) 引用返回左操作数：修改左操作数的运算符
+
+* Footnotes
+
+[fn:11]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+template <typename T>
+T average(const T* myArray, int numValues)
+{
+    T sum { 0 };
+    for (int count { 0 }; count < numValues; ++count)
+        sum += myArray[count]; // NOTE 模板实例化，需要实现 operator+=
+
+    sum /= numValues;          // NOTE 模板实例化，需要实现 operator/=
+    return sum;
+}
+
+class Cents
+{
+private:
+    int m_cents {};
+public:
+    Cents(int cents)
+        : m_cents { cents }
+    {
+    }
+
+    friend std::ostream& operator<< (std::ostream& out, const Cents& cents)
+    {
+        out << cents.m_cents << " cents ";
+        return out;
+    }
+
+    Cents& operator+= (const Cents &cents)
+    {
+        m_cents += cents.m_cents;
+        return *this;
+    }
+
+    Cents& operator/= (int x)
+    {
+        m_cents /= x;
+        return *this;
+    }
+};
+
+int main()
+{
+    Cents centsArray[] { Cents { 5 }, Cents { 10 }, Cents { 15 }, Cents { 14 } };
+    // NOTE 模板实例化，需要实现 operator<<
+    std::cout << average(centsArray, 4) << '\n';
+
+    return 0;
+}
+#+end_src
+
+[fn:10]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+template <typename T>
+T average(const T* myArray, int numValues)
+{
+    T sum { 0 };
+    for (int count { 0 }; count < numValues; ++count)
+        sum += myArray[count];
+
+    sum /= numValues;
+    return sum;
+}
+
+class Cents
+{
+private:
+    int m_cents {};
+public:
+    Cents(int cents)
+        : m_cents { cents }
+    {
+    }
+
+    friend std::ostream& operator<< (std::ostream& out, const Cents& cents)
+    {
+        out << cents.m_cents << " cents ";
+        return out;
+    }
+
+    Cents& operator+= (const Cents &cents)
+    {
+        m_cents += cents.m_cents;
+        return *this;
+    }
+
+    Cents& operator/= (int x)
+    {
+        m_cents /= x;
+        return *this;
+    }
+};
+
+int main()
+{
+    Cents centsArray[] { Cents { 5 }, Cents { 10 }, Cents { 15 }, Cents { 14 } };
+    std::cout << average(centsArray, 4) << '\n';
+
+    return 0;
+}
+#+end_src
+
+
+[fn:9]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+MyString& MyString::operator= (const MyString& str)
+{
+	// 自赋值处理：直接返回
+	if (this == &str)
+		return *this;
+
+	// 删除自己的值
+	if (m_data) delete[] m_data;
+
+	m_length = str.m_length;
+	m_data = nullptr;
+
+  // 复制他人的值
+	if (m_length)
+		m_data = new char[static_cast<std::size_t>(str.m_length)];
+
+	std::copy_n(str.m_data, m_length, m_data);
+
+	// return the existing object so we can chain this operator
+	return *this;
+}
+#+end_src
+
+[fn:8]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Accumulator
+{
+private:
+    int m_counter{ 0 };
+
+public:
+    int operator() (int i) { return (m_counter += i); }
+
+    void reset() { m_counter = 0; } // optional
+};
+
+int main()
+{
+    Accumulator acc{};
+    std::cout << acc(1) << '\n'; // prints 1
+    std::cout << acc(3) << '\n'; // prints 4
+
+    Accumulator acc2{};
+    std::cout << acc2(10) << '\n'; // prints 10
+    std::cout << acc2(20) << '\n'; // prints 30
+
+    return 0;
+}
+#+end_src
+
+
+[fn:7]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <cassert> // for assert()
+#include <iterator> // for std::size()
+
+class IntList
+{
+private:
+    int m_list[10]{};
+
+public:
+    int& operator[] (int index)
+    {
+        // operator[] 是不会进行边界检查的，我们重载后可以加入 索引检查有效性
+        assert(index >= 0 && static_cast<std::size_t>(index) < std::size(m_list));
+
+        return m_list[index];
+    }
+};
+
+int main() {
+  IntList list{};         // IntList *list{}; 则不能使用 list[2] -> 改为：(*list)[2]
+  cout << list[2] << '\n';
+}
+#+end_src
+
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Digit
+{
+private:
+    int m_digit{};
+public:
+    Digit(int digit=0) : m_digit{digit} { }
+    // 前置：无参数
+    Digit& operator++();
+    Digit& operator--();
+    // 后置：int 参数
+    Digit operator++(int);
+    Digit operator--(int);
+
+    friend std::ostream& operator<< (std::ostream& out, const Digit& d);
+};
+
+Digit& Digit::operator++()
+{
+    if (m_digit == 9)
+        m_digit = 0;
+    else
+        ++m_digit;
+
+    return *this;
+}
+
+Digit& Digit::operator--()
+{
+    if (m_digit == 0)
+        m_digit = 9;
+    else
+        --m_digit;
+
+    return *this;
+}
+
+// NOTE 后置实现方式
+Digit Digit::operator++(int)
+{
+    Digit temp{*this};
+
+    ++(*this); // 调用 前置++
+
+    // 返回临时对象
+    return temp;
+}
+
+Digit Digit::operator--(int)
+{
+    Digit temp{*this};
+
+    --(*this);
+
+    return temp;
+}
+
+std::ostream& operator<< (std::ostream& out, const Digit& d)
+{
+	out << d.m_digit;
+	return out;
+}
+
+int main()
+{
+    Digit digit { 5 };
+
+    std::cout << digit;
+    std::cout << ++digit; // calls Digit::operator++();
+    std::cout << digit++; // calls Digit::operator++(int);
+    std::cout << digit;
+    std::cout << --digit; // calls Digit::operator--();
+    std::cout << digit--; // calls Digit::operator--(int);
+    std::cout << digit;
+
+    return 0;
+}
+#+end_src
+
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Point
+{
+private:
+    double m_x{};
+    double m_y{};
+    double m_z{};
+
+public:
+    Point(double x=0.0, double y=0.0, double z=0.0)
+      : m_x{x}, m_y{y}, m_z{z}
+    {
+    }
+
+    friend std::ostream& operator<< (std::ostream& out, const Point& point);
+};
+
+std::ostream& operator<< (std::ostream& out, const Point& point)
+{
+    out << "Point(" << point.m_x << ", " << point.m_y << ", " << point.m_z << ')';
+    return out; // 返回 std::ostream 所以我们可以链式调用
+}
+
+int main()
+{
+    const Point point1 { 2.0, 3.0, 4.0 };
+
+    std::cout << point1 << '\n';
+
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Cents
+{
+private:
+    int m_cents {};
+
+public:
+    Cents(int cents) : m_cents { cents } { }
+
+    // 成员函数重载：Cents + int
+    Cents operator+(int value) const;
+
+    int getCents() const { return m_cents; }
+};
+
+// 左操作数 是 隐式的*this
+Cents Cents::operator+ (int value) const
+{
+    return Cents { m_cents + value };
+}
+
+int main()
+{
+	const Cents cents1 { 6 };
+	const Cents cents2 { cents1 + 2 };
+	std::cout << "I have " << cents2.getCents() << " cents.\n";
+
+	return 0;
+}
+#+end_src
+
+[fn:3]
+#+name: Cents.h
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifndef CENTS_H
+#define CENTS_H
+
+class Cents
+{
+private:
+  int m_cents{};
+public:
+  Cents(int cents) : m_cents{ cents } { }
+
+  int getCents() const { return m_cents; }
+};
+// 提供函数声明
+Cents operator+(const Cents& c1, const Cents& c2);
+
+#endif
+#+end_src
+
+#+name: Cents.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "Cents.h"
+
+Cents operator+(const Cents& c1, const Cents& c2)
+{
+  return { c1.getCents() + c2.getCents() };
+}
+#+end_src
+
+#+name: main.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "Cents.h"
+
+int main()
+{
+  Cents cents1{ 6 };
+  Cents cents2{ 8 };
+  Cents centsSum{ cents1 + cents2 }; // 没有 Cents.h 中的函数声明, 这个会编译错误
+  std::cout << "I have " << centsSum.getCents() << " cents.\n";
+
+  return 0;
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Cents
+{
+private:
+  int m_cents{};
+
+public:
+  Cents(int cents) : m_cents{ cents } { }
+
+  int getCents() const { return m_cents; }
+};
+
+// 普通函数：使用类提供的公共接口访问私有成员
+Cents operator+(const Cents& c1, const Cents& c2)
+{
+  return Cents{ c1.getCents() + c2.getCents() };
+}
+
+int main()
+{
+  Cents cents1{ 6 };
+  Cents cents2{ 8 };
+  Cents centsSum{ cents1 + cents2 };
+  std::cout << "I have " << centsSum.getCents() << " cents.\n";
+
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+: I have 14 cents.
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Cents
+{
+private:
+	int m_cents {};
+public:
+  Cents(int cents) : m_cents{ cents } { }
+
+	friend Cents operator+(const Cents& c1, const Cents& c2); // NOTE 友元函数：类外实现 Cents + Cents
+
+	int getCents() const { return m_cents; }
+
+  // NOTE 友元函数：类内实现 -> 类内实现也属于 类的成员
+  // friend Cents operator+(const Cents& c1, const Cents& c2)
+	// {
+	//    return Cents { c1.m_cents + c2.m_cents };
+	// }
+
+};
+
+// 友元函数：类外实现
+Cents operator+(const Cents& c1, const Cents& c2)
+{
+	return c1.m_cents + c2.m_cents; // 因为是友元函数，因此可以访问类私有变量
+}
+
+int main()
+{
+	Cents cents1{ 6 };
+	Cents cents2{ 8 };
+	Cents centsSum{ cents1 + cents2 };
+	std::cout << "I have " << centsSum.getCents() << " cents.\n";
+
+	return 0;
+}
+#+end_src
+
+#+RESULTS:
+: I have 14 cents.

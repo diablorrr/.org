@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       1cab172d-a8d4-41c5-810d-e6792a0d1361
+:END:
+#+title: 基于范围的for循环
+#+filetags: cpp
+
+* 基于范围的for循环
+1. 背后靠 [[id:4366a3d0-3bc8-4b7d-a7e3-b730e96d0c01][迭代器(iterators)]] 的 =begin()= 和 =end()= 实现；若 *迭代器失效* （容器大小改变导致）会出问题

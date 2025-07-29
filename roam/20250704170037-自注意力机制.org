@@ -1,7 +1,204 @@
 :PROPERTIES:
 :ID:       e4f3deb0-fe49-45d2-85e7-2cc715ad6b1f
 :END:
-#+title: 自注意力机制
+#+title: self-attention(自注意力机制)
 #+filetags: deep_learning
 
-[[https://blog.csdn.net/beilizhang/article/details/115282604][参考]]
+* 代码实现 [[https://yuanchaofa.com/hands-on-code/from-self-attention-to-multi-head-self-attention.html][博客]]
+** 简化版本(出于面试时间考虑)
+#+begin_src python
+import math
+import torch
+import torch.nn as nn
+
+class SelfAttentionV1(nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+
+        self.dim = dim
+
+        self.query_proj = nn.Linear(dim, dim)
+        self.key_proj = nn.Linear(dim, dim)
+        self.value_proj = nn.Linear(dim, dim)
+
+    def forward(self, X):
+        # NOTE X、q、k、v (batch, seq, dim)
+        q = self.query_proj(X);
+        k = self.key_proj(X);
+        v = self.value_proj(X);
+        # NOTE attention_weight (batch, seq, seq)
+        attention_weight = torch.softmax(q @ k.transpose(-1, -2) / math.sqrt(self.dim), dim=-1) # q @ k.transpose(-1, -2) -> (batch, seq, dim) @ (batch, dim, seq) -> (batch, seq, seq)
+        print(attention_weight)
+        print(v)
+
+        # NOTE output (batch, seq, dim)
+        output = attention_weight @ v # (batch, seq, seq) @ (batch, seq, dim) -> (batch, seq, dim)
+
+        return output
+
+X = torch.rand(3, 2, 4)    # NOTE NOTE X 为输入，3：句子个数，2：每个句子的单词个数，4：每个单词的特征
+                           # 由下面张量结果可知 attention_weight @ v 是计算单词之间的关注度
+net = SelfAttentionV1(4)
+net(X)
+
+# attention_weight 的张量
+# tensor([[[0.4948, 0.5052],
+#          [0.5055, 0.4945]],
+#
+#         [[0.5101, 0.4899],
+#          [0.4778, 0.5222]],
+#
+#         [[0.4861, 0.5139],
+#          [0.4810, 0.5190]]], grad_fn=<SoftmaxBackward0>)
+
+# v 的张量
+# tensor([[[-0.1066,  0.4842,  0.3614,  0.5448],
+#          [-0.1046,  0.8612,  0.1977,  0.5434]],
+#
+#         [[-0.3678,  0.1672,  0.2547,  0.5061],
+#          [-0.1881,  0.5223,  0.1250,  0.4141]],
+#
+#         [[-0.4024,  0.6872,  0.0457,  0.4494],
+#          [-0.7761,  0.5528,  0.0219,  0.3440]]], grad_fn=<ViewBackward0>)
+
+# 最终张量
+# tensor([[[-0.0996, -0.5656,  0.9393,  0.8216],
+#          [-0.0997, -0.5657,  0.9388,  0.8219]],
+#
+#         [[-0.0638, -0.6147,  0.7391,  0.8268],
+#          [-0.0648, -0.6141,  0.7366,  0.8264]],
+#
+#         [[-0.1713, -0.3363,  1.0328,  0.4337],
+#          [-0.1736, -0.3400,  1.0371,  0.4412]]], grad_fn=<UnsafeViewBackward0>)
+#+end_src
+
+** 效率优化
+#+name: 可以将qkv矩阵合并成一个大矩阵计算
+#+begin_src python
+class SelfAttentionV2(nn.Module):
+    def __init__(self, dim) -> None:
+        super().__init__()
+
+        self.dim = dim
+
+        self.proj = nn.Linear(dim, dim*3) # 合并为大矩阵计算
+
+    def forward(self, X):
+        # NOTE X (batch, seq, dim)
+        # NOTE qkv (batch, seq, dim*3)
+        qkv = self.proj(X)
+        # NOTE q、k、v (batch, seq, dim)
+        q, k, v = torch.split(qkv, self.dim, dim=-1)
+        # NOTE attention_weight (batch, seq, seq)
+        attention_weight = torch.softmax(q @ k.transpose(-1, -2) / math.sqrt(self.dim), dim=-1)
+
+        output = attention_weight @ v
+        return output
+#+end_src
+
+** 面试完整版(加入细节：dropout、attention_mask、ouput_proj 输出映射：用于多头注意力)
+#+begin_src python
+class SelfAttentionV3(nn.Module):
+    def __init__(self, dim) -> None:
+        super().__init__()
+
+        self.dim = dim
+
+        self.query_proj = nn.Linear(dim, dim)
+        self.key_proj = nn.Linear(dim, dim)
+        self.value_proj = nn.Linear(dim, dim)
+
+        self.attention_drop = nn.Dropout(0.1)
+
+        self.output_proj = nn.Linear(dim, dim)
+
+    def forward(self, X, attention_mask=None):
+        # NOTE X、q、k、v (batch, seq, dim)
+        q = self.query_proj(X)
+        k = self.key_proj(X)
+        v = self.value_proj(X)
+
+        # NOTE attention_weight (batch, seq, seq)
+        attention_weight = q @ k.transpose(-1, -2) / math.sqrt(self.dim)
+        print(f'原始矩阵：\n{attention_weight}', attention_weight)
+
+        # 使用 mask矩阵
+        if attention_mask is not None:
+            attention_weight = attention_weight.masked_fill(attention_mask == 0, float("-inf"))
+        print(f'mask后：\n{attention_weight}', attention_weight)
+
+        attention_weight = torch.softmax(attention_weight, dim=-1)
+        print(f'softmax后：\n{attention_weight}', attention_weight)
+
+        attention_weight = self.attention_drop(attention_weight)
+
+        # NOTE output (batch, seq, dim)
+        output = attention_weight @ v
+        return self.output_proj(output)
+
+X = torch.rand(3, 4, 2)
+b = torch.tensor(
+    [
+        [1, 1, 1, 0],
+        [1, 1, 0, 0],
+        [1, 0, 0, 0],
+    ]
+)
+mask = b.unsqueeze(dim=1).repeat(1, 4, 1)
+net = SelfAttentionV3(2)
+net(X, mask).shape
+
+# X形状：3，4，2 -> 3个句子、每个句子4个单词、每个单词2个特征
+
+# 原始矩阵：
+# tensor([[[ 0.1860, -0.0221,  0.0466,  0.1395],
+#          [ 0.2200,  0.0699,  0.1282,  0.1752],
+#          [ 0.2534,  0.0445,  0.1202,  0.1980],
+#          [ 0.1363, -0.0080,  0.0404,  0.1031]],
+#
+#         [[ 0.0873,  0.1401,  0.0036,  0.0322],
+#          [ 0.0440,  0.0931, -0.0226, -0.0163],
+#          [ 0.0995,  0.1158,  0.0517,  0.1003],
+#          [ 0.1781,  0.2689,  0.0256,  0.0902]],
+#
+#         [[ 0.1152,  0.1486,  0.1136,  0.2317],
+#          [ 0.0539,  0.0798,  0.0504,  0.1347],
+#          [ 0.1440,  0.1846,  0.1423,  0.2867],
+#          [ 0.0133,  0.0502,  0.0044,  0.1116]]], grad_fn=<DivBackward0>)
+
+# mask后：
+# tensor([[[ 0.1860, -0.0221,  0.0466,    -inf],           # mask最后1个单词，关注前3个单词
+#          [ 0.2200,  0.0699,  0.1282,    -inf],
+#          [ 0.2534,  0.0445,  0.1202,    -inf],
+#          [ 0.1363, -0.0080,  0.0404,    -inf]],
+#
+#         [[ 0.0873,  0.1401,    -inf,    -inf],           # mask最后2个单词，关注前2个单词
+#          [ 0.0440,  0.0931,    -inf,    -inf],
+#          [ 0.0995,  0.1158,    -inf,    -inf],
+#          [ 0.1781,  0.2689,    -inf,    -inf]],
+#
+#         [[ 0.1152,    -inf,    -inf,    -inf],           # mask最后3个单词，关注前1个单词
+#          [ 0.0539,    -inf,    -inf,    -inf],
+#          [ 0.1440,    -inf,    -inf,    -inf],
+#          [ 0.0133,    -inf,    -inf,    -inf]]], grad_fn=<MaskedFillBackward0>)
+
+# softmax后：值落在 [0,1] 之间，且和为 1
+# tensor([[[0.3729, 0.3028, 0.3243, 0.0000],
+#          [0.3606, 0.3104, 0.3290, 0.0000],
+#          [0.3722, 0.3020, 0.3258, 0.0000],
+#          [0.3605, 0.3120, 0.3275, 0.0000]],
+#
+#         [[0.4868, 0.5132, 0.0000, 0.0000],
+#          [0.4877, 0.5123, 0.0000, 0.0000],
+#          [0.4959, 0.5041, 0.0000, 0.0000],
+#          [0.4773, 0.5227, 0.0000, 0.0000]],
+#
+#         [[1.0000, 0.0000, 0.0000, 0.0000],
+#          [1.0000, 0.0000, 0.0000, 0.0000],
+#          [1.0000, 0.0000, 0.0000, 0.0000],
+#          [1.0000, 0.0000, 0.0000, 0.0000]]], grad_fn=<SoftmaxBackward0>)
+
+# torch.Size([3, 4, 2])
+#+end_src
+** 多头自注意力机制(MultiHead-Self-Attention)
+见：[[id:31296065-6905-44d9-b881-b61002bbfcf0][MultiHead-Self-Attention(多头自注意力机制)]]

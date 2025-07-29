@@ -8,3 +8,4 @@
 1. 设置http代理： export http_proxy="http://127.0.0.1:7890"
 2. 设置https代理：export https_proxy="http://127.0.0.1:7890"
    （注意：这里 *是http不是https* ！像 clash 这种都是 *HTTP代理软件* ，因此只能通过 =http://127.0.0.1:7890= 来访问）
+3. 测试http代理  => curl -I http://www.google.com

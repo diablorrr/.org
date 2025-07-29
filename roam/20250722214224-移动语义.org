@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       0512d335-6d3f-4ebc-9021-88424c326876
+:END:
+#+title: 移动语义
+#+filetags: cpp
+
+* 移动语义 [[https://www.learncpp.com/cpp-tutorial/returning-stdvector-and-an-introduction-to-move-semantics/][learncpp16.5]]
+1. 窃取即将销毁的数据的资源，减少拷贝的开销（或者说 通过资源转移而非复制来提高效率）
+
+2. 移动语义 *调用条件*
+   1) 对象的类型支持移动语义
+   2) 用 右值 进行 初始化或赋值
+   3) 移动操作不会被省略
+
+3. 支持移动语义的类型
+   1) std::vector
+   2) std::string

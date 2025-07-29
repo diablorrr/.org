@@ -16,5 +16,5 @@
    GLFW_IM_MODULE=ibus       # kitty 默认关闭了IBus，因此需要启用
    fcitx5 -d &
    #+end_example
-3. 命令行输入 =fcitx5-configtool= 进入图形化界面，在右边 Available Input Method 选中 Rime ，点击 中间的左箭头，保存 [[https://wiki.archlinuxcn.org/wiki/Fcitx5#%E9%85%8D%E7%BD%AE%E5%B7%A5%E5%85%B7][参考]]
+3. 命令行输入 =fcitx5-configtool= 进入图形化界面，在右边 Available Input Method 选中 Rime ，点击 中间的左箭头，保存 [[https://wiki.archlinuxcn.org/wiki/Fcitx5#%E9%85%8D%E7%BD%AE%E5%B7%A5%E5%85%B7][参考]]usermod -aG wheel 用户名
 4. 重启后， =Ctrl + SPC= 就能调出输入法， =Shift= 切换输入法， =F4= 切换 Rime 到简体中文方案

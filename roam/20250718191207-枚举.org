@@ -1,47 +1,120 @@
 :PROPERTIES:
 :ID:       d091d455-5933-4047-92fb-4c2d2d2f7ff9
 :END:
-#+title: 枚举类型
+#+title: 枚举类型(enum)
 #+filetags: cpp
 
-* 枚举类型
-1. 是一种复合类型，分为
-   - 无作用域枚举
-   - 作用域枚举
+* 枚举类型 [[https://www.learncpp.com/cpp-tutorial/unscoped-enumerations/][learncpp13.2]] [[https://www.learncpp.com/cpp-tutorial/unscoped-enumerator-integral-conversions/][learncpp13.3]]
+1. 是一种复合类型， *分为*
+   - [[id:8f6af97c-9e71-4056-865b-ee98eb263939][无作用域枚举]]
+   - [[id:9d28e5ab-69ee-4b39-9e69-abeba760be13][作用域枚举]]（ *Best Practice* ）
 
-2. *命名规范*
-   - 枚举类型：大写字母开头
-   - 枚举成员：小写字母开头
+2. 枚举类型 是 [[id:f1619246-a266-4149-a059-021406106873][用户(程序)定义类型]] 因此在 *使用前需要完整定义* （仅前向声明是不够的）
 
-3. *枚举类型是不同的类型*
-   #+begin_src cpp :results output :namespaces std :includes <iostream>
-   enum Pet
+3. *枚举成员* 都是 [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]]整型常量，因此在 编译期确定值； *枚举成员的值为整数* ，默认从 0 开始 一直 +1（也可以显式定义 枚举成员的值）；最好定义 *枚举计数器* 用于统计枚举大小，也能用于 assert 判断[fn:2]
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <vector>
+   namespace Students
    {
-       cat,
-       dog,
-       pig,
-       whale,
-   };
-
-   enum Color
-   {
-       black,
-       red,
-       blue,
-   };
+       enum Names
+       {
+           kenny, // 0
+           kyle, // 1
+           stan, // 2
+           butters, // 3
+           cartman, // 4
+           // 这里 添加枚举成员
+           max_students // 枚举计数器：当前是5 ，未来添加枚举成员，这里自动 +1
+       };
+   }
 
    int main()
    {
-       Pet myPet { black }; // compile error: black is not an enumerator of Pet
-       Color shirt { pig }; // compile error: pig is not an enumerator of Color
+       std::vector<int> testScores(Students::max_students); // 用枚举大小 初始化 vector
 
+       testScores[Students::stan] = 76;
+       std::cout << "The class has " << Students::max_students << " students\n";
        return 0;
    }
    #+end_src
 
-4. *使用场景*
-   状态码
-   游戏物品
 
-* 无作用域枚举
-1. *作用域* ：枚举成员名称 在 枚举定义 的作用域中
+4. *命名规范* ：见 [[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
+
+5. *应用场景*
+   - 状态码 [fn:1]
+   - 游戏中用于识别物品、怪物、地形等
+
+6. *枚举类型是不同的类型* 无法跨枚举比较
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   enum Color
+   {
+       red,
+       blue,
+   };
+
+   enum Color2
+   {
+       red2,
+       blue2,
+   };
+
+   int main()
+   {
+       Color apple { red };
+       Color2 apple2 { red2 };
+       if (apple == apple2) {    // 编译错误：无法跨枚举比较
+           cout << yes << '\n';
+       }
+       return 0;
+   }
+   #+end_src
+
+7. *枚举和字符串互相转换* 可使用 [[id:2d04c210-79ae-4346-81f4-c5faf95ca902][switch语句]] 将 枚举转为字符串；使用 std::optional 和 if语句 将 字符串转枚举 [[https://www.learncpp.com/cpp-tutorial/converting-an-enumeration-to-and-from-a-string/][learncpp13.4]] ；使用 运算符重载 =<<= 和 =>>= [[https://www.learncpp.com/cpp-tutorial/introduction-to-overloading-the-i-o-operators/][learncpp13.5]]
+
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <vector> <cassert>
+enum StudentNames
+{
+    kenny, // 0
+    kyle, // 1
+    stan, // 2
+    butters, // 3
+    cartman, // 4
+    max_students // 5
+};
+
+int main()
+{
+    std::vector testScores { 78, 94, 66, 77, 14 };
+    // Ensure the number of test scores is the same as the number of students
+    assert(std::size(testScores) == max_students);
+    return 0;
+}
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+enum FileReadResult
+{
+    readResultSuccess,
+    readResultErrorFileOpen,
+    readResultErrorFileRead,
+    readResultErrorFileParse,
+};
+
+FileReadResult readFileContents()
+{
+    if (!openFile())
+        return readResultErrorFileOpen;
+    if (!readFile())
+        return readResultErrorFileRead;
+    if (!parseFile())
+        return readResultErrorFileParse;
+
+    return readResultSuccess;
+}
+#+end_src
+
