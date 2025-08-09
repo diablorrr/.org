@@ -1,0 +1,102 @@
+:PROPERTIES:
+:ID:       ac8c9c6d-760b-4ec8-847b-cbedebee7085
+:END:
+#+title: 锁
+#+filetags: operating_system
+
+* 锁 [[https://xiaolincoding.com/os/4_process/pessim_and_optimi_lock.html#%E4%B9%90%E8%A7%82%E9%94%81%E4%B8%8E%E6%82%B2%E8%A7%82%E9%94%81][小林coding]]
+实现 *互斥访问* ；要实现同步 -> [[id:dd50a08e-6b08-43c7-b35a-4109e47b679e][条件变量]]
+
+** 互斥锁、自旋锁
+两个最基本的锁，很多高级锁基于它们实现
+1. *互斥锁（=互斥量）* ：访问共享资源前加锁，访问结束解锁；资源被锁期间，任何试图再对资源加锁的线程都会 *被阻塞，释放CPU* ，直到加锁线程释放锁；加锁失败导致的 内核态/用户态切换 以及 加锁失败线程的状态切换，存在一定性能开销；因此互斥锁适合 *锁持有时间较长* 的情况
+   可以通过 [[id:97bd56c8-5092-4ef3-95db-c18e3c1b3be1][Test-and-Set]] 实现
+
+2. *自旋锁* ：类似互斥锁，但加锁失败不会被阻塞，线程处于 *忙等待状态，一直持有CPU* ；性能开销较小；因此自旋锁适合 *锁持有时间较短，不希望线程调度产生开销* 的情况
+   可以通过 [[id:97bd56c8-5092-4ef3-95db-c18e3c1b3be1][Test-and-Set]] 实现
+
+
+** 读写锁
+1. *读写锁* ：读锁加锁 其他线程可以同时加读锁；写锁加锁，不能加读锁、写锁，会被阻塞；因此读写锁适合 *读多写少* 的情况
+   #+begin_example 读多写少的场景
+   缓存系统、配置文件读取、数据库查询
+   #+end_example
+
+
+
+** 悲观锁、乐观锁
+上面三种锁都属于悲观锁
+- 悲观锁 :: 认为多线程修改资源概率高时使用（访问资源前，先加锁）
+- 乐观锁 :: 多线程修改资源概率很低，加锁成本很高时使用（先修改资源，再验证有没有发生冲突：若没有其他线程修改资源，操作完成，否则放弃本次操作）
+
+
+** Test-and-Set 实现 自旋锁、互斥锁(忙等待锁、无等待锁)
+:PROPERTIES:
+:ID:       97bd56c8-5092-4ef3-95db-c18e3c1b3be1
+:END:
+#+name: TAS
+#+begin_src c
+int TestAndSet(int *old_ptr, int new) {   // 原子指令：old_ptr 更新为 new 的新值（更新新值），返回 old_ptr 的旧值（测试旧值）
+  int old = *old_ptr;
+  *old_ptr = new;
+  return old;
+}
+#+end_src
+
+#+name: TAS实现 忙等待锁
+#+begin_src c
+typedef struct lock_t {
+  int flag;
+} lock_t;
+
+void init(lock_t *lock) {
+  lock->flag = 0;         // 0 代表锁没有被持有
+}
+
+// 加锁函数
+// 场景1加锁成功：当前线程调用 lock()，此时没有其他线程持有锁，TestAndSet返回0，跳过while循环（不会被阻塞），同时flag设置为1（表示取到锁），结束 lock()
+// 场景2加锁失败：当前线程调用 lock()，此时其他线程持有锁，TestAndSet返回1，同时不断设置flag为1，当前线程一直卡在while循环（阻塞），当其他线程调用 unlock() 重新将flag设为0，卡在while循环的当前线程TestAndSet返回0，跳过while循环（不会被阻塞），同时flag设置为1（表示取到锁），结束 lock()
+ void lock(lock_t *lock) {
+  while (TestAndSet(&lock->flag, 1) == 1)
+    ; // do nothing
+}
+
+void unlock(lock_t *lock) {
+  lock->flag = 0;
+}
+#+end_src
+
+#+name: TAS实现 无等待锁
+#+begin_src c
+typedef struct lock_t {
+  int flag;
+  queue_t *q; // 等待队列
+} lock_t;
+
+void init(lock_t *lock) {
+  lock->flag = 0;         // 0 表示锁没有被持有
+  queue_init(lock->q);    // 初始化 等待队列
+}
+
+void lock(lock_t *lock) {
+  while(TestAndSet(&lock->flag, 1) == 1) {
+    1. 保存 现在运行线程的 TCB;
+    2. 将 TCB 插入等待队列;
+    3. 设置线程为 等待状态;
+    4. 调度程序;
+  }
+}
+
+void unlock(lock_t *lock) {
+  if (lock->q != NULL) {
+    1. 移出 等待队列的队头元素;
+    2. 将 线程TCB 插入 就绪队列;
+    3. 设置线程为 就绪状态;
+  }
+
+  lock->flag = 0;
+}
+#+end_src
+
+
+** CAS

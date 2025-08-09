@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       332d23bd-0c98-4686-9b0b-c43a1e85e324
+:END:
+#+title: HTTP请求方式
+#+filetags: network
+
+* HTTP请求方式
+1. GET   ：获取资源，幂等
+2. POST  ：创建、更新资源（提交数据的方式），非幂等
+   - 幂等 :: 多次请求，结果相同
+
+3. PUT   ：修改数据
+4. DELETE：删除数据

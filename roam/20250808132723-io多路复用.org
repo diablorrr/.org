@@ -1,0 +1,77 @@
+:PROPERTIES:
+:ID:       9b23b4a1-11f8-441e-9b34-425d3835cc1a
+:END:
+#+title: IO多路复用
+#+filetags: operating_system
+
+* IO多路复用 [[https://www.bilibili.com/video/BV1RJ4m1b7cy/?vd_source=4441bc96046659b39d059d583f36ff52][bilibili-码农的荒岛求生]] [[https://xiaolincoding.com/os/8_network_system/selete_poll_epoll.html#epoll][小林coding]]
+1. 将一批文件描述符（fd）交给（操作系统）内核监视状态，返回里面可读/写的 fd 列表
+
+   #+begin_comment 为什么要有IO多路复用？
+   linux中一切皆文件，对系统资源（eg：网络连接）的访问都是通过读写 fd 实现的
+   - 场景1：现有一大批代表网络连接的 fd，我们对其中一个 fd 进行 阻塞read()，若当前没有数据可读，则 read()  *阻塞导致其他 fd 一直等待*
+   - 场景2：现有一大批代表网络连接的 fd，我们对其中一个 fd 进行 非阻塞read()，若没有数据则返回，我们需要 *轮询所有 fd*
+   #+end_comment
+   # 能用于网络场景也能用于其他IO场景
+
+2. 分为：select、poll、epoll
+
+3. *适用场景* IO密集、计算不密集的情况；eg：网络服务器
+
+
+* select
+:PROPERTIES:
+:ID:       bc54b622-fb1e-41cf-af6e-876a86923529
+:END:
+*原理* ：
+内核中用 =位图(bitmap)= 表示 fd集合
+1. 拷贝（用户空间 -> [[id:cbf178f7-ce4b-435d-bc2c-55cb1e39816e][内核空间]]）
+2. 内核 *遍历* 检查 fd 是否有读写事件，标记后
+3. 拷贝（内核态 -> 用户态）
+4. 用户 *遍历* 找到可读可写 fd，再处理
+
+*缺点* ：
+1. bitmap 只能监听 1024个fd
+2. 新增或修改fd，需要 2次完整fd集合的拷贝
+3. 用户取fd 时间复杂度：O(n)（ 需要完整遍历fd集合，还是2次）
+
+
+* poll
+:PROPERTIES:
+:ID:       78183794-d691-4478-92d4-51ca4e19851d
+:END:
+*原理* ：
+内核中用 =链表= 表示 fd集合
+（同 select）
+
+*优点/缺点* ：
+1. [改进] 链表形式，监听 fd数量 无限制
+2. 新增或修改fd，需要 2次完整fd集合的拷贝
+3. 用户取fd 时间复杂度：O(n)（ 需要完整遍历fd集合，还是2次）
+
+
+* epoll
+:PROPERTIES:
+:ID:       52c4cf0a-3de5-4e9d-a314-821f6c2f39c3
+:END:
+*原理* ：
+内核中用 =红黑树= 表示 fd集合
+1. epoll_create 在内核中创建 epoll对象（红黑树+链表：分别存放 需要监听的fd、就绪fd）
+2. epoll_ctl 将待监听的fd 加入红黑树
+3. 红黑树中fd触发读写事件 加入链表
+4. epoll_wait 从链表 取出fd
+
+*优点* ：
+1. 红黑树 监听 fd数量 无限制
+2. 新增或修改fd，无需重复拷贝大量fd
+3. 用户取fd 时间复杂度O(1)（只需通过 epoll_wait 从就绪队列中取）
+
+*水平触发LT* ：某个fd *就绪* (可读/可写) ，epoll_wait 每次调用都会返回该fd
+*边缘触发ET* ：某个fd *未就绪 -> 就绪* ，epoll_wait 才会返回该fd
+
+** epoll对象图 :ATTACH:
+:PROPERTIES:
+:ID:       a863cc3e-4e55-497f-ad15-5ee4c37c296f
+:END:
+[[attachment:_20250808_154635screenshot.png]]
+epoll对象中主要有：红黑树（需要监听的fd）、链表（就绪socket）

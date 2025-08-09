@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       6cd6d820-4519-4090-8b15-4b38060fe563
+:END:
+#+title: HTTP
+#+filetags: network
+
+* HTTP
+*半双工* 应用层协议，请求-响应模式
+
+* HTTP报文格式 :ATTACH:
+:PROPERTIES:
+:ID:       846e95b1-e15d-4277-822a-c2fa49faa90a
+:END:
+[[attachment:_20250805_131844screenshot.png]]
+请求报文：请求行、请求头、请求体
+响应报文：响应行、响应头、响应体

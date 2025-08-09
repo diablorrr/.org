@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       43b15fcd-d58b-4d06-aa11-ba1cea9964a9
+:END:
+#+title: TCP重传机制
+#+filetags: network
+
+* TCP重传机制
+1. 用于实现可靠传输，保证数据完整，分为：超时重传、快速重传
+   - 超时重传 :: 发送方设置定时器，超时未受到接收方的确认，重传
+   - 快速重传 :: 接收方每次收到乱序数据包时重复发送期望序号，发送方连续收到3次相同期望序号，重传
+
+** 快速重传图 :ATTACH:
+:PROPERTIES:
+:ID:       5006cd5d-8a75-4a3c-b4a7-572ec37b0637
+:END:
+[[attachment:_20250806_163047screenshot.png]]

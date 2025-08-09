@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       b2342e5b-8dac-4a5a-b7c7-a0ac4af6845a
+:END:
+#+title: arch安装linux-zen内核
+#+filetags: arch linux
+
+* arch安装linux-zen内核
+1. 安装 linux-zen  ：sudo pacman -S linux-zen linux-zen-headers
+2. 更新引导加载程序：sudo grub-mkconfig -o /boot/grub/grub.cfg
+3. reboot
+4. 引导菜单 -> 高级菜单 -> linux-zen
+5. 验证内核：uname -r

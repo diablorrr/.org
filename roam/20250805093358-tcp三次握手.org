@@ -1,0 +1,60 @@
+:PROPERTIES:
+:ID:       ceed6c1f-7585-4884-874d-eb2dbf4145ae
+:END:
+#+title: TCP三次握手
+#+filetags: network
+
+* TCP三次握手图 :ATTACH:
+:PROPERTIES:
+:ID:       d1f3066e-da66-47d4-b535-20f7a925ca87
+:END:
+[[attachment:_20250805_094902screenshot.png]]
+
+*作用*
+同步双方序列号（有序收发）
+验证双方收发能力没问题
+
+*流程*
+1. 客户端  ---发送 =SYN 报文= ，序列号 =seq=x= --->  服务器
+   进入 =SYN_SENT= 状态 -> 说明客户端发送没问题
+
+2. 服务器  ---发送 =SYN-ACK 报文= ，序列号、确认号 =seq=y, ack=x+1= --->  客户端
+   进入 =SYN_RCVD= 状态 -> 说明服务器发送和接收没问题
+
+3. 客户端  ---发送 =ACK 报文= ，序列号、确认号 =seq=x+1, ack=y+1= --->  服务器
+   双方进入 =ESTABLISHED= 状态 -> 说明客户端接收没问题（此阶段可以发送数据）
+
+#+begin_comment
+标识位 SYN、ACK：用于标识报文的类型（同步报文、确认报文）
+#+end_comment
+
+
+* 已建立连接但客户端突然断电怎么办？ [[https://www.xiaolincoding.com/network/3_tcp/tcp_interview.html#%E5%A6%82%E6%9E%9C%E5%B7%B2%E7%BB%8F%E5%BB%BA%E7%AB%8B%E4%BA%86%E8%BF%9E%E6%8E%A5-%E4%BD%86%E6%98%AF%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%AA%81%E7%84%B6%E5%87%BA%E7%8E%B0%E6%95%85%E9%9A%9C%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E][小林coding]]
+在一个时间段内没有任何交互，启动 *TCP保活机制* ，服务端每隔段时间发送一个探测报文，都没得到响应则TCP连接死亡；但保活机制的持续时间有点长（2个多小时），我们可以在 *应用层实现一个心跳机制*
+
+
+* 已建立连接但服务端进程崩溃会发生什么？ [[https://www.xiaolincoding.com/network/3_tcp/tcp_interview.html#%E5%A6%82%E6%9E%9C%E5%B7%B2%E7%BB%8F%E5%BB%BA%E7%AB%8B%E4%BA%86%E8%BF%9E%E6%8E%A5-%E4%BD%86%E6%98%AF%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%B4%A9%E6%BA%83%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88][小林coding]]
+TCP连接信息由内核维护，四次挥手也是在内核中完成，无需进程参与 -> 因此就算服务端进程退出，还是能与客户端完成TCP四次挥手
+
+
+* 什么是 SYN Flood 攻击？如何避免？ :ATTACH: [[https://www.xiaolincoding.com/network/3_tcp/tcp_no_accpet.html#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E7%9A%84%E7%BB%86%E8%8A%82%E5%88%86%E6%9E%90][小林coding]]
+:PROPERTIES:
+:ID:       77bbfdac-f6d4-487c-8ebd-9c572840f518
+:END:
+[[attachment:_20250807_094405screenshot.png]]
+*SYN Flood 攻击* ：攻击者发送大量 SYN报文 占满 半连接队列，导致服务端无法接收新的 SYN请求
+*避免* ：使用 =tcp_syncookies= 绕过 半连接队列 直接 accept 连接：第一次握手，服务端不会将 sock 放入半连接队列，而是生成 cookies；第二次握手带上 cookies；第三次握手带上 cookies，服务端验证 cookies是不是之前发的那个，若是，则建立连接放入 全连接队列
+- 半连接队列（SYN队列）    :: 第一次握手时，将 sock 放入该队列（队列中 sock 为 SYN_RECV 状态）
+- 全连接队列（ACCEPT队列） :: 第三次握手时，将 sock 从半连接队列取出，放入全连接队列（队列中 sock 为 ESTABLISHED 状态），等待服务端 =accept()=
+
+
+* 没有 accept 可以建立 TCP连接吗？
+可以，使用 =tcp_syncookies= ，见：[[id:77bbfdac-f6d4-487c-8ebd-9c572840f518][什么是 SYN Flood 攻击？如何避免？ :ATTACH: 小林coding]]
+
+
+* 没有 listen 可以建立 TCP连接吗？ [[https://www.xiaolincoding.com/network/3_tcp/tcp_no_listen.html#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90][小林coding]]
+可以。客户端可以自连接，也可以两个客户端同时向对方请求建立连接
+*分析* ：服务端 listen 会建立 半连接队列、全连接队列，用于存放连接信息；因此要形成连接，只要有地方存放连接信息就行 -> 内核有一个 *全局hash表* ，可以存放 socket 连接信息
+#+begin_example
+以TCP自连接为例：客户端 connect 时，会将连接信息放入 全局hash表中，将信息发出，信息通过回环地址回到 TCP传输层，根据 IP+端口信息 再次从 全局hash 中取出信息，建立连接
+#+end_example

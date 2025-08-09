@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       2aaca537-94b0-40b2-a0c4-89d2743843d7
+:END:
+#+title: QUIC
+#+filetags: network
+
+* QUIC [[https://www.xiaolincoding.com/network/3_tcp/quic.html#_4-17-%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8E-udp-%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93][小林coding]]

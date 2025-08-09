@@ -10,39 +10,55 @@
    2) 非类型模板参数
    3) 模板模板参数
 
-2. *类型模板参数*
-   - 声明 :: =template <typename T>= 可以 *多个* 类型模板参数，返回值可以用 [[id:bee683d2-eec4-45a8-af02-be369d182e8d][auto]] 自动推导
-     #+begin_src cpp :results output :namespaces std :includes <iostream>
-     template <typename T = int, typename U>
-     auto max(T x, U y) // 如果这里不用 auto ，使用 T，则结果为 3
-     {
-         return (x < y) ? y : x;
-     }
+2. *模板参数声明* ： =template <>=
 
-     int main()
-     {
-         std::cout << max(2, 3.5) << '\n'; //结果为 3.5
-         return 0;
-     }
-     #+end_src
 
-   - 推导 :: 见 [[id:542f88ff-7ad0-41c6-a46b-c54dc9fe1840][模板参数推导]]
-   - 默认值 :: 函数模板 和 类类型模板 都可以有
-   - [[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]] ::
-
-3. *非类型模板参数*
-   - 是一种具有 *固定类型的值的模板参数* ，是 [[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]] （可以用于函参，因为一般 函数参数不能为 constexpr）[[https://www.learncpp.com/cpp-tutorial/non-type-template-parameters/][learncpp11.9]]
+* 类型模板参数
+1. *声明* ： =template <typename T>= 可以 *多个* 类型模板参数，返回值可以用 [[id:bee683d2-eec4-45a8-af02-be369d182e8d][auto]] 自动推导
    #+begin_src cpp :results output :namespaces std :includes <iostream>
-   template <int N> // 一般用 N 表示；声明 非类型模板参数
-   void print()
+   template <typename T = int, typename U>
+   auto max(T x, U y) // 如果这里不用 auto ，使用 T，则结果为 3
    {
-       std::cout << N << '\n'; // use value of N here
+       return (x < y) ? y : x;
    }
 
    int main()
    {
-       print<5>(); // 5 is our non-type template argument
-
+       std::cout << max(2, 3.5) << '\n'; //结果为 3.5
        return 0;
    }
    #+end_src
+
+2. *推导* 见 [[id:542f88ff-7ad0-41c6-a46b-c54dc9fe1840][模板参数推导]]
+3. 函数模板 和 类类型模板 都可以有 *默认值*
+4. [[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
+
+
+* 非类型模板参数 [[https://www.learncpp.com/cpp-tutorial/non-type-template-parameters/][learncpp11.9]]
+ 1. *声明* ： =template <具体类型 N>= ；是一种具有 *固定类型的值的模板参数* ，必须传入 [[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]] （可以用于函参，因为一般 函数参数不能为 constexpr）
+  #+begin_src cpp :results output :namespaces std :includes <iostream>
+  template <int N> // 一般用 N 表示；声明 非类型模板参数
+  void print()
+  {
+      std::cout << N << '\n'; // use value of N here
+  }
+
+  int main()
+  {
+      int x { 5 };
+      print<5>(); // 5 传入 非类型模板参数
+
+      // print<x>();  FIXME：非类型模板参数必须是 常量表达式
+  }
+  #+end_src
+
+  #+RESULTS:
+
+ 2. 非类型参数 *可以是以下类型* [[https://www.learncpp.com/cpp-tutorial/template-non-type-parameters/][learncpp26.2]]
+    - 整型
+    - 枚举
+    - 指向类对象的 指针/引用
+    - 指向函数的 指针/引用
+    - 指向类成员函数的 指针/引用
+    - std::nullptr_t 类型
+    - cpp20，浮点型

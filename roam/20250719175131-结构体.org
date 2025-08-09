@@ -9,33 +9,33 @@
 
 2. 默认 *访问权限* 为 public，public 继承
 
-3. *初始化* 方式：[fn:1]
+3. *应用场景*
+   - 简单的数据存储（可以使用 聚合初始化）
+   - 与 C语言兼容 的数据结构
+
+4. *结构体大小* 问题，见：[[id:2c06fba7-342c-42ba-a063-176b6c3c8a4d][结构体大小]]
+
+5. *初始化* 方式：[fn:1]
    - *聚合初始化* （结构体是一种 [[id:382ff65a-9dfa-476a-8868-78b7418bcba8][聚合类型]] ）
    - 使用 =成员选择运算符 .= 初始化
    - 使用 *另一个结构体* 初始化
    - 嵌套结构体 使用 *嵌套初始化列表* 初始化
 
-4. *赋值* 方式：
+6. *赋值* 方式：
    - *初始化列表*
    - 使用 *成员访问运算符* =.= 赋值
    - 使用 *另一个结构体* 赋值
    - 嵌套结构体 使用 *嵌套初始化列表* 赋值
 
-5. *访问* 方式：[[https://www.learncpp.com/cpp-tutorial/member-selection-with-pointers-and-references/][learncpp13.12]]
+7. *访问* 方式：[[https://www.learncpp.com/cpp-tutorial/member-selection-with-pointers-and-references/][learncpp13.12]]
    - 结构体对象 或 引用： =成员选择运算符 .=
    - 指针： =箭头运算符 ->= （也称为 指针成员选择运算符）； =ptr->id= 等价于 =(*ptr).id=
    =->= 支持 *链式调用* [fn:2]（与 =.= 相比更优雅）
    =->= 与 =.= *混用* =(ptr->id).xx= [fn:3]
 
-6. *应用场景*
-   - 简单的数据存储（可以使用 聚合初始化）
-   - 与 C语言兼容 的数据结构
-
-7. *嵌套结构体* [[https://www.learncpp.com/cpp-tutorial/struct-miscellany/][learncpp13.11]]
+8. *嵌套结构体* [[https://www.learncpp.com/cpp-tutorial/struct-miscellany/][learncpp13.11]]
    - 先定义一个 结构体，在 另一个结构体 中作为成员 [fn:7]
    - 直接在一个 结构体 中嵌套定义 另一个结构体 [fn:8]
-
-8. *结构体大小* 问题，见：[[id:2c06fba7-342c-42ba-a063-176b6c3c8a4d][结构体对齐]]
 
 9. *结构体 与 [[id:77c81947-ba5c-4bad-93da-03bb11cee093][常量(constants)]]* 结构体可以是 const/constexpr 的，必须初始化 [fn:4]
 

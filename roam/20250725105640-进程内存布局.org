@@ -1,12 +1,110 @@
 :PROPERTIES:
 :ID:       ae7fc8d9-0053-45b6-92f4-9a42f1565718
 :END:
-#+title: 进程内存布局
+#+title: cpp内存布局
 #+filetags: cpp
 
-* 进程内存布局 [[https://www.learncpp.com/cpp-tutorial/the-stack-and-the-heap/][learncpp20.2]]
-- [[id:1491881a-65d2-41da-9069-0067bb7f8ebc][栈]]（stack：调用栈）：存储 函参、局部变量、函数调用上下文
+* cpp内存布局 [[https://www.learncpp.com/cpp-tutorial/the-stack-and-the-heap/][learncpp20.2]] [[https://v1otusc.github.io/2021/05/21/C++%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E6%83%85%E5%86%B5/][github]]
+- [[id:1491881a-65d2-41da-9069-0067bb7f8ebc][栈]]（stack：调用栈）：函参、局部变量...
+- 内存映射段         ：将文件映射到进程空间 -> 实现高效的文件IO操作
 - [[id:09cff25e-1c04-475b-b551-1f7a94b1aab3][堆]]（heap）         ：动态分配的内存
-- 数据段（.data）    ：初始化的 全局变量和static变量
-- bss段（.bss）      ：未初始化的 全局变量和static变量
-- 代码段（.text）    ：编译后的 *机器指令*
+- BSS段（.bss）      ：（未初始化）全局变量、static变量；[[id:f4a757af-96df-44bc-abef-4720a0c40275][main()]]之前初始化为 0
+- 数据段（.data）    ：（初始化）  全局变量、static变量
+- 代码段（.text）    ：
+  1. 文本区（编译后的 *机器指令* ）
+  2. 只读存储区（常量）
+
+#+name: 示例图
+#+begin_comment
+高地址
+┌───────────────────────┐
+│        Kernel Space   │ （用户态不可访问）
+├───────────────────────┤
+│        Stack          │ （向下增长）
+├───────────────────────┤
+│        Memory Mapping │ ← 文件映射区（含动态库、共享内存）
+├───────────────────────┤
+│        Heap           │ （向上增长，动态分配内存）
+├───────────────────────┤
+│        BSS            │ （未初始化：全局变量、static变量）
+├───────────────────────┤
+│        Data           │ （已初始化：全局变量、static变量）
+├───────────────────────┤
+│        Text           │ （机器指令、常量）
+└───────────────────────┘
+低地址
+#+end_comment
+
+#+name: 代码
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <cstdlib>
+#include <cstdint>
+// 全局变量（数据段）
+int g_a = 10;
+int g_b = 10;
+
+// 全局常量（代码段-常量区）
+const int c_g_a = 10;
+const int c_g_b = 10;
+
+// 全局静态变量（数据段）
+static int s_g_a = 11;
+static int s_g_b = 11;
+
+int main() {
+  // 局部变量（栈）
+  int a = 10;
+  int b = 10;
+
+  // 静态局部变量（数据段）
+  static int s_l_a = 10;
+  static int s_l_b = 10;
+
+  // 局部常量（栈）
+  const int c_l_a = 10;
+  const int c_l_b = 10;
+
+  // 堆区内存（堆）
+  int* p_l_a = new int(100);
+  int* p_l_b = new int(100);
+
+  // 地址打印
+  cout << "局部变量a         ：" << reinterpret_cast<uintptr_t>(&a) << endl;
+  cout << "局部变量b         ：" << reinterpret_cast<uintptr_t>(&b) << endl;
+
+  cout << "const局部变量c_l_a：" << reinterpret_cast<uintptr_t>(&c_l_a) << endl;
+  cout << "const局部变量c_l_b：" << reinterpret_cast<uintptr_t>(&c_l_b) << endl;
+  cout << '\n';
+
+  cout << "全局变量g_a        ：" << reinterpret_cast<uintptr_t>(&g_a) << endl;
+  cout << "全局变量g_b        ：" << reinterpret_cast<uintptr_t>(&g_b) << endl;
+
+  cout << "static全局变量s_g_a：" << reinterpret_cast<uintptr_t>(&s_g_a) << endl;
+  cout << "static全局变量s_g_b：" << reinterpret_cast<uintptr_t>(&s_g_b) << endl;
+  cout << "static局部变量s_l_a：" << reinterpret_cast<uintptr_t>(&s_l_a) << endl;
+  cout << "static局部变量s_l_b：" << reinterpret_cast<uintptr_t>(&s_l_b) << endl;
+  cout << '\n';
+
+  cout << "const全局变量c_g_a ：" << reinterpret_cast<uintptr_t>(&c_g_a) << endl;
+  cout << "const全局变量c_g_b ：" << reinterpret_cast<uintptr_t>(&c_g_b) << endl;
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+局部变量a         ：140730249679336
+局部变量b         ：140730249679340
+const局部变量c_l_a：140730249679344
+const局部变量c_l_b：140730249679348
+
+全局变量g_a        ：94857618763848
+全局变量g_b        ：94857618763852
+static全局变量s_g_a：94857618763856
+static全局变量s_g_b：94857618763860
+static局部变量s_l_a：94857618763864
+static局部变量s_l_b：94857618763868
+
+const全局变量c_g_a ：94857618755588
+const全局变量c_g_b ：94857618755592
+#+end_example
+

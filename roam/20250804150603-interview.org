@@ -1,0 +1,125 @@
+:PROPERTIES:
+:ID:       3cad4156-34eb-4e1f-82e4-46775015a546
+:END:
+#+title: interview
+#+filetags: other
+
+* Qt
+
+
+* C++
+- [X] [[id:3e85303c-39c7-4ac3-9d88-a9513d036477][inline]]
+- [X] 类和结构体区别
+- [X] [[id:34134e75-291c-45b5-b333-9488592c61af][explicit]]
+- [X] [[id:b23cd926-82ec-489e-ad8f-96b86e5559c2][虚函数]]
+- [ ] [[id:50402d44-720e-42ed-b590-2b18d219acc1][构造函数]]
+- [X] [[id:2c06fba7-342c-42ba-a063-176b6c3c8a4d][类的大小(结构体大小)]]
+- [X] [[id:878bbff5-6362-4cf9-ab1c-15bc1849cd79][野指针和悬挂指针]]
+- [X] [[id:7cb0d4aa-e74a-4563-acf6-053e129105e9][智能指针]]
+- [X] [[id:ae7fc8d9-0053-45b6-92f4-9a42f1565718][cpp内存布局]]
+- [X] [[id:3aa872a4-290a-4fc8-8e37-add919e44822][cpp编译过程]]
+- [X] C++如何实现单例模式？懒汉式单例模式：[[file:~/wheel/singleton_static.cpp][static实现]]
+- [ ] 工厂模式
+- [ ] [[/home/yoshiki01/.org/interview/海量数据/海量数据处理.org][海量数据查高频词]]
+---------------------------------金山办公C++
+- [X] [[id:a3778673-5028-4637-b8f2-85b1bf798587][面向对象三大特性]]
+- [X] [[id:f72a714e-5a38-4c4b-a773-17fb7e216e6f][循环和递归区别]]
+- [ ] map和unordered_map
+- [ ] #define和const的区别
+
+
+* 操作系统
+- [X] [[id:27145501-fa0b-4b05-a5df-1cd2f6a46226][什么是进程和线程？进程和线程的区别？]]
+- [X] [[id:eea0107c-ac34-4210-be33-534585e20915][进程间的通信方式有哪些？]]
+- [X] I/O 多路复用（select/poll/epoll）是什么？通常适用哪些场景？
+- [X] 线程间同步方式有哪些？[[id:ac8c9c6d-760b-4ec8-847b-cbedebee7085][锁]] [[id:dd50a08e-6b08-43c7-b35a-4109e47b679e][条件变量]] [[id:5b709163-a1e7-49cf-8e66-d6cfe35a38c3][信号量]]
+- [X] [[id:cbf178f7-ce4b-435d-bc2c-55cb1e39816e][用户态和内核态有什么区别？]]
+- [X] [[id:030cfed8-79d0-43cd-9e4d-de5cedef7e63][什么是 LRU 算法？]]
+- [X] [[id:57a3e52f-e77e-439f-a4e5-3dc6e1886e5a][常见进程调度算法]]
+- [X] 多线程冲突了怎么办？[[id:ac8c9c6d-760b-4ec8-847b-cbedebee7085][锁]] [[id:5b709163-a1e7-49cf-8e66-d6cfe35a38c3][信号量]]
+- [X] [[id:8984b341-e5ac-4715-b9a6-0ba8fdd70ecf][什么情况下会发生死锁？]]
+- [X] [[id:ac8c9c6d-760b-4ec8-847b-cbedebee7085][介绍一下你知道的锁]]
+- [X] [[id:8984b341-e5ac-4715-b9a6-0ba8fdd70ecf][如何解决 / 解除死锁？]]
+- [X] [[id:52c4cf0a-3de5-4e9d-a314-821f6c2f39c3][epoll 的原理及其 O(1) 查询速度？有哪两种工作模式？]]
+- [X] [[id:27145501-fa0b-4b05-a5df-1cd2f6a46226][什么是协程？]]
+- [X] [[id:cb213eda-0332-4351-8136-b7712d62c8bd][线程切换时操作系统要做哪些动作？]]
+- [X] [[id:e9d72e49-079e-4275-ab59-31e2e8e3d3c7][malloc 是如何分配内存的？]]
+- [X] [[id:27145501-fa0b-4b05-a5df-1cd2f6a46226][什么时候选用进程，什么时候选用线程？]] -> 1.
+- [X] [[id:9c2a5102-40ec-47c9-ae2f-ea3b8c7b2df9][为什么要有虚拟内存？]]
+- [X] [[id:784c244c-7f7f-4e36-be15-7145add1b4f5][为什么要使用多线程？]]
+- [X] [[id:aca79555-759a-47a5-90ac-ab6454bd872a][并行和并发是什么？]]
+- [X] [[id:0880c9ba-5beb-4cdc-8ef1-178a85ff6f6c][同步与异步的区别？]]
+- [X] [[id:0880c9ba-5beb-4cdc-8ef1-178a85ff6f6c][阻塞和非阻塞的区别？]]
+- [ ] ...
+- [X] [[id:27145501-fa0b-4b05-a5df-1cd2f6a46226][进程有哪些状态？]]
+- [X] [[id:d925363c-f872-4443-a964-efeeca7cfb85][软中断与硬中断有什么区别？]]
+- [X] [[id:d925363c-f872-4443-a964-efeeca7cfb85][什么是中断和异常？]]
+- [X] [[id:cbf178f7-ce4b-435d-bc2c-55cb1e39816e][什么是系统调用？]]
+- [X] [[id:679da1a6-1914-4b9e-b693-137ddb6dc047][讲讲局部性原理？]]
+
+
+* HTTP
+- [X] [[id:06a05125-f3ac-44e9-8e75-55b296f622e8][键入网址到网页显示]]
+- [X] [[id:b0b55d01-31a8-4684-b94e-880240e10f2a][HTTP vs HTTPS]]
+- [X] [[id:332d23bd-0c98-4686-9b0b-c43a1e85e324][GET 和 POST区别]]
+- [X] [[id:0b3fad26-6096-455d-a8af-79522c5113f3][HTTP/1.0、HTTP/1.1、HTTP/2.0、HTTP/3.0 的区别]]
+- [X] [[id:6567b042-3d48-4e52-b02f-7bd1b4443479][HTTP常见状态码有哪些]]
+- [X] [[id:93d2dbd5-5033-4ab9-a6bb-38c27c1ca3a6][TLS四次握手]]、[[id:93d2dbd5-5033-4ab9-a6bb-38c27c1ca3a6][HTTPS密钥交换]]
+- [X] [[id:5b07ed5a-0791-4807-b666-f321d40f578c][HTTPS证书验证]]
+- [X] [[id:2631e4b6-e65d-4f92-8807-12b3fc1a2330][谈谈HTTP的缓存机制，服务器如何判断缓存是否过期？]]
+- [X] [[id:f405fdf1-8944-4b8a-b275-afeb753424f1][WebSocket]]
+- [X] [[id:e2497906-dc9c-40c7-b2f4-9e4f1ee2c579][HTTP常见字段]]、[[id:6cd6d820-4519-4090-8b15-4b38060fe563][HTTP请求头中包含什么？]]
+- [ ] HTTPS（TLS）里都用到了哪些加密算法？
+- [X] [[id:0b3fad26-6096-455d-a8af-79522c5113f3][HTTP是基于TCP还是UDP？]]
+- [X] [[id:509b7100-a51d-4433-a5d2-0795fb2dcb60][HTTP长连接和短链接的区别]]
+
+
+* TCP/UDP
+- [X] [[id:3c53f1a0-0e17-4911-8ce9-c436234b7d46][TCP]]与[[id:9ae5020d-2ae4-465a-a90c-180e64b1b635][UDP]]的核心区别？
+- [X] [[id:ceed6c1f-7585-4884-874d-eb2dbf4145ae][TCP三次握手]]
+- [X] [[id:a9a65a40-fc21-4c71-925e-291763a06f35][TCP四次挥手]]
+- [X] [[id:3c53f1a0-0e17-4911-8ce9-c436234b7d46][TCP 如何保证可靠传输？]] -> 可靠部分
+- [ ] [[id:2aaca537-94b0-40b2-a0c4-89d2743843d7][如何在 UDP 之上实现可靠传输？]]
+- [X] [[id:a1cc3035-80d0-41d7-a846-a8657b8dbf9d][TCP 的粘包 / 拆包机制]]
+- [X] [[id:a9a65a40-fc21-4c71-925e-291763a06f35][为什么需要四次挥手]]
+- [X] [[id:9ae5020d-2ae4-465a-a90c-180e64b1b635][UDP]] 和 [[id:3c53f1a0-0e17-4911-8ce9-c436234b7d46][TCP]] 的应用场景
+- [X] [[id:ae96f81e-fb9f-4c52-8f42-14b5dea2e357][为什么挥手需要 TIME_WAIT？]]
+- [X] [[id:38f5ad84-add1-40ab-a0ff-2ef0c81d59f2][流量控制]]和[[id:63a8feff-fff9-4e50-8a8a-260fb5158ac4][拥塞控制]]的步骤？
+- [X] [[id:38f5ad84-add1-40ab-a0ff-2ef0c81d59f2][TCP滑动窗口的作用是什么？]]
+- [X] [[id:a9a65a40-fc21-4c71-925e-291763a06f35][TIME_WAIT 过多有什么危害？如何优化？]]
+- [X] [[id:0e2cdec4-1d24-4be2-92ef-62058f1510fb][TIME_WAIT、CLOSE_WAIT 状态发生在哪一步？]]
+- [X] [[id:ceed6c1f-7585-4884-874d-eb2dbf4145ae][已建立连接时客户端突然断电]] / [[id:ceed6c1f-7585-4884-874d-eb2dbf4145ae][进程崩溃会怎样]]？
+- [X] [[id:ceed6c1f-7585-4884-874d-eb2dbf4145ae][什么是 SYN Flood 攻击？如何避免？]]
+- [X] [[id:4a9aabda-eb66-4ebe-b267-9a279ee47380][TCP和UDP可以使用同一个端口吗？]]
+- [X] [[id:abf2d234-abd2-4248-8d10-cdf4fb849432][服务器监听一个端口，TCP “最大连接数”怎么计算？]]
+- [X] [[id:ceed6c1f-7585-4884-874d-eb2dbf4145ae][没有 accept 可以建立 TCP连接吗？]]
+- [X] [[id:ceed6c1f-7585-4884-874d-eb2dbf4145ae][没有 listen 可以建立 TCP连接吗？]]
+
+
+* 数据库基础
+- [ ] 详细描述一条 SQL 在 MySQL 中的执行过程
+- [ ] MySQL 的存储引擎有哪些？它们之间有什么区别？默认使用哪个？
+- [ ] 数据库的三大范式是什么？
+- [ ] MyISAM 与 InnoDB 有什么区别？如何选择？
+- [ ] InnoDB 是如何存储数据的？
+- [ ] SQL 中 select、from、join、where、group by、having、order by、limit 的执行顺序？
+
+
+* SQL
+- [ ] 为什么 MySQL 采用 B+ 树作为索引？
+- [ ] SQL 调优常见方法有哪些？
+- [ ] 如何监控并优化慢 SQL？
+- [ ] 如何评估 / 判断索引是否生效？常见索引失效场景有哪些？
+
+
+* 数据库锁/日志
+- [ ] 事务隔离级别有哪些？
+- [ ] 什么是数据库事务？
+- [ ] MySQL 中的 MVCC 是什么？Read View 在 MVCC 中如何工作？如果没有 MVCC 会怎样？
+- [ ] redo log / undo log / binlog 各自作用？
+
+
+* Redis
+- [ ] 详细的说说Redis的数据类型
+- [ ] 说说Redis的持久化策略。
+- [ ] 如何利用Redis实现一个分布式锁？

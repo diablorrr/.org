@@ -4,14 +4,89 @@
 #+title: 完美转发
 #+filetags: cpp
 
+* 完美转发
+（cpp11）函数模板将参数原封不动的转发给其他函数，保持参数的属性不变（左值/右值）[fn:1]
+- 问题 :: 模板函数参数使用万能引用，接受右值的时候，推导为右值引用，[[id:78a7c695-510d-4b03-a1e1-055d32a034cf][右值引用]]的函数名为左值，传入内部函数，会调用内部函数的左值版本
+  + 万能引用 :: =T&&= ，使模板函数可以接收左右值，根据引用折叠确定最终类型
+  + 引用折叠 :: 多个引用组合时，简化后为 左值/右值引用，规则 [fn:2]
+    | 组合方式 | 折叠结果 |
+    |----------+----------|
+    | T& &     | T&       |
+    | T& &&    | T&       |
+    | T&& &    | T&       |
+    | T&& &&   | T&&      |
+    简单说：右值引用的右值引用折叠为右值引用，其他情况为左值引用
 
-* 使用
-** 解决模板函数内部调用另一个函数时，传递的参数由右值变成左值的问题
-1. 外层模板函数：[[id:108d37bf-0aa2-4a95-b65b-1306c2e8e39c][万能引用]]
-2. 内层函数：完美转发 std::forward
 
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <iostream>
+#include <type_traits>
 
-* 概念
-- 简介 ::
-  1. [[id:8ab4df56-e11f-42b8-87f8-4daa2fd045db][cpp]]模板函数无损转发参数(保留左/右值属性)
-  2. 实现：std::forward  保证参数的左右值属性
+template<typename T>
+void check_type() {
+    if (std::is_lvalue_reference<T>::value) {
+        std::cout << "左值引用" << std::endl;
+    } else if (std::is_rvalue_reference<T>::value) {
+        std::cout << "右值引用" << std::endl;
+    } else {
+        std::cout << "非引用类型" << std::endl;
+    }
+}
+
+int main() {
+    using namespace std;
+
+    int x = 10;
+
+    // 引用折叠规则示例
+    typedef int&  lref;
+    typedef int&& rref;
+
+    cout << "int& & 的结果: ";
+    check_type<lref&>();  // int& & → int&
+
+    cout << "int& && 的结果: ";
+    check_type<lref&&>(); // int& && → int&
+
+    cout << "int&& & 的结果: ";
+    check_type<rref&>();  // int&& & → int&
+
+    cout << "int&& && 的结果: ";
+    check_type<rref&&>(); // int&& && → int&&
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: int& & 的结果: 左值引用
+: int& && 的结果: 左值引用
+: int&& & 的结果: 左值引用
+: int&& && 的结果: 右值引用
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <utility> // for std::forward
+
+void target(int& x) { std::cout << "左值引用: " << x << std::endl; }
+void target(int&& x) { std::cout << "右值引用: " << x << std::endl; }
+
+template<typename T>
+void forwarder(T&& arg) {
+    target(std::forward<T>(arg)); // 完美转发：forwarder(123) 调用 target右值版本
+    // target(arg);  // forwarder(123) 调用 target左值版本 -> 根据 123 推导 T 为 int，则 arg 为 int&&类型（右值引用），右值引用本质为左值，因此调用 target左值版本
+}
+
+int main() {
+    int x = 42;
+
+    forwarder(x);      // 转发左值
+    forwarder(123);    // 转发右值
+}
+#+end_src
+
+#+RESULTS:
+: 左值引用: 42
+: 右值引用: 123

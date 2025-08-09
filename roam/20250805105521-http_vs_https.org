@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       b0b55d01-31a8-4684-b94e-880240e10f2a
+:END:
+#+title: HTTP vs HTTPS
+#+filetags: network
+
+* HTTP vs HTTPS :ATTACH:
+:PROPERTIES:
+:ID:       588c6cd1-1452-40bd-802b-fc6b2baf736b
+:END:
+[[attachment:_20250805_105648screenshot.png]]
+
+1. HTTP ：明文传输 -> 无加密传输、验证机制、数字证书机制 -> 不安全
+   端口80
+
+2. [[id:865c2eff-7d6a-449f-843d-215ccb8a913e][HTTPS]]：SSL/TLS层 提供 -> 更安全
+   1) 加密传输
+   2) 校验机制
+   3) 数字证书机制
+   端口443
+

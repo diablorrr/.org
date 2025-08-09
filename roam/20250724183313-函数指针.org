@@ -69,7 +69,7 @@
    1) 回调函数（作为函参传到其他函数的函数）[fn:1]
    2) 将函数 存储在数组 中
 
-5. *std::function* （cpp11）：用于定义和存储函数指针； *只允许隐式解引用*
+5. *std::function* （cpp11）：用于包装函数指针（定义和存储函数指针）； *只允许隐式解引用*
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    #include <functional>
 

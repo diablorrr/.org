@@ -1,0 +1,26 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/yoshiki01/.org/roam/20250319165005-g.org
+
+
+* 查询
+:PROPERTIES:
+:ARCHIVE_TIME: 2025-08-04 一 17:33
+:ARCHIVE_FILE: ~/.org/roam/20250319165005-g.org
+:ARCHIVE_CATEGORY: 20250319165005-g
+:END:
+| 参数                 | 说明                                                               |
+|----------------------+--------------------------------------------------------------------|
+| -o <output> <source> | 编译source => 文件output                                           |
+| -O<level>[fn:1]      | 设置优化级别：-O0无优化，-O1、-O2、-O3优化级别递增。推荐优化选项O2 |
+| -L<dir>[fn:3]        | 库文件搜索路径                                                     |
+| -l<library>[fn:2]    | 链接指定的库                                                       |
+| -I<dir>[fn:4]        | 头文件搜索路径                                                     |
+| -std=<standard>      | 指定语言标准                                                       |
+| -g                   | 生成调试信息                                                       |
+| -c                   | 只编译生成中间文件.o，不链接                                       |
+| -v                   | 显示编译器版本、详细编译过程                                       |
+| -w                   | 编译时，不显示任何警告信息                                         |
+| -Wall                | 编译时，显示所有警告信息                                           |
+| -DNDEBUG             | 预处理器禁用代码中的调试行为(如assert())                           |

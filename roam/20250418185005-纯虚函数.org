@@ -1,52 +1,89 @@
 :PROPERTIES:
 :ID:       09c9cdf8-61a3-48c9-86e3-4caa29fbdc05
 :END:
-#+title: 纯虚函数
+#+title: 纯虚函数、抽象类、接口类
+#+filetags: cpp
 
-* 概念
-- 简介 ::
-  1. 用virtual关键字声明的成员函数，末尾添加=0标记
-  2. 用于提供接口规范(做什么)
-  3. 含纯虚函数的类称为[[id:82398284-df61-4c14-9eed-e4b9f587f78b][抽象类]]，派生类必须实现，否则派生类也是抽象类；[[id:82398284-df61-4c14-9eed-e4b9f587f78b][抽象类]]不可实例化
-  4. 可以有实现，但是必须在类外实现
+* 纯虚函数、抽象类、接口类 [[https://www.learncpp.com/cpp-tutorial/pure-virtual-functions-abstract-base-classes-and-interface-classes/][learncpp25.7]]
+1. =virtual= 声明的函数，末尾添加 ==0= 标记
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   virtual void func() = 0;
+   #+end_src
 
-** 示例
-*** 示例1:纯虚函数
-#+begin_src cpp
-virtual void func() = 0;
-#+end_src
-*** 示例2:纯虚函数可以有实现
-#+begin_src cpp :results output
-#include <iostream>
+2. *抽象类*
+   1) 有纯虚函数的类 是抽象类，抽象类 的派生类没有实现纯虚函数，也是抽象类
+   2) 抽象类无法实例化
+   3) 抽象类可以有定义：必须类外定义，仍为抽象类，继承的类没实现纯虚函数也是抽象类 [fn:1]
+   4) 抽象类有 [[id:74b3a07c-d965-4a3d-aa07-eb49d5a08b7e][虚函数表]]
 
-// 基类（抽象类）
+3. *接口类*
+   1) 没有成员变量，所有函数都是纯虚函数，因此继承接口类的类需要实现所有纯虚函数；[[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
+   2) 使用场景：函数参数
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <string_view> <cmath>
+   class IErrorLog {
+   public:
+       virtual bool openLog(std::string_view filename) = 0;
+       virtual bool closeLog() = 0;
+       virtual bool writeError(std::string_view errorMessage) = 0;
+
+       virtual ~IErrorLog() {} // 定义虚析构，以至于 delete 指向 IErrorLog 的指针，可以调用正确的析构函数
+   };
+
+   // 传入接口类 IErrorLog：继承该接口类的类，都能传入
+   double mySqrt(double value, IErrorLog& log)
+   {
+       if (value < 0.0)
+       {
+           log.writeError("Tried to take square root of value less than 0");
+           return 0.0;
+       }
+       return std::sqrt(value);
+   }
+   #+end_src
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <string> <string_view>
+// Animal 是抽象类
 class Animal {
+protected:
+    std::string m_name {};
 public:
-    virtual void speak() = 0;  // 声明为纯虚函数
+    Animal(std::string_view name) : m_name(name) { }
+
+    const std::string& getName() const { return m_name; }
+    virtual std::string_view speak() const = 0; // speak() 纯虚函数
+
+    virtual ~Animal() = default;
 };
 
-// 实现基类的纯虚函数（必须定义在类外部）
-void Animal::speak() {
-    std::cout << "Animal makes a sound." << std::endl;
+
+std::string_view Animal::speak() const // 纯虚函数的定义，必须在类外
+{
+    return "buzz";
 }
 
-// 派生类
-class Dog : public Animal {
+
+class Dragonfly: public Animal {
 public:
-    void speak() override {
-        Animal::speak();       // 显式调用基类的纯虚函数实现
-        std::cout << "Dog barks: Woof!" << std::endl;
+    Dragonfly(std::string_view name) : Animal{name} { }
+
+    // 若没重写，就算纯虚函数有定义，也为抽象类
+    std::string_view speak() const override
+    {
+        return Animal::speak(); // 调用基类的纯虚函数实现
     }
 };
 
-int main() {
-    Dog dog;
-    dog.speak();
+
+int main()
+{
+    Dragonfly dfly{"Sally"};
+    std::cout << dfly.getName() << " says " << dfly.speak() << '\n';
     // Animal animal;  // 错误：Animal 是抽象类，无法实例化
+
     return 0;
 }
 #+end_src
-
-#+RESULTS:
-: Animal makes a sound.
-: Dog barks: Woof!

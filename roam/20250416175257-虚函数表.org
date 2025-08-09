@@ -1,38 +1,131 @@
 :PROPERTIES:
 :ID:       74b3a07c-d965-4a3d-aa07-eb49d5a08b7e
 :END:
-#+title: 虚函数表
+#+title: 虚函数实现(虚函数表、虚函数指针)
+#+filetags: cpp
 
-* 概念
-- 简介 ::
-  1. 编译时，生成虚函数表，表内存放指针，指向真实的函数；若派生类有重写基类虚函数，则指向派生类重写的函数，否则指向基类的函数
-  2. 运行时(调用对象的构造函数)，将虚函数表首地址赋值给[[id:1af91a2c-5ce4-4095-8572-7632d815a34b][虚函数表指针]](vptr)
-  3. 一个类是否有虚函数表，取决于 => 自己或祖宗是否有虚函数
-** 示例
-*** 示例1:有虚函数的构造函数
-#+begin_src cpp
-Base* ptr = new Derived();  // 第1行：创建 Derived 对象并用 Base* 指针指向它
-ptr->func1();               // 第2行：通过 Base* 调用虚函数 func1()
+* 函数的早期绑定和晚期绑定 [[https://www.learncpp.com/cpp-tutorial/early-binding-and-late-binding/][learncpp25.5]]
+- 早期绑定 :: 编译时，将函数调用和函数定义绑定 [fn:1]
+  跳转到函数地址；相对不灵活
+
+- 晚期绑定 :: 运行时，将函数调用和函数定义绑定（通过 [[id:ee21abb8-cd89-4207-bbbe-49c4ed887fed][函数指针]] 实现） [fn:2]
+  效率低点：读取指针中存储的地址 -> 跳转到函数地址；但是更灵活（eg：运行时根据用户输入选择函数）
+
+
+* 虚函数实现 [[https://www.learncpp.com/cpp-tutorial/the-virtual-table/][learncpp25.6]]
+1. 有虚函数的类（ =virtual= ）有 虚函数表、虚函数指针（ =*__vptr= ），其派生类也有自己的虚函数表；
+   在类对象初始化的时，虚函数指针 指向对应的虚函数表（eg：派生类创建时，虚函数表指针指向派生类的虚函数表，表内会用掉重写版本的函数指针替换被重写的）；
+   调用虚函数时，根据类指针 -> 找到 =*__vptr=  -> 再找到对应的 虚函数表 -> 最后调用真实的函数
+   1) *虚函数表* ：是一个 *函数查找表* ：一个数组，里面存放函数指针（派生类有重写存放重写版本，否则存放基类版本），指向该类可以真实调用的函数； *编译时设置* -> 有虚函数的类及其派生类各自都有
+   2) *虚函数指针* ：指向虚函数表； *运行时设置* ->  创建类对象时，在基类添加，然后指向该类（基类或派生类）的虚表
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   class Base {
+   public:
+       // VirtualTable* __vptr; 编译器自动添加 虚函数指针
+       virtual void function1() {};
+       virtual void function2() {};};
+
+   // D1、D2 是派生类，会继承 虚函数指针
+   class D1: public Base {
+   public:
+       void function1() override {};};
+
+   class D2: public Base {
+   public:
+       void function2() override {};};
+
+   int main() {
+    D1 d1 {};           // D1创建，*__vptr 指向 D1虚表
+    Base* dPtr = &d1;   // Base指针 指向 D1的基类部分，又 *__vptr 指向 D1虚表，因此可以访问 D1的虚函数表
+    dPtr->function1();  // 程序识别出这是虚函数，通过 虚函数表 解析出 D1::function1()
+
+    Base b {};          // Base创建，*__vptr 指向 Base虚表
+    Base* bPtr = &b;
+    bPtr->function1();  // 调用 Base::function1
+   }
+   #+end_src
+
+2. *性能* ：虚函数 比 非虚函数 *调用慢* 、 *体积大* （*__vptr）
+   - 虚函数调用 :: =*__vptr= 找到虚表 -> 对虚表进行索引 -> 找到函数 -> 调用
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int add(int x, int y) { return x + y; }
+
+int subtract(int x, int y) { return x - y; }
+
+int multiply(int x, int y) { return x * y; }
+
+int main()
+{
+    int x{};
+    std::cout << "Enter a number: ";
+    std::cin >> x;
+
+    int y{};
+    std::cout << "Enter another number: ";
+    std::cin >> y;
+
+    int op{};
+    std::cout << "Enter an operation (0=add, 1=subtract, 2=multiply): ";
+    std::cin >> op;
+
+    using FcnPtr = int (*)(int, int); // 函数指针的别名
+    FcnPtr fcn { nullptr };           // 创建函数指针 fcn
+
+    // 根据用户选择，将 fcn 指向具体函数
+    switch (op)
+    {
+        case 0: fcn = add; break;
+        case 1: fcn = subtract; break;
+        case 2: fcn = multiply; break;
+        default:
+            std::cout << "Invalid operator\n";
+            return 1;
+    }
+
+    // 晚期绑定：在编译时，编译器无法确定 fcn 指向哪个函数
+    std::cout << "The answer is: " << fcn(x, y) << '\n';
+
+    return 0;
+}
 #+end_src
-- 解释 ::
-  + 第一行 ::
-    1. 调用Derived的构造函数。Derived的构造函数执行前，先调用Base的构造函数，vptr指向Base的虚函数表
-    2. Derived构造函数执行后，vptr指向Derived的虚函数表
-    3. 对象构造完成后，vptr最终指向Derived的虚函数表
-    4. ptr指向对象内的vptr指向的Derived的虚函数表
-  + 第二行 ::
-    1. 通过ptr找到vptr
-    2. 通过vptr找到Derived的虚函数表
-    3. 调用Derived::func1()
-*** 示例2:虚析构
-#+begin_src cpp
-Base* ptr = new Derived();
-delete ptr;  // 触发多态析构
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int add(int x, int y) { return x + y; }
+
+int subtract(int x, int y) { return x - y; }
+
+int multiply(int x, int y) { return x * y; }
+
+int main()
+{
+    int x{};
+    std::cout << "Enter a number: ";
+    std::cin >> x;
+
+    int y{};
+    std::cout << "Enter another number: ";
+    std::cin >> y;
+
+    int op{};
+    std::cout << "Enter an operation (0=add, 1=subtract, 2=multiply): ";
+    std::cin >> op;
+
+    int result {};
+    switch (op)
+    {
+        // 早期绑定：编译时将函数调用和函数定义绑定
+        case 0: result = add(x, y); break;
+        case 1: result = subtract(x, y); break;
+        case 2: result = multiply(x, y); break;
+        default:
+            std::cout << "Invalid operator\n";
+            return 1;
+    }
+    std::cout << "The answer is: " << result << '\n';
+}
 #+end_src
-- 解释 ::
-  + 第一行 ::
-    1. 此时vptr指向派生类的虚函数表
-  + 第二行 ::
-    1. 调用派生类的析构函数
-    2. vptr指向基类的虚函数表
-    3. 调用基类的析构函数

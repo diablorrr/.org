@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID:       7a87bf4e-74d0-4760-9979-a6a247a5a384
+:END:
+#+title: 进程控制块(PCB)
+#+filetags: operating_system
+
+* 进程控制块(PCB) [[https://www.bilibili.com/video/BV17pEkzVEHt/?vd_source=4441bc96046659b39d059d583f36ff52][bilibili-十里01]]
+1. 进程的唯一标识，查看方式： =cat /proc/<PID>/status=
+   PCB中的重要信息如下：
+   #+begin_example C
+   pub struct ProcessControlBlock {
+       pid: u16,                           // NOTE 进程标识：区分不同进程
+       state: ProcessState,                // NOTE 进程状态：就绪、运行、阻塞等
+       // ppid、uid、gid                   // 创建当前进程的父进程ID、所属用户、用户组
+       /* 一些寄存器：保存进程的CPU状态 */
+       program_counter: u16,               // NOTE 程序计数器：下一条指令的位置
+       general_purpose_registers: [u8; 4], // NOTE 通用寄存器：存在正在用于计算的数据
+       instruction_register: u8,           // NOTE 指令寄存器：当前正在执行的指令
+       // flags: [u1; 3],                  // 标志位
+       // stack_pointer: u16,              // 栈指针（可能有）
+       // index_registers: [u16; 2],       // 索引寄存器（可能有）
+       /* 其他 */
+       memory_limits: [u16; 2],            // NOTE 进程的内存范围
+       io_devices: Vec<IO_Device>,         // NOTE 打开的IO设备列表
+       open_files: Vec<File>,              // NOTE 打开的文件列表
+   }
+   #+end_example
+   在多进程上下文切换时，操作系统会保存当前进程A的 CPU状态（就存在A的PCB里），然后切换到下一个进程B，执行完B后，保存B的进程CPU状态，恢复A的进程CPU状态，见：[[id:93410ded-f946-431c-8d3a-05f6fb5273d6][图:多进程上下文切换]]
+
+2. 操作系统通过 PCB 管理进程，用 链表 将 *相同状态的PCB* 组织成各种队列，见：[[id:778bf7b6-3709-43f3-8cfb-96c532862909][图:PCB组成的各种队列]]
+   #+begin_example
+   就绪队列：所有就绪状态的PCB
+   阻塞队列：所有阻塞状态的PCB
+   ...
+   #+end_example
+
+
+
+** 图:多进程上下文切换 :ATTACH:
+:PROPERTIES:
+:ID:       93410ded-f946-431c-8d3a-05f6fb5273d6
+:END:
+[[attachment:_20250807_124232screenshot.png]]
+
+
+** 图:PCB组成的各种队列 :ATTACH:
+:PROPERTIES:
+:ID:       778bf7b6-3709-43f3-8cfb-96c532862909
+:END:
+[[attachment:_20250807_124618screenshot.png]]

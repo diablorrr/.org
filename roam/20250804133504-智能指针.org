@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       7cb0d4aa-e74a-4563-acf6-053e129105e9
+:END:
+#+title: 智能指针
+#+filetags: cpp
+
+* 智能指针
+是 RAII 思想的体现：通过 对象生命周期 自动化管理动态内存资源；具体如下：
+1. [[id:02ce83ed-31b4-4906-89e4-271bbf432834][std::unique_ptr]]
+2. [[id:40c9dfcd-6bcb-4bec-8160-89b3187c4997][std::shared_ptr]]
+3. [[id:eb06d6f0-46b3-4793-836e-6bd8e3a4814e][std::weak_ptr]]

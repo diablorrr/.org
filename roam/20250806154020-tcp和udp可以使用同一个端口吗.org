@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       4a9aabda-eb66-4ebe-b267-9a279ee47380
+:END:
+#+title: TCP和UDP可以使用同一个端口吗？
+#+filetags: network
+
+* TCP和UDP可以使用同一个端口吗？ :ATTACH: [[https://xiaolincoding.com/network/3_tcp/port.html#tcp-%E5%92%8C-udp-%E5%8F%AF%E4%BB%A5%E5%90%8C%E6%97%B6%E7%BB%91%E5%AE%9A%E7%9B%B8%E5%90%8C%E7%9A%84%E7%AB%AF%E5%8F%A3%E5%90%97][小林coding]]
+:PROPERTIES:
+:ID:       28bcae4c-6ee6-40a4-a77c-d213d4c76223
+:END:
+可以；TCP 和 UDP 是内核中的两个独立模块，当主机收到数据包后，根据 *IP包头的协议字段* 判断送到哪个模块处理
+[[attachment:_20250806_154253screenshot.png]]

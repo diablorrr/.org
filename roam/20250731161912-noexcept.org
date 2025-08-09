@@ -1,0 +1,117 @@
+:PROPERTIES:
+:ID:       54dd1cc2-2d5f-4971-97cd-57541ddcef10
+:END:
+#+title: noexcept
+#+filetags: cpp
+
+* noexcept [[https://www.learncpp.com/cpp-tutorial/exception-specifications-and-noexcept/][learncpp27.9]]
+1. 用于承诺函数 *不会抛出异常/不会失败* ，编译器可以进行优化（eg：std::vector 可以感知 noexcept，并决定用拷贝语义或移动语义：移动语义更快）；不会阻止函数抛出异常，也不会阻止函数调用其他可能抛异常的函数： *只要 =noexcept函数= 在内部捕获并处理，且异常不会从 =noexcept函数= 传出就可* [fn:1]，最坏情况 =noexcept函数= 内部调用 =std::terminate=
+
+2. noexcept 可以 *带布尔参数*
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   noexcept(true)  // 等价于 noexcept
+   noexcept(false) // 意味着函数可能抛异常
+   #+end_src
+
+3. noexcept 可以在 *表达式内部使用* ：会抛异常返回 true，否则 false
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   void foo() {throw -1;}
+   void boo() {};
+   void goo() noexcept {};
+   struct S{};
+
+   constexpr bool b1{ noexcept(5 + 3) }; // true; ints are non-throwing
+   constexpr bool b2{ noexcept(foo()) }; // false; foo() throws an exception
+   constexpr bool b3{ noexcept(boo()) }; // false; boo() is implicitly noexcept(false)
+   constexpr bool b4{ noexcept(goo()) }; // true; goo() is explicitly noexcept(true)
+   constexpr bool b5{ noexcept(S{}) };   // true; a struct's default constructor is noexcept by default
+   #+end_src
+
+4. *何时使用？*
+   - [[id:ac154a46-7700-4286-96aa-a45f8d93c6b6][移动构造函数、移动赋值]] 始终使用
+   - [[id:828d1a9b-3ab1-4471-8906-1cf535ea8e7d][拷贝构造函数、拷贝赋值]] 尽量使用
+
+5. *异常安全保证* （exception safety guarantee）
+   1. 不提供保证：不保证发生什么情况
+   2. 基本保证：抛出异常 -> 不会内存泄漏、程序状态可能改变
+   3. 强保证：抛出异常 -> 不会内存泄漏、程序状态不变（要么完全成功，要么完全失败）
+   4. 不抛出/不失败异常保证：不抛出异常（内部捕获处理或调用std::terminated）-> noexcept对应这个级别
+
+6. std::move_if_noexcept：根据移动构造函数是否标记 noexcept 决定移动还是拷贝 [[https://www.learncpp.com/cpp-tutorial/stdmove_if_noexcept/][learncpp27.10]]
+
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Doomed
+{
+public:
+    ~Doomed()
+    {
+        std::cout << "Doomed destructed\n";
+    }
+};
+
+void thrower()
+{
+    std::cout << "Throwing exception\n";
+    throw 1;
+}
+
+void pt()
+{
+    std::cout << "pt (potentally throwing) called\n";
+    Doomed doomed{};
+    thrower();
+    std::cout << "This never prints\n";
+}
+
+void nt() noexcept
+{
+    std::cout << "nt (noexcept) called\n";
+    Doomed doomed{};
+    thrower();
+    std::cout << "this never prints\n";
+}
+
+void tester(int c) noexcept // 保证不会抛出异常：在内部捕获并处理了；能调用抛出异常函数 pt()，也能调用 保证不抛出异常函数nt()，但nt()没法处理，于是调用 std::terminate
+{
+    std::cout << "tester (noexcept) case " << c << " called\n";
+    try
+    {
+        (c == 1) ? pt() : nt();
+    }
+    catch (...)
+    {
+        std::cout << "tester caught exception\n";
+    }
+}
+
+int main()
+{
+    std::cout << std::unitbuf;
+    std::cout << std::boolalpha;
+    tester(1);
+    std::cout << "Test successful\n\n";
+    tester(2);
+    std::cout << "Test successful\n";
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+tester (noexcept) case 1 called
+pt (potentally throwing) called
+Throwing exception
+Doomed destructed
+tester caught exception
+Test successful
+
+tester (noexcept) case 2 called
+nt (noexcept) called
+Throwing exception
+#+end_example

@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       e2497906-dc9c-40c7-b2f4-9e4f1ee2c579
+:END:
+#+title: HTTP常见字段
+#+filetags: network
+
+* HTTP常见字段
+*客户端*
+- Host            :: 指定 要访问的服务器的域名。eg： =Host: www.A.com=
+- Connection      :: 客户端要求服务端使用 HTTP长连接 机制。eg： =Connection: Keep-Alive=
+  #+begin_comment
+  HTTP/1.1 默认长连接，老版本 HTTP 需要指定 Keep-Alive
+  #+end_comment
+
+- Accept          :: 接受的数据格式。eg： =Accept: */*=
+- Accept-Encoding :: 接受的数据压缩方式。eg： =Accept-Encoding: gzip, deflate=
+
+
+*服务端*
+- Content-Length   :: 响应的数据长度。eg： =Content-Length: 1000=
+
+- Content-Type     :: 响应的数据格式。eg： =Content-Type: text/html; Charset=utf-8=
+- Content-Encoding :: 响应的数据压缩方法。eg： =Content-Encoding: gzip=
+
+- Cache-Control    :: 相对时间（资源在客户端的有效期），优先级更高
+- Expires          :: 绝对时间（资源在客户端的有效期）

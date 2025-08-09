@@ -4,7 +4,7 @@
 #+title: 函数重载解析
 #+filetags: cpp
 
-* 重载解析(overload resolution) [[https://www.learncpp.com/cpp-tutorial/function-overload-resolution-and-ambiguous-matches/][learncpp11.3]]
+* 函数重载解析(overload resolution) [[https://www.learncpp.com/cpp-tutorial/function-overload-resolution-and-ambiguous-matches/][learncpp11.3]]
 1. 调用重载函数时，编译器根据 *函数参数* 匹配重载版本
 
 2. *重载解析规则*

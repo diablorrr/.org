@@ -5,17 +5,43 @@
 #+filetags: cpp
 
 * 聚合类型 = 聚合体 [[https://www.learncpp.com/cpp-tutorial/struct-aggregate-initialization/][learncpp13.8]]
-1. 可以包含包含多种类型的数据成员，聚合体可以使用 *聚合初始化* 初始化成员变量
-   非聚合体 使用 [[id:50402d44-720e-42ed-b590-2b18d219acc1][构造函数]] 初始化
+1. 简单，可以使用 *聚合初始化* 初始化成员变量（非聚合体 使用 [[id:50402d44-720e-42ed-b590-2b18d219acc1][构造函数]] 初始化）
 
 2. *哪些属于聚合体？*
    - 满足以下条件的 类类型（[[id:373eed2b-8eaf-4b48-b42a-23e031290e5d][结构体]]、[[id:d63526f2-db09-4c79-8a1a-57d6a7d82ec9][类]]、联合体）
      + 无 自定义构造函数
      + 无 private 或 protected 的 非static数据成员（因此默认的类 无法使用聚合初始化）
-     + 无 虚函数
+     + 无 virtual函数
    - C风格数组（数组）
 
-3. *聚合初始化* 用 ={}= 直接初始化成员，意味着 *我们知道类的实现* -> 因此 private 隐藏的类类型 是希望隐藏实现的
+3. *使用场景？*
+   1) 简单的数据存储：配置
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      struct WindowConfig {
+          int width;
+          int height;
+          bool fullscreen;
+          const char* title;
+      };
+      WindowConfig config = {800, 600, false, "My App"};
+      CreateWindow(config);
+      #+end_src
+   2) 作为与 C兼容的数据结构
+   3) 用于 [[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr]]，提高运行时性能
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      struct RGB {
+          uint8_t r, g, b;
+      };
+
+      constexpr RGB colors[] = {
+          {255, 0, 0},   // 红
+          {0, 255, 0},   // 绿
+          {0, 0, 255}    // 蓝
+      };
+      #+end_src
+
+
+4. *聚合初始化* 用 ={}= 直接初始化成员，意味着 *我们知道类的实现* -> 因此 private 隐藏的类类型 是希望隐藏实现的
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    struct Employee
    {

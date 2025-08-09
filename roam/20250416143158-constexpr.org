@@ -4,12 +4,13 @@
 #+title: constexpr
 #+filetags: cpp
 
-* constexpr [[https://blog.csdn.net/lemonxiaoxiao/article/details/128344695?ops_request_misc=elastic_search_misc&request_id=13c51d0e3756dcb6b158d811a6e15cae&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-128344695-null-null.142^v102^pc_search_result_base9&utm_term=constexpr&spm=1018.2226.3001.4187][csdn]]
-1. 用于声明 =变量、函数（包括模板函数）、构造函数= 是 [[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]]，使其具有 *编译时求值* 的能力 ->
-   1) 提高运行时效率
-   2) 用于需要编译时常量的上下文（可用于常量表达式）
-   3) 健壮性（提供编译期检查）
-   4) 编译器会进行一定优化，见：[[id:a047ed53-7758-4ecd-8451-1eaf172442eb][编译期优化]]
+* constexpr [[https://www.learncpp.com/cpp-tutorial/constant-expressions/][learncpp5.5]] [[https://blog.csdn.net/lemonxiaoxiao/article/details/128344695?ops_request_misc=elastic_search_misc&request_id=13c51d0e3756dcb6b158d811a6e15cae&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-128344695-null-null.142^v102^pc_search_result_base9&utm_term=constexpr&spm=1018.2226.3001.4187][csdn]] [[https://blog.csdn.net/lemonxiaoxiao/article/details/128344695?ops_request_misc=elastic_search_misc&request_id=13c51d0e3756dcb6b158d811a6e15cae&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-128344695-null-null.142^v102^pc_search_result_base9&utm_term=constexpr&spm=1018.2226.3001.4187][csdn1]]
+1. 用于声明 =变量、函数（包括模板函数）、构造函数= 是 *常量表达式* （多个常量组成的表达式），使其具有 *编译时求值* 的能力 -> 提高运行时性能
+   1) 编译器提供编译期 *检查* 、以及 *优化* ，见：[[id:a047ed53-7758-4ecd-8451-1eaf172442eb][编译期优化]]
+   2) 用于需要编译时常量的 *上下文*
+      a. 作为 *[[id:b06260e2-ed7a-4b12-8e9d-b07a3e564a75][constexpr变量]]* 初始值
+      b. 作为 *[[id:9148c346-c9dd-4480-9b37-25d448987e98][非类型模板实参]]* 初始值
+      c. *std::array* 和 *C风格数组* 数组长度
 
 2. *constexpr变量* [[https://www.learncpp.com/cpp-tutorial/constexpr-variables/][learncpp5.6]]
    - （称为 *编译时常量* ）需要 常量表达式 初始化，否则报错
@@ -26,12 +27,29 @@
    - [[id:a1a9b3a8-35a3-4d81-9df5-bb6ac3216515][内部链接性]]
    - 包含 *隐式* 的 [[id:1450514f-880d-42f5-8bb4-f114c1a5b675][const]]
 
-3. *constexpr函数* [[https://www.learncpp.com/cpp-tutorial/constexpr-functions/][learncppF.1]] [fn:2]
+3. *常量表达式* 可以在 运行时求值 或 编译时求值（在常量表达式上下文时）； 常见的常量表达式
+   - [[id:27733720-d27e-4852-bb07-b50130457fc9][字面值]]（'5'、'1.2'）
+   - 常量表达式 和 运算符 组合成的常量表达式（3 + 4）
+   - 用常量表达式初始化的 =const int=
+     #+begin_src cpp :results output :namespaces std :includes <iostream>
+     const int a {10};       // 由于历史原因，NOTE 它是常量表达式，能够在编译时计算
+     int c {9};              // 非常量表达式
+     const int d {c};        // 非常量表达式
+     const double b {10.0};  // 非常量表达式
+     #+end_src
+   - constexpr变量
+   - constexpr函数
+   - 非类型模板参数
+   - 枚举成员
+   - 类型特性 =<type_traits>=  [[https://en.cppreference.com/w/cpp/header/type_traits.html][cppreference]]
+   - constexpr lambdas
+
+4. *constexpr函数* [[https://www.learncpp.com/cpp-tutorial/constexpr-functions/][learncppF.1]] [fn:2]
    - 默认inline
    - [[id:f6bf51b1-6034-48c5-9fea-81e561eef430][外部链接性]]
    - 不包含 *隐式* 的 [[id:1450514f-880d-42f5-8bb4-f114c1a5b675][const]]
 
-4. 若修饰的 [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]] ，则会在 *静态初始化* 阶段初始化；见：[[id:819c9ef5-5220-4678-994a-3122d7d17ab7][初始化]]
+5. 若修饰的 [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]] ，则会在 *静态初始化* 阶段初始化；见：[[id:819c9ef5-5220-4678-994a-3122d7d17ab7][初始化]]
 
 
 * Footnotes

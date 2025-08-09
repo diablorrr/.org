@@ -2,6 +2,7 @@
 :ID:       579ca6d5-b01b-4db0-bfd8-0166db88261e
 :END:
 #+title: TCP/IP网络模型
+#+filetags: network
 
 * 概念
 ** 层次结构

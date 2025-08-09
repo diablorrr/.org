@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       509b7100-a51d-4433-a5d2-0795fb2dcb60
+:END:
+#+title: HTTP长连接和短链接
+#+filetags: network
+
+* HTTP长连接和短链接 :ATTACH:
+:PROPERTIES:
+:ID:       ed062bab-3f15-4562-a1b7-d7c47b38ac2c
+:END:
+[[attachment:_20250805_131134screenshot.png]]
+1. *HTTP 1.0 短连接* ：每次 请求-响应 都需要 [[id:ceed6c1f-7585-4884-874d-eb2dbf4145ae][TCP三次握手]] 和 [[id:a9a65a40-fc21-4c71-925e-291763a06f35][TCP四次挥手]]，效率低下
+2. *HTTP 1.1 长连接* ： =Connection字段= 改为 =Keep-Alive= ； 任意一方没有提出断开连接，则保持TCP连接状态（当然，如果某个HTTP长连接超过一定时间没有交互，则服务端主动断开）

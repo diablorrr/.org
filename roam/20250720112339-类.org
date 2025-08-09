@@ -7,15 +7,19 @@
 * 类
 1. 用户定义的 [[id:99463280-0fa3-491e-82ae-2c3402272509][复合数据类型]]，将 [[id:372c18aa-a68a-47b2-a5b8-9685e7677a69][成员变量]] 和 [[id:3a39bdbf-179e-4dd8-aaf9-3aeb1d0c3863][成员函数]] 封装在一起，形成自己的一种类型
 
-2. 默认 *访问权限* private（不能使用 [[id:382ff65a-9dfa-476a-8868-78b7418bcba8][聚合初始化]] [fn:1]）
+2. *面向对象三大特性* ：封装、[[id:7b0c3ac7-1b45-4b02-97a9-bdad067c03e9][继承]]、[[id:a9d73cec-1b32-45fd-88fc-e6649fd6abc2][多态]]
+
+3. 默认 *访问权限* private（不能使用 [[id:382ff65a-9dfa-476a-8868-78b7418bcba8][聚合初始化]] [fn:1]）
    默认 *继承权限* private
 
-3. *初始化* 方式：[[id:50402d44-720e-42ed-b590-2b18d219acc1][构造函数]]（因为有 private 成员的类没法使用 聚合初始化）
+4. *类的大小* ：见 [[id:2c06fba7-342c-42ba-a063-176b6c3c8a4d][类的大小]]
+
+5. *初始化* 方式：[[id:50402d44-720e-42ed-b590-2b18d219acc1][构造函数]]（因为有 private 成员的类没法使用 聚合初始化）
    不同初始化方式 都能调用 不同类型的构造函数 [fn:2] [[https://www.learncpp.com/cpp-tutorial/class-initialization-and-copy-elision/][learncpp14.15]]
 
-4. *销毁* 方式：[[id:be44b0c2-d234-409f-b1a6-b447e365db37][析构函数]]
+6. *销毁* 方式：[[id:be44b0c2-d234-409f-b1a6-b447e365db37][析构函数]]
 
-5. *类内标识符次序 任意* （成员变量、成员函数）；但是如果用 一个成员变量 初始化 另一个成员变量， *需要考虑声明顺序*
+7. *类内标识符次序 任意* （成员变量、成员函数）；但是如果用 一个成员变量 初始化 另一个成员变量， *需要考虑声明顺序*
    #+name: 用一个成员变量 初始化 另一个成员变量
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    struct Bad
@@ -59,14 +63,14 @@
    int Foo::y() { return 5; }
    #+end_src
 
-6. *类 与 常量（const/constexpr）*[fn:5] [[https://www.learncpp.com/cpp-tutorial/const-class-objects-and-const-member-functions/][learncpp14.4]]
+8. *类 与 常量（const/constexpr）*[fn:5] [[https://www.learncpp.com/cpp-tutorial/const-class-objects-and-const-member-functions/][learncpp14.4]]
    - const/constexpr对象：必须初始化
    - const对象：不能调用 非const成员函数 [fn:6]；可以调用 const成员函数 ，不能修改 const对象的成员变量
    - 非const对象：可以调用 非const成员函数 和 const成员函数
    - constexpr聚合体对象：[fn:7] [[https://www.learncpp.com/cpp-tutorial/constexpr-aggregates-and-classes/][learncpp14.17]]
    - constexpr非聚合体对象：需要有 constexpr构造函数 才能初始化[fn:8]  [[https://www.learncpp.com/cpp-tutorial/constexpr-aggregates-and-classes/][learncpp14.17]]
 
-7. *类 与 函数* [[https://www.learncpp.com/cpp-tutorial/temporary-class-objects/][learncpp14.13]]
+9. *类 与 函数* [[https://www.learncpp.com/cpp-tutorial/temporary-class-objects/][learncpp14.13]]
    - 函数参数 :: 可以传递 对象 或 *临时对象* （使用 =const &= 形式，减少复制开销）
      #+begin_src cpp :results output :namespaces std :includes <iostream>
      IntPair p { 1, 2 }; // 用 {1,2} 初始化 具名IntPair类型对象 p
@@ -75,7 +79,7 @@
      #+end_src
    - 函数返回 :: 可以返回 对象 或 *临时对象* [fn:9]
 
-8. *命名规范* ：成员变量、成员函数 见 [[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
+10. *命名规范* ：成员变量、成员函数 见 [[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
 
 
 * Footnotes

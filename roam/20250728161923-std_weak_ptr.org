@@ -5,7 +5,7 @@
 #+filetags: cpp
 
 * std::weak_ptr [[https://www.learncpp.com/cpp-tutorial/circular-dependency-issues-with-stdshared_ptr-and-stdweak_ptr/][learncpp22.7]]
-1. cpp11，用于观察和访问 std::shared_ptr 管理的对象；可以解决 [[id:40c9dfcd-6bcb-4bec-8160-89b3187c4997][std::shared_ptr]] 产生的循环引用问题（因为它是资源的 *观察者* ，不是所有者， *不会增加引用计数* ）
+1. cpp11，用于观察和访问 std::shared_ptr 管理的对象；可以解决 [[id:40c9dfcd-6bcb-4bec-8160-89b3187c4997][std::shared_ptr]] 产生的 *循环引用* 问题（因为它是资源的 *观察者* ，不是所有者， *不会增加引用计数* ）
 
 2. std::weak_ptr 不能直接使用（没有 =operator->= ），必须使用 =lock()= 将其转为 std::shared_ptr [fn:1]
 

@@ -1,0 +1,86 @@
+:PROPERTIES:
+:ID:       865c2eff-7d6a-449f-843d-215ccb8a913e
+:END:
+#+title: HTTPS
+#+filetags: network
+
+* HTTPS
+1. 在 HTTP层、TCP层 之间加入 SSL/TLS层，在 [[id:ceed6c1f-7585-4884-874d-eb2dbf4145ae][TCP三次握手]] 后，还需 SSL/TLS握手；端口443
+
+2. SSL/TLS 提供：
+   1) 加密传输    ：通信建立前使用非对称加密，建立后使用对称加密
+   2) 校验机制    ：摘要算法
+   3) 数字证书    ：服务器公钥放入数字证书
+   #+begin_comment
+   加密      ：防止 窃取信息
+   校验      ：防止 修改信息
+   证书      ：验证 服务器身份
+   对称加密  ：一把密匙加密解密；eg：你给我密钥，我把密钥加密后的数据给你，中间人偷到密钥，中间人能解密
+   非对称加密：公钥私钥（公钥/私钥 加密的只能 私钥/公钥 解）；eg：你给我公钥，我把公钥加密后的数据给你，中间人偷到公钥，中间人无法解密
+   #+end_comment
+
+
+* TLSv1.2四次握手 :ATTACH: [[https://www.bilibili.com/video/BV1KY411x7Jp/?spm_id_from=333.337.search-card.all.click&vd_source=4441bc96046659b39d059d583f36ff52][bilibili-技术蛋老师]]
+:PROPERTIES:
+:ID:       93d2dbd5-5033-4ab9-a6bb-38c27c1ca3a6
+:END:
+[[attachment:_20250805_204033screenshot.png]]
+
+1. *Client Hello* ：TLS版本、支持的加密套件、第1随机数
+2. *Server Hello* ：TLS版本、加密套件、第2随机数（服务端确认TLS版本、选择加密套件）
+   *Certificate*  ：数字证书（证实服务端身份）
+   # 非对称加密
+   *Server Key Exchange* ：公钥（将公钥交给客户端）
+   *Server Hello Done* ：（表示发送完了）
+3. *Client Key Exchange* ：被公钥加密的预主密钥（第3随机数）
+   # 服务端用私钥解密 -> 得到预主密钥
+   客户端、服务端用 第1随机数、第2随机数、预主密钥 -> 得到 会话密钥
+   # 对称加密
+   *Change Ciper Spec* ：（告诉服务器，开始使用加密方式发送消息）
+   *Encrypted Handshake Message* ：握手过程中的所有已发送信息做个 摘要，再用会话密钥加密
+   # 服务端 解密摘要，验证是否一致，若一致发送以下内容
+4. *Encrypted Handshake Message* ：握手过程中的所有已发送信息做个 摘要，再用会话密钥加密
+   # 数据传输阶段：经过会话密钥加密后的 数据+摘要算法（基于摘要的MAC）
+
+
+* 数字证书 [[https://www.bilibili.com/video/BV1mj421d7VE/?spm_id_from=333.788.comment.all.click&vd_source=4441bc96046659b39d059d583f36ff52][bilibili-技术蛋老师]]
+:PROPERTIES:
+:ID:       5b07ed5a-0791-4807-b666-f321d40f578c
+:END:
+#+begin_example
+背景：你发布公钥A，先给到中间人，中间人不给我，中间人将自己的公钥B给我，我用公钥B加密后，中间人用它的私钥B解密出真实内容，又用公钥A加密后给你，你用私钥A解密发现正确，于是建立了：我-中间人-你 这样的连接
+
+因此我们需要第三方解决公钥信任问题，也就是 证书颁发机构（CA）
+你把公钥放到大家都信任的CA那里，CA根据公钥和其他信息生成 数字证书，你把数字证书给我，我发现是信任的CA，于是我取出公钥...
+#+end_example
+
+** 服务端申请数字证书 :ATTACH:
+:PROPERTIES:
+:ID:       1cc489e2-46d9-45f6-98c7-3e27b69e2a24
+:END:
+服务端将公钥A和自己相关的信息交给CA，CA用这些信息计算出hash值，再用自己的私钥B加密，生成 数字签名，（数字签名 + 公钥A + 服务端相关信息）= 数字证书
+- 数字签名 :: 证明数字证书的有效性
+[[attachment:_20250806_092614screenshot.png]]
+
+
+** 证书链 :ATTACH:
+:PROPERTIES:
+:ID:       469be9ff-16f2-4ec5-8831-c0b1a886ad8f
+:END:
+# CA的公钥/数字证书如何验证呢？根CA
+证书链：根CA-中间CA-服务端
+根CA计算中间CA数字证书的哈希值，用自己的私钥C加密，得到数字签名，为中间CA的数字证书签名，同时也用自己的私钥C自签名，根CA的数字证书安装到客户端的系统中
+[[attachment:_20250806_094414screenshot.png]]
+#+begin_comment
+为什么这么麻烦，不根CA直接颁发证书呢？
+假设只有根CA，根CA失守了，整个信任链都会有问题；
+有中间CA的情况，中间CA失守，问题不大
+#+end_comment
+
+
+** 客户端验证数字证书 :ATTACH:
+:PROPERTIES:
+:ID:       872d627b-9548-41a0-8452-1c19100ee48d
+:END:
+根据中间CA的签发者找到根CA，用自己系统中根CA数字证书里的公钥C进行解密成功，则中间CA可信；用中间CA给的公钥B对数字证书中的数字签名解密得到哈希值H1，再对数字证书进行哈希计算得到H2，比较H1和H2，值相同则证书可信
+[[attachment:_20250806_093002screenshot.png]]

@@ -4,30 +4,11 @@
 #+STARTUP: show3levels
 
 * Inbox
-** TODO [#A] 小论文 [6/7]
-DEADLINE: <2025-07-15 四>
-*** DONE pytorch框架学习: Introduction to PyTorch
-SCHEDULED: <2025-06-04 三>
-*** DONE pytorch框架学习: Learning PyTorch
-SCHEDULED: <2025-06-05 四>
-*** DONE python官方教程
-DEADLINE: <2025-06-09 一>
-*** DONE 基础论文 [6/6]
-**** DONE VBPR
-**** DONE GNN
-**** DONE GCN
-**** DONE LightGCN
-**** KILL bert：李沫
-**** KILL transformer：李沫
-*** DONE MIG-GT项目注释
-DEADLINE: <2025-06-26 四>
-*** DONE 训练loss代码
-DEADLINE: <2025-06-25 三>
-:LOGBOOK:
-CLOCK: [2025-06-27 五 14:43]
-:END:
-** TODO [#B] hot100
-** TODO [#B] 面经
+** TODO [#A] hot100
+** TODO [#A] 高频面经
+DEADLINE: <2025-08-11 一>
+** TODO [#A] 百万并发reactor服务器
+DEADLINE: <2025-08-15 五>
 ** -----------------------------------
 ** TODO 项目 [10/16]
 *** DONE 编写整个项目的CMakeLists.txt [4/4]
@@ -67,7 +48,6 @@ DEADLINE: <2025-05-14 三> SCHEDULED: <2025-05-14 三>
 *** TODO ci/cd工作流
 *** TODO mysql使用与优化
 *** TODO redis使用与优化
-*** TODO 百万并发reactor服务器
 *** KILL gtest或ctest
 *** KILL 异步日志系统
 *** KILL 开发插件系统

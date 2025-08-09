@@ -1,0 +1,183 @@
+:PROPERTIES:
+:ID:       b680a66a-a704-4446-941a-6a8b2f265327
+:END:
+#+title: 模板全特化
+#+filetags: cpp
+
+* 函数模板全特化
+1. 完全特化的函数模板 [fn:1] *不会隐式内联* （类似普通函数），在 =.h= 文件中定义需要 [[id:3e85303c-39c7-4ac3-9d88-a9513d036477][inline]]，以免违反 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]]
+2. 使用 [[id:5aea3bf8-964d-4925-91bf-c5cf83f88753][=delete]] 删除 模板特化的函数 -> 不会调用该删除的版本
+3. *优先级* ：非模板函数 -> 模板函数
+
+
+* 类模板全特化
+1. 完全特化的类模板[fn:2] 被视为独立的类
+2. *优先级* ：特化类模板 -> 非特化类模板
+
+
+* 成员函数全特化 [[https://www.learncpp.com/cpp-tutorial/class-template-specialization/][learncpp26.4]]
+1. 完全特化的成员函数模板 *不会隐式内联* ，在 =.h= 文件中定义需要 [[id:3e85303c-39c7-4ac3-9d88-a9513d036477][inline]]，以免违反 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]]
+2. *方法* ：
+   1) 显示特化类模板，使用特化类模板中的成员函数 [fn:3]
+   2) 仅显式特化成员函数模板 （ *推荐* ）
+      #+begin_src cpp :results output :namespaces std :includes <iostream>
+      // 原理：Storage<T> --编译器隐式特化--> Storage<double> --仅显式特化--> Storage<double>::print()
+      template <typename T>
+      class Storage {
+      private:
+          T m_value {};
+      public:
+          Storage(T value)
+            : m_value { value } {}
+          void print() {
+              std::cout << m_value << '\n';
+          }
+      };
+
+      // 显式特化成员函数：编译器会先进行隐式特化
+      // 显式特化成员函数 不是 隐式inline的，因此在头文件中时，手动inline
+      template<>
+      void Storage<double>::print() {
+          std::cout << std::scientific << m_value << '\n';
+      }
+      int main()
+      {
+          Storage i { 5 };
+          Storage d { 6.7 }; // 隐式实例化 Storage<double>
+
+          i.print(); // 调用 Storage<int>::print (由 Storage<T>)
+          d.print(); // 调用 Storage<double>::print (调用 显式特化的 Storage<double>::print())
+      }
+      #+end_src
+
+      #+RESULTS:
+      : 5
+      : 6.700000e+00
+
+
+
+
+
+
+
+
+* Footnotes
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+// 原理：Storage<T> --显式特化--> Storage<double> --显式特化--> Storage<double>::print()
+template <typename T>
+class Storage {
+private:
+    T m_value {};
+public:
+    Storage(T value)
+      : m_value { value } {}
+
+    void print() {
+        std::cout << m_value << '\n';
+    }
+};
+
+// 显式特化类模板 Storage<double> -> 显得冗余
+template <>
+class Storage<double>
+{
+private:
+    double m_value {};
+public:
+    Storage(double value)
+      : m_value { value }
+    {
+    }
+
+    void print();
+};
+
+// We're going to define this outside the class for reasons that will become obvious shortly
+// This is a normal (non-specialized) member function definition (for member function print of specialized class Storage<double>)
+void Storage<double>::print()
+{
+    std::cout << std::scientific << m_value << '\n';
+}
+
+int main()
+{
+    Storage i { 5 };
+    Storage d { 6.7 }; // uses explicit specialization Storage<double>
+
+    i.print(); // calls Storage<int>::print (instantiated from Storage<T>)
+    d.print(); // calls Storage<double>::print (called from explicit specialization of Storage<double>)
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <cstdint>
+// 非特化类模板
+template <typename T>
+class Storage8
+{
+private:
+    T m_array[8];
+
+public:
+    void set(int index, const T& value)
+    {
+        m_array[index] = value;
+    }
+
+    const T& get(int index) const
+    {
+        return m_array[index];
+    }
+};
+
+// 特化类模板
+template <>
+class Storage8<bool> // 特化为 Storage8<bool>
+{
+private:
+    std::uint8_t m_data{};
+
+public:
+    void set(int index, bool value)
+    {
+        auto mask{ 1 << index };
+        if (value)
+            m_data |= mask;
+        else
+            m_data &= ~mask;
+    }
+
+    bool get(int index)
+    {
+        auto mask{ 1 << index };
+        return (m_data & mask);
+    }
+};
+#+end_src
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+template <typename T>
+void print(const T& t)
+{
+    std::cout << t << '\n';
+}
+
+// double类型的完全特化版本 print；不是隐式inline，头文件中需要inline
+template<>                          // 模板参数声明：模板参数列表中无参数
+void print<double>(const double& d)
+{
+    std::cout << std::scientific << d << '\n';
+}
+
+int main()
+{
+    print(5);
+    print(6.7);
+
+    return 0;
+}
+#+end_src

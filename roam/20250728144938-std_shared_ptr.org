@@ -54,13 +54,7 @@
    } // ptr1 超出作用域
    #+end_src
 
-2. 可以用 =std::make_shared()= 初始化智能指针，简单安全
-
-3. 创建返回智能指针的函数，选择 *返回 std::unique_ptr* ，因为
-   - 可以 [[id:02ce83ed-31b4-4906-89e4-271bbf432834][std::unique_ptr]]  --转换-->  std::shared_ptr
-   - 不能 std::shared_ptr  --转换-->  std::unique_ptr
-
-4. *循环引用* 问题：两个对象内部的 std::shared_ptr 互相指向对象 -> 引用计数无法归 0，内存泄漏 [[https://www.learncpp.com/cpp-tutorial/circular-dependency-issues-with-stdshared_ptr-and-stdweak_ptr/][learncpp22.7]]
+2. *循环引用* 问题：两个对象内部的 std::shared_ptr 互相指向对象 -> 引用计数无法归 0，内存泄漏 [[https://www.learncpp.com/cpp-tutorial/circular-dependency-issues-with-stdshared_ptr-and-stdweak_ptr/][learncpp22.7]]
    （以上是 a -> b、b -> a；也能是三个对象：a -> b、b -> c、c -> a）
    #+begin_src cpp :results output :namespaces std :includes <iostream> <memory> <string>
    class Person
@@ -121,3 +115,9 @@
      return 0;
    } // Lucy、Ricky 正常销毁
    #+end_src
+
+3. 可以用 =std::make_shared()= 初始化智能指针，简单安全
+
+4. 创建返回智能指针的函数，选择 *返回 std::unique_ptr* ，因为
+   - 可以 [[id:02ce83ed-31b4-4906-89e4-271bbf432834][std::unique_ptr]]  --转换-->  std::shared_ptr
+   - 不能 std::shared_ptr  --转换-->  std::unique_ptr

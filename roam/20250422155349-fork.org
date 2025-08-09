@@ -2,6 +2,7 @@
 :ID:       6df148db-bb3c-4c5f-abb7-0fa63679a676
 :END:
 #+title: fork()
+#+filetags: del
 
 * 概念
 - 简介 ::

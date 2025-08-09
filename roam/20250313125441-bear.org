@@ -2,7 +2,7 @@
 :ID:       a8f646b8-1262-424f-9bba-388f572bb22f
 :END:
 #+title: bear
-#+LAST_MODIFIED: 2025-03-13 13:10:05
+#+filetags: linux
 
 * 使用
 #+begin_src bash

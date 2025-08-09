@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       1998eb7d-2d2d-4b3d-8619-ad639b7f84f7
+:END:
+#+title: IP
+#+filetags: network
+
+* IP :ATTACH:
+:PROPERTIES:
+:ID:       b63bff4b-6f9d-4be6-af31-a0fb1f313826
+:END:
+[[attachment:_20250806_153729screenshot.png]]

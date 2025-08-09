@@ -1,0 +1,146 @@
+:PROPERTIES:
+:ID:       9f071537-cd60-49c4-97bc-47e3474b7c2e
+:END:
+#+title: 虚基类
+#+filetags: cpp
+
+* 多重继承-菱形继承问题
+内存浪费、二义性 -> 最派生类会得到直接基类所继承的最基类成员变量的多个副本[fn:1]
+
+* 虚基类 [[https://www.learncpp.com/cpp-tutorial/virtual-base-classes/][learncpp25.8]]
+1. 在 继承列表中加入 =virtual= ，最派生类中的最基类成员变量只会有一份；用于解决 多重继承-菱形继承问题
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   class Base { public: int data {12}; };
+
+   class A: virtual public Base { }; // 虚继承
+   class B: virtual public Base { };
+
+   class Derived: public A, public B { };
+
+   /*
+   Derived对象内存结构：
+   [ A::vbptr ]      -> 指向A的虚基类表（记录Base子对象的偏移量）
+   [ A的成员变量 ]
+   [ B::vbptr ]      -> 指向B的虚基类表
+   [ B的成员变量 ]
+   [ 唯一Base子对象 ]  // 被A和B共享
+   */
+   #+end_src
+   *底层* ：每个虚继承类中有 vbptr（虚基类指针），指向 虚基类表，虚基类表中记录 Base的偏移量，通过偏移量定位到 Base
+   *访问流程* ：
+   1) 通过 A/B::vbptr 找到虚基类表，获得 Base 的偏移量 offset
+   2) 访问 Derived对象地址 + offset 定位到 Base::data
+
+3. 在使用虚基类的情况下， *最基类的创建由最派生类负责* [fn:2]
+
+4. 最派生类的构造函数中， *虚基类在非虚基类之前创建*
+   #+begin_example
+   Copier(int scanner, int printer, int power)
+       : PoweredDevice{ power }, // 最派生类 负责构造 最基类
+       Scanner{ scanner, power }, Printer{ printer, power } {}
+
+   创建顺序：PoweredDevice -> Scanner -> Printer -> Copier
+   Scanner、Printer 仍然会调用 PoweredDevice构造函数，但是会被忽略
+   #+end_example
+
+
+
+* Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class PoweredDevice {
+public:
+    PoweredDevice(int power)
+    {
+      std::cout << "PoweredDevice: " << power << '\n';
+    }
+};
+
+// PoweredDevice 是虚基类
+class Scanner: virtual public PoweredDevice {
+public:
+    Scanner(int scanner, int power)
+        : PoweredDevice{ power } // this line is required to create Scanner objects, but ignored in this case
+    {
+      std::cout << "Scanner: " << scanner << '\n';
+    }
+};
+
+// PoweredDevice 是虚基类
+class Printer: virtual public PoweredDevice {
+public:
+    Printer(int printer, int power)
+        : PoweredDevice{ power } // this line is required to create Printer objects, but ignored in this case
+    {
+      std::cout << "Printer: " << printer << '\n';
+    }
+};
+
+class Copier: public Scanner, public Printer {
+public:
+    Copier(int scanner, int printer, int power)
+        : PoweredDevice{ power }, // 最派生类 负责构造 最基类
+        Scanner{ scanner, power }, Printer{ printer, power }
+    {
+    }
+};
+
+int main()
+{
+    Copier copier{ 1, 2, 3 };
+
+    return 0;
+}
+#+end_src
+
+#+RESULTS:
+: PoweredDevice: 3
+: Scanner: 1
+: Printer: 2
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class PoweredDevice {
+public:
+    PoweredDevice(int power) {
+      std::cout << "PoweredDevice: " << power << '\n';
+    }
+};
+
+class Scanner: public PoweredDevice {
+public:
+    Scanner(int scanner, int power)
+        : PoweredDevice{ power }
+    {
+      std::cout << "Scanner: " << scanner << '\n';
+    }
+};
+
+class Printer: public PoweredDevice {
+public:
+    Printer(int printer, int power)
+        : PoweredDevice{ power }
+    {
+      std::cout << "Printer: " << printer << '\n';
+    }
+};
+
+class Copier: public Scanner, public Printer {
+public:
+    Copier(int scanner, int printer, int power)
+        : Scanner{ scanner, power }, Printer{ printer, power }
+    { }
+};
+
+int main()
+{
+    Copier copier{ 1, 2, 3 }; // Printer、Scanner都调用了 PoweredDevice构造函数，因此他俩都有 PoweredDevice的成员变量；Copier中就有两份 PoweredDevice的成员变量 -> 问题：Copier类对象体积大，访问 PoweredDevice 中的成员变量会出现模棱两可的问题
+}
+#+end_src
+
+#+RESULTS:
+: PoweredDevice: 3
+: Scanner: 1
+: PoweredDevice: 3
+: Printer: 2

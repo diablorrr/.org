@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       2631e4b6-e65d-4f92-8807-12b3fc1a2330
+:END:
+#+title: HTTP缓存机制
+#+filetags: network
+
+* HTTP缓存机制
+1. *强缓存*
+   # 浏览器自己判断是否使用资源
+   浏览器第一次请求资源时，服务器返回 *资源 + Cache-Control/Expires字段* （说明资源的过期时间），
+   浏览器后续请求相同资源时，会与 =Cache-Control= 进行比对，决定用缓存/重新请求服务器
+   - Cache-Control :: 资源过期 相对时间，优先级更高
+   - Expires       :: 资源过程 绝对时间
+
+2. *协商缓存* [[https://www.bilibili.com/video/BV1n54y1E7wH/?vd_source=4441bc96046659b39d059d583f36ff52][bilibili-小野WEB世界]] [[https://www.bilibili.com/video/BV1gf4y1V7CH/?spm_id_from=333.1387.upload.video_card.click&vd_source=4441bc96046659b39d059d583f36ff52][bilibili-小野WEBi世界2]]
+   # 浏览器和服务器协商后，判断是否使用资源
+   浏览器第一次请求资源时，服务器返回 *资源 + 资源标识（Last-Modified / ETag）*
+   浏览器后续请求（ *If-Modified-Since / If-None-Match* ），服务器判断 若是最新资源，返回 *304 状态码* ，直接从缓存拿资源；否则返回 *200 状态码 + 最新资源 + 新的资源标识*
+   1) (请求头) If-Modified-Since：用服务器发来的 Last-Modified 的值填充
+      (响应头) Last-Modified：资源上一次修改时间
+   2) (请求头) If-None-Match：用服务器发来的 Etag 的值填充
+      (响应头) Etag：资源对应的唯一字符串
+   #+begin_comment
+   优先使用 Etag
+   1. Last-Modified 的值 *只精确到秒级* -> 资源修改速度在秒级以下，则无法及时更新资源
+   2. 如果每隔一段时间重复生成 *内容相同* 的文件 -> Last-Modified 每次都会返回
+   #+end_comment

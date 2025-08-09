@@ -24,6 +24,51 @@
    int* ptr{ new int{} };
    ptr = new int{}; // old address lost, memory leak results
    #+end_src
+4. 析构函数没有设置为虚析构，直接 delete 基类指针 [fn:1]
 
 * RAII
 1. 用于解决内存泄漏；用类的生命周期自动化管理资源：构造函数中分配资源，析构函数中释放资源
+2. [[id:7cb0d4aa-e74a-4563-acf6-053e129105e9][智能指针]]
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <iostream>
+class Base
+{
+public:
+    ~Base() // note: not virtual
+    {
+        std::cout << "Calling ~Base()\n";
+    }
+};
+
+class Derived: public Base
+{
+private:
+    int* m_array {};
+
+public:
+    Derived(int length)
+      : m_array{ new int[length] }
+    {
+    }
+
+    ~Derived() // note: not virtual (your compiler may warn you about this)
+    {
+        std::cout << "Calling ~Derived()\n";
+        delete[] m_array;
+    }
+};
+
+int main()
+{
+    Derived* derived { new Derived(5) };
+    Base* base { derived };
+
+    delete base;
+
+    return 0;
+}
+#+end_src

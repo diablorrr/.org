@@ -5,7 +5,7 @@
 #+filetags: cpp
 
 * explicit [[https://www.learncpp.com/cpp-tutorial/converting-constructors-and-the-explicit-keyword/][learncpp14.16]]
-1. 修饰构造函数，使其只能 *显式调用* （函数传参、函数返回），防止意想不到的隐式转换（转换构造函数）
+1. 修饰 [[id:50402d44-720e-42ed-b590-2b18d219acc1][构造函数]]，使其只能 *显式调用* （函数传参、函数返回），防止意想不到的隐式转换（转换构造函数）
    - 显式构造函数 :: 用 =explicit= 修饰的构造函数
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    // 假设f为explicit的拷贝构造函数

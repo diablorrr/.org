@@ -5,7 +5,36 @@
 #+filetags: cpp
 
 * 库 [[https://www.learncpp.com/cpp-tutorial/classes-and-header-files/][learncpp15.2]]
-1. cpp 中存在的库类型
-   1) 仅头文件（开源项目）：使用方便，直接 include；增加编译时间
-   2) 头文件+源文件（开源项目）：使用麻烦点，编译时间短点
+1. 库类型
+   - 静态库 :: 编译时，链接器将静态库代码直接嵌入可执行文件中(.a .lib)
+   - 动态库 :: 运行时，程序会查找并加载所需的动态库(.so .dll)
+     + 命名规则 :: lib<动态库名>.so
+
+2. 制作动态库
+   1) =g++ <源代码>.cpp -fPIC -shared -o lib<动态库名>.so=
+   2) =g++ <源代码>.cpp -o <可执行文件名> -L<静态库文件所在目录> -l<需要链接的库名>=
+   3) 设置环境变量 LD_LIBRARY_PATH： =export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<动态库目录>=
+
+3. 制作静态态库
+   1) g++ <.cpp文件> -c -o <.o文件>
+   2) ar rcs lib<静态库名>.a <.o文件>
+   #+begin_src bash
+   .
+   ├── app
+   │   └── demo01.cpp
+   └── tools
+       ├── libpublic.a
+       ├── public.cpp
+       └── public.h
+   # 制作静态库
+   g++ ./tools/public.cpp -c -o public.o
+   ar rcs ./tools/libpublic.a ./tools/public.o
+   # 使用静态库
+   g++ ./app/demo01.cpp -o app -L./tools -lpublic
+   #+end_src
+
+4. 开源项目的库类型
+   1) 仅头文件（开源项目）             ：使用方便，直接 include；增加编译时间
+   2) 头文件+源文件（开源项目）        ：使用麻烦点，编译时间短点
    3) 头文件+预编译的库文件（商业软件）：不需要重新编译源文件，直接链接库；知识产权
+

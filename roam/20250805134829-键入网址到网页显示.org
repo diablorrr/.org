@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       06a05125-f3ac-44e9-8e75-55b296f622e8
+:END:
+#+title: 键入网址到网页显示
+#+filetags: network
+
+* 键入网址到网页显示 [[https://zhuanlan.zhihu.com/p/57895541][知乎]]
+1. 浏览器解析 URL -> 协议、服务器、资源路径
+2. 生成 [[id:846e95b1-e15d-4277-822a-c2fa49faa90a][HTTP请求报文]]
+3. 查询 [[id:36774da4-2384-4014-92e1-a77e0eea1309][DNS]]服务器 -> 域名对应IP
+4. [[id:ceed6c1f-7585-4884-874d-eb2dbf4145ae][TCP三次握手]]
+5. 客户端 发送 HTTP请求报文 给服务器
+6. 服务器 收到后发送 HTTP响应报文（包含：html、css、js）给客户端
+7. 客户端的浏览器 渲染页面
+8. [[id:a9a65a40-fc21-4c71-925e-291763a06f35][TCP四次挥手]]

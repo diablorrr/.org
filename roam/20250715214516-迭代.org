@@ -1,8 +1,16 @@
 :PROPERTIES:
 :ID:       f72a714e-5a38-4c4b-a773-17fb7e216e6f
 :END:
-#+title: 迭代、遍历
+#+title: 循环、递归、迭代、遍历
 #+filetags: cpp
+
+* 循环
+重复执行代码块，解决当前问题
+
+
+* 递归
+重复调用自己（压栈），将大问题分解为小问题，再解决
+
 
 * 迭代 [[https://www.learncpp.com/cpp-tutorial/introduction-to-loops-and-while-statements/][learncpp8.8]]
 1. 一轮循环

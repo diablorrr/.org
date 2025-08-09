@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       abf2d234-abd2-4248-8d10-cdf4fb849432
+:END:
+#+title: TCP四元组
+#+filetags: network
+
+* TCP四元组 [[https://www.xiaolincoding.com/network/3_tcp/tcp_interview.html#%E5%A6%82%E4%BD%95%E5%94%AF%E4%B8%80%E7%A1%AE%E5%AE%9A%E4%B8%80%E4%B8%AA-tcp-%E8%BF%9E%E6%8E%A5%E5%91%A2][小林coding]]
+1. (源地址，源端口，目标地址，目标端口)，用于表示一个 TCP连接
+
+2. *服务端监听一个端口，它的TCP的最大连接数？*
+   理论  ： =最大TCP连接数 = 客户端IP数 x 客户端端口数=
+   受限于：每个TCP连接都会占用一个文件描述符
+   1) 文件描述符数量
+      # 系统级、用户级、进程级
+   2) 内存限制（操作系统）

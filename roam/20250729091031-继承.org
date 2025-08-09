@@ -5,7 +5,8 @@
 #+filetags: cpp
 
 * 继承 [[https://www.learncpp.com/cpp-tutorial/order-of-construction-of-derived-classes/][learncpp24.3]] [[https://www.learncpp.com/cpp-tutorial/constructors-and-initialization-of-derived-classes/][learncpp24.4]] [[https://www.learncpp.com/cpp-tutorial/inheritance-and-access-specifiers/][learncpp24.5]] [[https://www.learncpp.com/cpp-tutorial/hiding-inherited-functionality/][learncpp24.8]]
-1. *继承* 让派生类会获得基类的 成员变量、成员函数，并可以进行扩展；是 =is-a= 关系（ *组合* 是 =has-a= 关系）
+1. 派生类继承基类的数据和方法，实现 *代码复用* ，同时在此基础上能进行 *扩展* ；是 =is-a= 的关系 -> 意味着 可以使用基类指针/引用作为函数参数，这样就能传入任何派生类对象，更加 *灵活*
+   （ *组合* 是 =has-a= 关系）
 
 2. 根据 *继承权限* 与 基类访问权限 组合出的权限 来 *访问基类成员* （见：继承权限表；结构体默认 public；类默认 private）
 
@@ -38,20 +39,20 @@
    }
    #+end_src
 
-3. 派生类 *构造顺序* ：基类 -> 派生类 -> ... [fn:1]（ *派生类的组成* ：一部分基类，一部分自己）； *具体流程* ：
+4. 派生类 *构造顺序* ：基类 -> 派生类 -> ... [fn:1]（ *派生类的组成* ：一部分基类，一部分自己）； *具体流程* ：
    1) 为派生类留内存（放得下基类和派生类）
    2) 调用派生类构造（派生类初始化列表：基类构造 -> 派生类成员）
    3) 派生类构造函数体
 
-4. 派生类 *销毁顺序* ：构造顺序的相反顺序 [fn:1]
+5. 派生类 *销毁顺序* ：构造顺序的相反顺序 [fn:1]
 
-5. 向派生类 *添加新功能* ：继承的方式添加功能 [fn:2] [[https://www.learncpp.com/cpp-tutorial/adding-new-functionality-to-a-derived-class/][learncpp24.6]]
+6. 向派生类 *添加新功能* ：继承的方式添加功能 [fn:2] [[https://www.learncpp.com/cpp-tutorial/adding-new-functionality-to-a-derived-class/][learncpp24.6]]
    #+name: 背景
    #+begin_example
    从第三方买了代码库，现在想扩充功能，直接在代码库中写功能不行，后边若第三方更新了代码库，可能出问题 -> 继承的方式添加功能
    #+end_example
 
-6. *访问基类函数* [[https://www.learncpp.com/cpp-tutorial/calling-inherited-functions-and-overriding-behavior/][learncpp24.7]]
+7. *访问基类函数* [[https://www.learncpp.com/cpp-tutorial/calling-inherited-functions-and-overriding-behavior/][learncpp24.7]]
    - 访问 *基类同名函数* ：加基类作用域限定符 =<基类>::<基类同名函数>= [fn:5]
    - 访问 *基类友元函数* ：使用 =static_cast= 转为基类后调用 [fn:6]（友元函数不是基类成员，因此不能使用 基类作用域限定符）
    #+begin_src cpp :results output :namespaces std :includes <iostream>
@@ -62,14 +63,18 @@
    - 调用流程 :: 在派生类中查找函数（同名函数：[[id:8c55eec4-57bb-45c2-8890-c65d7c473a24][函数重载解析]]）；否则去基类以同样方式查找 [fn:3]
    - 函数调用 :: 重新定义基类函数，调用派生类版本 [fn:3]， *访问权限不同* 也使用派生类的 [fn:4]
 
+8. 多重继承-菱形问题：[[id:9f071537-cd60-49c4-97bc-47e3474b7c2e][虚基类]]
+
+9. [[id:c5b42e9c-19fc-4396-a2dd-8a032518c933][对象切片]]问题：将派生类对象赋值给基类对象，派生类对象的基类部分被复制，派生类部分不会
+
+10. 使用 operator<< 打印继承类 [[https://www.learncpp.com/cpp-tutorial/printing-inherited-classes-using-operator/][learncpp25.11]]
+
 
 ** 继承权限表 :ATTACH:
 :PROPERTIES:
 :ID:       866f63a0-b2eb-4e25-8107-27d569bc4374
 :END:
 [[attachment:_20250729_100703screenshot.png]]
-
-
 
 
 * Footnotes

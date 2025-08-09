@@ -1,0 +1,61 @@
+:PROPERTIES:
+:ID:       dd50a08e-6b08-43c7-b35a-4109e47b679e
+:END:
+#+title: 条件变量
+#+filetags: operating_system
+
+* 条件变量
+1. 搭配 [[id:ac8c9c6d-760b-4ec8-847b-cbedebee7085][互斥锁]] 一起使用，实现 *同步* （线程执行顺序）
+   具体来说：线程持有锁查看条件是否满足，不满足则释放锁，进入睡眠状态，等待被唤醒后重新获得锁，满足则继续执行临界区操作 [fn:1]
+
+#+begin_comment
+小咪喜欢中午吃鱼干，臭咪喜欢早上吃鱼干
+早上，小咪想要吃鱼干，于是拿到鱼干（获得锁），但是没到中午（条件不满足），所以小咪放下鱼干（释放锁）睡了（睡眠），于是臭咪吃鱼干
+中午，臭咪叫醒小咪吃鱼干（唤醒）
+#+end_comment
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+
+std::mutex mtx;
+std::condition_variable cv;
+bool ready = false;
+
+// 等待条件满足的线程
+void wait_thread() {
+    std::unique_lock<std::mutex> lock(mtx);
+    cv.wait(lock, []{ return ready; }); // 等待直到ready为true
+    std::cout << "收到通知，开始工作\n";
+}
+
+// 发送通知的线程
+void notify_thread() {
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // 模拟准备工作
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        ready = true; // 更新条件
+    }
+    std::cout << "准备完毕，发送通知\n";
+    cv.notify_one(); // 唤醒等待的线程
+}
+
+int main() {
+    std::thread t1(wait_thread);
+    std::thread t2(notify_thread);
+
+    t1.join();
+    t2.join();
+    return 0;
+}
+
+#+end_src
+
+#+RESULTS:
+: 准备完毕，发送通知
+: 收到通知，开始工作

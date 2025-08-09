@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       de9e0187-3b5a-4801-8322-94b43908ff5d
+:END:
+#+title: linux内核
+#+filetags: linux
+
+* linux内核
+- linux     :: 稳定、省电、兼容性好
+- linux-zen :: 输入延迟低（游戏、音频处理）、UI响应快（KDE动画更流畅）、网络优化（下载更快：看视频等）

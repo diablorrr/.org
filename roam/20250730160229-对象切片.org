@@ -1,0 +1,153 @@
+:PROPERTIES:
+:ID:       c5b42e9c-19fc-4396-a2dd-8a032518c933
+:END:
+#+title: 对象切片
+#+filetags: cpp
+
+* 对象切片 [[https://www.learncpp.com/cpp-tutorial/object-slicing/][learncpp25.9]]
+1. 将派生类对象赋值给基类对象，派生类对象的基类部分被复制，派生类部分不会
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // 常见情况
+   Derived derived{ 5 };
+   Base base{ derived }; // 发生对象切片
+
+   // 一个不明显的例子
+   Derived d1{ 5 };
+   Derived d2{ 6 };
+   Base& b{ d2 }; // 基类引用b 指向 派生类d2的基类部分
+
+   b = d1;        // 对象切片：d1 的 Base部分 复制到 d2
+                  // 现在 d2 有 d1基类部分、d2派生类部分
+   #+end_src
+2. *发生场景*
+   1) 赋值 [fn:1]
+   2) 函数传参 [fn:2]    --解决--> 引用 [fn:3]
+   3) [[id:d69bd9f3-2e77-4ec3-9a7b-b655fbc7ba44][std::vector]] [fn:4] --解决--> 指针 [fn:5]、std::reference_wrapper（模拟可重新赋值引用的类）[fn:6]
+
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int main()
+{
+    Derived derived{ 5 };
+    Base base{ derived }; // 发生对象切片
+    std::cout << "base is a " << base.getName() << " and has value " << base.getValue() << '\n'; // 输出 I am a Base
+}
+#+end_src
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void printName(const Base base) // 值传递 类对象 -> 发生对象切片
+{
+    std::cout << "I am a " << base.getName() << '\n';
+}
+
+int main()
+{
+    Derived d{ 5 };
+    printName(d); // oops, didn't realize this was pass by value on the calling end
+}
+#+end_src
+
+[fn:3]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void printName(const Base& base) // ok：引用传递 类对象
+{
+    std::cout << "I am a " << base.getName() << '\n';
+}
+
+int main()
+{
+    Derived d{ 5 };
+    printName(d);
+
+    return 0;
+}
+#+end_src
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <vector>
+int main()
+{
+  std::vector<Base> v{};     // 值传递形式，添加对象到容器 -> 发生 对象切片
+  v.push_back(Base{ 5 });    // 添加基类对象
+  v.push_back(Derived{ 6 }); // 添加派生类对象
+
+  for (const auto& element : v)
+    std::cout << "I am a " << element.getName() << " with value " << element.getValue() << '\n';
+  // 输出：
+  // I am a Base with value 5
+  // I am a Base with value 6
+
+}
+#+end_src
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <vector>
+int main()
+{
+	std::vector<Base*> v{}; // ok：引用的方式 添加对象到容器
+
+	Base b{ 5 }; // b and d can't be anonymous objects
+	Derived d{ 6 };
+
+	v.push_back(&b); // add a Base object to our vector
+	v.push_back(&d); // add a Derived object to our vector
+
+	// Print out all of the elements in our vector
+	for (const auto* element : v)
+		std::cout << "I am a " << element->getName() << " with value " << element->getValue() << '\n';
+}
+#+end_src
+
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream> <vector> <string_view>
+#include <functional> // for std::reference_wrapper
+
+class Base
+{
+protected:
+    int m_value{};
+
+public:
+    Base(int value)
+        : m_value{ value }
+    {
+    }
+    virtual ~Base() = default;
+
+    virtual std::string_view getName() const { return "Base"; }
+    int getValue() const { return m_value; }
+};
+
+class Derived : public Base
+{
+public:
+    Derived(int value)
+        : Base{ value }
+    {
+    }
+
+    std::string_view getName() const override { return "Derived"; }
+};
+
+int main()
+{
+	std::vector<std::reference_wrapper<Base>> v{}; // a vector of reassignable references to Base
+
+	Base b{ 5 }; // b and d can't be anonymous objects
+	Derived d{ 6 };
+
+	v.push_back(b); // add a Base object to our vector
+	v.push_back(d); // add a Derived object to our vector
+
+	// Print out all of the elements in our vector
+	// we use .get() to get our element out of the std::reference_wrapper
+	for (const auto& element : v) // element has type const std::reference_wrapper<Base>&
+		std::cout << "I am a " << element.get().getName() << " with value " << element.get().getValue() << '\n';
+
+	return 0;
+}
+#+end_src

@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       a1cc3035-80d0-41d7-a846-a8657b8dbf9d
+:END:
+#+title: TCP粘包和拆包
+#+filetags: network
+
+* TCP粘包和拆包 [[https://www.xiaolincoding.com/network/3_tcp/tcp_stream.html#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%AD%97%E8%8A%82%E6%B5%81][小林coding]]
+*粘包* ：发送方的用户消息 可能被系统拆分成 多个 TCP报文进行传输，但接收方 *不知道用户消息的开始和结束边界*
+#+begin_comment
+因此我们说TCP是面向字节流传输的，因为一个TCP报文不对应一个完整的用户消息
+#+end_comment
+
+*拆包* ：
+1. *自定义消息结构* ：消息头+消息体（消息头长度固定，用于说明后边消息体中的数据长度）
+2. 在用户消息之间插入 *特殊字符作为边界* （eg：[[id:6cd6d820-4519-4090-8b15-4b38060fe563][HTTP]]用 回车+换行 作为边界）

@@ -5,9 +5,10 @@
 #+filetags: cpp
 
 * 类模板 [[https://www.learncpp.com/cpp-tutorial/class-templates/][learncpp13.13]]
-1. 用于实例化一系列 类类型（类、结构体、共用体） 的模板； *[[id:9148c346-c9dd-4480-9b37-25d448987e98][模板参数]]* 作为占位符；在编译期 编译器遇到  *创建对象* 时发生 *类模板实例化* （在发生实例化的文件处 *复制* 一份模板，模板参数 -> 具体类型，因此会 *增加编译时间* [fn:1]）
+1. 用于实例化一系列 类类型（类、结构体、共用体） 的模板； *[[id:9148c346-c9dd-4480-9b37-25d448987e98][模板参数]]* 作为占位符；在编译期 编译器遇到  *创建对象* 时发生 *类模板实例化* （在发生实例化的文件处 *复制* 一份模板，模板参数 -> 具体类型，因此会 *增加编译链接时间* [fn:1]）
 
-2. 在 *多个源文件* 中使用类模板：类似 [[id:d296e2b2-3557-479c-ad2d-58c1600fbfd9][函数模板]]，通常是将模板放入 =.h= 头文件，然后 =include= 进 =.cpp= 源文件 [fn:2]
+2. 在 *多个源文件* 中使用类模板：类似 [[id:d296e2b2-3557-479c-ad2d-58c1600fbfd9][函数模板]]，通常是将类模板声明和定义放入 =.h= 头文件（定义放 .h，实现放 .cpp 会出现问题[fn:6]），然后 =include= 进 =.cpp= 源文件 [fn:2] [[https://www.learncpp.com/cpp-tutorial/template-classes/][learncpp26.1]]
+   不会发生 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]] 错误（链接器会对重复定义 *去重* ）
 
 3. 类模板中的 *成员函数* [fn:5] [[https://www.learncpp.com/cpp-tutorial/class-templates-with-member-functions/][learncpp15.5]]
    - 类模板内部定义 *无需* 模板参数声明
@@ -28,7 +29,96 @@
 
 
 
+
 * Footnotes
+
+[fn:6]
+#+name: Array.h
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#ifndef ARRAY_H
+#define ARRAY_H
+
+#include <cassert>
+
+template <typename T>
+class Array
+{
+private:
+    int m_length{};
+    T* m_dpata{};
+
+public:
+
+    Array(int length)
+    {
+        assert(length > 0);
+        m_data = new T[length]{};
+        m_length = length;
+    }
+
+    Array(const Array&) = delete;
+    Array& operator=(const Array&) = delete;
+
+    ~Array()
+    {
+        delete[] m_data;
+    }
+
+    void erase()
+    {
+        delete[] m_data;
+        // We need to make sure we set m_data to 0 here, otherwise it will
+        // be left pointing at deallocated memory!
+        m_data = nullptr;
+        m_length = 0;
+    }
+
+    // Array<T>::operator[] 的声明
+    T& operator[](int index);
+
+    int getLength() const { return m_length; }
+};
+
+// Definition of Array<T>::operator[] moved into Array.cpp below
+
+#endif
+#+end_src
+
+#+name: Array.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "Array.h"
+
+// Array<T>::operator[]的定义
+template <typename T>
+T& Array<T>::operator[](int index)
+{
+    assert(index >= 0 && index < m_length);
+    return m_data[index];
+}
+#+end_src
+
+#+name: main.cpp
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include "Array.h"
+
+int main()
+{
+	const int length { 12 };
+	Array<int> intArray { length };
+	Array<double> doubleArray { length };
+
+	for (int count{ 0 }; count < length; ++count)
+	{
+		intArray[count] = count;                  // 调用 Array<int>::operator[] 我们只在 Array.h 中看到声明，没看到定义，因此链接错误
+		doubleArray[count] = count + 0.5;
+	}
+
+	for (int count{ length - 1 }; count >= 0; --count)
+		std::cout << intArray[count] << '\t' << doubleArray[count] << '\n';
+}
+// 编译成功，FIXME 但链接错误：undefined reference to `Array<int>::operator[](int)'
+#+end_src
+
 [fn:5]
 #+begin_src cpp :results output :namespaces std :includes <iostream> <ios>
 template <typename T>
@@ -127,7 +217,6 @@ int main()
 #+end_src
 
 [fn:2]
-不会发生 [[id:c611b7e9-f4e4-4ac4-9a84-fddb01e4275e][ODR(单一定义规则)]] 错误
 #+name: pair.h
 #+begin_src cpp :results output :namespaces std :includes <iostream>
 #ifndef PAIR_H
