@@ -1,10 +1,17 @@
 :PROPERTIES:
 :ID:       38f5ad84-add1-40ab-a0ff-2ef0c81d59f2
 :END:
-#+title: TCP滑动窗口机制
+#+title: TCP流量控制(基于滑动窗口实现)
 #+filetags: network
 
-* TCP滑动窗口机制
+* TCP流量控制 [[https://www.bilibili.com/video/BV1ju4y1G7wB/?vd_source=4441bc96046659b39d059d583f36ff52][bilibili-编程十万问]]
+使用 滑动窗口机制 实现，在通信过程中，接收方根据自己的 =rwnd= 的大小动态调整发送方的发送窗口大小， =swnd = min(cwnd, rwnd)= -> 不考虑拥塞控制：swnd = rwnd； 不考虑流量控制：swnd = cwnd
+- swnd :: 发送窗口
+- rwnd :: 接收窗口
+- cwnd :: 拥塞窗口
+
+
+* 滑动窗口机制
 1. *作用* ：
    1) 提高发送效率（慢：停止等待协议）
       - 停止等待协议 :: 发送一个数据，等到确认才发下一个

@@ -1,0 +1,255 @@
+:PROPERTIES:
+:ID:       84b76ad2-597e-40d3-9332-27c9700ece88
+:END:
+#+title: interview_project
+#+filetags: other
+
+* 虚拟数字人
+*微调流程* ：[[https://xtx0o8yn7x.feishu.cn/docx/XjvpdaeQcoF8d3xhpbCcoOJNn9b][微调]]
+1. 加载分词器​​（AutoTokenizer）预处理数据，使用分词器将文本编码为数字，得到数据集
+2. 加载模型​​（AutoModelForCausalLM + BitsAndBytesConfig量化）：量化，减少显存占用
+3. 配置训练参数​​（TrainingArguments）：训练的超参数（学习率、批次等）
+4. 配置Lora参数（peft中的LoraConfig）：用于高效参数微调
+5. SFTTrainer（训练参数 + Lora参数 + 数据集）开始训练
+
+#+begin_comment
+使用 hugging face 中的库：
+1. transformers：基础模型库
+   用的 AutoTokenizer：加载分词器，用于将文本编码为数字
+   AutoModelForCausalLM：加载模型
+   BitsAndBytesConfig：量化参数（减少显存占用 4位量化、8位量化）
+   TrainingArguments：训练超参数（学习率、批次大小等）
+2. peft：参数高效微调库，用的 LoRA
+3. trl：强化学习微调库，用的 SFTTrainer（监督式微调的训练器）
+#+end_comment
+
+- [X] 项目用的是哪种微调方式，LoRA、Freeze（冻结预训练层）还是全量微调？为什么在虚拟数字人场景下选择这种方案？
+  + 用的LoRA（低秩适配），将原始大权重矩阵拆为两个低秩矩阵A、B，训练时只训练A、B，推理时合并原始矩阵和A、B；训练量更少
+  + 在终端设备（eg：智能屏）的环境下算力不强，对精确度要求不需要那么高，选择 LoRA 模型响应更快
+- [X] 虚拟数字人需要适配特定场景（比如客服、教育）的交互风格，你们的微调数据集是怎么构建的？
+  + 从博物馆官网上爬来，然后交给chatgpt生成角色对话，且保持角色语气一致性
+
+
+*外挂知识库流程* ：[[https://xtx0o8yn7x.feishu.cn/docx/UOAadjjReoI6UBxPq4lcI9frnMb][外挂知识库]]
+# 以下都是 langchain 的模块
+1. 用 UnstructuredFileLoader 加载文件，将非结构化文件（eg：PDF、Word、TXT等）转换为统一格式（Document对象列表：List[Document]）
+2. RecursiveCharacterTextSplitter 将长文本分块（chunk），确保分块后保留语义完整
+3. HuggingFaceEmbeddings中的 text2vec-large-chinese模型 对chunk进行embedding，存储到向量库 FAISS（Facebook开源的向量库） 中
+4. 用户查询时，查询首先变成向量的形式，在 向量库中进行相似度搜索，返回相似度 top k，大模型结合这个返回结果进行回答
+
+#+begin_example python
+# Document对象列表：List[Document]
+[
+    Document(
+        page_content="小白的父亲是张三。",
+        metadata={"source": "/root/knowledge.txt"}
+    ),
+    Document(
+        page_content="Llama2是由Meta发布的开源大模型。",
+        metadata={"source": "/root/knowledge.txt"}
+    )
+]
+#+end_example
+
+- [X] 为什么使用 FAISS？
+  （facebook开源）主要因为与 langchain 集成，方便使用（很多api调用方便）
+- [X] 为什么选用 text2vec-large-chinese模型？
+  中文模型，langchain 集成，调用方便
+
+
+** LoRA(低秩矩阵适配)原理
+1. *秩 代表信息量* ：秩越低则该矩阵所含信息量越少
+   #+begin_comment
+   [1 2 3] 这个矩阵秩为2，所含信息多
+   [4 5 6]
+
+   [1 2 3] 这个矩阵秩为1，所含信息少（第2行可以用第1行表示）
+   [2 4 6]
+   #+end_comment
+
+2. *大矩阵可以分解为两个低秩矩阵* ：虽然两个低秩矩阵的信息量变少了，但是训练量也变小了
+   #+begin_comment
+   [ 4  5  6]   [1]
+   [ 8 10 12] = [2] x [4 5 6]
+   [12 15 18]   [3]
+   #+end_comment
+
+3. 训练时将原始矩阵冻结，用两个低秩矩阵A、B表示原始矩阵，并训练A、B
+   推理时 =最终权重矩阵 = 原始权重矩阵 + 低秩矩阵A * 低秩矩阵B=
+
+
+
+
+* llfc项目
+- [ ] 怎么做的用户登录？
+- [ ] 登录的具体流程
+- [ ] 登录和聊天分别用是协议？
+- [ ] 登录用的http的哪个方法，为什么用post，不用get？
+- [ ] 为什么用异步不用同步？
+- [ ] 怎么设计多线程模式？
+- [ ] 域名如何映射到ip
+- [ ] 项目中用的是私域ip还是公网ip，如何获得一个公网ip
+- [ ] 连接池的实现原理？（怎么设计连接数），当有大量请求时，如何处理连接超时问题？
+- [ ] 怎么封装的http和tcp？
+- [ ] 项目中微服务的拆分、职责边界怎么划分
+- [ ] 聊天服务器如何实现的负载均衡、当有大量请求到来时，如何实现连接的均匀分布？
+- [ ] 怎么测出单服务器的连接数的，连接数的瓶颈在哪儿？
+- [ ] MySQL连接池的设计要点？
+- [ ] GRPC在项目中解决的什么问题？
+- [ ] redis缓存的应用场景
+- [ ] 聊天过程中的数据如何产生，如何传递，如何存储
+- [ ] 存储聊天数据的表如何设计，如何建立索引
+- [ ] 如果离线消息过大，需要等所有数据发送完后再删除吗，如果发送过程中服务断掉，那下一次要重复发送吗
+- [ ] redis如果遇到内存快满了，如何处理
+- [ ] 讲项目做的好的一个点
+- [ ] 大量用户连接时，负载的处理和断连的处理
+- [ ] 客户端请求到达服务端的通信链路
+- [ ] 数据库中用户密码的加密存储
+- [ ] 数据库中用户密码的加密存储
+- [ ] 高并发场景下单个连接数不足的问题具体讲讲
+- [ ] 项目还有什么不足和改进点
+- [ ] 有没有了解消息队列
+- [ ] 多线程并发修改全局变量会有什么问题，如何解决? （除了加锁还有什么方法?)
+- [ ] 为什么要选择项目中的这个网络库（asio），以及这些技术
+- [ ] 如何存储大量的聊天信息，包括音频视频以及各种大文件
+- [ ] grpc如何实现断线重连
+- [ ] 两个客户端之间如何实现聊天功能？（grpc）
+- [ ] 服务器如何确定用户连接到哪个聊天服务器？
+- [ ] 如何实现发送验证码功能？
+- [ ] 为什么需要网关服务，没有行不行？
+- [ ] 如何获得服务器性能的？（测试）
+- [ ] 如何解决大量tcp连接的性能问题？如何用户登陆后长时间没有请求（心跳机制），如何又突然要发消息了，需要重新登录吗？
+- [ ] 在项目中用到的redis函数？
+- [ ] redis在项目中的作用？
+- [ ] redis常用的数据结构，redis是单线程还是多线程、为什么单线程他的效率还高？
+- [ ] 为什么要把登录和聊天拆分成不同的服务器？
+- [ ] 不同的聊天服务器是物理上的分离，还是逻辑上的分离？
+- [ ] 每个聊天服务器都是一个单独的ip，如果一个服务器挂了、那么这个服务器上的客户端都会受到影响，那如何做到无损切换服务器？
+- [ ] 项目中mysql主要存储哪些数据？
+- [ ] 如何实现A发消息给B，服务器如何识别不同的客户端并实现消息转发？
+- [ ] 客户端使用什么接口进行消息发送的？
+- [ ] grpc用的什么协议？protobuf的作用？
+- [ ] 具体的添加好友的业务怎么实现的？
+- [ ] 主动添加方的消息推送是怎么实现的（因为被添加方同意时，主动添加方可能不在线）
+- [ ] 同一账号，在设备上添加的好友，之后在b设备上登陆时，如何同步这个好友信息？
+- [ ] 什么是asio，具体可以实现哪些功能？
+
+
+** 客户端
+- 与服务器的通信端口：
+  1. 网关：8080
+  2. chat1：8090
+  3. chat2：8091
+
+** 服务端
+*网关服务器* ：处理客户端HTTP请求，根据请求内容的不同，将请求分发到不同的服务器，将响应结果返回给客户端
+*状态服务器* ：存储聊天服务器的状态信息，主要是负载；网关服务器请求状态服务器（作为grpc服务端），状态服务器会返回负载较低的 聊天服务器的ip、端口、token
+*验证服务器* ：（作为grpc服务端）通过uuid生成4位随机数作为验证码，存放在redis中设置过期时间，并发送邮件到用户邮箱，用户在Qt客户端填写信息发送到服务端后，与redis中存储的验证码对比
+*聊天服务器* ：（作为grpc服务器），Qt客户端通过TCP连接到聊天服务器，聊天服务器，向聊天服务器发送消息，若
+
+*** GateServer
+监听端口、处理连接
+HttpConnection类：数据的收发，解析HTTP请求，并交给LogicSystem处理，LogicSystem 中注册了一些业务相关的回调函数：登录、注册、获取验证码、重置密码
+
+*** StatusServer
+- 核心 ::
+  1. 创建StatusServiceImpl对象，用于构建并启动grpc服务器，接收请求
+  2. StatusServiceImpl返回负载最小的ChatServer的ip、host、token
+- 辅助 ::
+  1. ConfigMgr为StatusServiceImpl获取ChatServer的配置信息，并存入StatusServiceImpl
+  2. RedisMgr缓存查询负载最小ChatServer时的信息：负载最小的服务器、登录的数量
+- 细节 ::
+
+*** ChatServer
+- 核心 ::
+  1. 创建ChatServiceImpl对象，用于构建并启动grpc服务器，用于与qt客户端通信
+  2. CServer保管很多CSession，用会话id识别
+  3. CSession用于读写数据，将读到的数据存放到LogicSystem的消息队列，将要写的数据先放到发送队列
+  4. LogicSystem注册了相关逻辑的回调函数：登录、搜索用户、添加好友、认证好友
+  5. LogicSystem处理消息队列中的消息，调用相应回调函数
+  6. 登录：验证token
+- 辅助 ::
+  1. ConfigMgr
+  2. AsioIOServicePool
+  3. RedisMgr
+- 细节 ::
+
+** 实现
+*redis线程池* ：创建 redis连接，并将 redis连接 放入queue中，后台起一个 check线程，每隔一段时间检查 redis连接 健康状态（PING），状态正常则放回连接池，状态不正常删除连接，并创建新连接放入连接池；取出和放回操作注意加锁，其次注意判断 线程池关闭的标志变量 b_stop_
+
+
+
+
+
+** DONE io_context底层原理？
+io_context是一个事件循环，内部存在任务队列，任务队列中存放着异步操作的回调函数、手动提交的任务；事件循环启动后会处理任务队列中的任务。
+
+** DONE 如何封装的io_context(AsioIOServicePool.cpp)？
+AsioIOServicePool(线程池)
+每个线程内启动一个[[id:a853063a-5a85-4bc9-8afc-65731a28e27e][事件循环]]([[id:17d4394b-4f3d-479f-a51b-2f821387e81b][io_context]])，处理异步回调和手动提交的任务；为了防止任务队列空的时候，事件循环退出，使用work
+
+** DONE 如何封装的mysql(MysqlMgr.cpp)？
+MySqlPool(连接池) => 存储mysql连接 => 起一个线程实现心跳机制 => 保证连接存活
+MysqlDao为数据访问层，对MySqlPool进行封装
+MysqlMgr为业务访问层，对MysqlDao进行封装
+
+** DONE 如何封装的redis(RedisMgr.cpp)？
+RedisConPool(连接池) => 存储redis连接 => 起一个线程实现心跳机制[fn:3] => 保证连接存活
+RedisMgr对RedisConPool进行封装，提供对redis操作的接口
+
+** DONE ChatServer的CSession.cpp中为什么将发送的数据先放到发送队列？
+这个队列是生产者消费者模型的实现，解耦了生产者和消费者的逻辑、支持多线程并发操作、利用队列的缓冲能力平衡双方速率差异；同时队列先进先出的特点保证了处理消息的顺序
+
+** DONE ChatServer的LogicSystem.cpp中为什么将接收的数据放到消息队列？
+这个队列是生产者消费者模型的实现，解耦了生产者和消费者的逻辑、支持多线程并发操作、利用队列的缓冲能力平衡双方速率差异；同时队列先进先出的特点保证了处理消息的顺序
+
+** DONE 如何使用grpc进行数据传输的？
+客户端创建channel，再用channel创建stub，使用stub通信
+服务端继承Service并实现相应虚函数得到服务；再用ServerBuilder监听端口，并注册服务
+
+
+* 百万并发reactor服务器
+整个系统中上层注册回调函数给下层（上层 -> 下层），下层根据事件的不同而触发不同的回调（下层 -> 上层），这就好似上下层之间通信，事件的来源是 epoll；当事件触发时，从下层到上层 层层回调
+#+begin_comment 示例
+上层：EchoServer
+下层：TcpServer
+再下层：....
+#+end_comment
+
+- 连接建立与收发流程 ::
+  # 连接建立流程
+  1. EchoServer 注册 newconnectioncb（新连接回调函数）：TcpServer -> Acceptor -> Channel
+  2. 当事件发生时（epoll_wait返回），Channel根据事件类型调用不同回调（handleevent），此时是读回调，又因为是 acceptchannel，回调Acceptor::newconnection（clientchannel回调Connection::onmessage）
+  3. Acceptor::newconnections 创建 clientsocket（客户端socket），回调 TcpServer::newconnection
+  4. TcpServer::newconnection 创建 Connection（连接类），然后就能收发数据了
+  # 收发流程
+  1. Connection在 clientchannel 中注册 Connection::onmessage读回调
+  2. 当 clientchannel 中事件发生时，调用 Connection::onmessage
+  3. Connection::onmessage 读取数据并放入缓冲区，回调 TcpServer::onmessage
+  4. TcpServer::onmessage 回调 EchoServer::HandleMessage
+  5. EchoServer::HandleMessage 将回调消息加入 工作线程池
+  6. 工作线程池 调用 EchoServer::OnMessage
+  7. EchoServer::OnMessage 将 数据通过 Connection::send 发送出去
+  8. 因为收发这种IO是交给 IO线程的，而我们在 工作线程 处理完数据是需要发送数据给客户端的，因此要交给 IO线程处理，就得委托 EventLoop 内部的任务队列
+-
+
+TcpServer  中跑 主从事件循环（EventLoop） 的线程池是 IO线程，任务放在 主从EventLoop 中的任务队列，处理 IO任务
+- 主事件循环：用于 接收连接
+- 从事件循环：用于 收发数据（IO）-> 内部有个任务队列
+
+
+EchoServer 中的线程池是 工作线程，该线程池中的 任务队列，处理 业务任务
+
+
+
+
+TcpServer 负责 连接的生命周期 管理
+EventLoop 负责 连接的IO事件 处理
+
+
+
+* Footnotes
+
+[fn:3] 每隔一定时间，检查所有连接一次
+[fn:2] 子类构造函数私有，但父类需要构造子类
+[fn:1] 父类调用子类构造，子类构造会调用父类构造；不希望外部直接通过Singleton<T>()实例化

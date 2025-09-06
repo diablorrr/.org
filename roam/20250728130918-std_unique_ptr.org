@@ -5,7 +5,7 @@
 #+filetags: cpp
 
 * std::unique_ptr [[https://www.learncpp.com/cpp-tutorial/stdunique_ptr/][learncpp22.5]]
-1. cpp11， *独占资源* 的智能指针，不可拷贝，可移动
+1. cpp11， *独占资源* 的智能指针，一次只有一个这样的指针管理资源，不可拷贝，可移动
    - 内部 ::
      1) 指针指向 资源
      2) 无 拷贝语义（ [[id:828d1a9b-3ab1-4471-8906-1cf535ea8e7d][拷贝构造函数、拷贝赋值]]）

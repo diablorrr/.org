@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       5007d3f1-963b-48d3-88ff-261c4b4e454e
+:END:
+#+title: PageCache
+#+filetags: operating_system
+
+* PageCache [[https://xiaolincoding.com/os/8_network_system/zero_copy.html#pagecache-%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8][小林coding]]
+磁盘高速缓存，存在于内核中（不是磁盘的缓冲区，磁盘有自己的缓冲区）：
+1. 用于 *缓存最近访问的磁盘数据* （时间局部性原理），也就是在读取数据先查看 PageCache，有就直接返回，否则从磁盘读取
+2. *预读功能* ：读取一定量数据到 PageCache时，会将附近的数据也读取了（空间局部性原理）
+   #+begin_example
+   假设 read 每次读取 32KB字节，内核除了读取 32KB字节，也会将后边的 32~64KB字节的数据一起读取
+   #+end_example
+
+不适合 传输大文件，只适合 传输小文件；见：[[id:38a82890-b4b8-4985-978d-7e9dff72a291][零拷贝]]

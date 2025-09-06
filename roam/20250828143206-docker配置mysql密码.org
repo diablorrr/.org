@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       469e9975-eced-4ee3-9ede-2ef732085eae
+:END:
+#+title: docker配置mysql密码
+#+filetags: docker mysql
+
+* docker配置mysql密码
+1. docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=123456 mysql:8.0

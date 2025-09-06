@@ -5,7 +5,7 @@
 #+filetags: cpp
 
 * auto [[https://www.learncpp.com/cpp-tutorial/type-deduction-for-objects-using-the-auto-keyword/][learncpp10.8]] [[https://www.learncpp.com/cpp-tutorial/type-deduction-for-functions/][learncpp10.9]] [[https://www.learncpp.com/cpp-tutorial/type-deduction-with-pointers-references-and-const/][learncpp12.14]]
-1. 用于 *自动类型推导* （根据 value 来推断 type） ；推断 表达式类型 时， *会执行表达式*
+1. 用于 *自动类型推导* ，根据 value 来推断 type；推断 表达式类型 时， *会执行表达式*
 
 2. auto 与 *const/constexpr、引用*
    a. *[[id:1f3d6196-77e0-47a7-95e3-fb61a399ee2b][顶层const]]、引用* ：会被丢弃 ；若要保留，重新用 const 和 引用 修饰

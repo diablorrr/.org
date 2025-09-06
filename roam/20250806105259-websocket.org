@@ -29,7 +29,7 @@
      #+end_example
 3. 服务器返回 状态码为101的报文（含有 用公开算法将客户端base64码生成的字符串）
    #+begin_example css
-   HTTP/1.1 101 Switching Protocols\r\n                 /* 101：转换协议的状态码 */
+   HTTP/1.1 101 Switching Protocols\r\n                   /* 101：转换协议的状态码 */
    Sec-WebSocket-Accept: iBJKv/ALIW2DobfoA4dmr3JHBCY=\r\n /* 公开算法 将 客户端的Sec-WebSocket-Key生成的另一个字符串 */
    Upgrade: WebSocket\r\n
    Connection: Upgrade\r\n

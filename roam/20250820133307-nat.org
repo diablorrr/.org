@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       4d950bf8-4cfc-4206-814c-04bbb3ba5870
+:END:
+#+title: NAT
+#+filetags: network
+
+* NAT(网络地址转换)
+用于将 *私有IP地址 ---> 公有IP地址* ；不属于协议，而是一种技术
+最常用的 NAT类型 -> *PAT（端口地址转换）* ：内网中多个主机IP共用一个公网IP，用端口区分内网主机
+
+*作用* ：
+1. 解决 IPv4地址 耗尽问题
+2. 外网无法直接访问内网设备，更安全
+
+** 图:NAT类型之PAT :ATTACH:
+:PROPERTIES:
+:ID:       ba035bde-edb3-4256-ac3c-77ca9982cb06
+:END:
+
+[[attachment:_20250820_140608screenshot.png]]
+1. NAT设备 内会维护一张 NAT映射表，记录 ="内网IP:端口 -> 公网IP:端口"=
+2. 内网 <-> 外网：数据发送通过 NAT映射表

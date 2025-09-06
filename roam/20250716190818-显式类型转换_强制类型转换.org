@@ -4,34 +4,186 @@
 #+title: 强制类型转换(显示类型转换)
 #+filetags: cpp
 
-* 强制类型转换(显示类型转换) [[https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/][learncpp10.6]]
-1. 程序员明确指示编译器进行的类型转换， *必要性* 如下
-   #+begin_src cpp :results output :namespaces std :includes <iostream>
-   int x = 10, y = 4;
-   double d = x / y; // 结果为2.0；因为 先进行 x / y 得到 int 2，然后转为 double 2.0
-   cout << d << '\n';
-   #+end_src
+* 强制类型转换(显示类型转换) [[https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/][learncpp10.6]] [[https://www.bilibili.com/video/BV1EaXeYeECJ/?vd_source=4441bc96046659b39d059d583f36ff52][bilibili-程序员陈子青]]
+1. 程序员明确指示编译器进行的类型转换， *必要性*  [fn:5]
 
-   #+RESULTS:
-   : 2
+2. cpp 中有4种，C中有1种
+   1) std::static_cast
+   2) std::dynamic_cast
+   3) std::const_cast
+   4) std::reinterpret_cast
+   5) C风格类型转换： =(类型)变量= ； *底层* 使用到 static_cast、const_cast、reinterpret_cast 或 它们的组合； *应避免使用*
 
-   使用 static_cast 进行强制类型转换
-   #+begin_src cpp :results output :namespaces std :includes <iostream>
-   int x = 10, y = 4;
-   double d = static_cast<double>(x) / y; // 结果为2.5；因为 x 转为 double 10.0，根据 算数转换，y 转为 double 4.0
-   cout << d << '\n';
-   #+end_src
-
-   #+RESULTS:
-   : 2.5
-
-
-2. *静态类型转换*  ： =static_cast<类型>(变量)= 进行 *编译期类型转换* -> 提供编译时类型检查 -> 安全
-3. *C风格类型转换* ： =(类型)变量= ； *底层* 使用到 static_cast、const_cast、reinterpret_cast 或 它们的组合； *应避免使用*
-
-
-** 5种强制类型转换 :ATTACH:
+** 图:5种强制类型转换 :ATTACH:
 :PROPERTIES:
 :ID:       4d09b863-c477-4521-a800-b5edbb9fb2be
 :END:
 [[attachment:_20250716_192752screenshot.png]]
+
+
+* std::static_cast
+1. 静态类型转换，编译时类型转换，提供编译时检查（相比于 C风格转换 更安全），一般用于： *基本类型转换*[fn:1]、 *向上转型*[fn:2]；用于 向下转型[fn:2] 时因为没有运行时检查，因此转型总是成功，但是访问转型后的对象可能出现未定义行为
+
+
+* std::dynamic_cast
+1. 动态类型转换，在 *有虚函数的继承体系* 中使用[fn:3]，用于 *向下转型* ，有运行时检查，转换失败返回空指针 [fn:4]
+
+2. std::dynamic_cast 进行 *向下转型失效* 的情况，会直接报错
+   1) protected 或 private 继承
+   2) 不是有虚函数的继承体系
+
+3. 向下转型 和 [[id:b23cd926-82ec-489e-ad8f-96b86e5559c2][虚函数]] *选择*
+   优先 虚函数，以下情况使用 向下转型：
+   1) 需要访问特定于派生类的内容（eg：仅在派生类中定义的函数）
+   2) 无法修改基类以添加虚函数（eg：基类是标准库一部分）
+
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Base { virtual void f() {} };
+class Derived : public Base {};
+
+Base* b = new Base(); // 指向基类对象
+Derived* d = dynamic_cast<Derived*>(b); // 转换失败，d为nullptr
+#+end_src
+
+
+
+* std::const_cast
+1. const转换，用于去除对象的const属性；但是 对象本身不是const，后来被加上 const 属性（不常用：还有volatile），才能用 const_cast 去除对象的const属性；const_cast 只能用于指针/引用
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   void modify(const char* str) {      // 2. 函数参数是 const，导致 str 变成 const
+     char* p = const_cast<char*>(str); // 3. const_cast 去除const
+     p[0] = 'H';
+   }
+
+   int main() {
+     char str[] = "hello";             // 1. 对象本身不是 const
+     modify(str);
+     cout << str <<'\n';
+   }
+   #+end_src
+
+   #+RESULTS:
+   : Hello
+
+
+* std::reinterpret_cast
+1. 重解释转换，用于将一种类型转换为另一种类型，无检查，风险极高，一般用于 指针之间/引用之间转换 或 指针/引用与整数之间的转换
+   #+begin_src cpp :results output :namespaces std :includes <iostream> <cstdint>
+   int a = 42;
+   uintptr_t addr = reinterpret_cast<uintptr_t>(&a); // 指针转为整数
+   int* p = reinterpret_cast<int*>(addr);            // 整数转为指针
+   cout << *p << "\n";
+   #+end_src
+
+   #+RESULTS:
+   : 42
+
+
+
+* Footnotes
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int x = 10, y = 4;
+double d = x / y; // 结果为2.0；因为 先进行 x / y 得到 int 2，然后转为 double 2.0
+cout << d << '\n';
+#+end_src
+
+#+name: 使用 static_cast 进行强制类型转换
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int x = 10, y = 4;
+double d = static_cast<double>(x) / y; // 结果为2.5；因为 x 转为 double 10.0，根据 算数转换，y 转为 double 4.0
+cout << d << '\n';
+#+end_src
+
+
+[fn:4]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Base { virtual void f() {} };
+class Derived : public Base {};
+
+int main() {
+  Base* b = new Base(); // 指向基类对象
+  Derived* d = dynamic_cast<Derived*>(b); // 转换失败，d为nullptr
+  if (d) {
+    cout << "转换成功" << '\n';
+  } else {
+    cout << "转换失败" << '\n';
+  }
+  delete b;
+}
+#+end_src
+
+#+RESULTS:
+: 转换失败
+
+[fn:3]
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   /* 有虚函数的继承体系 */
+   struct Base {
+       virtual ~Base() {} // 有虚函数
+   };
+   struct Derived : Base {};
+
+   Base* b = new Derived;
+   Derived* d = dynamic_cast<Derived*>(b); // ok
+   if (b) {
+     cout << "转换成功" << '\n';
+   } else {
+     cout << "转换失败" << '\n';
+   }
+
+   /* 没有虚函数的继承体系 */
+   struct NonPolyBase {}; // 没有虚函数
+   struct NonPolyDerived : NonPolyBase {};
+
+   NonPolyBase* npb = new NonPolyDerived;
+   // NonPolyDerived* npd = dynamic_cast<NonPolyDerived*>(npb); // FIXME 不是有虚函数的继承体系，无法使用 std::dynamic_cast
+   #+end_src
+
+#+RESULTS:
+: 转换成功
+
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+double d = 3.14;
+int i = static_cast<int>(d);
+cout << i << '\n';
+#+end_src
+
+#+RESULTS:
+: 3
+
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+class Base {
+public:
+  int a;
+  Base() {}
+  Base(int v) : a(v) {}
+  virtual ~Base() = default;
+};
+
+class Derived : public Base {
+public:
+  // int a; NOTE 因为是继承，所以有基类成员
+  int b;
+  Derived(int v) : b(v) {
+    this->a = v;
+  }
+};
+
+int main() {
+  Derived d(10);
+  Base* b = static_cast<Base*>(&d);         // ok，static_cast 向上转型
+  cout << "Base pointer: " << b->a << endl;
+
+  Base b1(1);
+  Derived* d1 = static_cast<Derived*>(&b1);  // FIXME static_cast 向下转型
+  cout << "Base pointer: " << d1->b << endl; // FIXME 访问派生类成员b：但基类里没有b，用 static_cast 向下转型，不知道访问到哪片内存中了，可能产生未定义行为
+}
+#+end_src
+
+#+RESULTS:
+: Base pointer: 10
+: Base pointer: 0

@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       ebe6c5ce-08f0-46eb-b28b-c07b40d363e3
+:END:
+#+title: docker配置redis
+#+filetags: docker redis
+
+* docker配置redis
+1. docker run --name redis-container -v ~/docker/redis/redis.conf:/etc/redis.conf redis:latest redis-server /etc/redis.conf

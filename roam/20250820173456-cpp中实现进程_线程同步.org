@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       12e4e623-53bd-4b85-8167-16a75a03bb6f
+:END:
+#+title: cpp中实现线程/进程同步
+#+filetags: cpp
+
+* cpp中实现进程/线程同步
+*锁*
+互斥锁        ：std::mutex
+递归互斥锁    ：std::recursive_mutex
+定时互斥锁    ：std::timed_mutex
+递归定时互斥锁：std::recursive_timed_mutex
+
+*锁包装器*
+# 利用RAII机制（根据类的生命周期自动加锁、自动解锁）简化锁的使用
+std::lock_guard
+std::unique_lock：支持和 std::condition_variable 一起使用
+
+
+[[id:dd50a08e-6b08-43c7-b35a-4109e47b679e][条件变量]]（std::condition_variable）、原子操作（[[id:35815261-4069-4577-8db3-f5c93f175c79][std::atomic]]）
+- 互斥量   :: 用于保护资源，确保同一时间只有一个线程能访问（互斥）
+- 条件变量 :: 搭配互斥量使用，用于线程间的等待和通知（同步）
+- 原子操作 :: 不使用锁的情况下，对数据的读写是原子的（读写的过程中不会被打断）

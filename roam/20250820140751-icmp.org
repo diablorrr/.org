@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       39273e3f-7925-4c25-a276-aacf4294d353
+:END:
+#+title: ICMP
+#+filetags: network
+
+* ICMP(互联网控制消息协议)
+网络层协议，用于 *在IP网络中传递控制信息和错误报告*

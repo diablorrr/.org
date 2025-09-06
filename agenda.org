@@ -3,52 +3,14 @@
 #+TAGS: 项目(j) 科研(p) 杂事(o) 书(b)
 #+STARTUP: show3levels
 
+1. [[id:3cad4156-34eb-4e1f-82e4-46775015a546][interview]]
+2. [[id:3f19781d-1730-463d-a079-98008e782347][life]]
+3. 公司：金山、小米、趣链、统信
+
+
 * Inbox
-** TODO [#A] hot100
-** TODO [#A] 高频面经
-DEADLINE: <2025-08-11 一>
-** TODO [#A] 百万并发reactor服务器
-DEADLINE: <2025-08-15 五>
-** -----------------------------------
-** TODO 项目 [10/16]
-*** DONE 编写整个项目的CMakeLists.txt [4/4]
-**** DONE 自动编译grpc文件
-**** DONE 构建静态库和动态库
-**** DONE 层次结构编译
-**** KILL 跨平台兼容性
-*** DONE 视频:网络编程&IO多路复用
-*** DONE 视频:linux环境高级编程 + 相关八股
-DEADLINE: <2025-04-22 二> SCHEDULED: <2025-04-21 一>
-*** DONE 吃透项目代码:服务器代码运行逻辑
-DEADLINE: <2025-04-25 五> SCHEDULED: <2025-04-23 三>
-*** DONE 迁移到docker环境 [6/6]
-DEADLINE: <2025-05-05 一> SCHEDULED: <2025-04-28 一>
-**** DONE GeekHour视频:docker使用
-**** DONE 容器内基于alpine基础镜像编译boost环境
-**** DONE 容器内编译grpc
-**** DONE dockerfile编写
-**** DONE 联调测试
-**** DONE docker compose编写
-*** DONE CMakeLists.txt完善 [3/3]
-**** DONE 构建release版本和debug版本
-**** DONE 重构项目CMakeLists.txt
-**** DONE 双笙子:CMake教程(3)+笔记
-DEADLINE: <2025-05-14 三> SCHEDULED: <2025-05-14 三>
-*** TODO 吃透项目代码:客户端代码运行逻辑 [3/4]
-**** DONE 重构客户端代码 [3/3]
-***** KILL 重构qmake项目为cmake
-***** KILL cmake模块化项目
-***** KILL 纯代码ui(MVC)
-**** TODO 理解客户端代码 + 相关八股笔记
-**** KILL 大丙QT+笔记
-**** KILL 双笙子:QT视频(4)+笔记
-*** TODO 项目bug [0/2]
-**** TODO chat服务器之间通信无效
-**** TODO 聊天气泡显示问题
-*** TODO ci/cd工作流
-*** TODO mysql使用与优化
-*** TODO redis使用与优化
-*** KILL gtest或ctest
-*** KILL 异步日志系统
-*** KILL 开发插件系统
-*** KILL 性能监控系统
+** TODO 百万并发reactor服务器
+** TODO llfc项目
+** TODO qt八股
+** TODO 数据库
+** TODO 手写智能指针

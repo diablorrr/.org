@@ -5,6 +5,6 @@
 #+filetags: index
 
 * grpc
-1. 高性能的 *RPC（远程过程调用）框架* ，基于 HTTP/2协议，使用 [[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][Protocol Buffers]] 序列化
+1. 高性能的 *RPC（远程过程调用）框架* ，基于 [[id:0b3fad26-6096-455d-a8af-79522c5113f3][HTTP/2.0]] 协议，使用 [[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][Protocol Buffers]] 序列化
 2. *实现序列化* /反序列化：使用 [[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][Protocol Buffers]]编译器 [[id:2732f7a7-3f0e-4ce0-a466-38b9a072818c][protoc]] 将 .proto文件 编译成 对应语言的代码（Python、Java、C++）
 3. *编译方法* 见：[[id:395677a5-f825-4935-a1d1-ef8a31f366cc][编译grpc]]

@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID:       3a8cabb7-16a4-4502-b218-6070225354f2
+:END:
+#+title: interview_tmp
+#+filetags: other
+
+* #define和const的区别
+:PROPERTIES:
+:ID:       575e6016-559a-4b72-90bc-55919d01ad40
+:END:
+#define就是一个预处理指令，纯文本替换，无类型检查；const有，比较安全
+
+* 讲讲KMP算法
+:PROPERTIES:
+:ID:       533827ef-6e6d-4dd0-a1eb-18da3499bc8e
+:END:
+
+* 构造智能指针，new完后内存用完怎么办
+:PROPERTIES:
+:ID:       8d03dee2-b89b-4517-bf36-541d72b3bfd7
+:END:
+抛出 std::bad_alloc 异常，智能指针未构造，无资源泄漏
+# ？ nothrow版本返回 nullptr，智能指针接管 nullptr，智能指针析构，无资源泄漏
+
+* cpp中的 std::lock_guard 和 std::unique_lock 的区别
+:PROPERTIES:
+:ID:       4dddcd08-6f69-4118-bd30-cd3383face83
+:END:
+std::lock_guard ：构造函数中锁定互斥量、析构函数中解锁互斥量；不能手动解锁
+std::unique_lock：可以手动解锁互斥量
+
+* cpp中的 std::async 和 std::future 是什么？如何使用它们实现异步操作？
+:PROPERTIES:
+:ID:       6aeca3bf-1e7b-4d78-bf43-2000dc5da059
+:END:
+1. std::async 用于启动一个异步任务，该任务在后台线程中执行
+   std::future 用于获取异步操作结果
+2. std::async 启动异步任务后返回一个 std::future对象，用 std::future 的 get()方法 获取异步任务结果，若任务还没完成，则 get()方法 阻塞等待任务完成
+
+* 既然有HTTP协议，为什么还要有RPC？
+:PROPERTIES:
+:ID:       721b00cb-86b9-4c01-b8d9-05f5db32a4d2
+:END:
+*RPC* ：
+性能更好：
+1. 自定义二进制协议，只传递必要信息
+2. 基于多路复用，可以连续传输
+
+开发效率更高：
+调用方式就像调用本地函数
+
+
+*HTTP* ：
+性能较差：
+1. 每次通信都携带完整HTTP头部，浪费带宽，增加序列化/反序列化成本
+2. 基于 请求-响应 这样的一问一答通信模式
+
+开发效率较低：
+开发者需要手动构造 HTTP请求、手动序列化/反序列化
+
+
+综上，RPC追求 *性能效率* ，适合服务间通信；HTTP 追求 *开放通用* （在大部分设备上都支持，只需提供 HTTP API，任何客户端都能接入），适合外部调用

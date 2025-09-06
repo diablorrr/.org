@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       6840b9b2-5d0d-466f-90dd-e588bf1ff617
+:END:
+#+title: ssh: connect to host github.com port 22: Connection timed out
+#+filetags: ssh git
+
+* 解决ssh: connect to host github.com port 22: Connection timed out [[https://stackoverflow.com/questions/15589682/how-to-fix-ssh-connect-to-host-github-com-port-22-connection-timed-out-for-g][stackoverflow]]
+1. 在 =~/.shh/config= 中写入以下内容
+   #+begin_comment
+   Host github.com
+    Hostname ssh.github.com
+    Port 443
+   #+end_comment
+2. =ssh -T git@github.com= 测试是否成功

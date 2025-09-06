@@ -5,13 +5,13 @@
 #+filetags: network
 
 * DNS
-应用层协议，基于 UDP 实现，用于将域名解析为IP地址
+应用层协议，用于将 *域名 --解析--> IP地址* ；基于 UDP 实现
 - 域名层级关系 :: 根DNS服务器 顶级域DNS服务器 权威DNS服务器(从右往左，层级从高到低)
   #+begin_example
   www.server.com. => 根(.) 顶级(com.) 权威(server.com.)
   #+end_example
 
-** 域名解析工作流程
+*域名解析工作流程* ：
 1. 查缓存（浏览器缓存 => 操作系统缓存 => hosts文件）
 2. 查本地DNS服务器
 3. 本地 查 根

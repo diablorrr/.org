@@ -4,7 +4,7 @@
 #+title: TCP四次挥手
 #+filetags: network
 
-* TCP四次挥手图 :ATTACH:
+* TCP四次挥手(图) :ATTACH:
 :PROPERTIES:
 :ID:       0e2cdec4-1d24-4be2-92ef-62058f1510fb
 :END:
@@ -27,35 +27,28 @@
 因为被动关闭方（eg：服务端），可能还有数据需要处理或发送，因此 仅发送 =ACK= 报文表示确认，等处理完，才会发送 =FIN= 报文表示同意关闭连接
 
 
-* TIME_WAIT等待时间为什么是 2MSL？
-1. =MSL= 代表报文在网络中的存在的最长时间， =2MSL= 覆盖 发送方和接收方数据包一次来回的时间，确保服务端能收到 =ACK报文= ，就算没收到，客户端也能等到服务端重发的 =FIN报文=
-   - MSL ::  *报文最大生存时间* (Maximum Segment Lifetime) -> 代表报文在网络中存在的最长时间，超过这个时间就丢弃
-   #+begin_example
-   被动关闭方没有收到 最后的ACK报文，会触发超时重传发送 FIN报文，一来一回正好 2MSL
-   #+end_example
-
-
-* 为什么挥手需要 TIME_WAIT 状态？ [[https://www.xiaolincoding.com/network/3_tcp/tcp_interview.html#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-time-wait-%E7%8A%B6%E6%80%81][小林coding]] :ATTACH:
+* TIME_WAIT等待时间为什么是 2MSL？ / 为什么挥手需要 TIME_WAIT 状态？ [[https://www.xiaolincoding.com/network/3_tcp/tcp_interview.html#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-time-wait-%E7%8A%B6%E6%80%81][小林coding]] :ATTACH:
 :PROPERTIES:
 :ID:       ae96f81e-fb9f-4c52-8f42-14b5dea2e357
 :END:
-两个原因：
+2个原因：
 1. *保证被动关闭方能正确关闭*
-   等待 =2MSL= 确保服务端能收到 =ACK报文= ，就算没收到，客户端也能等到服务端重发的 =FIN报文=
-2. *历史连接中的报文都消失，防止污染同[[id:abf2d234-abd2-4248-8d10-cdf4fb849432][TCP四元组]]的新连接*
-   =2MSL= 的时间足够让历史连接中两个方向的数据包在网络中自然消失，保证后续数据包一定是新连接产生的
+   =MSL= 代表报文在网络中的存在的最长时间， =2MSL= 覆盖 发送方和接收方数据包一次来回的时间，确保服务端能收到 =ACK报文= ，就算没收到，客户端也能等到服务端重发的 =FIN报文=
+    - MSL(报文最大生存时间) :: =MSL= 代表报文在网络中的存在的最长时间
+2. *保证历史连接中的报文都消失* -> 防止污染同[[id:abf2d234-abd2-4248-8d10-cdf4fb849432][TCP四元组]]的新连接
+   =2MSL= 的时间足够让历史连接中两个方向的数据包在网络中自然消失，防止下一个连接收到历史报文，造成数据混乱
    #+begin_example
-  假设上一个连接（TCP四元组A）和下一个连接（TCP四元组B）的四元组相同：A=B； 上一个连接服务端发送的历史数据包a被网络延迟，A释放连接（没有TIME_WAIT时间过短或没有），下一个连接立刻建立后接收数据包a（因为包中的序列号是循环的，会绕回初始值，因此没法通过序列号判断 数据包a 是历史数据），造成数据混乱
+   假设上一个连接（TCP四元组A）和下一个连接（TCP四元组B）的四元组相同：A=B； 上一个连接服务端发送的历史数据包a被网络延迟，A释放连接（没有TIME_WAIT时间过短或没有），下一个连接立刻建立后接收数据包a（因为包中的序列号是循环的，会绕回初始值，因此没法通过序列号判断 数据包a 是历史数据），造成数据混乱
    #+end_example
 [[attachment:_20250806_204653screenshot.png]]
 
 
 * TIME_WAIT过多有什么危害？如何优化？ [[https://www.xiaolincoding.com/network/3_tcp/tcp_interview.html#time-wait-%E8%BF%87%E5%A4%9A%E6%9C%89%E4%BB%80%E4%B9%88%E5%8D%B1%E5%AE%B3][小林coding]]
-1. *危害* ：占用资源：文件描述符、内存、CPU、端口等
+1. *危害* ：占用资源：fd、端口、内存、CPU等
 2. *优化* ：
-   1) 如果是HTTP使用短连接导致的，就改用[[id:509b7100-a51d-4433-a5d2-0795fb2dcb60][长连接]]
+   1) 如果是HTTP使用 短连接 导致的，就改用[[id:509b7100-a51d-4433-a5d2-0795fb2dcb60][长连接]]
    2) 修改内核参数： =/etc/sysctl.conf=
-      - net.ipv4.tcp_tw_reuse=1     :: (客户端用) 调用 connect() 时，随机复用 TIME_WAIT 时间超过一秒的连接
+      - net.ipv4.tcp_tw_reuse=1     :: （客户端用） 调用 connect() 时，随机复用 TIME_WAIT 时间超过一秒的连接
       - net.ipv4.tcp_max_tw_buckets :: （默认18000）超过这个选项值的 TIME_WAIT连接 会被关闭
       #+end_src
    3) 避免 =TIME_WAIT= （避免成为主动关闭方）

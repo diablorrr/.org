@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       c590482b-2e5a-4617-822b-74a9dd015ae5
+:END:
+#+title: asio
+#+filetags: index
+
+* asio [[https://www.boost.org/doc/libs/latest/doc/html/boost_asio/overview/basics.html][boost::asio]]
+用于异步IO的 C++ 库（proactor模式库）
+
+*异步操作原理* ：
+异步操作 中注册 completion handler，发起异步操作后立刻返回，后续使用 io_context.run() 启动事件循环并且同步阻塞的等待异步通知，当得知某个操作完成，从内部队列取出该操作对应的 completion handler（前边注册过）执行；具体见：[[id:9058e3e8-60a2-48a3-b028-ec05ff0b3f1f][图:asio同步/异步模型]]
+- 异步操作： =async_read= 、 =async_write= 、 =async_wait=
+- completion handler :: 完成处理函数
+- io_context         :: IO执行上下文，用于连接 IO对象 和 操作系统的IO服务
+
+** 图:asio工作方式(同步/异步模型) :ATTACH:
+:PROPERTIES:
+:ID:       9058e3e8-60a2-48a3-b028-ec05ff0b3f1f
+:END:
+*同步模型* ：
+[[attachment:_20250826_220615screenshot.png]]
+
+*异步模型* ：
+[[attachment:_20250826_220703screenshot.png]]
+1. IO对象的异步操作 中注册 完成处理函数（completion handler）
+   #+begin_example cpp
+   socket.async_connect(server_endpoint, your_completion_handler);
+   void your_completion_handler(const boost::system::error_code& ec);
+   #+end_example
+2. IO对象 将请求转发给 IO执行上下文（io_context）
+3. io_context 向操作系统发出信号，指示其启动异步连接
+[[attachment:_20250826_220730screenshot.png]]
+4. 操作系统 将结果放入队列，等待 io_context 取用
+5. io_context::run() 来同步阻塞地获取结果
+6. 调用 io_context::run() 期间，io_context 从队列中取出结果，转换为 error_code，然后传递给 注册的 completion handler

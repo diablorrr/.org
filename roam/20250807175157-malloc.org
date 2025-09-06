@@ -1,10 +1,15 @@
 :PROPERTIES:
 :ID:       e9d72e49-079e-4275-ab59-31e2e8e3d3c7
 :END:
-#+title: malloc()
+#+title: malloc、free
 #+filetags: c
 
-* malloc() [[https://xiaolincoding.com/os/3_memory/malloc.html#linux-%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7][小林coding]]
-1. *malloc分配内存方式* ：见 [[id:ae7fc8d9-0053-45b6-92f4-9a42f1565718][cpp内存布局]]
-   1) 用户申请内存 =<128KB= ，通过 =brk()系统调用=  在堆区 申请内存
-   2) 用户申请内存 =>128KB= ，通过 =mmap()系统调用= 在内存映射区 申请内存
+* malloc [[https://xiaolincoding.com/os/3_memory/malloc.html#linux-%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7][小林coding]]
+1. C标准库函数，仅分配内存且需要手动指定分配内存大小，返回空指针
+
+2. *malloc内存分配方式* ：见 [[id:ae7fc8d9-0053-45b6-92f4-9a42f1565718][cpp内存布局]]
+   1) 用户申请内存 =<128KB= ，通过 =brk()系统调用=  在 堆区       申请内存
+   2) 用户申请内存 =>128KB= ，通过 =mmap()系统调用= 在 内存映射区 申请内存
+
+
+* free

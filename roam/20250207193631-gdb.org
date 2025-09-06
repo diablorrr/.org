@@ -5,7 +5,7 @@
 #+filetags: index
 
 * gdb
-1. gdb 是一个用于 debug 的工具，常见操作见 [[id:838ac6cf-8fd7-4193-9163-6ca32ffb6d00][gdb table]]
+1. gdb 是一个用于 debug 的工具，常见操作见 [[id:838ac6cf-8fd7-4193-9163-6ca32ffb6d00][gdb cheat sheet]]
 2. 它的配置文件是 .gdbinit，存放位置在 [[id:19d48c4a-8808-46b9-b636-bf6c0155a1f7][查看gdb配置文件]] ，每次启动 gdb 时都会加载，默认会下载缺失的 debug 信息，我们可以通过修改 .gdbinit 文件 ，让其[[id:4a454bad-d33c-475f-bafb-805251aab638][让gdb不要下载调试信息]]
 3. 进入 gdb 后，需要关注的是如何打断点，对于源文件，参照 [[id:e2263948-1766-4e71-b9b8-26bbaa6512b3][gdb给某文件中某类的某函数打断点]]，对于头文件，参照 [[id:32d6bb4b-dac6-4724-888e-a45c8e769279][gdb给头文件打断点]]
 4. 打完断点后，经常需要查看对象的值，对于类，可以使用 [[id:1a25cca4-f247-4c4e-a1e3-a2fc9289bc98][gdb打印类中的数据]] 中的方法

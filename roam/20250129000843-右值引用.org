@@ -5,14 +5,10 @@
 #+filetags: cpp
 
 * 右值引用 [[https://www.learncpp.com/cpp-tutorial/rvalue-references/][learncpp22.2]]
-1. 绑定右值（即将销毁的对象）的引用，用于识别 [[id:e2cacc2b-1353-48ab-8a05-d87eea857b51][左值和右值]]； *本质是左值*
-   #+begin_src cpp :results output :namespaces std :includes <iostream>
-   int x{ 5 };
-   int& lref{ x };  // 左值引用：用左值x初始化
-   int&& rref{ 5 }; // 右值引用：用右值5初始化
-   #+end_src
+1. 绑定右值（即将销毁的对象）的引用 [fn:1]， *延长右值生命周期* 与右值引用一致；
+   右值引用与 类型模板参数 结合时为 *万能引用* ，在以万能引用为形参的函数模板中调用另一个函数，并将万能引用捕获的参数传入该函数，该函数只会调用左值版本， 因为 *右值引用是左值* ，解决方式：[[id:bfc91713-c993-40b2-b9da-6301ceeb04f6][完美转发]]
+   - 万能引用 :: 可以接受左值/右值
 
-2. *延长 右值的生命周期* 与 右值引用一致
 3. 通过 非const右值引用 *修改右值*
 4. *使用场景* ：函数参数 -> 可以用于 [[id:6c92dc3d-9ce0-4d40-9597-5ecc93ea3366][函数重载]]
    #+begin_src cpp :results output :namespaces std :includes <iostream>
@@ -39,3 +35,12 @@
    : l-value reference to const: 6
    : l-value reference to const: 5
    : r-value reference: 5
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int x{ 5 };
+int& lref{ x };  // 左值引用：用左值x初始化
+int&& rref{ 5 }; // 右值引用：用右值5初始化
+#+end_src

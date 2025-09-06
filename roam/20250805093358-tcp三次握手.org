@@ -4,7 +4,7 @@
 #+title: TCP三次握手
 #+filetags: network
 
-* TCP三次握手图 :ATTACH:
+* TCP三次握手(图) :ATTACH:
 :PROPERTIES:
 :ID:       d1f3066e-da66-47d4-b535-20f7a925ca87
 :END:

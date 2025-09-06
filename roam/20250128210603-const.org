@@ -4,35 +4,49 @@
 :NOTER_PAGE: 81
 :END:
 #+title: const
-#+filetags: cpp constants
+#+filetags: cpp
 
 * const
-const 是运行时常量，除非 用 [[id:fec1bdbd-cae6-4b45-b136-00dcad95b5ad][常量表达式]] 初始化的 const int；const更多的是运行时只读的语义（常量表达式初始化const int是常量的语义），constexpr是常量的语义
+1. 给予被修饰对象 *只读* 属性
+   1) const变量                  ： =必须初始化= ，初始化后不可修改
+                                 （const全局变量 内部链接性)
+   2) const[[id:878bbff5-6362-4cf9-ab1c-15bc1849cd79][指针]]（先左后右）      ：指针常量， =必须初始化= （不能修改指向）
+                                   常量指针（不能修改指向的内容）
+   3) const[[id:1f772bce-0f88-46a2-ab44-c9bf04b30653][引用]]                  ： =必须初始化= （常量、非常量、临时对象），不能修改 引用内容
+   4) const[[id:d63526f2-db09-4c79-8a1a-57d6a7d82ec9][类对象]]                ： =必须初始化= ，只能调用const成员函数
+   5) const成员变量              ： =必须初始化= （类构造函数），不能修改
+   6) const成员函数（this指针）  ：不能修改 成员变量
 
-const变量 具有 内部链接性，见：[[id:c3e47726-c072-4c68-9905-1fc6e2c1e016][链接性]]
-const全局变量 可能静态初始化也可能动态初始化
-[[id:1f3d6196-77e0-47a7-95e3-fb61a399ee2b][顶层const和底层const]]
+2. 分为 顶层const 和 底层const；拷贝时 -> 忽略 顶层const，保留 底层const[fn:1]
+   - 顶层const :: 修饰 *自身*
+   - 底层const :: 修饰 *引用/指向的对象*
+   #+begin_comment
+   指针 可以是 顶/底const
+   引用 可以是 底const
+   #+end_comment
 
-- 特点 ::
-  1. const对象必须被初始化
-  2. const对象仅在文件内有效
-** 修饰引用
-- 绑定规则 ::
-  1. 引用类型与所引用对象的类型一致
-  2. (例外)可以绑定
-     1) 非常量对象
-     2) 字面值
-     3) 一般表达式(只要表达式结果可以[[id:5cb0d8f2-a257-48bf-ba1e-d465d4b069e0][类型转换]]就行)
-** 修饰函数参数
-可以读取，不能修改
-** 修饰函数返回值
-可以读取，不能修改
-** 修饰类对象
-常对象只能调用常函数
-** 修饰类成员函数
-this指针
+3. const 用于声明常量或只读变量，更多体现的是运行时的 *只读语义* （运行时常量）只有当使用 常量表达式 初始化 const int 时体现出常量语义（编译时常量）；而 constexpr 是 *常量语义* （编译时常量，用于与const区分）
+   #+begin_comment
+   运行时只读语义 -> const
+   常量语义       -> constexpr
+   #+end_comment
 
-* 发生[[id:de2b315b-cd05-419b-98f3-dbd79f03087a][拷贝操作]]
-1. 忽略顶层const
-2. 相同底层const资格
 
+
+
+
+
+
+
+* Footnotes
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+/* 顶层const：拷贝时忽略 */
+const int a = 10;   // 顶层const
+int b = a;          // 合法（忽略顶层const）
+
+/* 底层const：拷贝时不忽略 */
+const int* p = &a;  // 底层const（指针指向常量）
+// int* q = p;      // FIXME 错误（不能忽略底层const）
+const int* r = p;   // 合法（目标也有底层const）
+#+end_src

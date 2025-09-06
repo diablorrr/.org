@@ -5,7 +5,7 @@
 #+filetags: cpp
 
 * 虚函数 [[https://www.learncpp.com/cpp-tutorial/virtual-functions/][learncpp25.2]]
-1. =virtual= 声明的成员函数，允许派生类 *重写* 其实现，实现 [[id:a9d73cec-1b32-45fd-88fc-e6649fd6abc2][运行时多态]]；通过基类的 *指针或引用* 调用虚函数时（通过基类直接调用虚函数，调用的是该对象相同类型的成员），调用的是对象的 *实际类型* 的函数的 *最派生版本*
+1. =virtual= 声明的成员函数，允许派生类 *重写* 其实现，实现 [[id:a3778673-5028-4637-b8f2-85b1bf798587][运行时多态]]；通过基类的 *指针或引用* 调用虚函数时（通过基类直接调用虚函数，调用的是该对象相同类型的成员），调用的是对象的 *实际类型* 的函数的 *最派生版本*
    [✨ *BP* ：基类虚函数用 virtual，派生类不用]
    #+begin_src cpp :results output :namespaces std :includes <iostream> <string_view>
    class A {
@@ -78,12 +78,14 @@
    2) 禁止从类继承：在类名后使用 [fn:2]
 
 7. 基类 [[id:be44b0c2-d234-409f-b1a6-b447e365db37][析构函数]] 应该设置为 =virtual= ，防止[[id:6782179f-792b-4eb6-807c-4f95aba88169][内存泄漏]] [fn:4] [[https://www.learncpp.com/cpp-tutorial/virtual-destructors-virtual-assignment-and-overriding-virtualization/][learncpp25.4]]
-   [✨ *BP* ：设置继承关系时，将基类析构函数设置为 virtual；不希望类继承，设置类为final]
-
-8. *不能* 在 构造函数或析构函数 中调用虚函数
    #+begin_example
-   构造函数：构造派生类时，基类构造中调用虚函数，只能调用基类版本（首先构造基类，派生类还没构造，无法调用该函数派生类版本）
-   析构函数：基类的析构函数中调用虚函数，只能调用基类版本（派生类先被销毁）
+   基类指针指向派生类对象，delete基类指针，没有虚析构将不会释放派生类对象
+   #+end_example
+
+8. *面试题* 能不能在 构造函数或析构函数 中调用虚函数？ 可以，但不建议，因为可能没法触发多态，无法达到我们的目的
+   #+begin_example
+   构造派生类，先构造基类，基类构造函数中调用虚函数，希望触发派生类版本，但派生类还没构造，只能触发基类版本
+   析构派生类，先析构派生类，后析构基类，基类中调用虚函数，希望触发派生类版本，但派生类已经析构了，只能触发基类版本
    #+end_example
 
 9. 在有虚函数的继承体系中 向上转型和向下转型：[[id:728c2647-c601-4b7e-97dd-d5b21ea45e11][std::dynamic_cast]]

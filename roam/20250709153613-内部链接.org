@@ -5,13 +5,14 @@
 #+filetags: cpp
 
 * 内部链接性 [[https://www.learncpp.com/cpp-tutorial/internal-linkage/][learncpp7.6]] [[https://www.learncpp.com/cpp-tutorial/scope-duration-and-linkage-summary/][learncpp7.12]]
-1. 具有内部链接性的标识符， *只能在当前[[id:d8366823-aedc-4b95-ab2f-f81d3aadea6e][翻译单元]]访问，无法从其他翻译单元访问* ；因此 两个翻译单元中有同名标识符也不会出现冲突
+1. 标识符只在当前文件可见，跨文件不可见（因此 两个翻译单元中有同名标识符也不会出现冲突）
 
 2. *有哪些* ？
    1) const/constexpr [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]]
-   2) static 非const/constexpr的全局变量
-   3) static 函数
-   4) 未命名命名空间及其内部定义的任何内容
+   2) static 全局变量
+   3) static const/constexpr 全局变量
+   4) static 函数
+   5) 未命名命名空间及其内部定义的任何内容
    eg：具有内部链接的变量
    #+name: a.cpp
    #+begin_src cpp :results output :namespaces std :includes <iostream>

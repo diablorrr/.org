@@ -5,12 +5,11 @@
 #+filetags: cpp
 
 * 移动语义 [[https://www.learncpp.com/cpp-tutorial/returning-stdvector-and-an-introduction-to-move-semantics/][learncpp16.5]]
-1. 窃取即将销毁的数据的资源，减少拷贝的开销（或者说 通过资源转移而非复制来提高效率）
-2. 移动语义 *触发条件*
+1. 转移资源所有权（窃取即将销毁对象的资源），减少拷贝的开销
+   *如何触发？*
    1) 类支持 [[id:ac154a46-7700-4286-96aa-a45f8d93c6b6][移动构造函数、移动赋值]]
-   2) 用 右值 值传递方式进行 初始化或赋值（本身是右值 或 使用 [[id:d4285c38-cefe-4bb5-8ebf-0625bd976fa1][std::move]] 将左值转换为 [[id:78a7c695-510d-4b03-a1e1-055d32a034cf][右值引用]]）
-   3) 移动操作不会被省略
+   2) 用右值 赋值、初始化（没有右值，就用 [[id:d4285c38-cefe-4bb5-8ebf-0625bd976fa1][std::move]] 将左值转为右值）
 
-3. 支持移动语义的类型
+2. 支持移动语义的类型
    1) std::vector
    2) std::string

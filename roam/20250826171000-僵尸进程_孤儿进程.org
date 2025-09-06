@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       d1a53bae-2b04-4f9e-8a40-2f34a04b67bd
+:END:
+#+title: 僵尸进程、孤儿进程
+#+filetags: operating_system
+
+*僵尸进程* ：
+停止运行，但没被父进程回收的进程；系统中仍保留着 PCB，占用着 PID ，若僵尸进程大量产生，系统无法创建新进程
+- 解决方法：
+  1. 父进程调用 wait()、waitpid()
+  2. kill 父进程，让 init进程 收养 僵尸进程，自动调用 wait()回收，释放它的 PCB
+
+
+*孤儿进程* ：
+还在运行，但父进程先于子进程退出的进程；无危害，最后会被 init进程收养，自动调用 wait() 回收

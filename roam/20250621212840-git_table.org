@@ -1,7 +1,7 @@
 :PROPERTIES:
 :ID:       3eb41807-bf67-46de-a1d1-93fcb85e3038
 :END:
-#+title: git table
+#+title: git cheat sheet
 #+filetags: git
 
 * git table

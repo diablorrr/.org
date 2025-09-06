@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID:       0f713a88-2a2a-4240-8b15-73ed5e61e12b
+:END:
+#+title: cpp11标准
+#+filetags: cpp
+
+1. [[id:7cb0d4aa-e74a-4563-acf6-053e129105e9][智能指针]]          ：RAII思想的体现，用类的生命周期自动化管理资源
+2. 移动语义          ：减少拷贝开销，提升性能
+3. 统一初始化        ：使用 ={}= 列表初始化 统一不同场景的初始化语法
+4. 新容器            ：std::unordered_map、std::unordered_set
+5. [[id:1cab172d-a8d4-41c5-810d-e6792a0d1361][范围for循环]]       ：简化容器遍历
+6. 自动类型推导
+   - [[id:bee683d2-eec4-45a8-af02-be369d182e8d][auto]]    ：根据 初始化表达式 推导类型，会计算表达式
+   - decltype：推断表达式类型，不会计算表达式
+
+7. nullptr           ：cpp11关键字，NULL是C语言中的宏（定义为0，无法与整数0区分），导致函数重载的歧义问题[fn:1]
+8. [[id:926134dd-d8b9-4358-a89d-e84ce92a735f][lambda表达式]]：支持匿名函数
+
+* Footnotes
+
+[fn:1]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+int* p1 = NULL;    // 合法但可能有歧义
+int* p2 = nullptr; // 更安全的空指针赋值
+
+// 重载场景下的区别
+void func(int x) { ... }
+void func(char* p) { ... }
+
+func(NULL);  // 调用 func(int)，可能不符合预期
+func(nullptr); // 正确调用 func(char*)
+#+end_src

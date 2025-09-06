@@ -5,7 +5,8 @@
 #+filetags: cpp
 
 * 引用(左值引用) [[https://www.learncpp.com/cpp-tutorial/lvalue-references/][learncpp12.3]]
-1. 被引用对象的一个 *别名* ；必须初始化，不能改变引用的对象
+1. 引用是被引用对象的 *别名* ；必须初始化，后续不能改变引用的对象
+
 2. 引用需要和被引用对象的类型 *一致* ，如果不同，编译器会尝试进行 [[id:9c9c2b6a-92d9-431f-9f25-7f588848596a][隐式类型转换]]
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    int main()
@@ -25,11 +26,12 @@
    在函数中返回 *const左值引用绑定的临时值* ，会导致 悬空引用，非常经典的例子见：[[id:119083e2-90b1-4ac8-8938-4fa0b68b304a][按引用返回]]
 
 4. *左值引用 与 const*
+   *核心* ：通过该引用无法修改被引用对象（非const引用要求被引用对象必须可修改）
    - 非const左值引用 :: 不能绑定 const左值或右值 [fn:1]
-   - const左值引用 :: 可以绑定 [[https://www.learncpp.com/cpp-tutorial/lvalue-references-to-const/][learncpp12.4]]
-     1. const左值
-     2. 非const左值
-     3. *右值*
+   - const左值引用 :: 可以绑定 [fn:2] [[https://www.learncpp.com/cpp-tutorial/lvalue-references-to-const/][learncpp12.4]]
+     1. 常量
+     2. 非常量
+     3. 临时对象（eg：字面量、表达式生成的临时对象）
      #+begin_src cpp :results output :namespaces std :includes <iostream>
      int main()
      {
@@ -58,6 +60,24 @@
 
 
 * Footnotes
+[fn:2]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+/* 常量 */
+const int a = 10;
+const int& ra = a;  // 合法：引用常量
+
+/* 非常量 */
+int b = 20;
+const int& rb = b;  // 合法：引用非常量（但通过rb无法修改b）
+const int c = 30;
+// int& rc = c;  // FIXME：非常量引用不能绑定到常量
+
+/* 临时对象 */
+const int& ref1 = 100;       // 合法：绑定到临时对象100
+const int& ref2 = 20 + 30;   // 合法：绑定到表达式生成的临时对象
+// int& ref3 = 100;          // FIXME：普通引用不能绑定临时对象
+#+end_src
+
 
 [fn:1]
 #+begin_src cpp :results output :namespaces std :includes <iostream>

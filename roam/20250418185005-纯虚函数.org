@@ -5,20 +5,45 @@
 #+filetags: cpp
 
 * 纯虚函数、抽象类、接口类 [[https://www.learncpp.com/cpp-tutorial/pure-virtual-functions-abstract-base-classes-and-interface-classes/][learncpp25.7]]
-1. =virtual= 声明的函数，末尾添加 ==0= 标记
+1. *纯虚函数*
+   =virtual= 声明的函数，末尾添加 ==0= 标记；
    #+begin_src cpp :results output :namespaces std :includes <iostream>
    virtual void func() = 0;
    #+end_src
+   *核心作用* ：定义 *接口规范*  ，强制派生类实现所有纯虚函数（也就是让这个类实现我们想要的功能），否则为 *抽象类* ，抽象类无法实例化（表示我没实现要求的接口规范，我就没法用）；仅包含纯虚函数的类为 *接口类* ，定义一套行为规范，将接口和实现 *解耦* （接口、实现 分别对应 做什么、怎么做），调用者只需要依赖接口（函数参数为 接口类，后续可以传入任意派生类）-> *使用注意点* 见示例：接口类定义虚虚析构、函参为接口类指针或引用、实现所有纯虚函数
+   #+begin_src cpp :results output :namespaces std :includes <iostream>
+   // 接口（稳定）
+   class DataStorage {
+   public:
+       virtual void save(const std::string& data) = 0;
+       virtual std::string load() = 0;
+       virtual ~DataStorage() = default;     // NOTE 注意点1：必须是虚析构，否则没法调用派生类析构
+   };
+
+   // 实现1：MySQL存储
+   class MySQLStorage : public DataStorage { /* 具体实现 */ }; // NOTE 注意点3：派生类必须实现所有纯虚函数
+   // 实现2：Redis存储
+   class RedisStorage : public DataStorage { /* 具体实现 */ };
+
+   // 调用者只依赖接口，与具体实现解耦，后续可以传入具体实现
+   void processData(DataStorage& storage) { // NOTE 注意点2：使用指针或引用，否则对象切片
+       storage.save("hello"); // 无需知道是MySQL还是Redis
+   }
+   #+end_src
 
 2. *抽象类*
-   1) 有纯虚函数的类 是抽象类，抽象类 的派生类没有实现纯虚函数，也是抽象类
-   2) 抽象类无法实例化
+   1) 抽象类无法实例化
+   2) *哪些是？* 有纯虚函数的类 是抽象类，抽象类 的派生类没有实现纯虚函数，也是抽象类
    3) 抽象类可以有定义：必须类外定义，仍为抽象类，继承的类没实现纯虚函数也是抽象类 [fn:1]
    4) 抽象类有 [[id:74b3a07c-d965-4a3d-aa07-eb49d5a08b7e][虚函数表]]
 
 3. *接口类*
-   1) 没有成员变量，所有函数都是纯虚函数，因此继承接口类的类需要实现所有纯虚函数；[[id:29f43a49-8123-4541-a02d-02c7ed24a042][命名规范]]
-   2) 使用场景：函数参数
+   1) 没有成员变量，所有函数都是纯虚函数，接口类的派生类需要实现所有纯虚函数
+   2) *使用注意* ：
+      定义为虚析构：否则无法调用派生类析构
+      在函参用接口类的指针/引用：避免[[id:c5b42e9c-19fc-4396-a2dd-8a032518c933][对象切片]]
+   3) 使用场景：函数参数
+      - 理解 :: 派生类 *必须实现* 接口类中的方法，否则为抽象类，无法实例化（也就是无法使用），可以说这是一种强制规范
    #+begin_src cpp :results output :namespaces std :includes <iostream> <string_view> <cmath>
    class IErrorLog {
    public:

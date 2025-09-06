@@ -1,12 +1,35 @@
 :PROPERTIES:
 :ID:       be24bcfa-3a9e-4e52-93e4-66163f87f280
 :END:
-#+title: static(静态局部变量)
+#+title: static
 #+filetags: cpp
 
-* static(静态局部变量) [[https://www.learncpp.com/cpp-tutorial/static-local-variables/][learncpp7.11]]
-1. *只初始化一次* （第一次调用时初始化）；和 [[id:d85053ba-baae-419d-9902-edc51e53198e][全局变量]] 一样具有 [[id:853a3bee-b823-49fc-acd6-804eecb74822][静态生命周期]] ；具有 [[id:79cf3da5-7ff7-4a47-b4da-5380da55b840][局部作用域]]
-2. *使用场景*
+* static [[https://www.learncpp.com/cpp-tutorial/static-local-variables/][learncpp7.11]]
+1. 控制 被修饰对象的 [[id:853a3bee-b823-49fc-acd6-804eecb74822][生命周期、可见范围(作用域、链接性)]]
+   1) static局部变量
+      a. 函数/块内 可见
+      b. 生命周期至程序结束
+      c. 默认初始化为 0
+
+   2) static全局变量
+      a. 文件内可见（外部链接 -> 内部链接）
+      b. 生命周期至程序结束
+      c. 默认初始化为 0
+
+   3) static函数
+      a. 文件内可见（外部链接 -> 内部链接）
+
+   4) static成员变量
+      a. 属于类，类对象之间可见/共享（访问受 public/protected/private 控制）
+      b. 生命周期至程序结束
+      c. 类外定义，默认初始化为 0
+      d. 通过类名调用（无需创建类对象）
+
+   5) static成员函数
+      a. 属于类，没有this指针，只能访问 static成员变量/函数
+      b. 通过类名调用
+
+2. *static局部变量 使用场景*
    1) 生成唯一ID
       #+begin_src cpp :results output :namespaces std :includes <iostream>
       int generateID()

@@ -4,13 +4,21 @@
 #+title: TCP重传机制
 #+filetags: network
 
-* TCP重传机制
+* TCP重传机制 [[https://xiaolincoding.com/network/3_tcp/tcp_feature.html#%E9%87%8D%E4%BC%A0%E6%9C%BA%E5%88%B6][小林coding]]
 1. 用于实现可靠传输，保证数据完整，分为：超时重传、快速重传
-   - 超时重传 :: 发送方设置定时器，超时未受到接收方的确认，重传
-   - 快速重传 :: 接收方每次收到乱序数据包时重复发送期望序号，发送方连续收到3次相同期望序号，重传
+   - 超时重传       :: 发送方设置定时器，超时未受到接收方的确认，重传
+   - [[id:5006cd5d-8a75-4a3c-b4a7-572ec37b0637][快速重传]]       :: 接收方每次收到乱序数据包时重复发送期望序号，发送方连续收到3次相同期望序号，重传； *缺陷* ：只能判断连续丢失的首个数据包，无法明确后续的数据包是否丢失，可能导致冗余重传
+   - [[id:fdae90c8-d939-454c-aed2-9466a09d3edf][选择性确认]]     :: （SACK）接收方在三次ACK的TCP头的 *选项字段加入SACK* ，表示 已接收的非连续数据的范围，避免冗余重传
+   - 重复选择性确认 :: （D-SACK）
 
-** 快速重传图 :ATTACH:
+** 图:快速重传 :ATTACH:
 :PROPERTIES:
 :ID:       5006cd5d-8a75-4a3c-b4a7-572ec37b0637
 :END:
 [[attachment:_20250806_163047screenshot.png]]
+
+** 图:选择性确认 :ATTACH:
+:PROPERTIES:
+:ID:       fdae90c8-d939-454c-aed2-9466a09d3edf
+:END:
+[[attachment:_20250821_100918screenshot.png]]

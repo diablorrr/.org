@@ -5,12 +5,11 @@
 #+filetags: cpp
 
 * 容器类型(container) [[https://www.learncpp.com/cpp-tutorial/introduction-to-containers-and-arrays/][learncpp16.1]]
-1. 存储一系列的未命名对象（称为：元素），管理它所容纳元素的内存使用；容器中的元素是没有名字的（因此容器可以有任意数量的元素，如果用结构体存储数据，则需要为每个数据设置名字）
+1. 存储一系列类型的未命名对象（称为：元素），管理它所容纳元素的内存使用；容器中的元素是没有名字的（因此容器可以有任意数量的元素，如果用结构体存储数据，则需要为每个数据设置名字）
 
-2. 容器是同构的：容器中的元素类型相同
-
-3. *有哪些？* 满足 [[https://en.cppreference.com/w/cpp/named_req/Container][cppreference]] 中的要求
+2. *有哪些？* 满足 [[https://en.cppreference.com/w/cpp/named_req/Container][cppreference]] 中的要求
    1) 数组类型：内存连续分配，随机访问（使用下标（operator[]））
       a. [[id:0cd3f518-394f-477b-8969-e4a61486357c][C风格数组]]
       b. [[id:d69bd9f3-2e77-4ec3-9a7b-b655fbc7ba44][std::vector]]容器类
       c. [[id:c4b5dfae-2be0-4106-acbf-98645af16722][std::array]]容器类（C风格数组直接替代品）
+

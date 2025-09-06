@@ -1,0 +1,60 @@
+:PROPERTIES:
+:ID:       af418139-7c90-4e39-9e4f-57dd6896618d
+:END:
+#+title: emacs/org画图
+#+filetags: emacs org
+
+* emacs/org画图 [[https://www.shellcodes.org/Emacs/Emacs%E7%BB%98%E5%9B%BE%E7%BA%AF%E6%96%87%E6%9C%AC%E6%B5%81%E7%A8%8B%E5%9B%BE.html][博客-LU4NX]]
+# #+begin_src <mode名>；这里 <mode名> 填啥，就进入啥mode
+*手动绘图*
+=#+begin_src picture= 然后 =C-c '= 进入代码块为 =picture-mode=
+#+begin_src picture
+这个高度决定画布高度，尽量撑高
+...
+#+end_src
+1. #+begin_src picture 和 #+end_src 之间的高度，决定 C-c ' 进入后画布的高度
+2. =<回车>= 切换 画图/移动模式
+3. 单词的第一个字母左上角标记，移动到最后一个字母右下角， =C-c C-r= 就能用方框包围
+   #+begin_example
+   .....|......
+   ......hello.
+   ...........|
+   #+end_example
+   符号 =|= 表示：标记的开始和结束
+   符号 =.= 表示：空格
+4. 控制方向的快捷键 [fn:1]
+
+
+*鼠标绘图*
+=#+begin_src artist=  然后 =C-c '= 进入代码块为 =artist-mode=
+#+begin_src artist
+
+
+#+end_src
+
+
+
+* Footnotes
+
+[fn:1]
+#+begin_example
+   +-------+   +-------+   +-------+
+   | C-c ` |   | C-c ^ |   | C-c ' |
+   +-------+   +-------+   +-------+
+           ^       ^       ^
+            \      |      /
+             \     |     /
+              \    |    /
+               \   |   /
++-------+       \  |  /        +-------+
+| C-c < |<-------------------->| C-c > |
++-------+       /  |  \        +-------+
+               /   |   \
+              /    |    \
+             /     |     \
+            /      |      \
+           v       v       v
+   +-------+   +-------+   +-------+
+   | C-c / |   | C-c . |   | C-c \ |
+   +-------+   +-------+   +-------+
+#+end_example
