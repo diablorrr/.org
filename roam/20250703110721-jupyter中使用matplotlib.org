@@ -2,7 +2,7 @@
 :ID:       bbf4c3f6-c378-42a5-bdc7-bdae60c16f70
 :END:
 #+title: jupyter中使用matplotlib图片不显示
-#+filetags: jupyter IPython
+#+filetags: jupyter
 
 * jupyter中使用matplotlib图片不显示
 - 原因 :: 虽然我在 jupyter 里使用了 %matplotlib inline ，这将作用于当前 jupyter进程，后续我使用了 =!python...= ，这是在运行外部命令脚本，是在独立子进程中进行的，因此无法通过 jupyter 中 plt.show() 的方式显示图片

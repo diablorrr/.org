@@ -1,3 +1,9 @@
+:PROPERTIES:
+:ID:       d5dd574d-89a8-41fc-8a51-e793bbea1725
+:END:
+#+title: python
+#+filetags: index
+
 * python基础
 ** 名称是什么？[[https://docs.python.org/zh-cn/3.13/tutorial/classes.html#a-word-about-names-and-objects][参考]]
 - 对对象的引用(可以重新绑定到不同对象，这点不同于cpp)

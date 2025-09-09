@@ -28,7 +28,7 @@
 - [X] [[id:3aa872a4-290a-4fc8-8e37-add919e44822][cpp编译过程]]
 - [X] C++如何实现单例模式？懒汉式单例模式：[[file:~/wheel/singleton_static.cpp][static实现]]
 - [X] [[id:60cbe68b-543d-46b5-a5b2-89452e8ec901][工厂模式]]
-- [ ] [[/home/yoshiki01/.org/interview/海量数据/海量数据处理.org][海量数据查高频词]]
+- [ ] [[id:7e413f5c-0d6a-4bee-8b9e-2ff9f1e555a8][海量数据查高频词]]
 - [X] [[id:0f713a88-2a2a-4240-8b15-73ed5e61e12b][cpp11标准]]
 - [X] [[id:ba21ede7-8cc0-48ba-9002-6e9aafa797b9][STL容器]]
 - [X] [[id:12e4e623-53bd-4b85-8167-16a75a03bb6f][cpp中实现线程/进程同步]]

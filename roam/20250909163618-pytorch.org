@@ -1,3 +1,9 @@
+:PROPERTIES:
+:ID:       a47e0d7f-0aab-48e8-8101-9dd491e5d4d3
+:END:
+#+title: pytorch
+#+filetags: index
+
 * 张量和NumPy数组之间有什么区别和联系？[[https://docs.pytorch.org/tutorials/beginner/basics/tensorqs_tutorial.html][参考]]
 - 当张量在CPU中时，和NumPy数组共享底层的内存(意味着改变其中一个，另一个也会改变)；但是张量可以使用GPU计算
 * 什么是神经网络？训练神经网络时，前向传播和反向传播做了什么？[[https://docs.pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html][参考]]

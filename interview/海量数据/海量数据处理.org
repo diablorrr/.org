@@ -1,4 +1,0 @@
-* 大量数据，取其中出现次数较高的数据？[[https://interviewguide.cn/notes/03-hunting_job/02-interview/07-01-massive_data.html#_3%E3%80%81%E5%A6%82%E4%BD%95%E6%89%BE%E5%87%BA%E6%9F%90%E4%B8%80%E5%A4%A9%E8%AE%BF%E9%97%AE%E7%99%BE%E5%BA%A6%E7%BD%91%E7%AB%99%E6%9C%80%E5%A4%9A%E7%9A%84-ip][参考]] [[https://zhuanlan.zhihu.com/p/119385223][参考2]]
-1. 分治法，将数据拆分
-2. 存储hash表(unordered_map)，第1个元素为数据，第2个元素为频率
-3. 使用小顶堆：堆顶元素最小，堆以外的元素和堆顶元素比较，若是比它小，则继续读取后续元素，否则替换堆顶并调整堆

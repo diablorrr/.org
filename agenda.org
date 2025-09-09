@@ -5,11 +5,9 @@
 
 1. [[id:3cad4156-34eb-4e1f-82e4-46775015a546][interview]]
 2. [[id:3f19781d-1730-463d-a079-98008e782347][life]]
-3. 公司：金山、小米、趣链、统信
 
 
 * Inbox
-** TODO 百万并发reactor服务器
 ** TODO llfc项目
 ** TODO qt八股
 ** TODO 数据库
