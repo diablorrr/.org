@@ -2,7 +2,7 @@
 :ID:       3e59b096-d505-4251-a13c-2abcfef9437a
 :END:
 #+title: 咖啡日记
-#+filetags: other
+#+filetags: life
 
 *目标* ：均匀流速伴随丰富油脂，口感微苦醇厚
 

@@ -4,7 +4,7 @@
 #+title: IP
 #+filetags: network
 
-* IP :ATTACH:
+* IP(图) :ATTACH:
 :PROPERTIES:
 :ID:       b63bff4b-6f9d-4be6-af31-a0fb1f313826
 :END:

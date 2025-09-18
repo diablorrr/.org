@@ -3,36 +3,87 @@
 :END:
 #+title: qt
 
-* 信号与槽
-信号和槽本质是观察者模式，观察者模式简单的说就是被观察者注册了观察者，在某些事件发生时，被观察者会调用观察者的类似更新消息的函数
-信号的参数可以>=槽的参数
-connect应该写在接收信号的对象里
-如果我们想要一个类可以实现信号和槽机制，我们需要在类中增加Q_OBJECT宏
-- 一个界面通知另一个界面的方式
-- 一个界面发送信号时，链接该信号的槽会进行响应
-- 信号连接槽、信号连接信号
-QOject::connect 会创建一个信号和槽的连接，这个连接会在两个对象的生命周期内保持有效。Qt 会将这个连接的信息记录在对象内部，并确保连接在对象有效期间存在
+* 事件系统
+用于实现程序对 各种外部/内部变化 的响应机制，事件系统可以简单理解为： =事件系统 = 产生 + 循环 + 过滤 + 分发 + 处理=
 
+*工作流程* ：[fn:7]
+1. 系统产生事件被放入系统事件队列，qt取出系统事件队列中的事件封装为qt事件放入qt事件队列，qt也会产生事件并放入qt事件队列
+2. 事件循环会取出qt事件队列中的事件确定事件的目标对象，事件先经过全局事件过滤器（若app对象安装），再经过目标对象的事件过滤器（若目标对象安装），具体来说会调用事件过滤器的eventFilter()方法，若该方法返回true则拦截事件不再继续传递到目标对象，若该方法返回false则继续传递到目标对象
+3. 目标对象接收到事件后会调用事件处理的入口（event()方法），event()默认会根据事件类型调用对应的事件处理函数
 
-
-* 对象树机制
+** 图:事件系统之事件产生、循环、过滤、分发、处理 :ATTACH:
 :PROPERTIES:
-:ID:       3301bec5-5488-4bca-a23f-2f95a03ba401
-:ROAM_REFS: https://doc.qt.io/qt-6/objecttrees.html
+:ID:       f488468e-c836-44a2-b8a7-46d2738bc7fc
 :END:
-- 作用 :: 管理对象的生命周期和资源：通过父子关系建立对象间的依赖关系，从而避免内存泄漏和简化资源清理
-- 组成 :: QObjects被组织在object tree中
-- 创建对象 :: 如果以另一个object为parent创建一个QObject，那么该QObject会被加入parent的children()列表
-- 删除对象 :: 删除QObject：
-  + parent：会删除它的children和它自己
-  + children：删除它自己，并在parent的children()列表中移除
-  # 一个对象被销毁，相关的信号与槽连接会被自动断开
+[[attachment:_20250916_140415screenshot.png]]
 
 
-* 事件
-窗口产生事件后，会经过以下几个阶段：事件派发 => 事件过滤 => 事件分发 => 事件处理
+* 对象树
+1. 对象树是qt的内存管理机制，是以QObject为根节点，按对象间父子关系构建的树状结构，当树中某个对象销毁时，会自动销毁所有直接子对象，直接子对象又销毁其直接子对象，形成链式销毁。避免内存泄漏
+2. 一个对象销毁时，相关的信号槽连接会自动断开
 
 
+* 信号槽
+用于 类对象间的通信，具体来说一个对象发出信号会触发另一个对象的槽函数，要使用信号槽功能 类得继承 QObject，并在类声明中增加 Q_OBJECT宏
+
+*特点* ：
+- 松耦合 :: 信号发送者只需要发送信号，不需要知道接收者的存在；接收者只需关联信号，实现槽函数逻辑，无需了解发送者细节
+- 类型安全 :: （qt5）元对象系统会在编译期检查信号和槽的参数类型是否匹配
+- 灵活性 ::
+  1. 一个信号 连接 一个槽
+  2. 一个信号 连接 多个槽
+  3. 一个信号 连接 另一个信号
+  4. 多个信号 连接 一个槽
+
+*信号槽的连接写法* ：
+#+begin_example cpp
+// 1. 基于字符串
+connect(sender, SIGNAL(valueChanged(int)), receiver, SLOT(onValueChanged(int)));
+
+
+// 2. 基于函数指针（qt5新增）
+connect(sender, &Sender::valueChanged, receiver, &Receiver::onValueChanged);
+
+// 2.1 支持连接到lambda表达式
+connect(sender, &Sender::valueChanged, [](int value) {
+    qDebug() << "Value changed:" << value;
+});
+#+end_example
+
+*connection连接方式（第5个参数）* ：
+- Qt::AutoConnection（默认）   :: 自动连接
+  sender 和 receiver 在同一线程 ? 直接连接 : 队列连接
+
+- Qt::DirectConnection         :: 直接连接
+  信号触发时，立即调用发送者线程中的槽函数
+
+- Qt::QueuedConnection         :: 队列连接
+  信号触发时，qt会将信号打包成 qt事件，放入接收者线程的事件队列，接收者线程运行事件循环从事件队列中取出事件并执行槽函数
+
+- Qt::BlockingQueuedConnection :: 阻塞队列连接
+  类似队列连接，发送信号的线程会阻塞吗，直到槽u函数处理完毕
+
+- Qt::UniqueConnection         :: 唯一连接
+  用于确保 同一信号和槽之间不会建立重复连接，与其他连接方式组合使用
+  #+begin_example cpp
+  connect(sender, &Sender::signal, receiver, &Receiver::slot, Qt::AutoConnection | Qt::UniqueConnection);
+  #+end_example
+
+信号槽机制实现依赖 *元对象系统*
+
+** 信号槽底层原理
+1. 元对象编译器（moc）扫描声明了Q_OBJECT宏的类的信号槽和其他元信息，生成名为 moc_XXX.cpp 文件
+2. 运行时，程序运行到 QObject::connect，调用 发送者和接收者关联的moc文件中的 qt_static_metacall 方法，走 的QMetaObject::IndexOfMethod分支，根据信号和槽函数分别返回对应元索引，最后将 “发送者指针、信号索引、接收者指针、槽函数索引” 等信息存入内存中的QObject内部连接列表
+3. 信号触发时，调用发送者的moc文件中的信号函数实现，信号函数实现内部调用 QMetaObject::activate() ，QMetaObject::activate() 在内存中的QObject内部连接列表里找到与当前信号连接的所有 “接收者-槽”对，根据connection连接类型，对每个 “接收者-槽”对 进行处理，将槽函数的元索引传入接收者的 qt_static_metacall 中调用
+4. qt_static_metacall 走的 QMetaObject::InvokeMetaMethod 分支，根据槽函数的元索引找到槽函数并调用
+
+相关代码见：[fn:1]
+#+begin_example cpp
+Tom::miao() → QMetaObject::activate() → 查找连接列表 → 找到 jerry 和其槽索引 → 调用 Jerry::qt_static_metacall() → 执行 Jerry::runAway()
+#+end_example
+
+
+* TODO 动态属性系统
 
 * QObject的构造和析构顺序
 - 代码片段1
@@ -153,6 +204,8 @@ exec()作用：启动一个局部事件循环，等待用户操作完成后返�
 * tr()
 作用：国际化使用
 所有传入tr函数的文本，都可以用工具提取出来翻译成其他语言。
+
+
 * C++中局部变量的销毁顺序
 是按照逆序销毁
 - 该例中QPushButon父类是QWidget，QWidget的父类是QObject
@@ -187,59 +240,279 @@ int main()
 代码片段1正确。代码片段2错误：析构顺序和构造顺序相反，先是window先析构它的children quit，然后析构自己；接下来又析构quit
 
 
-* tmp
-
-** qt事件循环
-
-** 对象树机制
-
-
-** Q_OBJECT宏展开后有哪些内容？
-- 包含以下内容，这些内容的实现在moc生成的cpp文件中
-  1. staticMetaObject(成员变量)
-  2. metaObject(成员函数)
-  3. qt_metacast(成员函数)
-  4. qt_metacall(成员函数)
-  5. qt_static_metacall(私有成员函数)
-
-
-
-** 信号和槽机制原理 [[https://www.cnblogs.com/swarmbees/p/10816139.html][参考]] [[https://zhuanlan.zhihu.com/p/80539605][参考2]]
-1. moc在有Q_OBJECT宏的类中查找 signals、slots，收集信号和槽的信息，生成 moc_XXX 文件
-2. moc_XXX文件中的 staticMetaObject 对象存储了字符串表[fn:1]、对应索引、qt_static_metacall[fn:2]
-3. 调用 connect[fn:3] 时，构造 Connection[fn:4] 对象，存入发送者内存的QObjectConnectionListVector[fn:5] 存储，关联起信号和槽
-4. 信号触发(调用emit时)，实际是调用activate函数，传递发送者指针、staticMetaObject、信号索引
-5. activate找出当前信号连接的所有槽函数[fn:6]，根据连接类型处理
-
-
-
-** connect连接方式有哪几种？如何调用的？
-1. (默认) Qt::AutoConnection 自动连接：sender 和 receiver 在同一线程 ? 直连 : 队列连接
-2. Qt::DirectConnection 直连 => 直接调用槽函数
-3. Qt::QueuedConnection 队列连接 => 调用槽函数 转换为 QMetaCallEvent 事件，放入qt事件循环
-4. Qt::BlockingQueuedConnection 阻塞队列连接 => 类似以上，但发送信号的线程会处于阻塞状态(槽函数没处理完时)
-5. Qt::UniqueConnection 唯一连接
-
-
-
-
 * Footnotes
 
 [fn:1]
-类名、信号/槽名称、参数类型/参数名称
+#+name: Tom.h
+#+begin_example cpp
+class Tom : public QObject
+{
+    Q_OBJECT
+public:
+    Tom(QObject *parent = nullptr) : QObject(parent) { }
+    void miaow() {
+        qDebug() <<  u8"喵!" ;
+        emit miao();
+    }
 
-[fn:2]
-判断是槽连接时(OMetaObject::invokeMethod)，根据索引调用对应的槽函数或信号
+signals:
+    void miao();
+};
+#+end_example
 
-[fn:3]
-connect通过staticMetaObject解析信号/槽索引，建立连接
+#+name: Jerry.h
+#+begin_example cpp
+class Jerry : public QObject
+{
+    Q_OBJECT
+public:
+    Jerry(QObject *parent = nullptr) : QObject(parent) {}
 
-[fn:4]
-存储了很多信息，其中有发送者、接收者、信号索引、槽索引、连接类型、qt_static_metacall等
+public slots:
+    void runAway() {
+        qDebug() << u8"那只猫又来了，快溜！" ;
+    }
+};
+#+end_example
 
-[fn:5]
-class QObjectConnectionListVector : public QVector<QObjectPrivate::ConnectionList>
-这是一个容器，信号的索引为下标，每个元素是链表，链表存储 Connection对象 (因为一个信号可以被多个槽函数连接)
+#+name: main.cpp
+#+begin_example cpp
+#include "Tom.h"
+#include "Jerry.h"
+int main(int argc, char *argv[]) {
+    QCoreApplication a(argc, argv);
+    Tom tom;
+    Jerry jerry;
 
-[fn:6]
-通过 QObjectConnectionListVector 获取信号对应的ConnectionList，处理连接(Connection)，判断 connect 连接方式，调用qt_static_metacall调用槽函数或投递事件
+    QObject::connect(&tom, &Tom::miao, &jerry, &Jerry::runAway);
+    tom.miaow();
+
+    return a.exec();
+}
+#+end_example
+
+#+name: Q_OBJECT宏
+#+begin_example cpp
+public: \
+    QT_WARNING_PUSH \
+    Q_OBJECT_NO_OVERRIDE_WARNING \
+    static const QMetaObject staticMetaObject; \
+    virtual const QMetaObject *metaObject() const; \
+    virtual void *qt_metacast(const char *); \
+    virtual int qt_metacall(QMetaObject::Call, int, void **); \
+    QT_TR_FUNCTIONS \
+private: \
+    Q_OBJECT_NO_ATTRIBUTES_WARNING \
+    Q_DECL_HIDDEN_STATIC_METACALL static void qt_static_metacall(QObject *, QMetaObject::Call, int, void **); \
+    QT_WARNING_POP \
+    struct QPrivateSignal {}; \
+    QT_ANNOTATE_CLASS(qt_qobject, "")
+/******************关键部分***********************/
+static const QMetaObject staticMetaObject;
+virtual const QMetaObject *metaObject() const;
+virtual void *qt_metacast(const char *);
+virtual int qt_metacall(QMetaObject::Call, int, void **);
+static void qt_static_metacall(QObject *, QMetaObject::Call, int, void **)
+#+end_example
+
+
+#+name: moc_Tom.cpp
+#+begin_example cpp
+#include "../../TomJerry/Tom.h"
+/*省略一些内容*/
+struct qt_meta_stringdata_Tom_t {
+    QByteArrayData data[3];
+    char stringdata0[10];
+};
+
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_Tom_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+
+static const qt_meta_stringdata_Tom_t qt_meta_stringdata_Tom = {
+    {
+QT_MOC_LITERAL(0, 0, 3), // "Tom"
+QT_MOC_LITERAL(1, 4, 4), // "miao"
+QT_MOC_LITERAL(2, 9, 0) // ""
+
+    },
+    "Tom\0miao\0"
+};
+#undef QT_MOC_LITERAL
+
+// Tom的元数据数组，qt运行时通过解析它可以知道 属性、方法等数量信息
+static const uint qt_meta_data_Tom[] = {
+
+ // content:
+       8,       // 0    ：revision（版本）
+       0,       // 1    ：classname（类名索引）
+       0,    0, // 2-3  ：classinfo（类信息数量及偏移）
+       1,   14, // 4-5  ：methods（方法数量及偏移）-> 该类有一个方法（信号/槽/普通成员函数），方法详细信息从数组索引14开始
+       0,    0, // 6-7  ：properties（属性数量及偏移）-> 该类无属性
+       0,    0, // 8-9  ：enums/sets（枚举/集合数量及偏移）-> 该类无枚举
+       0,    0, // 10-11：constructors（自定义构造函数数量及偏移）-> 该类无自定义构造函数
+       0,       // 12   ：flags（类的标志位）
+       1,       // 13   ：signalCount（信号数量）-> 该类有一个信号
+
+ // signals: name, argc, parameters, tag, flags
+       1,    0,   19,    2, 0x06 /* Public */,     // 14-18：信号的具体描述
+
+ // signals: parameters
+    QMetaType::Void,                               // 19   ：信号参数信息（返回值类型）
+
+       0                                           // 20   ：eod
+};
+
+// NOTE 3. InvokeMetaMethod：根据元索引方法；IndexOfMethod：根据方法查元索引
+void Tom::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<Tom *>(_o);     // 将参数中的QObject对象 转换成 Tom类
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->miao(); break;             // 然后调用Tom类的miao()函数，在代码末尾 void Tom::miao()
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+                                                      // 当外部查询Tom类中miao方法的元索引时，返回其索引值0
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (Tom::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Tom::miao)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
+    Q_UNUSED(_a);
+}
+
+QT_INIT_METAOBJECT const QMetaObject Tom::staticMetaObject = { {
+    &QObject::staticMetaObject,
+    qt_meta_stringdata_Tom.data,
+    qt_meta_data_Tom,    // Tom的元信息数组：这个类的信号、槽、类名等元信息
+    qt_static_metacall,  // 静态函数 qt_static_metacall
+    nullptr,
+    nullptr
+} };
+
+
+const QMetaObject *Tom::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *Tom::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_Tom.stringdata0))
+        return static_cast<void*>(this);
+    return QObject::qt_metacast(_clname);
+}
+
+int Tom::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 1)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 1;
+    }
+    return _id;
+}
+
+// NOTE 1. 信号触发调用
+// SIGNAL 0
+void Tom::miao()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr); // 0 代表 miao()这个函数的索引号
+    // NOTE 2. QMetaObject::activate的大致实现：找出与当前信号连接的所有“接收者-槽”对；根据connection连接类型，对每个 “接收者-槽”对 进行处理；通过槽函数的元索引（qt_meta_data数组中）调用接收者类的 qt_static_metacall 函数
+}
+QT_WARNING_POP
+QT_END_MOC_NAMESPACE
+#+end_example
+
+
+
+
+
+#+begin_example cpp
+
+#+end_example
+
+
+[fn:7]
+#+begin_example cpp
+#include <QApplication>
+#include <QWidget>
+#include <QMouseEvent>
+#include <QDebug>
+
+// 事件过滤器对象
+class EventFilter : public QObject {
+    Q_OBJECT
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override {
+        // 过滤鼠标按下事件
+        if (event->type() == QEvent::MouseButtonPress) {
+            qDebug() << "事件过滤器：拦截到鼠标按下事件";
+            // 返回false表示事件继续传递
+            return false;
+        }
+        return QObject::eventFilter(watched, event);
+    }
+};
+
+// 自定义窗口（事件目标对象）
+class MyWidget : public QWidget {
+    Q_OBJECT
+protected:
+    // 事件分发器
+    bool event(QEvent *event) override {
+        if (event->type() == QEvent::MouseButtonPress) {
+            qDebug() << "事件分发器：收到鼠标按下事件，准备调用处理函数";
+            // 调用父类实现，会自动分发到mousePressEvent
+            return QWidget::event(event);
+        }
+        return QWidget::event(event);
+    }
+
+    // 具体事件处理函数
+    void mousePressEvent(QMouseEvent *event) override {
+        qDebug() << "事件处理函数：处理鼠标按下事件，位置："
+                 << event->x() << "," << event->y();
+        QWidget::mousePressEvent(event);
+    }
+};
+
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+    MyWidget widget;
+    EventFilter filter;
+
+    // 为窗口安装事件过滤器
+    widget.installEventFilter(&filter);
+
+    widget.resize(300, 200);
+    widget.show();
+
+    qDebug() << "进入事件循环";
+    // 启动事件循环
+    return app.exec();
+}
+
+#include "main.moc"
+#+end_example
+
+
+
+

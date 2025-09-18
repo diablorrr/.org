@@ -4,7 +4,44 @@
 #+title: grpc
 #+filetags: index
 
-* grpc
-1. 高性能的 *RPC（远程过程调用）框架* ，基于 [[id:0b3fad26-6096-455d-a8af-79522c5113f3][HTTP/2.0]] 协议，使用 [[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][Protocol Buffers]] 序列化
-2. *实现序列化* /反序列化：使用 [[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][Protocol Buffers]]编译器 [[id:2732f7a7-3f0e-4ce0-a466-38b9a072818c][protoc]] 将 .proto文件 编译成 对应语言的代码（Python、Java、C++）
-3. *编译方法* 见：[[id:395677a5-f825-4935-a1d1-ef8a31f366cc][编译grpc]]
+* grpc [[https://grpc.io/docs/languages/cpp/basics/][grpc官网:cpp]] [[https://grpc.io/docs/what-is-grpc/core-concepts/][grpc官网:核心概念]]
+google开源的高性能 RPC（远程过程调用）框架 ，使得在对服务器上方法的调用就像在本地一样（开发者只需关注业务逻辑无需关注底层网络通信），用于构建分布式系统。基于 [[id:0b3fad26-6096-455d-a8af-79522c5113f3][HTTP/2.0]] 和 [[id:13f67abf-4087-4d20-87d7-ed11e5b99edc][Protocol Buffers]]（传输协议、序列化协议），支持多种编程语言
+
+*使用流程* ：
+1. .proto文件中定义：message格式、服务、服务内rpc方法（4种rpc类型：[fn:1]）
+2. protoc、grpc插件：生成.pb、.grpc.pb文件
+   - .pb.h和.pb.cc           :: message的序列化和反序列化代码
+   - .grpc.pb.h和.grpc.pb.cc :: 服务和存根的框架代码
+3. grpc客户端      ：生成 Channel，在 Channel 基础上生成 Stub（存根），通过 Stub 调用 grpc服务端方法
+4. grpc服务端      ：
+   1) 服务实现类 继承 grpc.pb 文件中的 Service类，重写所有rpc方法
+      #+begin_example cpp
+      class ChatServiceImpl final: public ChatService::Service { /*...*/ }
+      #+end_example
+   2) 启动服务：ServerBuilder工厂类 配置监听端口 并 注册服务实现类，启动
+      #+begin_example cpp
+      chatserver::ChatServiceImpl service;
+		  grpc::ServerBuilder builder;
+		  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+		  builder.RegisterService(&service);
+		  std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+		  std::thread  grpc_server_thread([&server]() {
+			  server->Wait();
+			});
+      #+end_example
+
+*编译方法* 见：[[id:395677a5-f825-4935-a1d1-ef8a31f366cc][编译grpc]]
+
+* Footnotes
+
+[fn:1]
+#+begin_example cpp
+// NOTE 一元rpc方法  ：客户端发送一个请求，服务端返回一个响应
+rpc SayHello(HelloRequest) returns (HelloResponse);
+// NOTE 服务器流式RPC：客户端发送一个请求，服务端返回一个流（一系列消息）
+rpc LotsOfReplies(HelloRequest) returns (stream HelloResponse);
+// NOTE 客户端流式RPC：客户端发送一个流，服务器返回一个响应
+rpc LotsOfGreetings(stream HelloRequest) returns (HelloResponse);
+// NOTE 双向流式RPC  ：双发收发流
+rpc BidiHello(stream HelloRequest) returns (stream HelloResponse);
+#+end_example

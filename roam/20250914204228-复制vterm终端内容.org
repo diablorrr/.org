@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       29f401be-1438-4e5c-991d-a4ac47c68937
+:END:
+#+title: 复制vterm终端内容
+#+filetags: emacs
+
+* 复制vterm终端内容
+1. 打开 vterm-copy mode：C-c C-t

@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       2b3e8dcd-d87b-47d4-b0c3-b41fab8470e1
+:END:
+#+title: beast
+#+filetags: boost
+
+* beast
+[[id:c590482b-2e5a-4617-822b-74a9dd015ae5][asio]] 的基础上封装的 C++ 网络库，专注于 HTTP 和 WebSocket协议的封装

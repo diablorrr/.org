@@ -2,7 +2,7 @@
 :ID:       a47cc941-ccc6-4893-9862-d5b245ea912b
 :END:
 #+title: docker
-#+filetags: docker
+#+filetags: index
 
 * 查询
 ** 命令

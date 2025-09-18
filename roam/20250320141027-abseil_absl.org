@@ -2,9 +2,10 @@
 :ID:       afb8588c-992c-4dbd-9dfe-97ad0f845336
 :END:
 #+title: abseil(absl)
+#+filetags: grpc
 
 * 使用
-** absl链接失败问题[fn:1]
+** absl链接失败问题 [[https://blog.csdn.net/witton/article/details/144182568][MSYS2 MinGW64使用Protobuf新版本踩坑]]
 1. (我的解决方式) [[id:c651b8b0-bc76-451d-acac-0ea55329f0e8][cmake]]中将编译器clang++改成[[id:3aa872a4-290a-4fc8-8e37-add919e44822][g++]]
 
 * 概念
@@ -18,5 +19,3 @@
 [[attachment:_20250430_180211screenshot.png]]
 
 
-* Footnotes
-[fn:1] 参考：[[https://blog.csdn.net/witton/article/details/144182568][MSYS2 MinGW64使用Protobuf新版本踩坑]]

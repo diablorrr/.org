@@ -2,7 +2,7 @@
 :ID:       3a8cabb7-16a4-4502-b218-6070225354f2
 :END:
 #+title: interview_tmp
-#+filetags: other
+#+filetags: interview
 
 * #define和const的区别
 :PROPERTIES:

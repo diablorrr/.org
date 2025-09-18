@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       06a8f505-6d1b-4a84-8bbb-d5f4bc070354
+:END:
+#+title: 资源&工具
+
+* 资源
+[[https://beej.us/guide/][Beej's Guides]]
+[[https://www.tutorialspoint.com/][tutorialspoint]]
+[[https://godbolt.org/][godbolt]] 运行代码
+[[http://xahlee.info/emacs/index.html][Xah Emacs Tutorial]] 非常简洁的emacs教程网站
+[[https://www.learncpp.com/][learncpp]]：cpp，大量的示例代码，良好的代码注释，实践经验
+[[https://hackingcpp.com/index.html][hackingcpp]]：cpp，大量的可视化图表，良好的代码注释
+[[https://www.youtube.com/@CoreDumpped/playlists][Core Dumped]]：操作系统，动画描述原理
+
+八股:计算机网络 [[https://space.bilibili.com/327247876/lists/60187?type=season][技术蛋老师]]
+八股:C++ [[https://space.bilibili.com/385310384/upload/video][程序员陈子青]]
+
+
+* 工具
+- 系统       :: arch linux
+- 桌面环境   :: KDE
+- 开发文档   :: Zeal
+- 代码       :: emacs
+                vscode
+- 笔记       :: emacs：org-mode
+                drawio
+- 截屏       :: Snipaste
+- 代理       :: clash verge
+- 浏览器     :: Chrome
+- 浏览器插件 :: vimium c
+                adblock
+                豆包
+                元宝
+                单词收藏助手
+                raindrop.io
+- 音乐       :: musicfox
+- 终端       :: Yakuake
+- AI         :: deepwiki
+                zread.ai
+                cline
+                [[https://repomix.com/][repomix]]
+                [[https://aistudio.google.com/prompts/new_chat][google ai studio]]
+                cursor
+                豆包
+                元宝
+- 提示词     :: [[id:69db2457-7853-4b25-b4fd-8a67d408e4e5][prompt]]

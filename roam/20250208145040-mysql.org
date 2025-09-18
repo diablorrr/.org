@@ -20,8 +20,9 @@
 用于约束 *列（字段）* ，以下都是针对 该列中每行数据
 - PRIMARY KEY :: （主键） *唯一，不能有NULL*
 - UNIQUE      ::  *唯一，能有NULL*
-- NOT NULL    :: *不能有NULL*
 - FOREIGN KEY :: （外键）该列的值来自另一个表的 PRIMARY键 或 UNIQUE键
+- INDEX / KEY :: 创建索引
+- NOT NULL    :: *不能有NULL*
 - CHECK       :: 列中的值必须符合指定的条件
 
 ** 功能关键字

@@ -1,8 +1,8 @@
 :PROPERTIES:
 :ID:       db72392d-66d0-4995-90e4-27bbfa83e444
 :END:
-#+title: leetcode
-#+filetags: other
+#+title: 算法
+#+filetags: interview
 
 * 前缀和
 *推导*

@@ -2,16 +2,30 @@
 :ID:       c590482b-2e5a-4617-822b-74a9dd015ae5
 :END:
 #+title: asio
-#+filetags: index
+#+filetags: boost
 
 * asio [[https://www.boost.org/doc/libs/latest/doc/html/boost_asio/overview/basics.html][boost::asio]]
-用于异步IO的 C++ 库（proactor模式库）
+跨平台的 C++异步IO库（proactor模式），通过异步操作进行高效的网络通信
+
+*核心组件* ：
+1. io_context
+2. IO对象（eg：socket、定时器）
+3. 异步操作（eg：async_read、async_write、async_accept等）
+4. strand（保证回调函数在多线程环境下序列化进行）
+组件协作的示例 [fn:1]
 
 *异步操作原理* ：
-异步操作 中注册 completion handler，发起异步操作后立刻返回，后续使用 io_context.run() 启动事件循环并且同步阻塞的等待异步通知，当得知某个操作完成，从内部队列取出该操作对应的 completion handler（前边注册过）执行；具体见：[[id:9058e3e8-60a2-48a3-b028-ec05ff0b3f1f][图:asio同步/异步模型]]
+创建 io_context 对象，将 io_context 与 IO对象关联（eg：socket），进行异步操作，异步操作 中注册 completion handler，发起异步操作后立刻返回，后续同步阻塞（阻塞是等待操作系统IO完成通知，而不是主动轮询检查IO状态）的调用 =boost::asio::io_context::run()= ，内部会运行事件循环，并处理事件循环中任务队列里的任务，比如异步操作中注册的 completion handler（除此之外还有 post() 或 dispatch() 提交的任务、定时器任务），直到任务队列为空会io_context被停止，为了防止io_context退出，可以在io_context中添加工作对象（boost::asio::executor_work_guard）；具体见：[[id:9058e3e8-60a2-48a3-b028-ec05ff0b3f1f][图:asio同步/异步模型]]
 - 异步操作： =async_read= 、 =async_write= 、 =async_wait=
 - completion handler :: 完成处理函数
+  #+begin_example cpp
+  socket.async_read_some(buffer, [](error_code e, size_t) { /*处理逻辑*/ } );
+  // 此示例的完成处理函数是lambda
+  #+end_example
 - io_context         :: IO执行上下文，用于连接 IO对象 和 操作系统的IO服务
+#+begin_comment 防止io_context退出的场景
+创建一个线程池，每个线程运行一个 io_context，若 io_context 中的任务队列没有任务，io_context 会退出，但我们希望 io_context 存活
+#+end_comment
 
 ** 图:asio工作方式(同步/异步模型) :ATTACH:
 :PROPERTIES:
@@ -22,7 +36,7 @@
 
 *异步模型* ：
 [[attachment:_20250826_220703screenshot.png]]
-1. IO对象的异步操作 中注册 完成处理函数（completion handler）
+1. IO对象（eg：socket）的异步操作 中注册 完成处理函数（completion handler）
    #+begin_example cpp
    socket.async_connect(server_endpoint, your_completion_handler);
    void your_completion_handler(const boost::system::error_code& ec);
@@ -33,3 +47,28 @@
 4. 操作系统 将结果放入队列，等待 io_context 取用
 5. io_context::run() 来同步阻塞地获取结果
 6. 调用 io_context::run() 期间，io_context 从队列中取出结果，转换为 error_code，然后传递给 注册的 completion handler
+
+* Footnotes
+
+[fn:1]
+#+begin_example cpp
+// 初始上下文对象
+asio::io_context io_context;
+
+// 创建IO对象
+asio::ip::tcp::socket socket(io_context);
+socket.connect(asio::ip::tcp::endpoint(asio::ip::address::from_string("127.0.0.1"), 8080));
+
+// 发起异步操作
+char buffer[1024];
+asio::async_read(socket, asio::buffer(buffer),
+  [&](std::error_code ec, std::size_t length) {
+    if (!ec) {
+      // 处理读取的数据
+      std::cout << "Received: " << std::string(buffer, length) << std::endl;
+    }
+  });
+
+// 启动事件循环
+io_context.run();  // 阻塞，直到所有操作完成
+#+end_example

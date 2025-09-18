@@ -5,7 +5,7 @@
 #+filetags: cpp
 
 * 虚函数 [[https://www.learncpp.com/cpp-tutorial/virtual-functions/][learncpp25.2]]
-1. =virtual= 声明的成员函数，允许派生类 *重写* 其实现，实现 [[id:a3778673-5028-4637-b8f2-85b1bf798587][运行时多态]]；通过基类的 *指针或引用* 调用虚函数时（通过基类直接调用虚函数，调用的是该对象相同类型的成员），调用的是对象的 *实际类型* 的函数的 *最派生版本*
+1. =virtual= 声明的成员函数，允许派生类 *重写* 其实现，实现 [[id:a3778673-5028-4637-b8f2-85b1bf798587][运行时多态]]，具体来说：通过基类的 *指针或引用* 调用虚函数时会调用 基类指针或引用 指向或引用的类对象的虚函数版本
    [✨ *BP* ：基类虚函数用 virtual，派生类不用]
    #+begin_src cpp :results output :namespaces std :includes <iostream> <string_view>
    class A {

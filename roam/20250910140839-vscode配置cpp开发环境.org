@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       717096c9-1ecb-480e-b4a0-93461bd2f722
+:END:
+#+title: vscode配置cpp开发环境
+#+filetags: vscode cpp
+
+* vscode配置cpp开发环境

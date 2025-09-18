@@ -2,7 +2,7 @@
 :ID:       db3ce1bf-2066-4e91-abf4-2c4602d338e7
 :END:
 #+title: 装机
-#+filetags: other
+#+filetags: life
 
 * 主板
 ** 一线
