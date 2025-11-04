@@ -4,4 +4,193 @@
 #+title: vscode配置cpp开发环境
 #+filetags: vscode cpp
 
-* vscode配置cpp开发环境
+* vscode配置cpp开发环境（图文） :ATTACH:
+:PROPERTIES:
+:ID:       c08307a6-6dbb-42b4-8a59-947847aa780a
+:END:
+1. 下载插件
+   [[attachment:_20251010_162311screenshot.png]]
+
+2. 关键配置文件介绍
+   | 文件                    | 作用                              |
+   |-------------------------+-----------------------------------|
+   | tasks.json              | 自动化构建（编译+链接）、运行代码 |
+   | launch.json             | debug                             |
+   | c_cpp_properties.json   | 智能感知                          |
+   | settings.json（工作区） | 编辑器选项                        |
+
+3. 配置 *智能感知* （c_cpp_properties.json）： =Ctrl + Shift + p= 打开面板，选择
+   [[attachment:_20251010_162803screenshot.png]]
+   输入头文件路径（编译器路径、C标准、C++标准 按需选择）
+   [[attachment:_20251010_172402screenshot.png]]
+
+4. 配置 *自动化构建运行任务* （tasks.json）：右上角三角形选择 =运行 C/C++ 文件= 生成 tasks.json，基于生成内容修改
+   #+begin_example json
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ 生成活动文件",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${fileDirname}/*.cpp",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-I/usr/include/qt",
+                "-I/usr/include/qt/QtWidgets",
+                "-I/usr/include/qt/QtCore",
+                "-I/usr/include/qt/QtGui",
+                "-L/usr/lib",
+                "-lQt5Core",
+                "-lQt5Gui",
+                "-lQt5Widgets"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "调试器生成的任务。"
+        }
+    ],
+    "version": "2.0.0"
+}
+   #+end_example
+
+5. 配置 *debug* （launch.json）：创建 launch.json
+   [[attachment:_20251010_164114screenshot.png]]
+   粘贴以下内容（各字段含义见下文）
+   #+begin_example json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "complie"
+        }
+    ]
+}
+   #+end_example
+   右上角三角形选择 =调试 C/C++ 文件=
+
+6. 配置 *编辑器选项* （setting.json）：创建 setting.json
+   [[attachment:_20251010_165552screenshot.png]]
+
+
+
+
+
+* vscode配置cpp开发环境（windows版）[[https://zhuanlan.zhihu.com/p/401188789][知乎]]
+** windows开发环境配置
+*对比*
+- mingw：基础的cpp开发环境
+- msys2：更全面的cpp开发环境，win下类unix工具集
+- wsl  ：完整的linux子系统
+
+*配置msys2*
+1. msys2安装：https://www.msys2.org/
+2. msys2有多种子环境，差别见：https://www.msys2.org/docs/environments/， 推荐使用 ucrt64
+3. 在 msys2 ucrt64中执行
+   #+begin_example bash
+   pacman -Syu
+   pacman -S mingw-w64-ucrt-x86_64-toolchain
+   #+end_example
+4. 将 ucrt64/bin文件夹加入 windows环境变量（这是gcc所在位置）
+
+** vscode配置默认终端
+#+name: 设置vscode默认终端为 msys2 ucrt64
+#+begin_example json
+{
+       "terminal.integrated.profiles.windows": {
+        "MSYS2 UCRT": {
+            "path": "cmd.exe",
+            "args": [
+                "/c",
+                "D:\\software\\msys2\\msys2_shell.cmd -defterm -here -no-start -ucrt64"
+            ]
+        }
+    }
+}
+#+end_example
+
+** vscode配置launch.json（用于debug）
+#+name 示例
+#+begin_example json
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) g++调试",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
+            // "args": [],
+            // "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            // "environment": [],
+            // "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "%Path%\\gdb.exe"
+        }
+
+
+    ]
+}
+#+end_example
+
+#+name: 参考
+|----------------+-----------------+----------------------------------------------------------------------+----------|
+| 字段名         | 子字段名        | 作用说明                                                             | 是否必要 |
+|----------------+-----------------+----------------------------------------------------------------------+----------|
+| version        |                 | 配置文件版本（固定为 "0.2.0"）                                       | 是       |
+| configurations |                 | 调试配置数组（可包含多个调试方案）                                   | 是       |
+|                | name            | 调试配置名称（显示在调试面板，自定义即可）                           | 是       |
+|                | type            | 调试器类型（C/C++ 调试固定为 "cppdbg"）                              | 是       |
+|                | request         | 调试模式（"launch" 表示启动程序调试，"attach" 表示附加到已运行程序） | 是       |
+|                | program         | 要调试的可执行文件路径（必须是带调试信息的编译产物）                 | 是       |
+|                | MIMode          | 调试器模式（GDB 调试固定为 "gdb"）                                   | 是       |
+|                | miDebuggerPath  | GDB 调试器的可执行文件路径（需指向正确的 gdb.exe）                   | 是       |
+|----------------+-----------------+----------------------------------------------------------------------+----------|
+|                | args            | 程序运行时的命令行参数（无参数则留空数组）                           | 否       |
+|                | stopAtEntry     | 是否在程序入口处自动断点（true 则启动后暂停，默认 false）            | 否       |
+|                | cwd             | 调试时的工作目录（通常设为 ${fileDirname} 即当前文件目录）           | 否       |
+|                | environment     | 自定义环境变量（无额外变量则留空数组）                               | 否       |
+|                | externalConsole | 是否使用外部控制台（false 用 VS Code 内置终端，推荐）                | 否       |
+| setupCommands  |                 | GDB 初始化命令（如启用 pretty-printing、设置汇编风格等）             | 否       |
+|----------------+-----------------+----------------------------------------------------------------------+----------|
+
+*** "Run Code" 和 "运行C/C++文件" 的区别
+|---------------+----------------------+------------------------------------------------------------------------------------------------|
+|               | 来源                 | 运行方式                                                                                       |
+|---------------+----------------------+------------------------------------------------------------------------------------------------|
+| 运行C/C++文件 | Microsoft C/C++ 扩展 | 一般用于自动化构建任务（eg：make、cmake等）使用 tasks.json 中的编译选项                        |
+| Run Code      | Code Runner插件      | 一般用于单个文件快速运行                                                                       |
+|               |                      | 使用 code-runner.executorMap 中预定义的命令运行代码；不会加载 tasks.json 或其他 vscode项目配置 |
+|---------------+----------------------+------------------------------------------------------------------------------------------------|

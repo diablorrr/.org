@@ -4,78 +4,120 @@
 #+title: 项目
 #+filetags: interview
 
-* 虚拟数字人
-*微调流程* ：[[https://xtx0o8yn7x.feishu.cn/docx/XjvpdaeQcoF8d3xhpbCcoOJNn9b][微调]]
-1. 加载分词器​​（AutoTokenizer）预处理数据，使用分词器将文本编码为数字，得到数据集
-2. 加载模型​​（AutoModelForCausalLM + BitsAndBytesConfig量化）：量化，减少显存占用
-3. 配置训练参数​​（TrainingArguments）：训练的超参数（学习率、批次等）
-4. 配置Lora参数（peft中的LoraConfig）：用于高效参数微调
-5. SFTTrainer（训练参数 + Lora参数 + 数据集）开始训练
+* 基于C++11重构百万并发Reactor服务器
+1. 主从reactor
 
-#+begin_comment
-使用 hugging face 中的库：
-1. transformers：基础模型库
-   用的 AutoTokenizer：加载分词器，用于将文本编码为数字
-   AutoModelForCausalLM：加载模型
-   BitsAndBytesConfig：量化参数（减少显存占用 4位量化、8位量化）
-   TrainingArguments：训练超参数（学习率、批次大小等）
-2. peft：参数高效微调库，用的 LoRA
-3. trl：强化学习微调库，用的 SFTTrainer（监督式微调的训练器）
-#+end_comment
-
-- [X] 项目用的是哪种微调方式，LoRA、Freeze（冻结预训练层）还是全量微调？为什么在虚拟数字人场景下选择这种方案？
-  + 用的LoRA（低秩适配），将原始大权重矩阵拆为两个低秩矩阵A、B，训练时只训练A、B，推理时合并原始矩阵和A、B；训练量更少
-  + 在终端设备（eg：智能屏）的环境下算力不强，对精确度要求不需要那么高，选择 LoRA 模型响应更快
-- [X] 虚拟数字人需要适配特定场景（比如客服、教育）的交互风格，你们的微调数据集是怎么构建的？
-  + 从博物馆官网上爬来，然后交给chatgpt生成角色对话，且保持角色语气一致性
-
-
-*外挂知识库流程* ：[[https://xtx0o8yn7x.feishu.cn/docx/UOAadjjReoI6UBxPq4lcI9frnMb][外挂知识库]]
-# 以下都是 langchain 的模块
-1. 用 UnstructuredFileLoader 加载文件，将非结构化文件（eg：PDF、Word、TXT等）转换为统一格式（Document对象列表：List[Document]）
-2. RecursiveCharacterTextSplitter 将长文本分块（chunk），确保分块后保留语义完整
-3. HuggingFaceEmbeddings中的 text2vec-large-chinese模型 对chunk进行embedding，存储到向量库 FAISS（Facebook开源的向量库） 中
-4. 用户查询时，查询首先变成向量的形式，在 向量库中进行相似度搜索，返回相似度 top k，大模型结合这个返回结果进行回答
-
-#+begin_example python
-# Document对象列表：List[Document]
-[
-    Document(
-        page_content="小白的父亲是张三。",
-        metadata={"source": "/root/knowledge.txt"}
-    ),
-    Document(
-        page_content="Llama2是由Meta发布的开源大模型。",
-        metadata={"source": "/root/knowledge.txt"}
-    )
-]
-#+end_example
-
-- [X] 为什么使用 FAISS？
-  （facebook开源）主要因为与 langchain 集成，方便使用（很多api调用方便）
-- [X] 为什么选用 text2vec-large-chinese模型？
-  中文模型，langchain 集成，调用方便
-
-
-** LoRA(低秩矩阵适配)原理
-1. *秩 代表信息量* ：秩越低则该矩阵所含信息量越少
-   #+begin_comment
-   [1 2 3] 这个矩阵秩为2，所含信息多
-   [4 5 6]
-
-   [1 2 3] 这个矩阵秩为1，所含信息少（第2行可以用第1行表示）
-   [2 4 6]
+2. 整个系统中上层注册回调函数给下层（上层 -> 下层），下层根据事件的不同而触发不同的回调（下层 -> 上层），这就好似上下层之间通信，事件的来源是 epoll；当事件触发时，从下层到上层 层层回调
+   #+begin_comment 示例
+   上层：EchoServer
+   下层：TcpServer
+   再下层：....
    #+end_comment
 
-2. *大矩阵可以分解为两个低秩矩阵* ：虽然两个低秩矩阵的信息量变少了，但是训练量也变小了
-   #+begin_comment
-   [ 4  5  6]   [1]
-   [ 8 10 12] = [2] x [4 5 6]
-   [12 15 18]   [3]
-   #+end_comment
+3. 主线程对应 主EventLoop，主线程的主EventLoop与Acceptor绑定，负责监听和接收新连接
+   其他IO线程一对一 从EventLoop，每个从EventLoop对应几个Connection
+   EchoServer中线程池里都是 WORK线程
+   #+begin_example cpp
+   // 每个Connection根据内部的客户端socket的fd通过哈希函数打到不同的从事件循环上，因此多个Connection对应到一个EventLoop
+   spConnection conn(new Connection(subloops_[clientsock->fd()%threadnum_].get(),std::move(clientsock)));
+   #+end_example
 
-3. 训练时将原始矩阵冻结，用两个低秩矩阵A、B表示原始矩阵，并训练A、B
-   推理时 =最终权重矩阵 = 原始权重矩阵 + 低秩矩阵A * 低秩矩阵B=
+EchoServer 中的线程池是 工作线程，该线程池中的 任务队列，处理 业务任务
+
+** 问答
+*** YES 介绍下你的项目
+- 项目介绍           :: 这个一个基于 reactor模型 实现的 高并发TCP服务器框架（在这个TCP服务器框架上封装了 EchoServer），one thread one loop，具有 事件驱动、可扩展性高、线程安全 等特点；使用 =epoll + 非阻塞IO= 达到百万级连接能力
+- 整体架构与线程模型 :: 在TCP层，（主线程）主事件循环绑定Accept，负责监听、接受新连接；（其他线程）从事件循环线程池中的从事件循环绑定 Connection，负责连接的IO；在应用层，（其他线程）有可选的工作线程池负责业务处理（计算密集型任务）；上下层之间通信方式 上层向下层注册回调函数，下层根据触发事件类型的同步调用不同回调函数
+
+*** YES 从 accept 新连接到连接读写、消息处理、再到回包的完整链路描述，包括涉及的对象和回调绑定位置
+- 新连接： *「主线程」* Acceptor::newconnection()接受连接，构造客户端socket，回调TcpServer::newconnection()，在从EventLoop中选择一个，并创建Connection，Connection内部有客户端socket和clientchannel并注册读写/错误/关闭回调，后续Channel::handleevent()触发对应回调
+- 消息处理/回包： *「IO线程A」* clientchannel触发读事件，回调Connection::onmessage()，Connection::onmessage()读取数据到自己的缓冲区，回调TcpServer::onmessage()，TcpServer::onmessage()回调上层EchoServer::HandleMessage()，EchoServer::HandleMessage()中将 =任务std::bind(&EchoServer::OnMessage,this,conn,message)= 放入工作线程池的任务队列， *「WORK线程A」* 调用任务EchoServer::OnMessage，EchoServer::OnMessage调用Connection::send()发送响应，Connection::send()中判断出当前执行该函数的线程是「WORK线程A」，于是通过EventLoop::queueinloop将任务放入conn对应的EventLoop::taskqueue中，EventLoop::queueinloop内通过eventfd唤醒「IO线程A」， *「IO线程A」* 处理taskqueue
+
+*** YES 为什么要用 eventfd 唤醒而不使用其他手段？
+- 简单只需1个fd，与epoll无缝集成
+  pipe                  ：需要2个fd
+  pthread条件变量/信号量：不能纳入epoll的等待集合
+  signal                ：全局性强
+  timerfd               ：专门做计时器事件，不适合作为跨线程“任务到达”的通知
+  C++11互斥锁/条件变量  ：与epoll集成不好，会造成双重等待（既等条件变量，又等epoll_wait）
+
+*** YES Connection在回调过程中为什么要用shared_from_this()，用this行吗，或者 new 一个Connection的共享指针？
+# Connection::onmessagecallback_(shared_from_this(),message);
+- 用 this 不行，因为 this 不能增加 Connection 的引用计数，可能在回调过程中 Connection 被意外释放；new一个Connection的共享指针也不行，因为这样创建的共享指针引用计数与正在管理Connection的共享指针引用计数不同步（创建了新的shared_ptr），使用shared_from_this() 就能共享正在管理Connection的共享指针的引用计数
+
+*** YES 如何做消息拆包？Buffer::pickmessage() 三种分隔方式各自适用什么场景？
+- 消息 = 消息头(固定4字节) + 消息体；读取消息头获取长度信息，根据长度信息读取消息体
+- 0：无分割符，适合定长/持续流（eg：音视频）
+  1：4字节消息头（默认），处理粘包问题
+  2：\r\n\r\n分隔，处理HTTP
+
+*** EventLoop::stop_ 是原子变量，停止时如何保证不会丢任务？如何优雅退出所有 subloops_ 与工作线程？
+- EventLoop::stop() 会将 stop_ 设置为 true，然后通过 eventfd 通知 EventLoop 将任务队列中的任务全部处理，同时 stop_=true 后，EventLoop::run() 中 while循环停止，也就是 事件循环停止了
+- 设计了一个 ThreadPool::stop()，将 原子变量 stop_设置为true，然后唤醒全部阻塞的线程，等待它们执行完成；被唤醒的线程发现 stop_=true且任务队列为空就直接return，否则先将任务做完，下次while循环退出
+  *补充* ：不直接在析构函数中设计这个逻辑是为了增加灵活性，用户可以直接调用 stop() 来手动停止线程池；ThreadPool::stop() 中一开始设计 if(stop_) return; 是因为join过的线程不能再join
+  #+begin_example cpp
+  void ThreadPool::stop()
+  {
+      if (stop_) return;       // 被join过的线程不能再join的，否则会调用terminate；eg：第一次stop()，对所有线程join了；第二次 stop 若没有这行，则再次join，则程序终止
+      stop_ = true;
+      condition_.notify_all();  // 唤醒全部的线程。
+      // 等待全部线程执行完任务后退出。
+      for (std::thread &th : threads_)
+          th.join();
+  }
+  #+end_example
+
+*** YES 为什么 EventLoop 里集成了 timerfd_？EventLoop::conns_ 和 TcpServer::conns_ 都维护了连接，为什么要两份？
+- timerfd是计时器，可以打破程序执行的流程，每隔一段事件去做某件事，这里通过 timerfd 来定期检查 Connection 是否超时，将超时Connection从EventLoop中删除，并从TcpServer中删除
+  #+begin_comment
+  *具体来说* ：EventLoop中继承 timerfd、timerchannel 周期性触发 handletimer()，handletimer()设置重新计时并遍历所有 Connection，若超时，则从EventLoop::conns中删除，回调TcpServer::removeconn，TcpServer::removeconn将Connection从TcpServer::conns中删除
+  #+end_comment
+
+- TcpServer::conns 管理全局的Connection（eg：统一关闭），EventLoop::conns管理局部Connection（eg：空闲连接检测）
+  #+begin_comment
+  假设将空闲连接检测交给TcpServer::conns，则TcpServer性能不好，因为需要定期完整检查全部Connection，而TcpServer的职责主要是监听和接受新连接
+  #+end_comment
+
+*** YES 有无考虑进程级信号处理（如 SIGINT）触发所有 loops、ThreadPool 的优雅退出？
+- 有进程级的信号处理，捕获到 SIGINT、SIGTERM 时，调用自定义的Stop函数
+  #+begin_example cpp
+  signal(SIGTERM,Stop);    // 信号15，系统kill或killall命令默认发送的信号。
+  signal(SIGINT,Stop);     // 信号2，按Ctrl+C发送的信号。
+
+  // Stop函数中
+  echoserver->Stop();
+  delete echoserver;
+  #+end_example
+
+*** YES 实现主从 Reactor 吗？mainloop_ 和 subloops_ 的职责边界是什么？新连接如何在多个 EventLoop 之间分配（策略/理由），支持连接迁移吗？
+- 主事件循环负责 监听/接受 新连接（Acceptor绑定在主事件循环），从事件循环负责Connection的IO事件、超时管理（事件循环内有个定时器，每隔一段时间检查Connection）
+- 使用 哈希方法，简单且无锁（eg：轮询按顺序分配连接，因此可能需要锁）
+
+*** YES 为什么 Socket、Channel 在不同地方用 unique_ptr，而连接放在 std::map<int, spConnection>？
+- socket表示网络连接，channel表示事件，每个 Connection 独占各自的socket、channel，因此使用 unique_ptr；而 Connection 存在于 TcpServer 和 EventLoop 中，且在一些回调函数中需要传递 Connection，因此使用 shared_ptr，以便在回调链路中延续生命周期
+
+*** YES ThreadPool 主要用于 IO 线程还是工作线程？threadtype_ 的意图是什么？
+- 都有，用 threadtype_ 标识线程池类型
+
+*** YES 用什么方式压测（客户端、QPS、RT、连接数、CPU/内存）？
+- 虚拟机：4核CPU、2g内存 Ubuntu系统
+  sh脚本中在后台起了30个客户端，每个客户端发送10万个请求，计算下来大概1秒10万
+- autodl重庆A区：32核CPU 120g内存 Ubuntu系统
+  sh脚本中在后台起了30个客户端，每个客户端发送100万个请求，关闭可选的工作线程池，IO线程数改为30（也就是整个程序31个线程），计算下来QPS=100万
+  + top命令看CPU和内存
+  + QPS=请求/每秒，QPS是每秒查询率
+
+*** Channel::useet() 配合 EPOLLET 时，如何避免丢事件、确保把缓冲区读到 EAGAIN？写事件何时启用/关闭？
+
+*** 连接关闭/错误的路径是什么？如何避免重复关闭？如何确保回调顺序和资源回收正确？
+
+*** EventLoop::setepolltimeoutcallback() 和 settimercallback() 的典型用途？二者在你业务中分别做什么？
+
+*** 真正上到百万连接需要哪些内核与系统调优？你准备调整哪些参数、为何？
+
+*** 零拷贝与大报文：发送大文件/大报文时是否考虑 sendfile/splice/mmap/writev？当前 Buffer 设计的瓶颈在哪里？
+
+*** 如何处理对端半关闭（read 返回 0）与 RST？多次触发关闭路径会怎样？
 
 
 * 全栈聊天项目
@@ -163,6 +205,7 @@
 - 客户端发送添加好友请求，聊天服务器解析JSON，更新mysql（存储添加好友记录，此时还未添加，friend_apply表status=0），若在当前服务器则找到对应会话，通过该会话发送消息给客户端，若不在当前服务器，则通过grpc发送消息到用户所在的服务器的会话（对应关系：用户id -> grpc连接池、服务器、会话），通过该会话发送消息给客户端；
   当被添加客户端点击同意请求时，发送同意添加好友请求，更新mysql（更新添加好友记录，friend_apply表status=1；存储friend表），若在当前服务器则找到对应会话通过该会话发送消息给客户端，若不在当前服务器，则通过grpc发送消息到用户所在的服务器的会话，通过该会话发送消息给客户端
 - 若对方不在线，存储添加好友记录到mysql中的friend_apply表，被添加用户下次登录时，会从mysql中加载 好友申请列表
+
 *** 有没有了解消息队列
 - 猜测类似 进程间通信方式-消息队列，用于将发送方和接收方解耦（发送方只需把消息放到队列就能返回，无需等待接收方）、队列缓冲能力平衡双方速率差异、支持多线程并发操作，在项目中HTTPConnection/CSession负责IO，LogicSystem负责业务处理，IO类将消息放到 LogicSystem的队列中，LogicSystem后台起一个线程专门处理队列中的任务
 
@@ -245,13 +288,12 @@
   *成员* -> 会话id（标识会话），用户id（标识会话所属用户）；会话关闭标识（标识会话是否已关闭）；网络传输socket；数据缓冲区（char data[]）；发送消息队列（实现消息的有序发送）；发送队列的互斥锁；_recv_msg_node（消息体节点），_recv_head_node（消息头节点），b_head_parse（标识当前是否正在解析消息头）
   *函数* -> 绑定/查询用户和会话的函数、
 
-*** TODO 项目中消息格式是什么样的？
+*** 项目中消息格式是什么样的？
+tlv， =消息 = 4字节消息头（消息id+消息长度） + 消息体=
 *** TODO CSession中是怎么处理粘包的？
 
-*** [ ] 域名如何映射到ip？如何获得一个公网ip
 *** [ ] 项目中微服务的拆分、职责边界怎么划分
 *** [ ] 聊天服务器如何实现的负载均衡、当有大量请求到来时，如何实现连接的均匀分布？
-*** [ ] 怎么测出单服务器的连接数的，连接数的瓶颈在哪儿？
 *** [ ] 聊天过程中的数据如何产生，如何传递，如何存储
 *** [ ] 存储聊天数据的表如何设计，如何建立索引
 *** [ ] 如果离线消息过大，需要等所有数据发送完后再删除吗，如果发送过程中服务断掉，那下一次要重复发送吗
@@ -264,7 +306,8 @@
 
 *** [ ] 多线程并发修改全局变量会有什么问题，如何解决? （除了加锁还有什么方法?)
 *** [ ] 如何存储大量的聊天信息，包括音频视频以及各种大文件
-*** [ ] 服务器如何确定用户连接到哪个聊天服务器？
+*** 服务器如何确定用户连接到哪个聊天服务器？
+redis中存储了用户id和聊天服务器的绑定信息
 *** TODO 如何获得服务器性能的？（测试）
 *** [ ] 如何解决大量tcp连接的性能问题？如何用户登陆后长时间没有请求（心跳机制），如何又突然要发消息了，需要重新登录吗？
 *** [ ] redis常用的数据结构，redis是单线程还是多线程、为什么单线程他的效率还高？
@@ -372,7 +415,7 @@ ResetDialog::initHandlers()::_handlers.insert(ReqId::ID_RESET_PWD, [this](QJsonO
 
 *** 搜索好友流程？
 1. 用户搜索框输入用户名，点击“查找 uid/name”，将用户输入打包成JSON，通过 TcpMgr发送 搜索用户请求 到服务器（ID_SEARCH_USER_REQ）
-2. TcpMgr 收到来自服务端的 搜索用户回包（ID_AUTH_FRIEND_RSP），解析JSON，将用户搜索结果交给 SearchList
+2. TcpMgr 收到来自服务端的 搜索用户回包（ID_SEARCH_USER_RSP），解析JSON，将用户搜索结果交给 SearchList
 3. SearchList 创建 查找成功对话框（FindSuccessDlg）。（可选）若查找的是自己直接返回（通过SearchInfo中的uid查），若查找的本身就是自己的好友，则跳转到好友聊天界面（通过UserMgr查）
 
 #+begin_example cpp
@@ -409,11 +452,45 @@ TcpMgr::initHandlers()::ID_AUTH_FRIEND_RSP // 自己发起同意后的回包，�
 ChatDialog::slot_auth_rsp(...) // UI侧：自己同意成功后同样加好友并插入列表
 #+end_example
 
-*** TODO 动态加载聊天列表 [[https://llfc.club/category?catid=225RaiVNI8pFDD5L4m807g7ZwmF#!aid/2hZzSnPWDN4UhipxVbV1Jb1FVVk][llfc博客]]
+*** 动态加载聊天列表
+在列表滚动区域捕获鼠标滚轮事件，滚动到底部时发送一个加载聊天用户的信号，此时UI界面加载gif动画，后台加载好友列表，加载完毕后更新UI界面
+#+begin_example cpp
+bool ChatUserList::eventFilter(QObject *watched, QEvent *event)
+void ChatDialog::slot_loading_chat_user() // 加载gif动画（LoadingDlg，模态形式），后台ChatDialog::addChatUserList() -> UserMgr::GetChatListPerPage() -> 更新UI界面
+#+end_example
 
-*** TODO 气泡聊天实现
-*** TODO 滚动聊天布局
+*** 滚动聊天布局
+*布局* 从外到内：ChatView -> MainLayout -> ScrollArea -> w（widget，QScrollArea中需要QWidget作为内部可滚动内容） -> pHLayout_2（为了让滚动条覆盖在内容之上） -> pVLayout_1 -> new QWidget()
+*滚动加载* 滚动条最大值改变时会发出rangeChanged信号，意味着添加了新的聊天内容导致聊天布局中的内容超出显示，调用槽函数 将滚动条设置为最大值（滚动到最底部），同时一段时间内可能多次添加聊天内容因此加入防抖动处理，每隔500毫秒将标志位isAppended=false
+#+begin_example cpp
+connect(pVScrollBar, &QScrollBar::rangeChanged,this, &ChatView::onVScrollBarMoved); // 滚动条对象的信号 QScrollBar::rangeChanged -> 滚动条的最小值/最大值改变时发出这个信号
 
+// 添加新内容后自动将滚动条滚动到最底部
+void ChatView::onVScrollBarMoved(int min, int max)
+{
+    if(isAppended) // isAppendedo标志位，添加item可能调用多次
+    {
+        QScrollBar *pVScrollBar = m_pScrollArea->verticalScrollBar(); // 获取滚动区域的垂直滚动条 pVScrollBar
+        pVScrollBar->setSliderPosition(pVScrollBar->maximum()); // 将滚动条设置为最大值（即滚动到最底部）
+        QTimer::singleShot(500, [this]() //防抖动处理：设置500毫秒延迟，因为添加item可能调用多次
+        {
+            isAppended = false;
+        });
+    }
+}
+#+end_example
+
+*** TODO 气泡聊天对话框
+设计一个基类ChatItemBase，网格布局，见：[[id:5d43812f-d369-4b8c-9781-5486788d6e70][图:气泡聊天对话框网格布局]]
+其中 Bubble 为具体聊天气泡，对应基类 BubbleFrame，负责设置边距、设置具体消息气泡的widget、气泡绘画事件（方框和三角）；消息类型分为 文本、图片
+因此以 BubbleFrame 为基类派生 TextBubble、PictureBubble
+
+**** 图:气泡聊天对话框网格布局 :ATTACH:
+:PROPERTIES:
+:ID:       5d43812f-d369-4b8c-9781-5486788d6e70
+:END:
+[[attachment:_20250923_191619screenshot.png]]
+网格布局，NameLabel为用户名、IconLabel为用户头像、Bubble为聊天信息、Spacer为弹簧  用于将 聊天信息 挤压到右侧
 
 *** 这个项目中的验证机制怎么实现的？
 - 用户名验证：注册时要求 不能为空、只允许字母和数字
@@ -457,118 +534,111 @@ HttpConnection类：数据的收发，解析HTTP请求，并交给LogicSystem处
 - 细节 ::
 
 
-* 百万并发reactor服务器
-1. 主从reactor
+* 开放原子大赛:开源开发者工具及应用挑战赛
+** 流程
+用户通过 Alt+x 打开输入框进行输入，输入字符大于3时执行搜索
+先将输入内容根据两个关键字符拆分为多个部分：第一个字符，代表当前ripgrep使用的模式（普通、正则）；最后出现的@字符，@字符左侧到第一个字符之间为用户搜索内容，@字符右侧为搜索路径（可选）
+再通过 QProcess 运行rg命令两次，分别获取 匹配行、内容匹配部分（用于后续高亮）等输出，用正则表达式 截取输出中的文件名、行号、匹配行、内容匹配部分 填充 文件项结构体列表（QList<KeyFinderFileItem> ），再用 文件项结构体列表 填充 自定义单文件结果列表模型（KeyFinderSingleFileListModel）
+从 自定义单文件结果列表模型 中取出每一项（文件项结构体）创建 文件项widget，文件项widget 用 文件项结构体 填充 QGroupBox标题、创建和填充 行widget（KeyFinderLinesWidget） 并加到 QGroupBox内的垂直布局，再将 文件项widget 追加到 文件项widget列表，并在 列表视图 对应索引处设置widget，模型 中设置widget尺寸以此更新 列表视图（模型中调用 setData() 设置widget尺寸，然后发出 dataChanged信号 更新视图）
+自定义的输入框（KeyFinderEdit）重写了 按键按下事件，键盘上下会在搜索结果中的上下选择项，键盘回车跳转到对应位置
+上下选择的实现：上选择 检查当前选中的文件项（currRow），如果到了第一行（isSelectedFirst()）就取消当前选择，移动到上一个文件项（若是第一个则跳到最后一个文件项），否则当前文件项目中选择上一个。下选择类似
 
-2. 整个系统中上层注册回调函数给下层（上层 -> 下层），下层根据事件的不同而触发不同的回调（下层 -> 上层），这就好似上下层之间通信，事件的来源是 epoll；当事件触发时，从下层到上层 层层回调
-   #+begin_comment 示例
-   上层：EchoServer
-   下层：TcpServer
-   再下层：....
+** 主界面
+垂直布局 + 「显示」自定义的输入框（KeyFinderEdit）+ 列表视图（QListView）关联 自定义单文件结果列表模型（KeyFinderSingleFileListModel）、取出 选择模型
+
+*** 列表视图（QListView）
+*用下述的widget填充*
+
+**** 文件项widget（KeyFinderFileItemWidget）
+存储 行widget（KeyFinderLinesWidget）+ QGroupBox + 垂直布局（QVBoxLayout）
+具体样式：垂直布局 内放很多 QGroupBox，QGroupBox 内设置 垂直布局
+
+***** 行widget（KeyFinderLinesWidget）
+创建 水平布局，取出 行项结构体（KeyFinderLineItem）中的 行号、行内容、匹配内容；将行号渲染为绿色，行内容 根据 匹配内容 拆分为三个部分，将匹配内容渲染为红色后 重新拼接成 行内容
+
+*** 自定义单文件结果列表 模型（KeyFinderSingleFileListModel）
+存储 文件项结构体列表（QList<KeyFinderFileItem> ）
+实现 标准读写接口（data()、setDate()）、标准行数量接口（rowCount()）
+*用下述的结构体填充*
+
+**** 文件项结构体 列表（QList<KeyFinderFileItem> ）
+存储 文件路径 + 错误 + 行项结构体列表（QList<KeyFinderLineItem>）
+
+***** 行项结构体 列表（QList<KeyFinderLineItem>）
+存储 行号 + 行内容 + 匹配内容
+
+
+* TODO 大学生服务外包创新创业大赛
+
+* 虚拟数字人
+*微调流程* ：[[https://xtx0o8yn7x.feishu.cn/docx/XjvpdaeQcoF8d3xhpbCcoOJNn9b][微调]]
+1. 加载分词器​​（AutoTokenizer）预处理数据，使用分词器将文本编码为数字，得到数据集
+2. 加载模型​​（AutoModelForCausalLM + BitsAndBytesConfig量化）：量化，减少显存占用
+3. 配置训练参数​​（TrainingArguments）：训练的超参数（学习率、批次等）
+4. 配置Lora参数（peft中的LoraConfig）：用于高效参数微调
+5. SFTTrainer（训练参数 + Lora参数 + 数据集）开始训练
+
+#+begin_comment
+使用 hugging face 中的库：
+1. transformers：基础模型库
+   用的 AutoTokenizer：加载分词器，用于将文本编码为数字
+   AutoModelForCausalLM：加载模型
+   BitsAndBytesConfig：量化参数（减少显存占用 4位量化、8位量化）
+   TrainingArguments：训练超参数（学习率、批次大小等）
+2. peft：参数高效微调库，用的 LoRA
+3. trl：强化学习微调库，用的 SFTTrainer（监督式微调的训练器）
+#+end_comment
+
+- [X] 项目用的是哪种微调方式，LoRA、Freeze（冻结预训练层）还是全量微调？为什么在虚拟数字人场景下选择这种方案？
+  + 用的LoRA（低秩适配），将原始大权重矩阵拆为两个低秩矩阵A、B，训练时只训练A、B，推理时合并原始矩阵和A、B；训练量更少
+  + 在终端设备（eg：智能屏）的环境下算力不强，对精确度要求不需要那么高，选择 LoRA 模型响应更快
+- [X] 虚拟数字人需要适配特定场景（比如客服、教育）的交互风格，你们的微调数据集是怎么构建的？
+  + 从博物馆官网上爬来，然后交给chatgpt生成角色对话，且保持角色语气一致性
+
+
+*外挂知识库流程* ：[[https://xtx0o8yn7x.feishu.cn/docx/UOAadjjReoI6UBxPq4lcI9frnMb][外挂知识库]]
+# 以下都是 langchain 的模块
+1. 用 UnstructuredFileLoader 加载文件，将非结构化文件（eg：PDF、Word、TXT等）转换为统一格式（Document对象列表：List[Document]）
+2. RecursiveCharacterTextSplitter 将长文本分块（chunk），确保分块后保留语义完整
+3. HuggingFaceEmbeddings中的 text2vec-large-chinese模型 对chunk进行embedding，存储到向量库 FAISS（Facebook开源的向量库） 中
+4. 用户查询时，查询首先变成向量的形式，在 向量库中进行相似度搜索，返回相似度 top k，大模型结合这个返回结果进行回答
+
+#+begin_example python
+# Document对象列表：List[Document]
+[
+    Document(
+        page_content="小白的父亲是张三。",
+        metadata={"source": "/root/knowledge.txt"}
+    ),
+    Document(
+        page_content="Llama2是由Meta发布的开源大模型。",
+        metadata={"source": "/root/knowledge.txt"}
+    )
+]
+#+end_example
+
+- [X] 为什么使用 FAISS？
+  （facebook开源）主要因为与 langchain 集成，方便使用（很多api调用方便）
+- [X] 为什么选用 text2vec-large-chinese模型？
+  中文模型，langchain 集成，调用方便
+
+
+** LoRA(低秩矩阵适配)原理
+1. *秩 代表信息量* ：秩越低则该矩阵所含信息量越少
+   #+begin_comment
+   [1 2 3] 这个矩阵秩为2，所含信息多
+   [4 5 6]
+
+   [1 2 3] 这个矩阵秩为1，所含信息少（第2行可以用第1行表示）
+   [2 4 6]
    #+end_comment
 
-3. 主线程对应 主EventLoop，主线程的主EventLoop与Acceptor绑定，负责监听和接收新连接
-   其他IO线程一对一 从EventLoop，每个从EventLoop对应几个Connection
-   EchoServer中线程池里都是 WORK线程
-   #+begin_example cpp
-   // 每个Connection根据内部的客户端socket的fd通过哈希函数打到不同的从事件循环上，因此多个Connection对应到一个EventLoop
-   spConnection conn(new Connection(subloops_[clientsock->fd()%threadnum_].get(),std::move(clientsock)));
-   #+end_example
+2. *大矩阵可以分解为两个低秩矩阵* ：虽然两个低秩矩阵的信息量变少了，但是训练量也变小了
+   #+begin_comment
+   [ 4  5  6]   [1]
+   [ 8 10 12] = [2] x [4 5 6]
+   [12 15 18]   [3]
+   #+end_comment
 
-EchoServer 中的线程池是 工作线程，该线程池中的 任务队列，处理 业务任务
-
-** 问答
-*** 介绍下你的项目
-- 项目介绍           :: 这个一个基于 Reactor 模型的高并发 TCP服务器框架，在这个TCP服务器框架上封装了 EchoServer；以 =epoll + 非阻塞IO= 实现百万级连接能力，其次它具有 事件驱动、线程安全、易扩展 等特点
-- 整体架构与线程模型 :: 主线程中运行主事件循环，负责监听、接受新连接；IO线程池中运行从事件循环，负责连接的IO；可选的工作线程池负责业务处理（计算密集型任务）
-
-*** 从 accept 新连接到连接读写、消息处理、再到回包的完整链路描述，包括涉及的对象和回调绑定位置
-- 首先这是一个 EchoServer，是对 TcpServer 的封装，TcpServer 中有 一个主事件循环、若干从事件循环，Acceptor绑定在主事件循环，监听和接受新连接，Connection绑定在从事件循环；one thread one loop
-- 新连接： *「主线程」* Acceptor::newconnection()接受连接，构造客户端socket，回调TcpServer::newconnection()，在从EventLoop中选择一个，并创建Connection，Connection内部有客户端socket和clientchannel并注册读写/错误/关闭回调，后续Channel::handleevent()触发对应回调
-- 消息处理/回包： *「IO线程A」* clientchannel触发读事件，回调Connection::onmessage()，Connection::onmessage()读取数据到自己的缓冲区，回调TcpServer::onmessage()，TcpServer::onmessage()回调上层EchoServer::HandleMessage()，EchoServer::HandleMessage()中将 =任务std::bind(&EchoServer::OnMessage,this,conn,message)= 放入工作线程池的任务队列， *「WORK线程A」* 调用任务EchoServer::OnMessage，EchoServer::OnMessage调用Connection::send()发送响应，Connection::send()中判断出当前执行该函数的线程是「WORK线程A」，于是通过EventLoop::queueinloop将任务放入conn对应的EventLoop::taskqueue中，EventLoop::queueinloop内通过eventfd唤醒「IO线程A」， *「IO线程A」* 处理taskqueue
-
-*** 为什么要用 eventfd 唤醒而不使用其他手段？
-- 简单只需1个fd，与epoll无缝集成
-  pipe                  ：需要2个fd
-  pthread条件变量/信号量：不能纳入epoll的等待集合
-  signal                ：全局性强
-  timerfd               ：专门做计时器事件，不适合作为跨线程“任务到达”的通知
-  C++11互斥锁/条件变量  ：与epoll集成不好，会造成双重等待（既等条件变量，又等epoll_wait）
-
-*** Connection在回调过程中为什么要用shared_from_this()，用this行吗，或者 new 一个Connection的共享指针？
-# Connection::onmessagecallback_(shared_from_this(),message);
-- 用 this 不行，因为 this 不能增加 Connection 的引用计数，可能在回调过程中 Connection 被意外释放；new一个Connection的共享指针也不行，因为这样创建的共享指针引用计数与正在管理Connection的共享指针引用计数不同步（创建了新的shared_ptr），使用shared_from_this() 就能共享正在管理Connection的共享指针的引用计数
-
-*** 如何做消息拆包？Buffer::pickmessage() 三种分隔方式各自适用什么场景？
-- 消息 = 消息头(固定4字节) + 消息体；读取消息头获取长度信息，根据长度信息读取消息体
-- 0：无分割符，适合定长/持续流（eg：音视频）
-  1：4字节消息头（默认），处理粘包问题
-  2：\r\n\r\n分隔，处理HTTP
-
-*** EventLoop::stop_ 是原子变量，停止时如何保证不会丢任务？如何优雅退出所有 subloops_ 与工作线程？
-- EventLoop::stop() 会将 stop_ 设置为 true，然后通过 eventfd 通知 EventLoop 将任务队列中的任务全部处理，同时 stop_=true 后，EventLoop::run() 中 while循环停止，也就是 事件循环停止了
-- 设计了一个 ThreadPool::stop()，将 原子变量 stop_设置为true，然后唤醒全部阻塞的线程，等待它们执行完成；被唤醒的线程发现 stop_=true且任务队列为空就直接return，否则先将任务做完，下次while循环退出
-  *补充* ：不直接在析构函数中设计这个逻辑是为了增加灵活性，用户可以直接调用 stop() 来手动停止线程池；ThreadPool::stop() 中一开始设计 if(stop_) return; 是因为join过的线程不能再join
-  #+begin_example cpp
-  void ThreadPool::stop()
-  {
-      if (stop_) return;       // 被join过的线程不能再join的，否则会调用terminate；eg：第一次stop()，对所有线程join了；第二次 stop 若没有这行，则再次join，则程序终止
-      stop_ = true;
-      condition_.notify_all();  // 唤醒全部的线程。
-      // 等待全部线程执行完任务后退出。
-      for (std::thread &th : threads_)
-          th.join();
-  }
-  #+end_example
-
-*** 为什么 EventLoop 里集成了 timerfd_？EventLoop::conns_ 和 TcpServer::conns_ 都维护了连接，为什么要两份？
-- 一个 从EventLoop 管理多个 Connection，通过集成 timerfd_ 来定期检查 Connection 是否超时，将超时Connection从EventLoop中删除，并从TcpServer中删除
-  #+begin_comment
-  *具体来说* ：EventLoop中继承 timerfd、timerchannel 周期性触发 handletimer()，handletimer()设置重新计时并遍历所有 Connection，若超时，则从EventLoop::conns中删除，回调TcpServer::removeconn，TcpServer::removeconn将Connection从TcpServer::conns中删除
-  #+end_comment
-- TcpServer::conns 用于管理所有的Connection（eg：统一关闭），EventLoop::conns用于管理局部Connection（eg：空闲连接检测）
-  #+begin_comment
-  假设将空闲连接检测交给TcpServer::conns，则TcpServer性能不好，因为需要定期完整检查全部Connection，而TcpServer的职责主要是监听和接受新连接
-  #+end_comment
-
-*** 有无考虑进程级信号处理（如 SIGINT）触发所有 loops、ThreadPool 的优雅退出？
-- 有进程级的信号处理，捕获到 SIGINT、SIGTERM时，调用自定义的Stop函数
-  #+begin_example cpp
-  signal(SIGTERM,Stop);    // 信号15，系统kill或killall命令默认发送的信号。
-  signal(SIGINT,Stop);     // 信号2，按Ctrl+C发送的信号。
-
-  // Stop函数中
-  echoserver->Stop();
-  delete echoserver;
-  #+end_example
-
-*** 实现主从 Reactor 吗？mainloop_ 和 subloops_ 的职责边界是什么？新连接如何在多个 EventLoop 之间分配（策略/理由），支持连接迁移吗？
-- 主事件循环负责 监听/接受 新连接（Acceptor绑定在主事件循环），从事件循环负责Connection的IO事件、超时管理（事件循环内有个定时器，每隔一段时间检查Connection）
-- 使用 哈希方法，简单且无锁（eg：轮询按顺序分配连接，因此可能需要锁）
-
-*** 为什么 Socket、Channel 在不同地方用 unique_ptr，而连接放在 std::map<int, spConnection>？
-- socket表示网络连接，channel表示事件，每个 Connection 独占各自的socket、channel，因此使用 unique_ptr；而 Connection 存在于 TcpServer 和 EventLoop 中，且在一些回调函数中需要传递 Connection，因此使用 shared_ptr，以便在回调链路中延续生命周期
-
-*** ThreadPool 主要用于 IO 线程还是工作线程？threadtype_ 的意图是什么？
-- 都有，用 threadtype_ 标识线程池类型
-
-*** 用什么方式压测（客户端、QPS、RT、连接数、CPU/内存）？
-- 虚拟机：4核CPU、2g内存 Ubuntu系统
-  sh脚本中在后台起了30个客户端，每个客户端发送10万个请求，计算下来大概1秒10万
-- autodl重庆A区：32核CPU 120g内存 Ubuntu系统
-  sh脚本中在后台起了30个客户端，每个客户端发送100万个请求，关闭可选的工作线程池，IO线程数改为30（也就是整个程序31个线程），计算下来QPS=100万
-  + top命令看CPU和内存
-  + QPS=请求/每秒，QPS是每秒查询率
-
-*** Channel::useet() 配合 EPOLLET 时，如何避免丢事件、确保把缓冲区读到 EAGAIN？写事件何时启用/关闭？
-
-*** 连接关闭/错误的路径是什么？如何避免重复关闭？如何确保回调顺序和资源回收正确？
-
-*** EventLoop::setepolltimeoutcallback() 和 settimercallback() 的典型用途？二者在你业务中分别做什么？
-
-*** 真正上到百万连接需要哪些内核与系统调优？你准备调整哪些参数、为何？
-
-*** 零拷贝与大报文：发送大文件/大报文时是否考虑 sendfile/splice/mmap/writev？当前 Buffer 设计的瓶颈在哪里？
-
-*** 如何处理对端半关闭（read 返回 0）与 RST？多次触发关闭路径会怎样？
-
+3. 训练时将原始矩阵冻结，用两个低秩矩阵A、B表示原始矩阵，并训练A、B
+   推理时 =最终权重矩阵 = 原始权重矩阵 + 低秩矩阵A * 低秩矩阵B=

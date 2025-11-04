@@ -8,3 +8,9 @@
 1. [[id:e396235e-8b41-475c-8fe2-40d3def9f9b2][.gitmodules]] => 注释掉不需要的子模块
 2. git submodule sync
 3. git submodule update
+
+
+* git仓库中添加子模块
+创建新git仓库
+touch .gitmodules
+git submodule <子模块仓库URL> [可选子模块目录名]

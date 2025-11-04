@@ -8,7 +8,7 @@
 :PROPERTIES:
 :ID:       b63bff4b-6f9d-4be6-af31-a0fb1f313826
 :END:
-[[attachment:_20250806_153729screenshot.png]]
+[[attachment:_20250806_153729screenshot.png]][[attachment:_20250806_153729screenshot.png]]
 用于 *定位网络中的主机* ，以实现主机间通信
 
 ** 图:IP和MAC的区别 :ATTACH:

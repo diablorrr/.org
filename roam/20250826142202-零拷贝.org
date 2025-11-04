@@ -32,6 +32,10 @@ write(sockfd, buf, len);
 ** 方法2: sendfile
 #+begin_example C
 ssize_t sendfile(int out_fd, int in_fd, off_t* offset, size_t count);
+// out_fd：输出文件描述符（通常是网络套接字 socket）
+// in_fd ：输入文件描述符（必须是支持 mmap 操作的文件，不能是套接字）
+// offset：指定从输入文件的哪个位置开始读取数据。若为 NULL，则从当前文件指针位置开始，并自动更新文件指针
+// count ：要传输的字节数
 #+end_example
 sendfile 用于在内核态中拷贝数据
 
@@ -42,7 +46,7 @@ sendfile 用于在内核态中拷贝数据
 [[attachment:_20250826_155042screenshot.png]]
 3次拷贝 + 2次上下文切换（用户态内核态切换）
 
-*** 图:网卡支持SG-DMA的sendfile :ATTACH:
+*** 图:sendfile（网卡支持SG-DMA） :ATTACH:
 :PROPERTIES:
 :ID:       94e2ca69-cd07-40a2-9a43-4c0526fbbbdd
 :END:
@@ -67,15 +71,15 @@ write(socket, tmp_buf, len);
 
 
 * DMA技术
-# 直接内存访问
-用于在 *I/O设备和内核缓冲区之间传输数据，无需 CPU 参与* -> 解放 CPU
+直接内存访问；用于在 *I/O设备和内核缓冲区之间传输数据，无需 CPU 参与拷贝* -> 解放 CPU
+- CPU拷贝 :: CPU将数据从源内存区域读取到CPU寄存器，再将数据写入到目标内存区域
 #+begin_comment
 现代设备       ：I/O设备（eg：网卡、显卡、硬盘） 一般内置自己的专用DMA控制器
 传统/嵌入式设备：系统中有一个中央的公用的DMA控制器
 #+end_comment
 
 ** 有无DMA控制器的I/O过程
-# 以 read() 为例
+# 以将磁盘数据读取到用户缓冲区为例
 *无DMA控制器* ：
 1. 进程调用 read()，阻塞： *用户态 -> 内核态*
 2. CPU 发出IO请求给 磁盘控制器
@@ -91,6 +95,7 @@ write(socket, tmp_buf, len);
 4. DMA控制器 从磁盘控制器的缓冲区中 *拷贝* 到 PageCache，通知 CPU
 5. CPU 将数据从 PageCache *拷贝* 到 用户缓冲区
 6. 从 read() 返回： *内核态 -> 用户态*
+
 
 * 小/大文件传输方式选择？
 小文件：零拷贝技术

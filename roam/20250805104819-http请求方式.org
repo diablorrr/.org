@@ -2,19 +2,42 @@
 :ID:       332d23bd-0c98-4686-9b0b-c43a1e85e324
 :END:
 #+title: HTTP请求方式
-#+filetags: network
+#+filetags: http
 
 * HTTP请求方式
-*GET*    ：
-1. 语义 是 获取数据
-2. 数据是键值对形式且暴露在URL中 -> 安全性不好
+HTTP 定义了 客户端和服务端之间的通信方式；HTTP请求方法 表示 *对资源执行的操作*
+
+*GET*
+1. 语义：获取数据
+2. 数据在URL中（键值对形式）-> 安全性不好
 3. 幂等
    - 幂等 :: 多次请求，结果相同
+#+begin_example
+https://example.com/search?keyword=apple&category=fruit
+#+end_example
 
-*POST*   ：
-1. 语义 是 提交数据
-2. 数据可以是结构化的JSON数据且在请求体中 -> 安全性好
+
+*POST*
+1. 语义：提交数据；常用于创建新资源
+2. 数据在请求体中（可以是结构化的JSON数据且在请求体中） -> 安全性好
 3. 非幂等
+   - 非幂等 :: 多次请求，结果不同
 
-*PUT*    ：修改数据
-*DELETE* ：删除数据
+*PUT*
+1. 语义：更新数据
+2. 幂等
+
+*DELETE*
+1. 语义：删除数据
+2. 幂等
+
+*HEAD*
+1. 语义：类似 GET；但只返回响应头，不返回响应体 -> 用于检查数据是否存在或获取元数据
+
+*PATCH*
+1. 语义：对数据进行部分修改；用于局部更新
+2. 非幂等
+
+*OPTIONS*
+
+*CONNECT*

@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       1857977d-5751-4671-80b6-dcf42868fb6b
+:END:
+#+title: WSL2
+#+filetags: windows
+
+* WSL2
+** WSL2没有启动没有自动加载.bashrc
+WSL2 启动时以 “登录Shell” 模式运行，若 ~/.bash_profile 或 ~/.profile 存在且未引用 ~/.bashrc，则 ~/.bashrc 不会被加载，一般.bash_profile中会自动加载.bashrc，但是wsl中没有.bash_profile
+cp /etc/skel/.bash_profile ~
+
+** WSL2 archlinux中设置locale进行本地化
+编辑 /etc/locale.gen，去掉en_US.UTF-8 所在行以及 zh_CN.UTF-8 所在行的注释符号（#）
+locale-gen
+echo 'LANG=en_US.UTF-8'  > /etc/locale.conf

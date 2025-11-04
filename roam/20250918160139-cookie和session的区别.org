@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       0b6fcccb-151f-42ee-b142-75d5306d7666
+:END:
+#+title: token、cookie、session
+#+filetags: http
+
+* token、cookie、session
+*token*
+
+*cookie*
+1. 用于存储用户信息的文本文件，保存在客户端（浏览器）中，发送HTTP请求-响应时可以带上Cookie，以此实现用户信息、用户状态管理
+
+*session*
+1. 存储位置：服务端

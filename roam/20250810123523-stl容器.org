@@ -17,8 +17,8 @@
    - 底层实现       :: 动态数组（运行时可以改变容量），底层连续内存空间存储元素
    - 增删改查       :: 尾增删 O(1)、头中增删 O(n)、查 O(1)
    - 扩容机制       :: 插入元素导致容量不足时触发，扩容为当前容量的1.5/2倍（GCC 2倍），将旧数据拷贝到新内存（O(n)），释放旧空间 -> *避免频繁扩容的方法* ：reserve(n) 预分配容量
-   - 迭代器失效问题 :: 扩容后迭代器失效；中间插入/删除 点及之后的迭代器失效
    - 适用场景       :: *需要随机访问* 、尾部插入、元素数量可预测（ *扩容开销大* ）
+   - 迭代器失效问题 :: 扩容后迭代器失效；中间插入/删除 点及之后的迭代器失效
 
 2. std::list
    - 底层实现 :: 双向链表，内存空间不连续
@@ -46,6 +46,31 @@
    - key :: 唯一、无序存储
    - 哈希冲突解决方法？ :: 链地址法（每个桶后接链表/红黑树）、线性探测法（下一个空位置）
    - 适用场景 :: *查找、插入效率要求极高* ，无需范围查找（eg：缓存、高频查询的字典）
+   - 迭代器失效问题 ::
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+using namespace std;
+
+int main() {
+    unordered_map<int, string> um{{1, "yeshihao"}, {3, "hahahah"}, {2, "xia"}};
+    // FIXME 错误写法：由于迭代器失效，不能进行 ++it
+    // for (auto it = um.begin(); it != um.end(); ++it) {
+    //     um.erase(it);
+    // }
+    // NOTE 正确写法：用 erase的返回值更新迭代器
+    for (auto it = um.begin(); it != um.end();) {
+        it = um.erase(it);
+    }
+
+    cout << um.size();
+}
+#+end_src
+
+#+RESULTS:
+: 0
+
 
 
 * 容器适配器
@@ -61,7 +86,7 @@
    - 核心操作 :: push、pop、front、back（入队出队访问队头队尾）-> O(1)
 
 3. std::priority_queue：优先队列
-   - 底层实现 :: 默认 =vector= ，内部维护一个 大根堆（最大元素在队头）
+   - 底层实现 :: 默认 =vector= ，内部维护一个 大根堆（最大元素在队头，从上往下元素值变小）
    - 核心操作 ::
      |------+---------+------------------|
      | push | O(logn) | 插入并调整堆     |

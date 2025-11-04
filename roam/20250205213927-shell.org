@@ -6,4 +6,42 @@
 
 * shell
 1. 是用户和操作系统内核交互的 *命令行解释器*
-2. shell的实现：sh [[id:362a1bfe-9b93-427b-80ad-853b3ea46ec2][bash]] zsh
+2. shell的实现：sh bash zsh
+
+
+* 登录Shell和非登录Shell
+- 登录Shell   :: 需要登录初始化流程（通常需要输入帐号密码）
+  #+name: 登录bash Shell，顺序加载
+  #+begin_example bash
+  /etc/profile                              （系统级）
+  ~/.bash_profile、~/.bash_login、~/.profile（用户级，按顺序只加载第一个存在的文件）
+  # .bash_profile 中的内容一般为加载 .bashrc
+  #+end_example
+
+- 非登录Shell :: 用户在登录后，新开的Shell，用于日常命令
+  #+name: 非登录bash Shell，只加载
+  #+begin_example bash
+  /etc/bashrc（系统级）
+  ~/.bashrc  （用户级）
+  #+end_example
+
+** 区分方式
+1. =echo $0= 若输出 bash 或 zsh 则为 非登录Shell，否则为 登录Shell
+2. bash特有： =shopt login_shell= 若为 off 就是 非登录Shell
+
+
+* bash
+:PROPERTIES:
+:ID:       a9d4e699-059e-4911-869c-2b25e1b2568d
+:END:
+| 命令 | 参数 | 作用                                                      |
+|------+------+-----------------------------------------------------------|
+| bash |      | 交互式启动子[[id:1ff40557-56dc-4670-b38f-59586d545315][Shell]]，进入 Shell 中，需手动退出，加载[[id:d3077f97-a2b2-4e13-aa26-9a8686e6cd96][.bashrc]] |
+|      | -c   | 非交互式启动子[[id:1ff40557-56dc-4670-b38f-59586d545315][Shell]]，执行命令后退出，不加载[[id:d3077f97-a2b2-4e13-aa26-9a8686e6cd96][.bashrc]]        |
+
+若~中没有 =.bashrc= 、 =.bash_profile= 之类的文件
+可以从 =/etc/skel= 中复制
+#+begin_example bash
+# 从系统默认模板复制一份
+cp /etc/skel/.bashrc ~/
+#+end_example

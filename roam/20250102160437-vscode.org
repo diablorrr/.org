@@ -5,17 +5,11 @@
 #+filetags: index
 
 * vscode
-1. Microsoft 开发的代码编辑器
-2. vscode *普通用户配置位置、扩展插件位置*
+1. *root权限运行* vscode，但 *使用普通用户配置、扩展* ，见 [[id:09f51db8-5ce4-4089-8e18-c64d1601ed1c][vscode root权限运行但使用普通用户配置和扩展]]
+   vscode *普通用户配置位置、扩展插件位置*
    | 路径                              | 说明     |
    |-----------------------------------+----------|
    | ~/.config/Code/User/settings.json | 用户配置 |
    | ~/.vscode/extensions/             | 扩展插件 |
-3. vscode 中 *"Run Code" 和 "运行C/C++文件"* 的区别
-   |               | 来源                 | 运行方式                                            |
-   |---------------+----------------------+-----------------------------------------------------|
-   | Run Code      | Code Runner插件      | 使用 code-runner.executorMap 中预定义的命令运行代码 |
-   |               |                      | 不会加载 tasks.json 或其他 vscode项目配置           |
-   | 运行C/C++文件 | Microsoft C/C++ 扩展 | 使用 tasks.json 中的编译选项                        |
-4. 连接服务器后无法为 jupyter 选择内核，解决方法：[[id:13522bcf-1e56-4afb-9486-6adb8a9ed427][vscode连接远程后无法为jupyter选择内核]]
-5. *root权限运行* vscode，但 *使用普通用户配置、扩展* ，见 [[id:09f51db8-5ce4-4089-8e18-c64d1601ed1c][vscode root权限运行但使用普通用户配置和扩展]]
+2. 连接服务器后无法为 jupyter 选择内核，解决方法：[[id:13522bcf-1e56-4afb-9486-6adb8a9ed427][vscode连接远程后无法为jupyter选择内核]]
+3. [[id:717096c9-1ecb-480e-b4a0-93461bd2f722][vscode配置cpp开发环境]]

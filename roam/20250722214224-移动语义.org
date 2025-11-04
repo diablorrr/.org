@@ -6,9 +6,9 @@
 
 * 移动语义 [[https://www.learncpp.com/cpp-tutorial/returning-stdvector-and-an-introduction-to-move-semantics/][learncpp16.5]]
 1. 转移资源所有权（窃取即将销毁对象的资源），减少拷贝的开销
-   *如何触发？*
+   *如何实现移动语义？*
    1) 类支持 [[id:ac154a46-7700-4286-96aa-a45f8d93c6b6][移动构造函数、移动赋值]]
-   2) 用右值 赋值、初始化（没有右值，就用 [[id:d4285c38-cefe-4bb5-8ebf-0625bd976fa1][std::move]] 将左值转为右值）
+   2) 用右值 构造、赋值（没有右值，就用 [[id:d4285c38-cefe-4bb5-8ebf-0625bd976fa1][std::move]] 将左值转为右值）
 
 2. 支持移动语义的类型
    1) std::vector

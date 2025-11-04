@@ -2,7 +2,7 @@
 :ID:       b0b55d01-31a8-4684-b94e-880240e10f2a
 :END:
 #+title: HTTP vs HTTPS
-#+filetags: network
+#+filetags: http
 
 * HTTP vs HTTPS :ATTACH:
 :PROPERTIES:

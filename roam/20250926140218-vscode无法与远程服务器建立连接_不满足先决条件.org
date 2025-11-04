@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       ea3acf35-065c-4e9f-afd1-15c00f829f9f
+:END:
+#+title: vscode无法与远程服务器建立连接，不满足先决条件
+#+filetags: vscode
+
+* vscode无法与远程服务器建立连接，不满足先决条件 [[https://zhuanlan.zhihu.com/p/1896247625663092615][知乎]]
+原因：远程服务器的 GLIBC 版本过低，新版vscode GLIBC 版本较高
+解决：下载 低版本vscode
+# 以 arch linux 为例
+1. 在 https://code.visualstudio.com/updates/v1_98 中选择 =tarball= 下载
