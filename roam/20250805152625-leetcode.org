@@ -199,9 +199,37 @@ for (int i = 0, j = 0; i < n; ++i) {
 https://www.acwing.com/problem/content/801/
 https://www.acwing.com/problem/content/description/802/
 https://www.nowcoder.com/practice/b56799ebfd684fb394bd315e89324fb4?tpId=295&tqId=1008889&sourceUrl=%2Fexam%2Foj%3FquestionJobId%3D10%26subTabName%3Donline_coding_page
+** 回溯
+#+name: 选哪个
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+void backtrack(参数列表) {
+    // 1. 终止条件：达到目标状态（如收集完所有解）
+    if (终止条件) {
+        保存当前解到结果集;
+        return;
+    }
 
+    // 2. 遍历所有可能的选择（根据问题范围确定遍历起点和终点）
+    for (选择范围内的元素) {
+        // 3. 剪枝：排除不符合条件的选择（可选，优化效率）
+        if (剪枝条件) continue;
 
+        // 4. 做出选择：将当前元素加入路径
+        路径.push_back(当前元素);
 
+        // 5. 递归：深入下一层搜索
+        backtrack(更新后的参数);
+
+        // 6. 回溯：撤销选择，恢复状态（关键步骤）
+        路径.pop_back();
+    }
+}
+#+end_src
+
+#+name: 选或不选
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+
+#+end_src
 
 
 * 数组

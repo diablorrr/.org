@@ -5,27 +5,36 @@
 #+filetags: mysql
 
 * mysql日志 [[https://xiaolincoding.com/mysql/log/how_update.html#mysql-%E6%97%A5%E5%BF%97-undo-log%E3%80%81redo-log%E3%80%81binlog-%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8][小林coding]]
-*undo log（回滚日志）* ：
-1. undo log 记录数据被事务「修改前」的状态；用于事务回滚、MVCC，实现事务的 *原子性*
-   ；流程为 在事务对记录执行操作前，先将原始记录写到 Buffer Pool 中的 undo页，再对记录进行操作，后台线程/缓冲区满 会将 内存中的 undo log 刷到磁盘。示例：[fn:1]；见：[[id:cd6c827d-fd0a-4184-9e07-dfd646463fd2][图:undo log、redo log]]
+*undo log（回滚日志）* ：见：[[id:cd6c827d-fd0a-4184-9e07-dfd646463fd2][图:undo log、redo log]]
+1. InnoDB存储引擎层生成的日志，记录数据被事务「修改前」的状态，用于事务回滚、MVCC；实现事务的 *原子性 A*
+2. 简单说：事务改数据前先写undo log，出错就用它恢复，还能用它查看历史版本数据
    - 事务回滚 ：出错 或 用户使用 ROLLBACK 语句
    - MVCC 实现：Read View + undo log
-2. InnoDB存储引擎层生成的日志
 
-*redo log（重做日志）* ：
-1. redo log 记录数据被事务「修改后」的状态；用于故障恢复（eg：掉电），实现事务的 *持久性*
-   ；流程为 事务 修改 Buffer Pool 中的数据页（记录每条记录的更新操作），同时生成对应的 redo log 写入 redo log buffer ，事务提交时（mysql关闭、后台线程、redo log buffer占用超过一半）会将 redo log 刷到磁盘中，此时修改就算完成了，后台线程在适当时候将 脏页 刷新到磁盘，这是 WAL技术 的体现 -> 先持久化日志，再持久化数据；见：[[id:cd6c827d-fd0a-4184-9e07-dfd646463fd2][图:undo log、redo log]]
-   - WAL技术 :: （预写日志）先写日志，再写数据
-2. InnoDB存储引擎层生成的日志
+*redo log（重做日志）* ：见：[[id:cd6c827d-fd0a-4184-9e07-dfd646463fd2][图:undo log、redo log]]
+1. InnoDB存储引擎层生成的日志，记录数据被事务「修改后」的状态，用于故障恢复（eg：掉电）；实现事务的 *持久性 D*
+2. 简单说：先写redo log到内存缓冲区，再刷到磁盘，这个过程是同步的；后续再异步的将数据刷到磁盘
 
-# 数据页：一页纸
-# 记录  ：纸上的一行文字
+*bin log （归档日志）*  ：
+1. server层生成的日志，记录 *表结构变更、表数据修改的日志* ，用于 数据备份、主从复制
+   - 数据备份 ::
+     备份：全量备份（mysqldump等）+ binlog 记录的增量操作
+     恢复：先从全量备份恢复，然后执行binlog中的增量操作
+   - [[id:33836d68-a265-4307-b28f-0c610432b47f][主从复制]] ::
+     1. 主库将数据变更写入bin log
+     2. 从库IO线程请求主库bin log并存到relay log
+     3. 从库SQL线程回放中继日志，同步主库数据
+     主从复制完成后：写主库，读从库
 
-*binlog  （归档日志）*  ：
-1. 用于 数据备份、主从复制
-   - 数据备份 :: binlog 是追加写，保存全量日志；redo log是循环写，文件之间循环覆盖旧内容
-   - 主从复制 :: binlog保存的全量日志，复制时将 binlog中的数据 从主库传输到从库
-2. Server层生成的日志
+*relay log（中继日志）* ：
+1. 缓存主库同步来的bin log内容，解耦从库的IO线程和SQL线程（IO线程用于拉取bin log，SQL线程用于执行回放数据操作）；避免回放速度慢阻塞bin log拉取
+
+*慢查询日志* ：
+1. server层生成的日志，记录执行时间过长的SQL，需要设置慢查询阈值后手动开启，用于SQL优化
+2. *SQL优化* ：
+   1) 通过慢查询日志找到低效SQL
+   2) EXPALIN分析执行计划（看是否走索引）
+   3) 没走索引看是不是[[id:e3fe9403-ff44-4eb7-a10e-67e4db973455][索引失效]]
 
 ** 图:undo log、redo log :ATTACH:
 :PROPERTIES:
@@ -38,20 +47,8 @@
 :ID:       33836d68-a265-4307-b28f-0c610432b47f
 :END:
 [[attachment:_20250830_134547screenshot.png]]
-1. mysql主库收到 客户端提交事务请求，先写入 binlog，再提交事务，返回 操作成功响应 给客户端
-2. 主库的log dump线程 发送binlog日志给 从库的IO线程，IO线程将binlog中的信息写入 relay log（中继日志）中，返回 复制成功响应 给主库
-3. 从库 创建一个用于回放binlog的线程，读取 relay log，回放binlog更新存储引擎中的数据，实现主从数据一致
-
 主从复制完成后：写数据只写主库，读数据只读从库
 [[attachment:_20250830_135305screenshot.png]]
 
 
 
-* Footnotes
-
-[fn:1]
-#+begin_comment 如何记录 undo log？
-*插入* 记录时，将 该记录的 *主键值* 写入 undo log，回滚时 *删除* 主键对应记录
-*删除* 记录时，将 该记录 *所有内容* 写入 undo log，回滚时 *插入* 到表中
-*更新* 记录时，将 该记录 *被更新列的旧值* 写入 undo log，回滚时 将 *这些列改回旧值*
-#+end_comment

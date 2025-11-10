@@ -5,15 +5,21 @@
 #+filetags: cpp
 
 * 单例模式
-确保一个类只有一个实例，提供全局访问点，保证所有访问单例的客户端，获取到单例的信息都是共享的
+1. 创建一个唯一的实例，提供全局访问点
+2. 保证所有访问单例的客户端，获取到单例的信息都是共享的
+代码：[fn:4] [fn:5]
 
 * 工厂模式
-*核心作用* ：将对象的创建和使用分离，降低系统耦合度，提高代码扩展性
+*核心作用* ：
+1. 将对象的创建和使用分离，好处如下
+   - 降低系统耦合度：添加新类型只需修改工厂类
+   - 易于维护      ：创建逻辑改变不会影响客户端代码
 
 *简单工厂模式* [fn:1]：一个工厂根据传入参数创建产品，需要修改工厂类来添加新产品
 具体来说：产品有一个继承体系，工厂类中有一个创建产品的static方法，它会根据参数的不同（通常是枚举），通过switch语句动态创建具体产品，当我们要新增产品时需要修改工厂类方法，不符合开闭原则
 适合 产品少且无需扩展 的情况
 - 开闭原则 :: 对修改关闭，对扩展开放
+代码：[fn:6]
 
 *工厂方法模式* [fn:2]：定义一个用于创建对象的接口，让派生类决定实例化哪个产品，一个工厂生产一种产品，通过新增工厂的方式添加新产品
 具体来说：产品有一个继承体系，工厂也有一个继承体系，每个具体工厂生产一个具体产品，当我们要新增产品时只需要新增具体工厂，符合开闭原则，使用工厂时，只需创建抽象工厂指针，想创建什么产品就指向对应的具体工厂
@@ -22,6 +28,240 @@
 *抽象工厂模式* [fn:3]：适合 需要创建产品族 的情况
 
 * Footnotes
+[fn:6]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+/* 简单工厂 */
+#include <iostream>
+#include <string>
+#include <memory>
+using namespace std;
+
+class Shape {
+public:
+    virtual ~Shape() = default; // 确保基类指针删除派生类对象时，能正确调用派生类的析构函数
+    virtual void draw() const = 0;
+    virtual double area() const = 0;
+};
+
+class Circle : public Shape {
+public:
+    Circle(double r = 3.0): radius(r) {};
+    void draw() const override {
+        cout << "Drawing Circle with radius " << radius << endl;
+    }
+
+    double area() const override {
+        return 3.14*radius*radius;
+    }
+
+private:
+    double radius;
+};
+
+class Rectangle : public Shape {
+public:
+    Rectangle(double l = 3.0, double w = 4.0): len(l), wid(w) {};
+    void draw() const override {
+        cout << "Drawing Rectangle " << len << "x" << wid << endl;
+    }
+
+    double area() const override {
+        return len*wid;
+    }
+private:
+    double len;
+    double wid;
+};
+
+class Triangle : public Shape {
+public:
+    Triangle(double l = 3.0, double h = 4.0): len(l), height(h) {};
+    void draw() const override {
+        cout << "Drawing Triangle " << len << "x" << height << endl;
+    }
+
+    double area() const override {
+       return len*height/2;
+    }
+private:
+    double len;
+    double height;
+};
+
+class ShapeFactory {
+public:
+    enum ShapeType {CIRCLE, RECTANGLE, TRIANGLE}; // 无作用域枚举，直接ShapeFactory::CIRCLE就能访问
+                                                  // 作用域枚举 enum class ShapeType，通过ShapeFactory::ShapeType::CIRCLE访问
+    static unique_ptr<Shape> createShape(ShapeType type) {
+        switch(type) {
+            case CIRCLE: return make_unique<Circle>();
+            case RECTANGLE: return unique_ptr<Shape>(new Rectangle);
+            case TRIANGLE: return make_unique<Triangle>();
+            default: return nullptr;
+        }
+    }
+};
+
+int main() {
+    unique_ptr<Shape> circle = ShapeFactory::createShape(ShapeFactory::CIRCLE);
+    circle->draw();
+    cout << circle->area() << endl;
+
+    unique_ptr<Shape> rec = ShapeFactory::createShape(ShapeFactory::RECTANGLE);
+    rec->draw();
+    cout << rec->area() << endl;
+}
+#+end_src
+
+#+RESULTS:
+: Drawing Circle with radius 3
+: 28.26
+: Drawing Rectangle 3x4
+: 12
+
+
+[fn:5]
+#+begin_src cpp :results output :namespaces std :includes <iostream>
+/* 线程安全的配置管理类 */
+#include <iostream>
+#include <string>
+#include <mutex>
+#include <thread>
+#include <unordered_map>
+using namespace std;
+
+class ConfigManager {
+public:
+    static ConfigManager& getInstance() {
+        static ConfigManager instance;
+        return instance;
+    }
+
+    string getConfig(const string& key) const{
+        lock_guard<mutex> lock(mtx); // getConfig是const的，不允许修改；但对mutex加锁会修改mutex内部状态，因此成员变量为 mutable mutex mtx;
+        // return configs[key]; -> getConfig是const的，不允许修改；configs[key]会在key不存在时插入新元素，这会修改map
+        auto it = configs.find(key);
+        if (it != configs.end()) {
+            return it->second;
+        }
+        return "";
+    }
+
+    void setConfig(const string& key, const string& value) {
+        lock_guard<mutex> lock(mtx);
+        configs[key] = value;
+    }
+
+    void displayAll() {
+        lock_guard<mutex> lock(mtx);
+        for (auto& config:configs) {
+            cout << config.first << " " << config.second << endl;
+        }
+    }
+private:
+    ConfigManager() {
+        configs["host"] = "localhost";
+        configs["port"] = "8080";
+        configs["timeout"] = "30";
+    }
+    ConfigManager(const ConfigManager&) = delete;
+    ConfigManager& operator=(const ConfigManager&) = delete;
+    ConfigManager(ConfigManager&&) = delete;
+    ConfigManager& operator=(ConfigManager&&) = delete;
+
+    unordered_map<string, string> configs;
+    mutable mutex mtx;
+    static ConfigManager instance;
+};
+
+ConfigManager ConfigManager::instance;
+
+int main() {
+    thread t1([](){
+        auto& config = ConfigManager::getInstance();
+        for (int i = 0; i < 5; ++i) {
+            config.setConfig("key" + to_string(i), "value" + to_string(i));
+        }
+    });
+
+    thread t2([](){
+        auto& config = ConfigManager::getInstance();
+        for (int i = 0; i < 5; ++i) {
+            config.setConfig("key" + to_string(i+10), "value" + to_string(i));
+        }
+    });
+
+    thread t3([](){
+        auto& config = ConfigManager::getInstance();
+        this_thread::sleep_for(chrono::milliseconds(10));
+        config.displayAll();
+    });
+
+    t1.join();
+    t2.join();
+    t3.join();
+
+    cout << "\nHost: " << ConfigManager::getInstance().getConfig("host") << endl;
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+key4 value4
+key14 value4
+key12 value2
+key3 value3
+key10 value0
+key2 value2
+key13 value3
+key1 value1
+key11 value1
+key0 value0
+timeout 30
+port 8080
+host localhost
+
+Host: localhost
+#+end_example
+
+[fn:4]
+#+name: 单例模式
+#+begin_src cpp :results output :namespaces std :includes <iostream> <thread>
+class Singleton{
+public:
+    static Singleton& getInstance() {
+        static Singleton instance;
+        return instance;
+    }
+
+    ~Singleton() = default;
+
+    void print() const {
+        cout << this << endl;
+    }
+private:
+    Singleton() = default;
+    Singleton(const Singleton&) = delete;
+    Singleton& operator=(const Singleton&) = delete;
+};
+
+int main() {
+    thread t1([](){
+        Singleton::getInstance().print();
+    });
+
+    thread t2([](){
+        Singleton::getInstance().print();
+    });
+
+    t1.join();
+    t2.join();
+}
+#+end_src
+
+#+RESULTS: 单例模式
+: 0x555d7eba7191
+: 0x555d7eba7191
 
 [fn:1]
 #+name: 简单工厂模式

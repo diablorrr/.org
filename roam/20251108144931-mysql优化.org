@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       530a6a41-6c54-4f56-9002-c0a2597ba3dd
+:END:
+#+title: mysql优化
+#+filetags: mysql
+
+* mysql优化 [[https://www.bilibili.com/video/BV11RHYzgE2k?spm_id_from=333.788.videopod.sections&vd_source=4441bc96046659b39d059d583f36ff52][面试鸭]] [[https://www.bilibili.com/video/BV1oC4y177JE/?spm_id_from=333.788.recommend_more_video.-1&trackid=web_related_0.router-related-2206146-pkt2c.1762585462952.515&vd_source=4441bc96046659b39d059d583f36ff52][托尼学长1]]

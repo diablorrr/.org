@@ -94,23 +94,15 @@ connect(sender, &Sender::valueChanged, [](int value) {
 :PROPERTIES:
 :ID:       0235f0fc-df6c-4ebb-8dc5-26b2b845ee1d
 :END:
-1. 元对象编译器（moc）扫描声明了Q_OBJECT宏的类的信号槽和其他元信息，生成名为 moc_XXX.cpp 文件
-2. 运行时，程序运行到 QObject::connect，调用 发送者和接收者关联的moc文件中的 qt_static_metacall 方法，走 的QMetaObject::IndexOfMethod分支，根据信号和槽函数分别返回对应元索引，最后将 “发送者指针、信号索引、接收者指针、槽函数索引” 等信息存入内存中的QObject内部连接列表
-3. 信号触发时，调用发送者的moc文件中的信号函数实现，信号函数实现内部调用 QMetaObject::activate() ，QMetaObject::activate() 在内存中的QObject内部连接列表里找到与当前信号连接的所有 “接收者-槽”对，根据connection连接类型，对每个 “接收者-槽”对 进行处理，将槽函数的元索引传入接收者的 qt_static_metacall 中调用
-4. qt_static_metacall 走的 QMetaObject::InvokeMetaMethod 分支，根据槽函数的元索引找到槽函数并调用
+1. 元对象编译器（moc）扫描带有Q_OBJECT宏的类，提取信号、槽等元信息，生成 moc_XXX.cpp 文件
+2. 程序运行到 QObject::connect，从发送者和接收者关联的moc文件中取出信号、槽对应的元索引，将 “发送者指针、信号索引、接收者指针、槽函数索引” 等信息存入内存中的QObject内部连接列表
+3. 信号触发，调用发送者moc文件中的信号函数，信号函数内部调用 QMetaObject::activate() 遍历 QObject内部连接列表 找到与当前信号关联的所有 “接收者-槽”对，根据connection连接类型选择 直接调用 或 通过事件队列调用 槽函数，根据槽函数的元索引找到槽函数并调用
 
 相关代码见：[fn:2]
 #+begin_example cpp
 Tom::miao() → QMetaObject::activate() → 查找连接列表 → 找到 jerry 和其槽索引 → 调用 Jerry::qt_static_metacall() → 执行 Jerry::runAway()
 #+end_example
 
-
-** tmp精简版
-Qt 信号槽机制底层依赖元对象编译器（moc）。
-moc 扫描含Q_OBJECT宏的类，生成moc_XXX.cpp，其中包含元对象信息。
-QObject::connect时，通过qt_static_metacall的QMetaObject::IndexOfMethod分支获取信号与槽的元索引，将 “发送者指针、信号索引、接收者指针、槽函数索引” 等连接信息存入 QObject 内部连接列表，同时确定连接类型。
-信号触发，发送者的 moc 文件中信号函数调用QMetaObject::activate()，它按连接类型处理内部连接列表里的 “接收者 - 槽” 对。例如直接连接，立即在当前线程调用接收者qt_static_metacall；队列连接则将QMetaCallEvent放入接收者线程事件队列。
-qt_static_metacall走QMetaObject::InvokeMetaMethod分支，依槽函数元索引调用槽函数，并处理参数传递。
 
 * QWidget、QDialog、QMainWindow [[https://doc.qt.io/qt-6/dialogs.html][Qt doc:dialogs]] [[https://doc.qt.io/qt-6/application-windows.html][Qt doc:mainwindow]]
 *继承关系*

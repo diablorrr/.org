@@ -1,7 +1,7 @@
 :PROPERTIES:
 :ID:       6012c06e-c6c5-4001-a287-dfe05404724d
 :END:
-#+title: 库
+#+title: 静态链接库、动态链接库
 #+filetags: cpp
 
 * 库 [[https://www.learncpp.com/cpp-tutorial/classes-and-header-files/][learncpp15.2]]
@@ -38,3 +38,11 @@
    2) 头文件+源文件（开源项目）        ：使用麻烦点，编译时间短点
    3) 头文件+预编译的库文件（商业软件）：不需要重新编译源文件，直接链接库；知识产权
 
+
+* windows中的静态库和动态库
+*静态库（.lib）*
+.lib：包含完整的二进制代码
+
+*动态库（.lib + .dll）*
+.lib：中仅包含 DLL 中函数 / 符号的位置信息，用于编译时链接
+.dll：包含实际执行代码
